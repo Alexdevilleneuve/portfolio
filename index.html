@@ -18,18 +18,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #EFF3FA;            /* pastel ice blue */
-    --ink: #1E2A44;           /* deep navy ink */
-    --ink-soft: #5A6B8C;
-    --accent: #5B7FD9;        /* soft cornflower blue */
-    --accent-deep: #3D5CB8;
-    --pastel-1: #C9DCF7;      /* powder blue */
-    --pastel-2: #D9D4F5;      /* lavender */
-    --pastel-3: #CDEDE4;      /* mint */
-    --pastel-4: #F3DCE9;      /* blush */
-    --glass: rgba(255,255,255,.52);
-    --glass-strong: rgba(255,255,255,.68);
-    --glass-border: rgba(255,255,255,.75);
+    /* Hydrangea palette (site below hero) */
+    --teal: #00738C;
+    --dusty: #81B0B2;
+    --mint: #D6EAD4;
+    --cream: #EFF3D8;
+    --sage: #97A675;
+
+    --bg: var(--cream);
+    --ink: #0A4554;              /* deep teal ink */
+    --ink-soft: #5E7F82;         /* dusty-muted body */
+    --accent: var(--teal);
+    --accent-deep: #005A6E;
+    --pastel-1: #C9DCF7;         /* powder blue — ambient blobs match work+ */
+    --pastel-2: #D9D4F5;         /* lavender */
+    --pastel-3: #CDEDE4;         /* mint */
+    --pastel-4: #F3DCE9;         /* blush */
+    --glass: rgba(255,255,255,.55);
+    --glass-strong: rgba(255,255,255,.72);
+    --glass-border: rgba(255,255,255,.78);
     --serif: "Fraunces", serif;
     --sans: "Inter", sans-serif;
     --hand: "Caveat", cursive;
@@ -38,7 +45,7 @@
   /* Avoid scroll-behavior: smooth — it fights ScrollTrigger pin and blocks scrolling back up */
   html { scroll-behavior: auto; }
   body {
-    background: var(--bg);
+    background: #EFF3FA; /* base under the pastel blob wash */
     color: var(--ink);
     font-family: var(--sans);
     font-size: 16px;
@@ -96,8 +103,13 @@
     overflow: hidden;
   }
 
-  /* ---------- Hero (full-screen sky + photo clouds) ---------- */
+  /* ---------- Hero (keeps original sky blues — palette stops here) ---------- */
   .hero {
+    /* local tokens so hero stays ice-sky, not hydrangea */
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    --accent-deep: #3D5CB8;
     position: absolute;
     inset: 0;
     width: 100%;
@@ -453,6 +465,23 @@
   .sec-head h2 { font-family: var(--serif); font-weight: 600; font-size: 34px; }
   .sec-head p { color: var(--ink-soft); margin-top: 8px; max-width: 560px; }
   .hand-label { font-family: var(--hand); font-size: 23px; color: var(--accent); display: inline-block; transform: rotate(-2deg); margin-bottom: 6px; }
+
+  /* From Selected work down — original ice-blue tokens; pastel blobs show through */
+  #work,
+  #work ~ section,
+  footer {
+    --bg: #EFF3FA;
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    --accent-deep: #3D5CB8;
+    --pastel-1: #C9DCF7;
+    --pastel-2: #D9D4F5;
+    --pastel-3: #CDEDE4;
+    --pastel-4: #F3DCE9;
+    --sage: #5B7FD9;
+    background: transparent;
+  }
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
 
@@ -484,10 +513,10 @@
     pointer-events: none;
     transform-origin: 50% 100%;
     background:
-      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.45) 0%, transparent 62%),
-      linear-gradient(180deg, #C5D9F0 0%, #D7E6F6 42%, #E7EFF8 100%);
+      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
+      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 45%, #EFF3D8 100%);
     border-radius: 50% 50% 0 0 / 42% 42% 0 0;
-    box-shadow: 0 -24px 80px rgba(30,42,68,.1);
+    box-shadow: 0 -24px 80px rgba(0,115,140,.12);
     will-change: transform;
   }
   .about-arch-body {
@@ -517,7 +546,7 @@
     width: 1px;
     height: clamp(36px, 6vh, 64px);
     margin: 22px auto 0;
-    background: linear-gradient(to bottom, rgba(30,42,68,.35), rgba(30,42,68,.05));
+    background: linear-gradient(to bottom, rgba(0,115,140,.4), rgba(0,115,140,.05));
   }
   .skills-sub {
     display: flex;
@@ -709,7 +738,7 @@
 <!-- Nav: Michael's symbol style, her items -->
 <nav>
   <div class="nav-inner glass">
-    <a class="logo" href="#">Alexandra Zhao</a>
+    <a class="logo" href="#">Alexandra Irribarren</a>
     <ul class="nav-links">
       <li><a href="#work" data-ph="nav" data-ph-label="project"><b>⌘ |</b> project</a></li>
       <li><a href="#about" data-ph="nav" data-ph-label="about"><b>? |</b> about</a></li>
