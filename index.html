@@ -35,7 +35,8 @@
     --hand: "Caveat", cursive;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  /* Avoid scroll-behavior: smooth — it fights ScrollTrigger pin and blocks scrolling back up */
+  html { scroll-behavior: auto; }
   body {
     background: var(--bg);
     color: var(--ink);
@@ -87,44 +88,364 @@
   .nav-links a:hover { color: var(--ink); }
   .nav-links a:hover::after { width: 100%; }
 
-  /* ---------- Hero (her old site: eyebrow + big line + stats) ---------- */
-  .hero { padding: 120px 0 90px; position: relative; text-align: left; }
-  .eyebrow {
-    font-size: 15px; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--accent-deep); font-weight: 600;
-    opacity: 0; animation: rise .8s .1s cubic-bezier(.2,.7,.2,1) forwards;
+  /* ---------- Intro: GSAP pins this viewport for the scroll sequence ---------- */
+  .intro-pin {
+    position: relative;
+    height: 100vh;
+    min-height: 640px;
+    overflow: hidden;
+  }
+
+  /* ---------- Hero (full-screen sky + photo clouds) ---------- */
+  .hero {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 65%, #E8F0FA 100%);
+  }
+  /* Foreground layer — GSAP moves this up; sky stays behind */
+  .hero-fg {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    will-change: transform, opacity;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: clamp(88px, 14vh, 140px) 32px clamp(72px, 14vh, 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none; /* don't block cloud hover hit zones underneath */
+  }
+
+  .hero-copy {
+    max-width: 760px;
+    opacity: 0;
+    transform: translateY(120px);
+    transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
+
+  .hero-role {
+    font-size: 15px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    font-weight: 600;
   }
   .hero h1 {
-    font-family: var(--serif); font-weight: 500;
-    font-size: clamp(52px, 8vw, 96px); line-height: 1.06; margin-top: 18px;
-    letter-spacing: -.01em;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(48px, 8.5vw, 128px);
+    line-height: 1.08;
+    margin-top: 14px;
+    letter-spacing: -.02em;
+    color: var(--ink);
   }
-  .hero h1 .word { display: inline-block; opacity: 0; transform: translateY(30px); animation: rise .85s cubic-bezier(.2,.7,.2,1) forwards; }
   .hero h1 em { font-style: italic; color: var(--accent); }
-  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
-  .hero .sub {
-    margin-top: 26px; max-width: 620px; color: var(--ink-soft); font-size: 18px;
-    opacity: 0; animation: rise .8s .7s cubic-bezier(.2,.7,.2,1) forwards;
+
+  .hero-stats {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.08s .5s cubic-bezier(.2,.7,.2,1), transform 1.08s .5s cubic-bezier(.2,.7,.2,1);
   }
-  .stats {
-    display: flex; gap: 20px; margin-top: 54px; flex-wrap: wrap;
-    opacity: 0; animation: rise .8s .9s cubic-bezier(.2,.7,.2,1) forwards;
+  .hero.is-in .hero-stats { opacity: 1; transform: translateY(0); }
+  .hero-stats p {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    letter-spacing: .02em;
   }
-  .stat { border-radius: 20px; padding: 22px 34px; min-width: 170px; }
-  .stat .num { font-family: var(--serif); font-size: 38px; font-weight: 600; color: var(--ink); }
-  .stat .num span { color: var(--accent); }
-  .stat .lbl { font-size: 14px; color: var(--ink-soft); margin-top: 2px; }
-  .hero-cards { position: absolute; right: 0; top: 260px; width: 300px; height: 300px; pointer-events: none; }
-  .hero-card {
-    position: absolute; border-radius: 18px; overflow: hidden;
-    animation: floaty 6s ease-in-out infinite;
+  .hero-stats strong {
+    font-family: var(--serif);
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 18px;
   }
-  .hero-card img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
+  .hero-stats strong span { color: var(--accent); }
+
+  /* Top decorative cloud */
+  .cloud-top {
+    position: absolute;
+    top: -4%;
+    left: 50%;
+    width: min(70vw, 820px);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -40px);
+    transition: opacity 1.4s .1s cubic-bezier(.2,.7,.2,1), transform 1.4s .1s cubic-bezier(.2,.7,.2,1);
   }
-  .hc1 { width: 200px; height: 160px; top: 0; right: 20px; transform: rotate(4deg); }
-  .hc2 { width: 180px; height: 145px; top: 150px; right: 120px; transform: rotate(-5deg); animation-delay: 1.4s; }
-  @keyframes floaty { 50% { margin-top: -12px; } }
+  .hero.is-in .cloud-top {
+    opacity: .9;
+    transform: translate(-50%, 0);
+  }
+  .hero.is-in .cloud-top .cloud-bob {
+    animation: cloudBounce 10s ease-in-out 1.6s infinite;
+  }
+  .cloud-top .cloud-frame {
+    aspect-ratio: 2.4 / 1;
+    filter: drop-shadow(0 12px 28px rgba(30,42,68,.1));
+  }
+  .cloud-top img.cloud-face {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    display: block;
+  }
+
+  /* Bottom cloud band */
+  .hero-clouds {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: min(58vh, 560px);
+    z-index: 4; /* above hero-inner so hover isn't stolen */
+    pointer-events: none;
+  }
+
+  /* Wide soft layer behind the two interactive clouds */
+  .cloud-back {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    max-width: none;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-50%) translateY(24px);
+    transition: opacity 1.5s .25s cubic-bezier(.2,.7,.2,1), transform 1.5s .25s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-back {
+    opacity: .75;
+    transform: translateX(-50%) translateY(0);
+  }
+  /* Don't inherit interactive-cloud .cloud-bob sizing (that was breaking placement) */
+  .cloud-back .cloud-bob {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    will-change: transform;
+  }
+  .hero.is-in .cloud-back .cloud-bob {
+    animation: cloudBounceSoft 14s ease-in-out 2.2s infinite;
+  }
+  .cloud-back img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  /* Wide hit zones — left is wider because that cloud art spills past center */
+  .cloud {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: center;
+    font: inherit;
+    color: inherit;
+    pointer-events: auto;
+    opacity: 0;
+    overflow: visible;
+  }
+  .cloud:focus { outline: none; }
+  .cloud:focus-visible .cloud-frame {
+    outline: 2px solid var(--accent);
+    outline-offset: 8px;
+    border-radius: 40px;
+  }
+  .cloud-left {
+    left: 0;
+    width: 62%;
+    z-index: 3;
+    transform: translateX(-180px);
+    transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .cloud-right {
+    right: 0;
+    left: auto;
+    width: 48%;
+    z-index: 2;
+    transform: translateX(180px);
+    transition: opacity 1.4s .2s cubic-bezier(.2,.7,.2,1), transform 1.4s .2s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-left,
+  .hero.is-in .cloud-right {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Visual cloud sits in the hit zone; size/placement match the old art */
+  .cloud-bob {
+    position: absolute;
+    bottom: -6%;
+    width: min(124%, 720px);
+    will-change: transform;
+    pointer-events: none;
+  }
+  .cloud-left .cloud-bob {
+    left: -16%;
+  }
+  .cloud-right .cloud-bob {
+    right: -16%;
+    left: auto;
+    width: min(116%, 680px);
+  }
+  .hero.is-in .cloud-left .cloud-bob {
+    animation: cloudBounce 7.5s ease-in-out 1.5s infinite;
+  }
+  .hero.is-in .cloud-right .cloud-bob {
+    animation: cloudBounce 8.8s ease-in-out 1.9s infinite;
+  }
+  @keyframes cloudBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-48px); }
+  }
+  @keyframes cloudBounceSoft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  .cloud-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 1.1;
+    filter: drop-shadow(0 18px 36px rgba(30,42,68,.14));
+  }
+  .cloud-media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  /* Your original soft clouds (black bg → transparent via screen) */
+  .cloud-media img.cloud-face {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    display: block;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    transition: opacity 1s ease;
+  }
+  .cloud-media img.gif {
+    position: absolute;
+    inset: 8% 10%;
+    z-index: 1;
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0;
+    border-radius: 40%;
+    filter: blur(0.2px);
+    transition: opacity 1s ease;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
+  }
+
+  .cloud.is-hot .cloud-media img.gif,
+  .cloud:focus-within .cloud-media img.gif,
+  .cloud.is-revealed .cloud-media img.gif { opacity: 1; }
+  .cloud.is-hot .cloud-media img.cloud-face,
+  .cloud:focus-within .cloud-media img.cloud-face,
+  .cloud.is-revealed .cloud-media img.cloud-face { opacity: .28; }
+  .cloud.is-hot .cloud-caption,
+  .cloud:focus-within .cloud-caption,
+  .cloud.is-revealed .cloud-caption {
+    opacity: 1;
+    color: var(--ink);
+    font-size: clamp(22px, 2.35vw, 30px);
+    text-shadow:
+      0 0 22px rgba(239, 243, 250, .98),
+      0 0 8px rgba(239, 243, 250, .9),
+      0 1px 2px rgba(255, 255, 255, .85);
+  }
+
+  /* Whisper on the cloud — always faintly visible; blooms over the GIF */
+  .cloud-caption {
+    --caption-tilt: -1.5deg;
+    position: absolute;
+    left: 50%;
+    top: 18%;
+    z-index: 3;
+    width: max-content;
+    max-width: 72%;
+    margin: 0;
+    padding: 0;
+    font-family: var(--hand);
+    font-style: normal;
+    font-weight: 500;
+    font-size: clamp(20px, 2.1vw, 27px);
+    letter-spacing: 0.01em;
+    color: var(--ink-soft);
+    line-height: 1.25;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0.72;
+    transform: translateX(-50%) rotate(var(--caption-tilt));
+    transition: opacity .55s ease, color .55s ease, font-size .55s ease, text-shadow .55s ease;
+    text-shadow:
+      0 0 16px rgba(239, 243, 250, .85),
+      0 1px 0 rgba(255, 255, 255, .55);
+  }
+  .cloud-left .cloud-caption { --caption-tilt: -2deg; }
+  .cloud-right .cloud-caption { --caption-tilt: 2deg; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-copy, .hero-stats, .cloud, .cloud-top, .cloud-back {
+      transition: opacity .4s ease !important;
+      transform: none !important;
+    }
+    .cloud-caption {
+      transition: opacity .4s ease, color .4s ease !important;
+      transform: translateX(-50%) rotate(var(--caption-tilt, -1.5deg)) !important;
+    }
+    .hero.is-in .cloud-top { transform: translate(-50%, 0) !important; }
+    .hero.is-in .cloud-back { transform: translateX(-50%) translateY(0) !important; }
+    .hero.is-in .cloud-bob { animation: none !important; }
+    .cloud-media img.gif,
+    .cloud-media img.cloud-face { transition: opacity .5s ease !important; }
+  }
 
   /* ---------- Section scaffolding ---------- */
   section { padding: 96px 0; }
@@ -135,27 +456,111 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
 
-  /* ---------- Hard skills (Audrey ".quick evaluations" layout) ---------- */
-  .skills-grid { display: grid; grid-template-columns: 300px 1fr; gap: 56px; align-items: start; }
-  .tag-col { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 110px; }
-  .tag-col .dot-tag {
-    font-size: 14.5px; font-weight: 500; color: var(--ink-soft);
-    padding: 10px 18px; border-radius: 999px; width: fit-content;
-    transition: transform .25s, color .25s;
+  /* ---------- About: arch grows small → full (GSAP ScrollTrigger) ---------- */
+  #about {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
   }
-  .tag-col .dot-tag:first-child { color: var(--accent-deep); font-weight: 600; }
-  .tag-col .dot-tag:hover { transform: translateX(6px); color: var(--ink); }
-  .skills-main .statement {
-    font-family: var(--serif); font-weight: 400;
-    font-size: clamp(26px, 3.4vw, 40px); line-height: 1.32; letter-spacing: -.005em;
+  .about-arch {
+    position: relative;
+    width: 130%;
+    min-height: 110vh;
+    margin: 0 auto;
+    padding: clamp(80px, 14vh, 160px) clamp(28px, 8vw, 96px) clamp(48px, 8vh, 88px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Tip peeks over clouds visually, but must not steal their hover */
+    pointer-events: none;
+    transform-origin: 50% 100%;
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.45) 0%, transparent 62%),
+      linear-gradient(180deg, #C5D9F0 0%, #D7E6F6 42%, #E7EFF8 100%);
+    border-radius: 50% 50% 0 0 / 42% 42% 0 0;
+    box-shadow: 0 -24px 80px rgba(30,42,68,.1);
+    will-change: transform;
   }
-  .skills-main .statement em { font-style: italic; color: var(--accent); }
-  .skills-sub { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+  .about-arch-body {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin-top: 0;
+  }
+  .about-eyebrow {
+    font-size: 12.5px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .about-arch .statement {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(24px, 3.1vw, 38px);
+    line-height: 1.32;
+    letter-spacing: -.005em;
+    color: var(--ink);
+  }
+  .about-arch .statement em { font-style: italic; color: var(--accent-deep); }
+  .about-spine {
+    width: 1px;
+    height: clamp(36px, 6vh, 64px);
+    margin: 22px auto 0;
+    background: linear-gradient(to bottom, rgba(30,42,68,.35), rgba(30,42,68,.05));
+  }
+  .skills-sub {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .skills-sub .chip {
-    border-radius: 999px; padding: 12px 22px; font-size: 15px; font-weight: 500;
+    border-radius: 999px;
+    padding: 11px 20px;
+    font-size: 14.5px;
+    font-weight: 500;
     transition: transform .25s;
   }
   .skills-sub .chip:hover { transform: translateY(-3px) rotate(-1deg); }
+  .about-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 18px;
+    margin-top: 28px;
+    max-width: 520px;
+  }
+  .about-tags li {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    letter-spacing: .04em;
+  }
+  .about-tags li::before {
+    content: "·";
+    margin-right: 10px;
+    color: var(--accent);
+  }
+  .about-tags li:first-child::before { content: none; margin: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .intro-pin { height: auto; min-height: 100vh; overflow: visible; }
+    .hero { position: relative; height: 100vh; min-height: 640px; }
+    .hero-fg { position: relative; inset: auto; }
+    #about { position: relative; inset: auto; display: block; overflow: visible; }
+    .about-arch { width: 100%; min-height: 90vh; border-radius: 48% 48% 0 0 / 28% 28% 0 0; }
+  }
 
   /* ---------- Projects (Ben's large list on a timeline) ---------- */
   .timeline { position: relative; }
@@ -259,9 +664,32 @@
   footer .small { margin-top: 44px; color: var(--ink-soft); font-size: 13.5px; }
 
   @media (max-width: 900px) {
-    .hero-cards { display: none; }
-    .skills-grid { grid-template-columns: 1fr; gap: 30px; }
-    .tag-col { position: static; flex-direction: row; flex-wrap: wrap; }
+    .intro-pin { min-height: 100svh; }
+    .hero {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      min-height: 0;
+      padding-bottom: 0;
+    }
+    .hero-inner { padding-top: 88px; }
+    .hero h1 { font-size: clamp(36px, 9vw, 56px); }
+    .hero-stats { margin-top: auto; }
+    .cloud-top { width: min(88vw, 520px); top: -2%; }
+    .cloud-back {
+      width: 100vw;
+      left: 50%;
+      bottom: 0;
+    }
+    .cloud-left .cloud-bob,
+    .cloud-right .cloud-bob { width: min(140%, 420px); }
+    .cloud-frame { aspect-ratio: 16 / 11; }
+    .about-arch {
+      width: 160vw;
+      min-height: 100vh;
+      padding-top: 14vh;
+      border-radius: 50% 50% 0 0 / 36% 36% 0 0;
+    }
     .timeline::before { display: none; }
     .t-row { grid-template-columns: 1fr; gap: 14px; }
     .t-year::after { display: none; }
@@ -291,46 +719,84 @@
   </div>
 </nav>
 
-<!-- Hero: her old site's structure & animation -->
-<header class="hero wrap">
-  <div class="eyebrow">Senior UX Researcher / Manager</div>
-  <h1 id="slogan">From <em>insights</em> to influence</h1>
-  <p class="sub">SF Bay Area · I bring strategic insight to ambiguous problems — working from the whole down to the parts, and from evidence to decisions worth betting on.</p>
-  <div class="stats">
-    <div class="stat glass"><div class="num"><span data-count="9">0</span>+</div><div class="lbl">Years</div></div>
-    <div class="stat glass"><div class="num"><span data-count="100">0</span>+</div><div class="lbl">Studies</div></div>
-    <div class="stat glass"><div class="num"><span data-count="1000">0</span>+</div><div class="lbl">Participants</div></div>
-  </div>
-  <div class="hero-cards">
-    <div class="hero-card glass hc1">
-      <img src="assets/images/home/hero-researcher.gif" alt="Researcher at work">
-    </div>
-    <div class="hero-card glass hc2">
-      <img src="assets/images/home/hero-team-leader.gif" alt="Team leadership moment">
-    </div>
-  </div>
-</header>
+<!-- Intro: GSAP pins this — hero exits up, arch grows small → full -->
+<div class="intro-pin">
+    <header class="hero" id="hero">
+      <div class="hero-fg" data-hero-fg>
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="hero-role">Senior UX Researcher/Manager</p>
+            <h1 id="slogan">From <em>insights</em> to<br>influence</h1>
+          </div>
+          <div class="hero-stats">
+            <p><strong><span>9</span>+</strong> Years</p>
+            <p><strong><span>100</span>+</strong> Studies</p>
+            <p><strong><span>1000</span>+</strong> Participants</p>
+          </div>
+        </div>
 
-<!-- Hard skills: Audrey's ".quick evaluations" pattern -->
-<section id="about" data-ph-section="about">
-  <div class="wrap skills-grid">
-    <div class="tag-col reveal">
-      <span class="dot-tag glass">.quick evaluations</span>
-      <span class="dot-tag glass">mixed-methods rigor</span>
-      <span class="dot-tag glass">product convergence</span>
-      <span class="dot-tag glass">research ops + scale</span>
-      <span class="dot-tag glass">strategy-first</span>
-    </div>
-    <div class="skills-main">
-      <p class="statement reveal">I work from the <em>whole down to the parts</em> — converging fragmented products, grounding ambiguous direction in evidence, and building the systems that make research impossible to ignore.</p>
-      <div class="skills-sub reveal">
-        <span class="chip glass">science → users → product</span>
-        <span class="chip glass">long-term over short-term</span>
-        <span class="chip glass">evidence over assertion</span>
+        <div class="cloud-top" aria-hidden="true">
+          <div class="cloud-bob">
+            <div class="cloud-frame">
+              <img class="cloud-face" src="assets/images/home/cloud-soft-3.png" alt="">
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-clouds">
+          <div class="cloud-back" aria-hidden="true">
+            <div class="cloud-bob">
+              <img src="assets/images/home/cloud-soft-4.png" alt="">
+            </div>
+          </div>
+
+          <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+            <div class="cloud-bob">
+              <div class="cloud-frame">
+                <div class="cloud-media">
+                  <img class="gif" src="assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+                  <img class="cloud-face" src="assets/images/home/cloud-soft-1.png" alt="" aria-hidden="true">
+                </div>
+                <span class="cloud-caption">a compass when things get fuzzy</span>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+            <div class="cloud-bob">
+              <div class="cloud-frame">
+                <div class="cloud-media">
+                  <img class="gif" src="assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+                  <img class="cloud-face" src="assets/images/home/cloud-soft-2.png" alt="" aria-hidden="true">
+                </div>
+                <span class="cloud-caption">a seeker of truths</span>
+              </div>
+            </div>
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </header>
+
+    <section id="about" data-ph-section="about">
+      <div class="about-arch" data-about-arch>
+        <div class="about-arch-body">
+          <p class="about-eyebrow">strategy-first</p>
+          <p class="statement">I work from the <em>whole down to the parts</em> — converging fragmented products, grounding ambiguous direction in evidence, and building the systems that make research impossible to ignore.</p>
+          <div class="about-spine" aria-hidden="true"></div>
+          <div class="skills-sub">
+            <span class="chip glass">science → users → product</span>
+            <span class="chip glass">long-term over short-term</span>
+            <span class="chip glass">evidence over assertion</span>
+          </div>
+          <ul class="about-tags">
+            <li>mixed-methods rigor</li>
+            <li>product convergence</li>
+            <li>research ops + scale</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+</div>
 
 <!-- Projects: Ben's large list on a timeline -->
 <section id="work" data-ph-section="work">
@@ -462,25 +928,61 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script>
-  // Hero word-by-word rise (keeps the <em> intact)
-  const h1 = document.getElementById("slogan");
-  h1.innerHTML = h1.innerHTML.split(/(<em>.*?<\/em>)/).map(part => {
-    if (part.startsWith("<em>")) return `<em><span class="word">${part.replace(/<\/?em>/g, "")}</span></em>`;
-    return part.split(" ").map(w => w.trim() ? `<span class="word">${w}</span>` : w).join(" ");
-  }).join("");
-  document.querySelectorAll("#slogan .word").forEach((w, i) => w.style.animationDelay = (0.25 + 0.09 * i) + "s");
+  // Hero entrance (cloud slide-in + title rise)
+  const hero = document.getElementById("hero");
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => hero.classList.add("is-in"));
+  });
 
-  // Count-up stats
-  function countUp(el) {
-    const target = +el.dataset.count, dur = 1400, t0 = performance.now();
-    (function tick(t) {
-      const p = Math.min((t - t0) / dur, 1);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) requestAnimationFrame(tick);
-    })(t0);
+  // Cloud GIF reveal — pointer-driven with leave buffer (avoids flaky CSS :hover)
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  const clouds = document.querySelectorAll(".cloud");
+  if (canHover) {
+    // Track hover on the whole cloud band by X position — more reliable than
+    // per-button :hover when the left art spills across the midline.
+    const band = document.querySelector(".hero-clouds");
+    let leaveTimer;
+    const setHot = (side) => {
+      clouds.forEach((c) => {
+        const on = side && c.classList.contains(side);
+        c.classList.toggle("is-hot", on);
+      });
+    };
+    if (band) {
+      band.style.pointerEvents = "auto";
+      band.addEventListener("pointermove", (e) => {
+        clearTimeout(leaveTimer);
+        const rect = band.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        // Bias toward left — its cloud graphic is wider
+        setHot(x < 0.58 ? "cloud-left" : "cloud-right");
+      });
+      band.addEventListener("pointerleave", () => {
+        leaveTimer = setTimeout(() => setHot(null), 160);
+      });
+    } else {
+      clouds.forEach((cloud) => {
+        cloud.addEventListener("pointerenter", () => {
+          clearTimeout(leaveTimer);
+          setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
+        });
+        cloud.addEventListener("pointerleave", () => {
+          leaveTimer = setTimeout(() => setHot(null), 160);
+        });
+      });
+    }
+  } else {
+    clouds.forEach((cloud) => {
+      cloud.addEventListener("click", () => {
+        const open = cloud.classList.toggle("is-revealed");
+        cloud.setAttribute("aria-pressed", open ? "true" : "false");
+      });
+      cloud.setAttribute("aria-pressed", "false");
+    });
   }
-  setTimeout(() => document.querySelectorAll("[data-count]").forEach(countUp), 900);
 
   // Scroll reveal
   const io = new IntersectionObserver(entries => {
@@ -489,8 +991,84 @@
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
   // Stagger grids
-  document.querySelectorAll(".persona-grid, .testi-grid, .skills-sub, .tag-col").forEach(grid => {
+  document.querySelectorAll(".persona-grid, .testi-grid, .skills-sub").forEach(grid => {
     [...grid.children].forEach((c, i) => c.style.transitionDelay = (i * 0.07) + "s");
+  });
+
+  // Intro: pinned ScrollTrigger — hero exits up, arch grows small → full
+  gsap.registerPlugin(ScrollTrigger);
+  const introPin = document.querySelector(".intro-pin");
+  const heroFg = document.querySelector("[data-hero-fg]");
+  const aboutArch = document.querySelector("[data-about-arch]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (introPin && heroFg && aboutArch && !reduceMotion) {
+    // Landing: just the tip of the arch peeks under the hero clouds
+    gsap.set(aboutArch, {
+      scale: 0.3,
+      yPercent: 28,
+      transformOrigin: "50% 100%",
+    });
+
+    const introTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: introPin,
+        start: "top top",
+        end: () => "+=" + Math.round(window.innerHeight * 1.6),
+        pin: true,
+        pinSpacing: true,
+        scrub: true, // 1:1 with scroll so reverse/up isn't laggy or sticky
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        fastScrollEnd: true,
+        preventOverlaps: true,
+        onUpdate: (self) => {
+          const p = self.progress;
+          heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
+          // Only the grown arch should capture clicks; tip must stay pass-through
+          aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
+        },
+      },
+      defaults: { ease: "none" },
+    });
+
+    // Hero clears immediately as arch takes over
+    introTl.to(heroFg, {
+      y: () => -window.innerHeight * 0.45,
+      opacity: 0,
+      duration: 0.12,
+    }, 0);
+
+    // From the first scroll: tip → filling the screen
+    introTl.to(aboutArch, {
+      scale: 1,
+      yPercent: 0,
+      duration: 1,
+      ease: "power1.out", // front-loads growth so it arrives sooner
+    }, 0);
+
+    // Keep pin math correct after fonts/layout settle
+    const refreshIntro = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refreshIntro);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(refreshIntro).catch(() => {});
+    }
+  } else if (aboutArch) {
+    gsap.set(aboutArch, { clearProps: "all" });
+  }
+
+  // Anchor links: instant jump (smooth CSS scroll breaks pinned sections)
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const id = link.getAttribute("href");
+      if (!id || id === "#") return;
+      const target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      const y = target.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, y);
+      ScrollTrigger.update();
+    });
   });
 
   // PostHog: key portfolio interactions
