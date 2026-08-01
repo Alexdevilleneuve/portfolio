@@ -869,56 +869,182 @@
     nav.is-hidden { transform: none; pointer-events: auto; }
   }
 
-  /* ---------- Projects (Ben's large list on a timeline) ---------- */
+  /* ---------- Projects (featured timeline + more grid) ---------- */
+  .work-part + .work-part { margin-top: 80px; }
+  .work-part-label {
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent-deep);
+    margin-bottom: 10px;
+  }
+  .work-part-note {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 28px;
+    width: 100%;
+    max-width: none;
+  }
   .timeline { position: relative; }
   .timeline::before {
-    content: ""; position: absolute; left: 74px; top: 0; bottom: 0; width: 2px;
+    content: ""; position: absolute; left: 86px; top: 0; bottom: 0; width: 2px;
     background: linear-gradient(to bottom, transparent, rgba(91,127,217,.35) 8%, rgba(91,127,217,.35) 92%, transparent);
   }
-  .t-row { display: grid; grid-template-columns: 150px 1fr; gap: 40px; margin-bottom: 44px; }
-  .t-year {
-    font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--accent-deep);
-    position: sticky; top: 110px; height: fit-content; text-align: left;
-    display: flex; align-items: center; gap: 12px;
+  .t-group {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 36px;
+    margin-bottom: 64px;
   }
-  .t-year::after {
+  .t-group:last-child { margin-bottom: 0; }
+  .t-company {
+    position: sticky; top: 110px; height: fit-content;
+    display: flex; align-items: center; gap: 10px;
+    color: var(--accent-deep);
+  }
+  .t-company img {
+    width: 28px; height: 28px; flex-shrink: 0;
+    border-radius: 7px;
+  }
+  .t-company span {
+    font-family: var(--serif); font-size: 15px; font-weight: 600; line-height: 1.2;
+  }
+  .t-company::after {
     content: ""; width: 12px; height: 12px; border-radius: 50%;
     background: var(--accent); border: 3px solid var(--bg);
     box-shadow: 0 0 0 2px rgba(91,127,217,.4);
-    margin-left: auto; transform: translateX(27px);
+    margin-left: auto; transform: translateX(21px); flex-shrink: 0;
   }
-  .proj-card {
-    display: grid; grid-template-columns: 1fr 1.05fr; border-radius: 24px; overflow: hidden;
-    text-decoration: none; color: var(--ink);
-    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s;
+  .t-stack { display: flex; flex-direction: column; gap: 56px; min-width: 0; }
+
+  /* Featured study — title/desc above, large image hero (Miro-style) */
+  .proj-feature {
+    display: block;
+    text-decoration: none;
+    color: var(--ink);
   }
-  .proj-card:hover { transform: translateY(-6px); box-shadow: 0 26px 60px rgba(30,42,68,.14); }
-  .proj-media { min-height: 260px; position: relative; overflow: hidden; }
-  .proj-media .ph {
-    position: absolute; inset: 0; display: grid; place-items: center;
-    font-family: var(--hand); font-size: 22px; color: rgba(30,42,68,.5);
+  .proj-feature-copy { margin-bottom: 22px; }
+  .proj-feature h3 {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3.2vw, 40px);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+  }
+  .proj-feature h3 .arrow {
+    color: var(--accent);
+    font-size: .72em;
+    display: inline-block;
+    transition: transform .3s;
+  }
+  .proj-feature:hover h3 .arrow { transform: translateX(6px); }
+  .proj-feature p {
+    color: var(--ink-soft);
+    margin-top: 12px;
+    font-size: 16.5px;
+    line-height: 1.55;
+    width: 100%;
+    max-width: none;
+  }
+  .proj-feature .keywords {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .proj-feature .keywords span {
+    font-size: 12.5px; font-weight: 600; padding: 6px 13px; border-radius: 999px;
+    background: rgba(91,127,217,.13); color: var(--accent-deep);
+  }
+  .proj-feature-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(30,42,68,.12);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+  }
+  .proj-feature:hover .proj-feature-media {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 60px rgba(30,42,68,.16);
+  }
+  .proj-feature-media .ph {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-family: var(--hand); font-size: 24px; color: rgba(30,42,68,.45);
     transition: transform .6s cubic-bezier(.2,.7,.2,1);
   }
-  .proj-card:hover .ph { transform: scale(1.045); }
+  .proj-feature:hover .ph { transform: scale(1.03); }
+  .proj-feature-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   .m1 { background: linear-gradient(135deg, #D3E2F8, #B6CDF1); }
   .m2 { background: linear-gradient(135deg, #DFDAF7, #C6BEEF); }
   .m3 { background: linear-gradient(135deg, #D2EDE4, #B4DFD1); }
   .m4 { background: linear-gradient(135deg, #F4E0EC, #E4C4DA); }
-  .proj-info { padding: 38px 42px; display: flex; flex-direction: column; justify-content: center; }
-  .proj-info .role { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-deep); font-weight: 600; }
-  .proj-info h3 {
-    font-family: var(--serif); font-size: 27px; font-weight: 600; margin-top: 10px;
-    display: flex; align-items: baseline; gap: 10px;
+  .m5 { background: linear-gradient(135deg, #E8F0FA, #C9DCF5); }
+
+  /* Part 2 — simple more-studies grid (one-pagers) */
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 22px;
   }
-  .proj-info h3 .arrow { color: var(--accent); transition: transform .3s; font-size: 22px; }
-  .proj-card:hover .arrow { transform: translateX(6px); }
-  .proj-info p { color: var(--ink-soft); margin-top: 12px; font-size: 15.5px; }
-  .keywords { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .keywords span {
-    font-size: 12.5px; font-weight: 600; padding: 6px 13px; border-radius: 999px;
-    background: rgba(91,127,217,.13); color: var(--accent-deep);
+  .work-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px 22px 20px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: var(--ink);
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(30,42,68,.08);
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), background .3s ease, border-color .3s ease;
   }
-  .cta-note { font-family: var(--hand); font-size: 21px; color: var(--ink-soft); margin-top: 6px; }
+  .work-mini:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,.85);
+    border-color: rgba(91,127,217,.28);
+  }
+  .work-mini-co {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .work-mini-co img {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+  }
+  .work-mini h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .work-mini h3 .arrow {
+    color: var(--accent);
+    font-size: 17px;
+    display: inline-block;
+    transition: transform .3s;
+  }
+  .work-mini:hover h3 .arrow { transform: translateX(4px); }
+  .work-mini p {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.5;
+    width: 100%;
+    max-width: none;
+  }
 
   /* ---------- How I work (instincts) ---------- */
   #how.how-work {
@@ -1105,19 +1231,19 @@
     line-height: 1.6;
   }
   .how-work-cta {
-    margin-top: 56px;
+    margin-top: 64px;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 18px 28px;
-    text-align: center;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    text-align: right;
+    padding-right: clamp(24px, 8vw, 96px);
   }
   .how-work-cta-note {
     font-family: var(--hand);
-    font-size: 26px;
+    font-size: 25px;
     color: var(--ink-soft);
-    transform: rotate(-2deg);
+    transform: rotate(-1.5deg);
   }
   .how-work-cta-action {
     position: relative;
@@ -1125,46 +1251,72 @@
   }
   .how-work-cta-btn {
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     gap: 10px;
-    padding: 14px 22px;
-    border-radius: 999px;
+    padding: 6px 2px 8px;
     text-decoration: none;
     font-family: var(--serif);
-    font-size: 17px;
-    font-weight: 600;
-    color: #fff;
-    background: var(--accent-deep);
-    box-shadow: 0 12px 28px rgba(61,92,184,.28);
-    transition: transform .3s ease, background .25s ease, box-shadow .3s ease;
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 500;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
+    transition: color .25s ease;
   }
-  .how-work-cta-btn span {
-    transition: transform .3s ease;
+  .how-work-cta-btn::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    height: 1px;
+    background: currentColor;
+    opacity: .35;
+    transform: scaleX(.92);
+    transform-origin: left center;
+    transition: opacity .25s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .how-work-cta-btn .arrow {
+    display: inline-block;
+    color: var(--accent-deep);
+    transition: transform .3s cubic-bezier(.2,.7,.2,1);
   }
   .how-work-cta-btn:hover,
   .how-work-cta-action:focus-within .how-work-cta-btn {
-    background: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 16px 34px rgba(61,92,184,.34);
+    color: var(--accent-deep);
+    background: transparent;
+    transform: none;
+    box-shadow: none;
   }
-  .how-work-cta-btn:hover span { transform: translateX(4px); }
+  .how-work-cta-btn:hover::after,
+  .how-work-cta-action:focus-within .how-work-cta-btn::after {
+    opacity: .85;
+    transform: scaleX(1);
+  }
+  .how-work-cta-btn:hover .arrow,
+  .how-work-cta-action:focus-within .how-work-cta-btn .arrow {
+    transform: translateX(5px);
+  }
   /* Hover “show me” → photo peek */
   .how-work-cta-peek {
     position: absolute;
     left: 50%;
-    bottom: calc(100% + 18px);
-    width: min(260px, 56vw);
-    aspect-ratio: 4 / 5;
+    bottom: calc(100% + 20px);
+    width: min(220px, 48vw);
+    aspect-ratio: 3 / 2;
     margin: 0;
     padding: 0;
     border: 0;
-    transform: translateX(-50%) translateY(12px) rotate(-2deg) scale(.96);
+    transform: translateX(-50%) translateY(10px) rotate(-1.5deg) scale(.97);
     opacity: 0;
     pointer-events: none;
-    border-radius: 18px;
+    border-radius: 16px;
     overflow: hidden;
-    background: rgba(255,255,255,.72);
-    box-shadow: 0 22px 50px rgba(30,42,68,.18), inset 0 1px 0 rgba(255,255,255,.85);
+    background: rgba(255,255,255,.7);
+    box-shadow: 0 20px 48px rgba(30,42,68,.16), inset 0 1px 0 rgba(255,255,255,.9);
     transition: opacity .28s ease, transform .35s cubic-bezier(.2,.7,.2,1);
     z-index: 5;
   }
@@ -1177,45 +1329,561 @@
   .how-work-cta-action:hover .how-work-cta-peek,
   .how-work-cta-action:focus-within .how-work-cta-peek {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) rotate(-2deg) scale(1);
+    transform: translateX(-50%) translateY(0) rotate(-1.5deg) scale(1);
   }
   @media (prefers-reduced-motion: reduce) {
     .how-work-cta-peek { transition: opacity .2s ease; }
+    .how-work-cta-btn .arrow { transition: none; }
   }
 
-  /* ---------- Testimonials (Ben's "What's it like working with me?") ---------- */
-  .testi-head { text-align: center; margin-bottom: 54px; }
-  .testi-head h2 { font-family: var(--serif); font-size: clamp(30px, 4vw, 42px); font-weight: 600; }
-  .testi-head p { color: var(--ink-soft); margin-top: 10px; font-family: var(--hand); font-size: 24px; }
-  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: start; }
-  .testi { border-radius: 22px; padding: 30px 28px; transition: transform .35s; }
-  .testi:nth-child(1) { transform: rotate(-1.2deg); }
-  .testi:nth-child(2) { transform: rotate(.8deg) translateY(18px); }
-  .testi:nth-child(3) { transform: rotate(-.6deg); }
-  .testi:hover { transform: rotate(0) translateY(-4px); }
-  .testi q { font-size: 14.5px; color: var(--ink); quotes: "“" "”"; line-height: 1.65; }
-  .testi .person { display: flex; align-items: center; gap: 12px; margin-top: 22px; }
-  .testi .ava {
-    width: 42px; height: 42px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--pastel-1), var(--pastel-2));
-    display: grid; place-items: center; font-weight: 600; font-size: 15px; color: var(--accent-deep);
+  /* ---------- Endorsements collage ---------- */
+  #endorsements.endorse {
+    background: linear-gradient(180deg, #F4F1EA 0%, #F7F5F0 55%, #EEF2F8 100%);
+    padding-top: 72px;
+    padding-bottom: 80px;
+    overflow: hidden;
   }
-  .testi .who b { display: block; font-size: 14px; }
-  .testi .who span { font-size: 13px; color: var(--ink-soft); }
+  .endorse-head {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 8px;
+    position: relative;
+    z-index: 2;
+  }
+  .endorse-head h2 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4.6vw, 48px);
+    font-weight: 600;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .endorse-head p {
+    margin-top: 14px;
+    font-family: var(--hand);
+    font-size: clamp(22px, 2.4vw, 28px);
+    color: var(--ink-soft);
+    line-height: 1.35;
+  }
+  .endorse-stage {
+    position: relative;
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    /* Compact cluster — two card columns flanking the portrait */
+    min-height: 730px;
+    height: clamp(730px, 72vw, 800px);
+  }
+  /* Half-body cutout — no frame, no mask, just Alex */
+  .endorse-cutout {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(300px, 30vw);
+    z-index: 4;
+    pointer-events: none;
+  }
+  /* keep the -50%,-50% centering through the reveal animation
+     (the generic .reveal.in { transform:none } would un-center it) */
+  .endorse-cutout.reveal { transform: translate(-50%, calc(-50% + 30px)); }
+  .endorse-cutout.reveal.in { transform: translate(-50%, -50%); }
+  .endorse-cutout img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* soften the hard crop at the hips */
+    -webkit-mask-image: linear-gradient(180deg, #000 86%, transparent 99%);
+    mask-image: linear-gradient(180deg, #000 86%, transparent 99%);
+  }
+  /* signature block under the portrait */
+  .endorse-sign {
+    margin-top: 2px;
+    text-align: center;
+  }
+  .endorse-sign .sign-name {
+    display: block;
+    font-family: var(--hand);
+    font-size: clamp(36px, 4.4vw, 48px);
+    line-height: 1;
+    color: var(--ink);
+  }
+  .endorse-sign .sign-role {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .endorse-sign .sign-traits {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .endorse-sign .sign-traits span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .endorse-sign .sign-traits svg {
+    width: 14px;
+    height: 14px;
+    color: #E8A54B;
+    flex-shrink: 0;
+  }
+  .endorse-card {
+    position: absolute;
+    z-index: 2;
+    width: min(280px, 72vw);
+    padding: 18px 18px 16px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 14px 36px rgba(30,42,68,.1);
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
+  }
+  .endorse-card:hover {
+    z-index: 4;
+    box-shadow: 0 22px 48px rgba(30,42,68,.16);
+  }
+  .endorse-card p,
+  .endorse-card q {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    quotes: none;
+  }
+  .endorse-card .who {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .endorse-card .ava {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-deep);
+    background: linear-gradient(135deg, var(--pastel-1), var(--pastel-2));
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .endorse-card .ava img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .endorse-card .meta b {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .endorse-card .meta span {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .endorse-card .name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .endorse-card .li-badge {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  /* Card flavors */
+  .endorse-card--li {
+    border: 2px solid var(--card-accent, #5B7FD9);
+  }
+  .endorse-card--li .who { margin-top: 0; margin-bottom: 10px; }
+  /* Ryan-forward hero: full rec, larger, near center */
+  .endorse-card--hero {
+    z-index: 5;
+    padding: 22px 22px 18px;
+    box-shadow: 0 20px 48px rgba(30,42,68,.14);
+  }
+  .endorse-card--hero .ava {
+    width: 42px;
+    height: 42px;
+    font-size: 13px;
+  }
+  .endorse-card--hero .meta b { font-size: 14px; }
+  .endorse-card--hero .endorse-body {
+    max-height: 320px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 6px;
+    margin-right: -2px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(30,42,68,.22) transparent;
+  }
+  .endorse-card--hero .endorse-body::-webkit-scrollbar { width: 5px; }
+  .endorse-card--hero .endorse-body::-webkit-scrollbar-thumb {
+    background: rgba(30,42,68,.22);
+    border-radius: 999px;
+  }
+  .endorse-card--hero .endorse-body p {
+    font-size: 14px;
+    line-height: 1.58;
+  }
+  .endorse-card--hero .endorse-body p + p { margin-top: 12px; }
+  .endorse-card--post-shot {
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid var(--card-accent, #0A66C2);
+    background: #fff;
+  }
+  .endorse-card--post-shot a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+  .endorse-card--post-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+  }
+  .endorse-card--slack {
+    border: 2px solid var(--card-accent, #6B5CE0);
+    padding-top: 14px;
+  }
+  .endorse-card--slack .slack-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .endorse-card--slack .slack-head b { font-size: 13px; }
+  .endorse-card--slack .slack-head time {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-left: 4px;
+    font-weight: 400;
+  }
+  .endorse-card--slack .reacts {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .endorse-card--slack .reacts span {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #F1F2F6;
+    color: var(--ink-soft);
+  }
+  /* Polaroid-style team photos */
+  .endorse-card--photo {
+    margin: 0;
+    padding: 10px 10px 12px;
+    background: #fff;
+  }
+  .endorse-card--photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .endorse-card--photo figcaption {
+    font-family: var(--hand);
+    font-size: 17px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-top: 9px;
+  }
+  /*
+    Two flanking columns around the centered portrait:
+    left — Slack note, LinkedIn reaction card, Jonny;
+    right — Ryan hero, Slack note.
+  */
+  /* top-left — Slack (Lorem Wong) */
+  .endorse-card--1 {
+    top: 0;
+    left: 0;
+    width: min(330px, 31vw);
+    z-index: 5;
+    --card-accent: #7C6AEF;
+  }
+  /* mid-left — LinkedIn reactions (Security Advisor post screenshot) */
+  .endorse-card--7 {
+    top: 27%;
+    left: -1%;
+    width: min(290px, 27vw);
+    z-index: 5;
+    --card-accent: #0A66C2;
+  }
+  /* bottom-left — Jonny */
+  .endorse-card--2 {
+    bottom: 0;
+    left: 0;
+    width: min(330px, 31vw);
+    z-index: 5;
+    --card-accent: #5B7FD9;
+  }
+  /* top-right — Ryan hero */
+  .endorse-card--4 {
+    top: 0;
+    right: -1%;
+    width: min(410px, 38vw);
+    z-index: 5;
+    --card-accent: #E07A6D;
+  }
+  /* bottom-right — Slack (M. Placeholder) */
+  .endorse-card--3 {
+    bottom: 4%;
+    right: 0;
+    width: min(350px, 33vw);
+    z-index: 5;
+    --card-accent: #E8A54B;
+  }
+  .endorse-card--1.reveal.in { transform: rotate(-3.2deg); }
+  .endorse-card--2.reveal.in { transform: rotate(2.2deg); }
+  .endorse-card--3.reveal.in { transform: rotate(1.4deg); }
+  .endorse-card--4.reveal.in { transform: rotate(-1deg); }
+  .endorse-card--7.reveal.in { transform: rotate(1.6deg); }
+  .endorse-card--1.reveal.in:hover,
+  .endorse-card--2.reveal.in:hover,
+  .endorse-card--3.reveal.in:hover,
+  .endorse-card--4.reveal.in:hover,
+  .endorse-card--7.reveal.in:hover {
+    transform: rotate(0deg) translateY(-4px) scale(1.02);
+  }
+  /* Polaroid row under the collage */
+  .endorse-photos {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(18px, 3vw, 36px);
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    padding-top: 64px;
+  }
+  .endorse-photos .endorse-card--photo {
+    position: relative;
+    width: min(280px, 28vw);
+  }
+  .endorse-photos .endorse-card--photo:nth-child(2) { transform: rotate(-2.2deg); }
+  .endorse-photos .endorse-card--photo:nth-child(3) { transform: rotate(1.6deg) translateY(14px); }
+  .endorse-photos .endorse-card--photo:nth-child(4) { transform: rotate(-1.4deg); }
+  .endorse-photos .endorse-card--photo:hover {
+    transform: rotate(0deg) translateY(-4px) scale(1.02);
+  }
+  /* hand-written note + arrow pointing into the first polaroid */
+  .endorse-photos-note {
+    position: absolute;
+    top: 0;
+    left: clamp(4%, 12vw, 16%);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .endorse-photos-note svg {
+    width: 46px;
+    height: 40px;
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .8;
+    transform: translateY(8px);
+  }
+  .endorse-photos-note span {
+    font-family: var(--hand);
+    font-size: clamp(19px, 2.2vw, 25px);
+    color: var(--ink);
+    transform: rotate(-3deg);
+    white-space: nowrap;
+  }
+  /* Wide LinkedIn-style strip at the bottom */
+  .endorse-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(18px, 3vw, 40px);
+    width: min(1080px, 100%);
+    margin: 44px auto 0;
+    padding: 16px 22px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 14px 36px rgba(30,42,68,.1);
+    position: relative;
+    z-index: 2;
+  }
+  .endorse-strip .strip-who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .endorse-strip .ava {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .endorse-strip .ava img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .endorse-strip .name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .endorse-strip .name-row b {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .endorse-strip .li-badge {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+  .endorse-strip .strip-who .meta > span {
+    display: block;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .endorse-strip .name-row span {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .endorse-strip .strip-brands {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 36px);
+    flex-shrink: 0;
+  }
+  .endorse-strip .strip-brands img {
+    display: block;
+    height: 34px;
+    width: auto;
+  }
+  .endorse-strip .strip-org {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .endorse-strip .strip-org img {
+    display: block;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+  .endorse-strip .strip-org .meta b {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .endorse-strip .strip-org .meta span {
+    display: block;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .endorse-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 36px;
+    position: relative;
+    z-index: 2;
+  }
+  .endorse-more a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-family: var(--serif);
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 500;
+    color: var(--ink);
+    padding: 6px 2px;
+    position: relative;
+    transition: color .25s ease;
+  }
+  .endorse-more a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: currentColor;
+    opacity: .35;
+    transform: scaleX(.9);
+    transform-origin: left;
+    transition: opacity .25s ease, transform .3s ease;
+  }
+  .endorse-more a .li-badge { width: 18px; height: 18px; }
+  .endorse-more a .arrow {
+    color: var(--accent-deep);
+    transition: transform .3s ease;
+  }
+  .endorse-more a:hover { color: var(--accent-deep); }
+  .endorse-more a:hover::after { opacity: .85; transform: scaleX(1); }
+  .endorse-more a:hover .arrow { transform: translateX(4px); }
 
   /* ---------- Footer (Michael's) ---------- */
   footer { padding: 110px 0 70px; text-align: center; }
   footer .foot-line { font-family: var(--serif); font-size: clamp(26px, 3.6vw, 40px); font-weight: 400; line-height: 1.3; }
   footer .curious {
-    display: inline-block; margin-top: 22px; font-family: var(--hand); font-size: 26px;
-    color: var(--accent); text-decoration: none; transform: rotate(-2deg);
+    display: block;
+    width: fit-content;
+    margin: 22px auto 0;
+    font-family: var(--hand);
+    font-size: 26px;
+    color: var(--accent);
+    text-decoration: none;
+    transform: rotate(-2deg);
   }
   footer .curious:hover { text-decoration: underline; }
   footer .mail {
-    display: block; margin-top: 30px; text-decoration: none;
-    font-size: 17px; color: var(--ink); font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 30px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    transition: color .2s ease;
   }
-  footer .mail:hover { color: var(--accent-deep); }
+  footer .mail:hover,
+  footer .mail:focus-visible { color: var(--accent-deep); }
+  footer .mail:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  footer .mail-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: .72;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  footer .mail:hover .mail-icon { opacity: 1; }
+  footer .mail.is-copied .mail-icon { transform: scale(1.08); }
+  footer .mail-label { transition: opacity .15s ease; }
   footer .small { margin-top: 44px; color: var(--ink-soft); font-size: 13.5px; }
 
   @media (max-width: 900px) {
@@ -1246,19 +1914,84 @@
       border-radius: 50% 50% 0 0 / 36% 36% 0 0;
     }
     .timeline::before { display: none; }
-    .t-row { grid-template-columns: 1fr; gap: 14px; }
-    .t-year::after { display: none; }
-    .proj-card { grid-template-columns: 1fr; }
-    .instincts, .testi-grid { grid-template-columns: 1fr; }
+    .t-group { grid-template-columns: 1fr; gap: 14px; margin-bottom: 48px; }
+    .t-company::after { display: none; }
+    .t-stack { gap: 40px; }
+    .proj-feature-media { aspect-ratio: 16 / 11; border-radius: 16px; }
+    .work-grid { grid-template-columns: 1fr; }
+    .instincts { grid-template-columns: 1fr; }
     .instinct--decode.reveal.in,
     .instinct--derisk.reveal.in,
     .instinct--amplify.reveal.in { transform: none; }
     .instinct.reveal.in:hover { transform: translateY(-4px); }
-    .how-work-cta { margin-top: 40px; flex-direction: column; }
+    .how-work-cta { margin-top: 44px; }
     .how-flower { width: min(380px, 84vw); opacity: .82; }
     .how-flower--tr { top: -6%; right: -20%; }
     .how-flower--bl { left: -22%; bottom: -8%; }
-    .testi:nth-child(2) { transform: none; }
+    .endorse-stage {
+      min-height: 0;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      padding-bottom: 24px;
+    }
+    .endorse-cutout {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      width: min(220px, 58vw);
+      order: -2;
+      margin: 8px 0 4px;
+    }
+    .endorse-cutout.reveal,
+    .endorse-cutout.reveal.in { transform: none; }
+    .endorse-card {
+      position: relative;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: min(100%, 360px) !important;
+    }
+    .endorse-card--hero {
+      order: -1;
+      width: min(100%, 400px) !important;
+      z-index: 2;
+    }
+    .endorse-card--hero .endorse-body {
+      max-height: none;
+      overflow: visible;
+      padding-right: 0;
+    }
+    .endorse-card.reveal.in,
+    .endorse-card.reveal.in:hover {
+      transform: none;
+    }
+    .endorse-photos {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding-top: 56px;
+    }
+    .endorse-photos .endorse-card--photo,
+    .endorse-photos .endorse-card--photo:nth-child(2),
+    .endorse-photos .endorse-card--photo:nth-child(3),
+    .endorse-photos .endorse-card--photo:nth-child(4) {
+      width: min(100%, 320px) !important;
+      transform: none;
+    }
+    .endorse-photos-note { left: 8%; }
+    .endorse-strip {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .endorse-strip .strip-brands { padding-left: 56px; }
+    .endorse-more { margin-top: 28px; }
     #skills { margin-top: -10vh; }
     .skills-pin { min-height: 100svh; padding-top: 88px; }
     .skill-slide-inner { grid-template-columns: 1fr; min-height: 0; }
@@ -1495,61 +2228,128 @@
   </div>
 </section>
 
-<!-- Projects: Ben's large list on a timeline -->
+<!-- Projects: featured timeline + more studies grid -->
 <section id="work" data-ph-section="work">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>Selected work sample</h2>
       <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
     </div>
-    <div class="timeline">
-      <div class="t-row reveal">
-        <div class="t-year">2022</div>
-        <a class="proj-card glass" href="#" data-ph="project" data-ph-project="from-research-to-roadmap" data-ph-year="2022">
-          <div class="proj-media"><div class="ph m1">study mockup / video</div></div>
-          <div class="proj-info">
-            <div class="role">UX Researcher</div>
-            <h3>From Research to Roadmap <span class="arrow">→</span></h3>
-            <p>A 32-session mixed-methods mental model study that redirected company strategy away from mobile-first — and defined the modular IA behind MB5.</p>
-            <div class="keywords"><span>Kano Analysis</span><span>Open Card Sorting</span><span>Mental Models</span></div>
+
+    <!-- Part 1 — featured studies grouped by company -->
+    <div class="work-part">
+      <div class="timeline">
+        <div class="t-group reveal">
+          <div class="t-company">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="28" height="28">
+            <span>Malwarebytes</span>
           </div>
-        </a>
+          <div class="t-stack">
+            <a class="proj-feature" href="#" data-ph="project" data-ph-project="from-research-to-roadmap" data-ph-company="malwarebytes">
+              <div class="proj-feature-copy">
+                <h3>From Research to Roadmap <span class="arrow">→</span></h3>
+                <p>A 32-session mixed-methods mental model study that redirected company strategy away from mobile-first — and defined the modular IA behind&nbsp;MB5.</p>
+                <div class="keywords"><span>Kano Analysis</span><span>Open Card Sorting</span><span>Mental Models</span></div>
+              </div>
+              <div class="proj-feature-media"><div class="ph m1">study mockup / video</div></div>
+            </a>
+
+            <a class="proj-feature" href="#" data-ph="project" data-ph-project="security-advisor" data-ph-company="malwarebytes">
+              <div class="proj-feature-copy">
+                <h3>Security Advisor <span class="arrow">→</span></h3>
+                <p>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</p>
+                <div class="keywords"><span>AI + Trust</span><span>Conversational UX</span><span>Enterprise</span></div>
+              </div>
+              <div class="proj-feature-media"><div class="ph m5">SA / SAM mockup</div></div>
+            </a>
+
+            <a class="proj-feature" href="#" data-ph="project" data-ph-project="from-patchwork-to-posture" data-ph-company="malwarebytes">
+              <div class="proj-feature-copy">
+                <h3>From Patchwork to Posture <span class="arrow">→</span></h3>
+                <p>Redesigning Nebula from the ground up around Security Posture Assessment — card sorts to competitor IA to usability with SMB admins and&nbsp;MSPs.</p>
+                <div class="keywords"><span>Product Revamp</span><span>UX Architecture</span><span>Enterprise</span></div>
+              </div>
+              <div class="proj-feature-media"><div class="ph m3">console redesign</div></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="t-group reveal">
+          <div class="t-company">
+            <img src="assets/images/shared/brand/google.svg" alt="" width="28" height="28">
+            <span>Google</span>
+          </div>
+          <div class="t-stack">
+            <a class="proj-feature" href="#" data-ph="project" data-ph-project="grocery-reimagined" data-ph-company="google">
+              <div class="proj-feature-copy">
+                <h3>Grocery Reimagined <span class="arrow">→</span></h3>
+                <p>Assistive grocery shopping with Google Shopping List — end-to-end task flows, trip-tech testing, and AI personal-assistant concepts that made the list feel less like chores and more like&nbsp;help.</p>
+                <div class="keywords"><span>TripTech Testing</span><span>E2E Task Flow</span><span>AI Assistant</span></div>
+              </div>
+              <div class="proj-feature-media"><div class="ph m2">shopping list journey</div></div>
+            </a>
+
+            <a class="proj-feature" href="#" data-ph="project" data-ph-project="express-to-shopping-tab" data-ph-company="google">
+              <div class="proj-feature-copy">
+                <h3>Express → Shopping Tab <span class="arrow">→</span></h3>
+                <p>Foundational and concept-validation research as Express folded into the new Shopping tab — participatory design, competitor audits, and fieldwork that shaped how shoppers browse with&nbsp;confidence.</p>
+                <div class="keywords"><span>Google Shopping</span><span>Participatory Design</span><span>Concept Exploration</span></div>
+              </div>
+              <div class="proj-feature-media"><div class="ph m4">shopping tab concepts</div></div>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="t-row reveal">
-        <div class="t-year">2020–23</div>
-        <a class="proj-card glass" href="#" data-ph="project" data-ph-project="personas-with-purpose" data-ph-year="2020-23">
-          <div class="proj-media"><div class="ph m2">persona artifacts</div></div>
-          <div class="proj-info">
-            <div class="role">UX Researcher · Research Manager</div>
-            <h3>Personas with Purpose <span class="arrow">→</span></h3>
-            <p>Building data-driven personas for consumer and corporate UX — the foundation later studies (and strategy bets) stood on.</p>
-            <div class="keywords"><span>Methodology Study</span><span>JTBD Framework</span></div>
-          </div>
+    </div>
+
+    <!-- Part 2 — more studies as simple one-pager links -->
+    <div class="work-part work-part--more">
+      <p class="work-part-label reveal">More studies</p>
+      <p class="work-part-note reveal">Quick one-pagers — the supporting research that shaped teams, ops, and product&nbsp;direction.</p>
+      <div class="work-grid">
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="personas-with-purpose" data-ph-company="malwarebytes">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
+            Malwarebytes
+          </span>
+          <h3>Personas with Purpose <span class="arrow">→</span></h3>
+          <p>Building data-driven personas for consumer and corporate UX — the foundation later studies (and strategy bets) stood&nbsp;on.</p>
         </a>
-      </div>
-      <div class="t-row reveal">
-        <div class="t-year">2021–23</div>
-        <a class="proj-card glass" href="#" data-ph="project" data-ph-project="from-patchwork-to-posture" data-ph-year="2021-23">
-          <div class="proj-media"><div class="ph m3">console redesign</div></div>
-          <div class="proj-info">
-            <div class="role">UX Researcher · Research Manager</div>
-            <h3>From Patchwork to Posture <span class="arrow">→</span></h3>
-            <p>Redesigning Nebula from the ground up around Security Posture Assessment — card sorts to competitor IA to usability with SMB admins and MSPs.</p>
-            <div class="keywords"><span>Product Revamp</span><span>UX Architecture</span><span>Enterprise</span></div>
-          </div>
+
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="power-of-desktop-research" data-ph-company="google">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/google.svg" alt="" width="18" height="18">
+            Google
+          </span>
+          <h3>Power of Desktop Research <span class="arrow">→</span></h3>
+          <p>A methodology case study featuring Google Shopping SRP competitor audits — when desktop research moves the&nbsp;needle.</p>
         </a>
-      </div>
-      <div class="t-row reveal">
-        <div class="t-year">2019</div>
-        <a class="proj-card glass" href="#" data-ph="project" data-ph-project="shopping-with-confidence" data-ph-year="2019">
-          <div class="proj-media"><div class="ph m4">shopping tab concepts</div></div>
-          <div class="proj-info">
-            <div class="role">UX Researcher</div>
-            <h3>Shopping with Confidence <span class="arrow">→</span></h3>
-            <p>Evolving the Google Shopping Tab through iterative concept research — participatory design, competitor audits, and in-store grocery fieldwork.</p>
-            <div class="keywords"><span>Google Shopping</span><span>Participatory Design</span><span>Concept Exploration</span></div>
-            <div class="cta-note">coming soon ✺</div>
-          </div>
+
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="clarity-in-the-chaos" data-ph-company="google">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/google.svg" alt="" width="18" height="18">
+            Google
+          </span>
+          <h3>Clarity in the Chaos <span class="arrow">→</span></h3>
+          <p>Visualizing UX research recruiting at scale for Google Ads — dashboards that made a messy pipeline&nbsp;strategic.</p>
+        </a>
+
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="democratizing-with-strategy" data-ph-company="malwarebytes">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
+            Malwarebytes
+          </span>
+          <h3>Democratizing with Strategy <span class="arrow">→</span></h3>
+          <p>Building — and knowing when to let go of — a participatory research program so more teams could sit with&nbsp;users.</p>
+        </a>
+
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="from-fragmented-tools-to-unified-app" data-ph-company="malwarebytes">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
+            Malwarebytes
+          </span>
+          <h3>From Fragmented Tools to a Unified App <span class="arrow">→</span></h3>
+          <p>Building Malwarebytes 5.0 — converging four standalone products into one coherent, consumer-first security&nbsp;experience.</p>
         </a>
       </div>
     </div>
@@ -1568,8 +2368,8 @@
   </div>
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>What makes me,&nbsp;me</h2>
-      <p>At the end of the day, who I&nbsp;am.</p>
+      <h2>Who I&nbsp;am</h2>
+      <p>At the end of the day, the instincts behind the&nbsp;work.</p>
     </div>
     <ol class="instincts">
       <li class="instinct instinct--decode reveal">
@@ -1598,37 +2398,178 @@
       <p class="how-work-cta-note">Curious how I became this&nbsp;person?</p>
       <div class="how-work-cta-action">
         <figure class="how-work-cta-peek" aria-hidden="true">
-          <!-- Drop your photo here → assets/images/about/show-me.jpg -->
-          <img src="assets/images/about/show-me.jpg" alt="" width="520" height="650" decoding="async">
+          <img src="assets/images/how/show-me.png" alt="" width="520" height="650" decoding="async">
         </figure>
         <a class="how-work-cta-btn" href="#about" data-ph="nav" data-ph-label="about-from-how-i-work">
-          show me
+          show me <span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Testimonials: Ben's section -->
-<section data-ph-section="testimonials">
+<!-- Endorsements collage -->
+<section id="endorsements" class="endorse" data-ph-section="testimonials" aria-label="What's it like working with me">
   <div class="wrap">
-    <div class="testi-head reveal">
-      <h2>What's it like working with me?</h2>
-      <p>kind words from talented people ✺</p>
+    <div class="endorse-head reveal">
+      <h2>What's it like working with&nbsp;me?</h2>
+      <p>I believe by working hard, being kind — amazing things will&nbsp;happen.</p>
     </div>
-    <div class="testi-grid">
-      <div class="testi glass reveal">
-        <q>Her research always provided actionable insights that we as Product could leverage. She was always able to cut through the noise and find the information that was the most relevant, and distill that into something useful. Truly a great asset to any team!</q>
-        <div class="person"><div class="ava">JR</div><div class="who"><b>Jonny Rivera</b><span>Sr. Product Director</span></div></div>
+
+    <div class="endorse-stage" data-endorse-stage>
+      <div class="endorse-cutout reveal" aria-hidden="true">
+        <!-- alt pose: profile-halfbody.png (crossed arms) -->
+        <img src="assets/images/about/profile-halfbody-wave.png" alt="" width="960" height="1436" decoding="async">
+        <div class="endorse-sign">
+          <span class="sign-name">Alexandra</span>
+          <span class="sign-role">Senior UX Researcher</span>
+          <div class="sign-traits">
+            <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.1 6.5H21l-5.6 4 2.2 6.5-5.6-4-5.6 4 2.2-6.5-5.6-4h6.9z"/></svg>Insightful</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>Strategic</span>
+            <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 4.6 2.4 8.5 10 10-7.6 1.5-9.5 5.4-10 10-.5-4.6-2.4-8.5-10-10 7.6-1.5 9.5-5.4 10-10z"/></svg>Impactful</span>
+          </div>
+        </div>
       </div>
-      <div class="testi glass reveal">
-        <q>Alex is a highly skilled and experienced researcher with an extensive toolkit of methods. She is an excellent communicator, able to clearly and concisely present research findings to both technical and non-technical audiences.</q>
-        <div class="person"><div class="ava">KV</div><div class="who"><b>Kimberly Voisin</b><span>Sr. UX Researcher</span></div></div>
+
+      <!-- Slack × 2 (placeholders) -->
+      <article class="endorse-card endorse-card--slack endorse-card--1 reveal" style="--card-accent:#7C6AEF">
+        <div class="slack-head">
+          <div class="ava">LW</div>
+          <div class="name-row"><b>Lorem Wong</b><time datetime="2025-11">2 months ago</time></div>
+        </div>
+        <p>Lorem ipsum dolor sit amet — Alex always finds the signal in the noise and makes the next decision feel&nbsp;obvious.</p>
+        <div class="reacts" aria-hidden="true"><span>👍 8</span><span>❤️ 5</span><span>✨ 3</span></div>
+      </article>
+
+      <article class="endorse-card endorse-card--slack endorse-card--3 reveal" style="--card-accent:#E8A54B">
+        <div class="slack-head">
+          <div class="ava">MP</div>
+          <div class="name-row"><b>M. Placeholder</b><time datetime="2025-08">6 months ago</time></div>
+        </div>
+        <p>Ut enim ad minim veniam — sharp questions, kinder rooms, better product calls. Grateful we got to partner with&nbsp;her. She de-risks the fuzzy middle so the team can ship with&nbsp;confidence.</p>
+        <div class="reacts" aria-hidden="true"><span>🙌 12</span><span>💡 4</span><span>❤️ 7</span></div>
+      </article>
+
+      <!-- LinkedIn recommendations × 3 (real quotes) -->
+      <article class="endorse-card endorse-card--li endorse-card--2 reveal" style="--card-accent:#5B7FD9">
+        <div class="who">
+          <div class="ava"><img src="assets/images/endorsements/jr.jpg" alt="" width="72" height="72"></div>
+          <div class="meta">
+            <div class="name-row">
+              <b>Jonny Rivera</b>
+              <svg class="li-badge" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+            </div>
+            <span>Sr. Product Director</span>
+          </div>
+        </div>
+        <q>Her research always provided actionable insights that we as Product could leverage. She was always able to cut through the noise and find the information that was the most relevant, and distill that into something&nbsp;useful.</q>
+      </article>
+
+      <article class="endorse-card endorse-card--li endorse-card--hero endorse-card--4 reveal" style="--card-accent:#E07A6D" aria-label="Recommendation from Ryan Krepps">
+        <div class="who">
+          <div class="ava"><img src="assets/images/endorsements/Ryan.jpeg" alt="" width="84" height="84"></div>
+          <div class="meta">
+            <div class="name-row">
+              <b>Ryan Krepps</b>
+              <svg class="li-badge" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+            </div>
+            <span>Sr. UX Researcher</span>
+          </div>
+        </div>
+        <div class="endorse-body">
+          <p>I consider myself very lucky to have had the opportunity to work with Alexandra. In my experience, it's rare to encounter someone who possesses strong leadership skills AND the domain-specific expertise to help scaffold your own growth; Alex has both in&nbsp;spades. She has an excellent understanding of the UX process (in both methodological and business applications) and how to apply research to provide understanding, insight, and&nbsp;direction. In projects where we worked together, I was always impressed by her ability to “cut through the&nbsp;fog” that can surround research topics and identify the underlying&nbsp;questions.</p>
+          <p>Beyond her talents as an individual contributor, Alexandra also did an excellent job leading the UX Research team, even as business objectives and priorities would shift&nbsp;rapidly. She advocated strongly for both the role of UX research and for the individual UX researchers on her team, fostering cross-functional collaboration and empowering us to be the internal experts on our&nbsp;users.</p>
+          <p>On a personal level, every conversation I had with Alex felt honest and&nbsp;respectful. As a result, when it came time for performance reviews, it was much easier for us to talk openly about my strengths and weaknesses and — perhaps more importantly — what steps I could take to continue to&nbsp;grow. I truly feel like her guidance and support over the past 2+ years has had a significant (positive!) impact on my skills as a researcher and my expectations for a leader, and any team lucky enough to have her will undoubtedly find themselves feeling the&nbsp;same.</p>
+        </div>
+      </article>
+
+      <!-- LinkedIn reactions (Security Advisor post · Trey Wafer comment) -->
+      <article class="endorse-card endorse-card--post-shot endorse-card--7 reveal" style="--card-accent:#0A66C2">
+        <a
+          href="https://www.linkedin.com/posts/alexandradev_new-security-advisor-amps-up-security-in-activity-7103880680492716033-LkaE"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ph="connect"
+          data-ph-location="endorsements-post"
+        >
+          <img
+            src="assets/images/endorsements/li-post-security-advisor.png"
+            alt="LinkedIn post on Malwarebytes Security Advisor — 24 reactions, with a comment from Trey Wafer: Well said, Alex! This is brilliant work from the entire team."
+            width="720"
+            height="791"
+            decoding="async"
+            loading="lazy"
+          >
+        </a>
+      </article>
+
+    </div>
+
+    <!-- Malwarebytes team photos -->
+    <div class="endorse-photos reveal">
+      <div class="endorse-photos-note" aria-hidden="true">
+        <svg viewBox="0 0 46 40">
+          <path d="M42 6 C 30 16, 20 24, 9 31" />
+          <path d="M19 32 L 8 32 L 13 22" />
+        </svg>
+        <span>Great work. Even better&nbsp;together.</span>
       </div>
-      <div class="testi glass reveal">
-        <q>It's rare to encounter someone who possesses strong leadership skills and the domain-specific expertise to scaffold your own growth; Alex has both in spades. I was always impressed by her ability to "cut through the fog" and identify the underlying questions.</q>
-        <div class="person"><div class="ava">RK</div><div class="who"><b>Ryan Krepps</b><span>Sr. UX Researcher</span></div></div>
+
+      <figure class="endorse-card endorse-card--photo">
+        <img src="assets/images/about/mwb teambuiding 2.JPG" alt="Team sailing offsite aboard the Kai Lani" width="1024" height="768" loading="lazy" decoding="async">
+        <figcaption>team sailing&nbsp;day</figcaption>
+      </figure>
+
+      <figure class="endorse-card endorse-card--photo">
+        <img src="assets/images/about/mwb teambuilding 1.JPG" alt="Team offsite at the go-kart track, podium celebration" width="1024" height="768" loading="lazy" decoding="async">
+        <figcaption>offsites, podium&nbsp;included</figcaption>
+      </figure>
+
+      <figure class="endorse-card endorse-card--photo">
+        <img src="assets/images/about/mwb office.JPG" alt="Alexandra with her Malwarebytes teammates at the office" width="1024" height="768" loading="lazy" decoding="async">
+        <figcaption>my Malwarebytes&nbsp;crew</figcaption>
+      </figure>
+    </div>
+
+    <!-- LinkedIn-style strip: profile · past teams · Malwarebytes -->
+    <aside class="endorse-strip reveal" aria-label="Alexandra's LinkedIn profile, past teams Huawei and Google, and Malwarebytes">
+      <div class="strip-who">
+        <div class="ava"><img src="assets/images/about/LinkedIn Profile 1.png" alt="" width="88" height="88" loading="lazy" decoding="async"></div>
+        <div class="meta">
+          <div class="name-row">
+            <b>Alexandra Irribarren</b>
+            <svg class="li-badge" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+            <span aria-hidden="true">· 1st</span>
+          </div>
+          <span>Senior UX Researcher | Mixed-Methods | Ex-Google, Huawei,&nbsp;Malwarebytes</span>
+          <span>2yr</span>
+        </div>
       </div>
+      <div class="strip-brands">
+        <img src="assets/images/shared/brand/huawei.svg" alt="Huawei" width="34" height="34" loading="lazy" decoding="async">
+        <img src="assets/images/shared/brand/google.svg" alt="Google" width="34" height="34" loading="lazy" decoding="async">
+      </div>
+      <div class="strip-org">
+        <img src="assets/images/shared/brand/malwarebytes.svg" alt="Malwarebytes" width="44" height="44" loading="lazy" decoding="async">
+        <div class="meta">
+          <b>Malwarebytes</b>
+          <span>56,904 followers</span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="endorse-more reveal">
+      <a
+        href="https://www.linkedin.com/in/alexandra-irribarren/"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ph="connect"
+        data-ph-location="endorsements"
+      >
+        <svg class="li-badge" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+        More kind words on LinkedIn
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1638,8 +2579,21 @@
   <div class="wrap reveal">
     <p class="foot-line">You've hit the footer,<br>thanks for stopping by.</p>
     <a class="curious" href="#about" data-ph="nav" data-ph-label="still-curious">Still curious?</a>
-    <a class="mail" href="mailto:alexandrab.zhao@gmail.com" data-ph="connect" data-ph-location="footer">→ alexandrab.zhao@gmail.com</a>
-    <p class="small">© Alexandra Zhao 2026</p>
+    <button
+      type="button"
+      class="mail"
+      data-copy-email="alex@alexandra-irribarren.com"
+      data-ph="connect"
+      data-ph-location="footer"
+      aria-label="Copy email address alex@alexandra-irribarren.com"
+    >
+      <svg class="mail-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="8.5" y="8.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M15.5 8.5V6.8A2.3 2.3 0 0 0 13.2 4.5H6.8A2.3 2.3 0 0 0 4.5 6.8v6.4A2.3 2.3 0 0 0 6.8 15.5H8.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <span class="mail-label">alex@alexandra-irribarren.com</span>
+    </button>
+    <p class="small">© Alexandra Irribarren 2026</p>
   </div>
 </footer>
 
@@ -1768,7 +2722,7 @@
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
   // Stagger grids
-  document.querySelectorAll(".instincts, .testi-grid, .skills-chips").forEach(grid => {
+  document.querySelectorAll(".instincts, [data-endorse-stage], .skills-chips").forEach(grid => {
     [...grid.children].forEach((c, i) => c.style.transitionDelay = (i * 0.07) + "s");
   });
 
@@ -2078,6 +3032,40 @@
       year: el.dataset.phYear
     });
   });
+
+  // Footer email: copy to clipboard (no mailto popup)
+  const mailBtn = document.querySelector("[data-copy-email]");
+  if (mailBtn) {
+    const label = mailBtn.querySelector(".mail-label");
+    const email = mailBtn.dataset.copyEmail;
+    const idle = email;
+    let resetTimer;
+    mailBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+      } catch {
+        // Fallback for older browsers / insecure contexts
+        const ta = document.createElement("textarea");
+        ta.value = email;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      mailBtn.classList.add("is-copied");
+      if (label) label.textContent = "Copied!";
+      mailBtn.setAttribute("aria-label", "Email copied");
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => {
+        mailBtn.classList.remove("is-copied");
+        if (label) label.textContent = idle;
+        mailBtn.setAttribute("aria-label", `Copy email address ${email}`);
+      }, 1600);
+    });
+  }
 
   // Section reach (once per session per section)
   const seen = new Set();
