@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alexandra Zhao — From Insights to Influence</title>
+<title>Alexandra Irribarren — From Insights to Influence</title>
 <script>
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
   posthog.init("phc_r2cEAGp2HpvrfN22KtJUx2YuiNPY7YWuwbwLfbc9qTYp", {
@@ -522,7 +522,7 @@
   .about-arch-body {
     position: relative;
     z-index: 1;
-    max-width: 640px;
+    max-width: 680px;
     margin-top: 0;
   }
   .about-eyebrow {
@@ -548,47 +548,236 @@
     margin: 22px auto 0;
     background: linear-gradient(to bottom, rgba(0,115,140,.4), rgba(0,115,140,.05));
   }
-  .skills-sub {
+  /* ---------- Hard skills: pinned horizontal scroll ---------- */
+  #skills {
+    position: relative;
+    z-index: 2;
+    margin-top: -10vh;
+    background: linear-gradient(180deg, #EFF3D8 0%, #F2F6E6 30%, #EFF3FA 100%);
+  }
+  .skills-pin {
+    height: 100vh;
+    min-height: 640px;
     display: flex;
-    gap: 12px;
-    margin-top: 28px;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
+    padding: 88px 0 36px;
+    overflow: hidden;
   }
-  .skills-sub .chip {
+  .skills-top {
+    width: min(1140px, calc(100% - 64px));
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .skills-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .skills-chips .chip {
+    appearance: none;
+    border: 0;
     border-radius: 999px;
-    padding: 11px 20px;
-    font-size: 14.5px;
+    padding: 9px 16px;
+    font: inherit;
+    font-size: 13.5px;
     font-weight: 500;
-    transition: transform .25s;
+    cursor: pointer;
+    color: var(--ink);
+    transition: transform .25s, background .25s, color .25s, box-shadow .25s;
   }
-  .skills-sub .chip:hover { transform: translateY(-3px) rotate(-1deg); }
-  .about-tags {
+  .skills-chips .chip:hover { transform: translateY(-2px); }
+  .skills-chips .chip.is-active {
+    background: var(--accent-deep);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(0,90,110,.18);
+  }
+  .skills-scroll-hint {
+    font-family: var(--hand);
+    font-size: 22px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .skills-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+  .skills-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .skill-slide {
+    width: 100vw;
+    flex: 0 0 100vw;
+    padding: 0 max(32px, calc((100vw - 1140px) / 2));
+    box-sizing: border-box;
+  }
+  .skill-slide-inner {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    min-height: min(62vh, 560px);
+    padding: clamp(22px, 3vh, 36px) clamp(22px, 3vw, 40px);
+    border-radius: 28px;
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(0,115,140,.12);
+    box-shadow: 0 20px 50px rgba(10,69,84,.08);
+  }
+  .skill-slide .num {
+    font-family: var(--hand);
+    font-size: 28px;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+  }
+  .skill-slide h3 {
+    font-family: var(--serif);
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 600;
+    margin-top: 6px;
+    letter-spacing: -.015em;
+  }
+  .skill-slide .lede {
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    margin-top: 12px;
+    max-width: 44ch;
+    line-height: 1.55;
+  }
+  .skill-proofs {
+    margin: 18px 0 0;
+    padding: 0;
     list-style: none;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px 18px;
-    margin-top: 28px;
-    max-width: 520px;
+    flex-direction: column;
+    gap: 6px;
   }
-  .about-tags li {
+  .skill-proof {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border-left: 2px solid rgba(0,115,140,.18);
+    transition: background .22s, border-color .22s, transform .22s;
+  }
+  .skill-proof:hover,
+  .skill-proof:focus-visible,
+  .skill-proof.is-active {
+    background: rgba(239,243,216,.8);
+    border-left-color: var(--accent);
+    outline: none;
+    transform: translateX(2px);
+  }
+  .skill-proof strong {
+    display: block;
+    color: var(--accent-deep);
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .skill-proof span {
+    display: block;
     font-size: 13.5px;
     color: var(--ink-soft);
-    letter-spacing: .04em;
+    line-height: 1.45;
   }
-  .about-tags li::before {
-    content: "·";
-    margin-right: 10px;
-    color: var(--accent);
+  .proof-stage {
+    position: relative;
+    align-self: stretch;
+    min-height: min(48vh, 420px);
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 28% 24%, rgba(255,255,255,.78), transparent 55%),
+      linear-gradient(165deg, rgba(214,234,212,.75), rgba(201,220,247,.5));
+    border: 1px solid rgba(0,115,140,.12);
+    isolation: isolate;
   }
-  .about-tags li:first-child::before { content: none; margin: 0; }
+  .proof-stage .idle,
+  .proof-stage .stage-shot { position: absolute; inset: 16px; }
+  .proof-stage .idle {
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    font-family: var(--hand);
+    font-size: 24px;
+    color: rgba(10,69,84,.3);
+    transition: opacity .3s;
+  }
+  .proof-stage.has-image .idle { opacity: 0; pointer-events: none; }
+  .proof-stage .stage-shot {
+    border-radius: 14px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px) scale(.98);
+    transition: opacity .32s ease, transform .38s cubic-bezier(.2,.7,.2,1);
+    pointer-events: none;
+  }
+  .proof-stage .stage-shot.is-on {
+    opacity: 1;
+    transform: none;
+  }
+  .proof-ph {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 22px;
+    font-family: var(--hand);
+    font-size: 24px;
+    color: rgba(30,42,68,.55);
+    line-height: 1.25;
+  }
+  .proof-ph small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(30,42,68,.38);
+    margin-top: 8px;
+  }
+  .ph-ai { background: linear-gradient(145deg, #C9E0F5, #D8D2F0); }
+  .ph-conv { background: linear-gradient(145deg, #D2EDE4, #C9E0F5); }
+  .ph-zero { background: linear-gradient(145deg, #F3DCE9, #D9D4F5); }
+  .ph-amp { background: linear-gradient(145deg, #E4EFC8, #CDEDE4); }
+
   @media (prefers-reduced-motion: reduce) {
     .intro-pin { height: auto; min-height: 100vh; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
     .hero-fg { position: relative; inset: auto; }
     #about { position: relative; inset: auto; display: block; overflow: visible; }
     .about-arch { width: 100%; min-height: 90vh; border-radius: 48% 48% 0 0 / 28% 28% 0 0; }
+    .skills-pin { height: auto; min-height: 0; padding: 48px 0 80px; overflow: visible; }
+    .skills-viewport { overflow: visible; }
+    .skills-track {
+      width: 100%;
+      flex-direction: column;
+      gap: 20px;
+      transform: none !important;
+    }
+    .skill-slide {
+      width: 100%;
+      flex: none;
+      padding: 0 32px;
+    }
+    .skills-scroll-hint { display: none; }
+    .proof-stage .stage-shot { transition: none; }
   }
 
   /* ---------- Projects (Ben's large list on a timeline) ---------- */
@@ -725,8 +914,14 @@
     .proj-card { grid-template-columns: 1fr; }
     .persona-grid, .testi-grid { grid-template-columns: 1fr; }
     .testi:nth-child(2) { transform: none; }
+    #skills { margin-top: -6vh; }
+    .skills-pin { min-height: 100svh; padding-top: 96px; }
+    .skill-slide-inner { grid-template-columns: 1fr; min-height: 0; }
+    .proof-stage { min-height: 220px; order: -1; }
+    .skills-scroll-hint { display: none; }
     section { padding: 64px 0; }
   }
+
 </style>
 </head>
 <body>
@@ -809,23 +1004,143 @@
     <section id="about" data-ph-section="about">
       <div class="about-arch" data-about-arch>
         <div class="about-arch-body">
-          <p class="about-eyebrow">strategy-first</p>
-          <p class="statement">I work from the <em>whole down to the parts</em> — converging fragmented products, grounding ambiguous direction in evidence, and building the systems that make research impossible to ignore.</p>
+          <p class="about-eyebrow">strategic investigator</p>
+          <p class="statement">Hey, glad you're here. I'm a senior UX researcher based in the SF Bay Area. I lead strategic research in complex systems where trust is the product — security, privacy, and now AI.</p>
+          <p class="statement" style="margin-top:18px;font-size:clamp(18px,2.2vw,26px);">Trained in experimental science, I bring a lab scientist's rigor to a very human question: <em>what should we build, and why?</em></p>
           <div class="about-spine" aria-hidden="true"></div>
-          <div class="skills-sub">
-            <span class="chip glass">science → users → product</span>
-            <span class="chip glass">long-term over short-term</span>
-            <span class="chip glass">evidence over assertion</span>
-          </div>
-          <ul class="about-tags">
-            <li>mixed-methods rigor</li>
-            <li>product convergence</li>
-            <li>research ops + scale</li>
-          </ul>
         </div>
       </div>
     </section>
 </div>
+
+<!-- Section 2: pinned horizontal scroll through hard skills -->
+<section id="skills" data-ph-section="skills" aria-label="Hard skills">
+  <div class="skills-pin" data-skills>
+    <div class="skills-top">
+      <div class="skills-chips" role="tablist" aria-label="Practice areas">
+        <button type="button" class="chip glass is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+        <button type="button" class="chip glass" role="tab" data-skill="conv" aria-selected="false">convergence + revamp</button>
+        <button type="button" class="chip glass" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+        <button type="button" class="chip glass" role="tab" data-skill="amp" aria-selected="false">research influence</button>
+      </div>
+      <p class="skills-scroll-hint" aria-hidden="true">keep scrolling →</p>
+    </div>
+
+    <div class="skills-viewport">
+      <div class="skills-track" data-skills-track>
+        <article class="skill-slide" data-skill-slide="ai" id="skill-ai">
+          <div class="skill-slide-inner">
+            <div>
+              <span class="num">01</span>
+              <h3>AI + Trust</h3>
+              <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks back.</p>
+              <div class="skill-proofs">
+                <button type="button" class="skill-proof" data-proof="sa">
+                  <strong>Security Advisor</strong>
+                  <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for it.</span>
+                </button>
+                <button type="button" class="skill-proof" data-proof="automation">
+                  <strong>Automation scaling</strong>
+                  <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the loop.</span>
+                </button>
+              </div>
+            </div>
+            <div class="proof-stage" data-proof-stage aria-live="polite">
+              <p class="idle" aria-hidden="true">hover a bullet</p>
+              <div class="stage-shot" data-shot="sa"><div class="proof-ph ph-ai">Security Advisor<br><small>sanitized SA / SAM mockup</small></div></div>
+              <div class="stage-shot" data-shot="automation"><div class="proof-ph ph-ai">Automation scaling<br><small>autonomy framework</small></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="skill-slide" data-skill-slide="conv" id="skill-conv">
+          <div class="skill-slide-inner">
+            <div>
+              <span class="num">02</span>
+              <h3>Product Convergence &amp; Legacy Revamp</h3>
+              <p class="lede">I design UX architecture for products that outgrew their own structure.</p>
+              <div class="skill-proofs">
+                <button type="button" class="skill-proof" data-proof="shopping">
+                  <strong>Google Express → Shopping</strong>
+                  <span>Foundational and concept-validation research as Express folded into the new Shopping tab.</span>
+                </button>
+                <button type="button" class="skill-proof" data-proof="mb5">
+                  <strong>Malwarebytes 5.0</strong>
+                  <span>Converged four standalone products into one coherent app — mental models defining the unified structure.</span>
+                </button>
+                <button type="button" class="skill-proof" data-proof="console">
+                  <strong>Enterprise console rebuild</strong>
+                  <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture assessment.</span>
+                </button>
+              </div>
+            </div>
+            <div class="proof-stage" data-proof-stage aria-live="polite">
+              <p class="idle" aria-hidden="true">hover a bullet</p>
+              <div class="stage-shot" data-shot="shopping"><div class="proof-ph ph-conv">Google Shopping tab<br><small>Express → Shopping</small></div></div>
+              <div class="stage-shot" data-shot="mb5"><div class="proof-ph ph-conv">Malwarebytes 5.0<br><small>unified app</small></div></div>
+              <div class="stage-shot" data-shot="console"><div class="proof-ph ph-conv">Enterprise console<br><small>before → after</small></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="skill-slide" data-skill-slide="zero" id="skill-zero">
+          <div class="skill-slide-inner">
+            <div>
+              <span class="num">03</span>
+              <h3>0→1 Product Builds</h3>
+              <p class="lede">Build product from concept to launch in both traditional and AI-native environments.</p>
+              <div class="skill-proofs">
+                <button type="button" class="skill-proof" data-proof="ai-native">
+                  <strong>AI-native builds</strong>
+                  <span>From pain point to vision to working product — strategy-first discipline in AI-native contexts.</span>
+                </button>
+                <button type="button" class="skill-proof" data-proof="vpn">
+                  <strong>Privacy VPN</strong>
+                  <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was built.</span>
+                </button>
+              </div>
+            </div>
+            <div class="proof-stage" data-proof-stage aria-live="polite">
+              <p class="idle" aria-hidden="true">hover a bullet</p>
+              <div class="stage-shot" data-shot="ai-native"><div class="proof-ph ph-zero">AI-native build<br><small>personal project</small></div></div>
+              <div class="stage-shot" data-shot="vpn"><div class="proof-ph ph-zero">Privacy VPN<br><small>concept → launch</small></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="skill-slide" data-skill-slide="amp" id="skill-amp">
+          <div class="skill-slide-inner">
+            <div>
+              <span class="num">04</span>
+              <h3>Amplify Research Influence</h3>
+              <p class="lede">I make the value of research visible — so teams act on it, and users feel it.</p>
+              <div class="skill-proofs">
+                <button type="button" class="skill-proof" data-proof="participatory">
+                  <strong>Participatory Research Program</strong>
+                  <span>Bridged teams and users — boosting engagement, buy-in, and org empathy.</span>
+                </button>
+                <button type="button" class="skill-proof" data-proof="dashboard">
+                  <strong>Google Ads recruiting dashboard</strong>
+                  <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and PMs.</span>
+                </button>
+                <button type="button" class="skill-proof" data-proof="practice">
+                  <strong>Built the UX research practice</strong>
+                  <span>Grew the team from 2 to 5; streamlined research ops and standardized practices.</span>
+                </button>
+              </div>
+            </div>
+            <div class="proof-stage" data-proof-stage aria-live="polite">
+              <p class="idle" aria-hidden="true">hover a bullet</p>
+              <div class="stage-shot" data-shot="participatory"><div class="proof-ph ph-amp">Participatory program<br><small>three-phase diagram</small></div></div>
+              <div class="stage-shot" data-shot="dashboard"><div class="proof-ph ph-amp">Ads recruiting dashboard<br><small>pipeline view</small></div></div>
+              <div class="stage-shot" data-shot="practice"><div class="proof-ph ph-amp">Research ops<br><small>intake / planning</small></div></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Projects: Ben's large list on a timeline -->
 <section id="work" data-ph-section="work">
@@ -893,31 +1208,28 @@
 <section data-ph-section="personas">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="hand-label">what makes me, me</span>
-      <h2>One instinct, three arenas</h2>
-      <p>Work from the whole down to the parts — applied to products, direction, and organizations.</p>
+      <span class="hand-label">how I work</span>
+      <h2>What makes me, me</h2>
+      <p>Three instincts that show up in every project — how I read evidence, protect the plan, and let the work land.</p>
     </div>
     <div class="persona-grid">
       <div class="persona glass reveal">
-        <div class="icon">◱</div>
-        <div class="kicker">Products</div>
-        <h3>The Converger</h3>
-        <p>I take products that have grown apart and merge them into one coherent experience — mapping users' mental models and turning their own groupings into the architecture.</p>
-        <div class="proof"><b>Proof:</b> MB5 shipped 2023 as one unified app.</div>
+        <div class="icon">◈</div>
+        <div class="kicker">Mechanism</div>
+        <h3>Decoder</h3>
+        <p><b>Not just numbers, but the mechanism behind it.</b> I don't just report what the data says — I validate the evidence, uncover the mechanism behind it, and turn it into sound decisions.</p>
       </div>
       <div class="persona glass reveal">
-        <div class="icon">✧</div>
-        <div class="kicker">Direction</div>
-        <h3>The Strategist</h3>
-        <p>I start from vision and work down — grounded in evidence, not opinion. Most strategy work is deciding what <i>not</i> to do, and I can design the study that tests it.</p>
-        <div class="proof"><b>Proof:</b> One study redirected a mobile-first strategy.</div>
+        <div class="icon">◎</div>
+        <div class="kicker">Foresight</div>
+        <h3>De-risker</h3>
+        <p><b>Measure twice. Cut once.</b> I think ahead, pressure-test the plan, and eliminate risks before they become problems.</p>
       </div>
       <div class="persona glass reveal">
-        <div class="icon">⛭</div>
-        <div class="kicker">Organizations</div>
-        <h3>The System-builder</h3>
-        <p>I build the ops that let research scale and be heard — intake to planning to broadcast — so findings reach people every cycle, with or without me in the room.</p>
-        <div class="proof"><b>Proof:</b> Grew a 1-person function into a team of 4.</div>
+        <div class="icon">✦</div>
+        <div class="kicker">Delivery</div>
+        <h3>Amplifier</h3>
+        <p><b>Let the work speak for itself.</b> I earn respect by delivering beyond what's expected.</p>
       </div>
     </div>
   </div>
@@ -1020,7 +1332,7 @@
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
   // Stagger grids
-  document.querySelectorAll(".persona-grid, .testi-grid, .skills-sub").forEach(grid => {
+  document.querySelectorAll(".persona-grid, .testi-grid, .skills-chips").forEach(grid => {
     [...grid.children].forEach((c, i) => c.style.transitionDelay = (i * 0.07) + "s");
   });
 
@@ -1084,6 +1396,116 @@
     }
   } else if (aboutArch) {
     gsap.set(aboutArch, { clearProps: "all" });
+  }
+
+  // Hard skills: pinned horizontal scroll + hover bullet → proof
+  const skillsRoot = document.querySelector("[data-skills]");
+  const skillsTrack = document.querySelector("[data-skills-track]");
+  let skillsScrollTween = null;
+
+  const wireProofHover = (root) => {
+    root.querySelectorAll(".skill-slide").forEach((slide) => {
+      const stage = slide.querySelector("[data-proof-stage]");
+      const proofs = [...slide.querySelectorAll(".skill-proof")];
+      if (!stage || !proofs.length) return;
+      const shots = [...stage.querySelectorAll(".stage-shot")];
+
+      const showProof = (key) => {
+        if (!key) return;
+        proofs.forEach((b) => b.classList.toggle("is-active", b.dataset.proof === key));
+        shots.forEach((shot) => shot.classList.toggle("is-on", shot.dataset.shot === key));
+        stage.classList.add("has-image");
+      };
+
+      proofs.forEach((proof) => {
+        const key = proof.dataset.proof;
+        proof.addEventListener("pointerenter", () => {
+          if (matchMedia("(hover: hover)").matches) showProof(key);
+        });
+        proof.addEventListener("focus", () => showProof(key));
+        proof.addEventListener("click", () => showProof(key));
+      });
+
+      // Warm first proof when the slide is the active one (chip sync also covers this)
+      showProof(proofs[0].dataset.proof);
+    });
+  };
+
+  if (skillsRoot && skillsTrack && !reduceMotion) {
+    const slides = gsap.utils.toArray("[data-skill-slide]");
+    const chips = [...skillsRoot.querySelectorAll(".skills-chips [data-skill]")];
+    const getTravel = () => Math.max(0, skillsTrack.scrollWidth - window.innerWidth);
+    const snapStep = slides.length > 1 ? 1 / (slides.length - 1) : 1;
+
+    const syncChips = (progress) => {
+      if (!slides.length) return;
+      const idx = Math.min(
+        slides.length - 1,
+        Math.max(0, Math.round(progress / snapStep))
+      );
+      const key = slides[idx].dataset.skillSlide;
+      chips.forEach((chip) => {
+        const on = chip.dataset.skill === key;
+        chip.classList.toggle("is-active", on);
+        chip.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    };
+
+    skillsScrollTween = gsap.to(skillsTrack, {
+      x: () => -getTravel(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#skills",
+        start: "top top",
+        end: () => "+=" + Math.round(getTravel() * 0.85),
+        pin: true,
+        scrub: true, // 1:1 with wheel — snappy
+        snap: {
+          snapTo: snapStep,
+          duration: 0.18,
+          delay: 0,
+          ease: "power2.out",
+        },
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        fastScrollEnd: true,
+        onUpdate: (self) => syncChips(self.progress),
+      },
+    });
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const st = skillsScrollTween && skillsScrollTween.scrollTrigger;
+        if (!st) return;
+        const idx = slides.findIndex((s) => s.dataset.skillSlide === chip.dataset.skill);
+        if (idx < 0) return;
+        const p = slides.length <= 1 ? 0 : idx / (slides.length - 1);
+        window.scrollTo(0, st.start + (st.end - st.start) * p);
+      });
+    });
+
+    wireProofHover(skillsRoot);
+
+    const refreshSkills = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refreshSkills);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(refreshSkills).catch(() => {});
+    }
+  } else if (skillsRoot) {
+    // Reduced motion: stacked slides + hover proofs still work
+    wireProofHover(skillsRoot);
+    skillsRoot.querySelectorAll(".skills-chips [data-skill]").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const slide = document.querySelector(`[data-skill-slide="${chip.dataset.skill}"]`);
+        if (!slide) return;
+        window.scrollTo(0, slide.getBoundingClientRect().top + window.scrollY - 88);
+        skillsRoot.querySelectorAll(".skills-chips [data-skill]").forEach((c) => {
+          const on = c === chip;
+          c.classList.toggle("is-active", on);
+          c.setAttribute("aria-selected", on ? "true" : "false");
+        });
+      });
+    });
   }
 
   // Anchor links: instant jump (smooth CSS scroll breaks pinned sections)
