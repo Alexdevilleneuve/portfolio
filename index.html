@@ -51,7 +51,11 @@
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
+    text-wrap: pretty; /* reduce orphans / runts where supported */
   }
+  /* Opt out of runt prevention (CSS + JS) when needed */
+  .allow-runts,
+  [data-allow-runts] { text-wrap: wrap; }
   ::selection { background: var(--accent); color: #fff; }
   .wrap { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
 
@@ -75,8 +79,25 @@
     box-shadow: 0 12px 40px rgba(30,42,68,.08), inset 0 1px 0 rgba(255,255,255,.9);
   }
 
-  /* ---------- Nav (Michael's style: symbol | label) ---------- */
-  nav { position: sticky; top: 14px; z-index: 50; }
+  /* ---------- Nav (directionally aware: hide on down, show on up) ---------- */
+  nav {
+    position: fixed;
+    top: 14px;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 0 16px;
+    transform: translateY(0);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+    will-change: transform;
+  }
+  nav.is-hidden {
+    transform: translateY(calc(-100% - 24px));
+    pointer-events: none;
+  }
+  nav.is-scrolled .nav-inner {
+    box-shadow: 0 14px 40px rgba(30,42,68,.12), inset 0 1px 0 rgba(255,255,255,.9);
+  }
   .nav-inner {
     display: flex; align-items: center; justify-content: space-between;
     padding: 14px 28px; max-width: 1100px; margin: 0 auto; border-radius: 999px;
@@ -235,7 +256,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: min(58vh, 560px);
+    height: min(50vh, 480px);
     z-index: 4; /* above hero-inner so hover isn't stolen */
     pointer-events: none;
   }
@@ -277,12 +298,12 @@
     object-position: center bottom;
   }
 
-  /* Wide hit zones — left is wider because that cloud art spills past center */
+  /* Hit zones — slightly tighter than the full cloud band */
   .cloud {
     position: absolute;
-    top: 0;
+    top: 16%;
     bottom: 0;
-    height: 100%;
+    height: auto;
     margin: 0;
     padding: 0;
     border: none;
@@ -302,16 +323,16 @@
     border-radius: 40px;
   }
   .cloud-left {
-    left: 0;
-    width: 62%;
+    left: 2%;
+    width: 44%;
     z-index: 3;
     transform: translateX(-180px);
     transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
   }
   .cloud-right {
-    right: 0;
+    right: 2%;
     left: auto;
-    width: 48%;
+    width: 40%;
     z-index: 2;
     transform: translateX(180px);
     transition: opacity 1.4s .2s cubic-bezier(.2,.7,.2,1), transform 1.4s .2s cubic-bezier(.2,.7,.2,1);
@@ -457,13 +478,14 @@
     .hero.is-in .cloud-bob { animation: none !important; }
     .cloud-media img.gif,
     .cloud-media img.cloud-face { transition: opacity .5s ease !important; }
+    .how-flower img { animation: none !important; }
   }
 
   /* ---------- Section scaffolding ---------- */
   section { padding: 96px 0; }
   .sec-head { margin-bottom: 48px; }
   .sec-head h2 { font-family: var(--serif); font-weight: 600; font-size: 34px; }
-  .sec-head p { color: var(--ink-soft); margin-top: 8px; max-width: 560px; }
+  .sec-head p { color: var(--ink-soft); margin-top: 8px; max-width: none; width: 100%; }
   .hand-label { font-family: var(--hand); font-size: 23px; color: var(--accent); display: inline-block; transform: rotate(-2deg); margin-bottom: 6px; }
 
   /* From Selected work down — original ice-blue tokens; pastel blobs show through */
@@ -485,8 +507,14 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
 
-  /* ---------- About: arch grows small → full (GSAP ScrollTrigger) ---------- */
+  /* ---------- About: intro arch + hard skills (one section, two parts) ---------- */
   #about {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(180deg, #D6EAD4 0%, #EFF3D8 28%, #F2F6E6 55%, #EFF3FA 100%);
+  }
+  /* Part 1 — arch layer inside the hero pin */
+  .about-stage {
     position: absolute;
     inset: 0;
     z-index: 3;
@@ -503,7 +531,7 @@
     width: 130%;
     min-height: 110vh;
     margin: 0 auto;
-    padding: clamp(80px, 14vh, 160px) clamp(28px, 8vw, 96px) clamp(48px, 8vh, 88px);
+    padding: clamp(80px, 14vh, 160px) clamp(28px, 8vw, 96px) clamp(28px, 5vh, 56px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -541,32 +569,42 @@
     letter-spacing: -.005em;
     color: var(--ink);
   }
-  .about-arch .statement em { font-style: italic; color: var(--accent-deep); }
-  .about-spine {
-    width: 1px;
-    height: clamp(36px, 6vh, 64px);
-    margin: 22px auto 0;
-    background: linear-gradient(to bottom, rgba(0,115,140,.4), rgba(0,115,140,.05));
+  .about-arch .statement + .statement { margin-top: 0.85em; }
+  .about-arch .statement-hook {
+    color: var(--accent);
+    font-style: italic;
   }
-  /* ---------- Hard skills: pinned horizontal scroll ---------- */
+  .about-arch .split-word { display: inline-block; }
+  .about-arch .split-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+  .about-arch .split-line-inner {
+    display: block;
+    will-change: transform, opacity;
+  }
+  /* Part 2 — hard skills (continues the same about section) */
   #skills {
     position: relative;
     z-index: 2;
-    margin-top: -10vh;
-    background: linear-gradient(180deg, #EFF3D8 0%, #F2F6E6 30%, #EFF3FA 100%);
+    margin-top: -18vh;
+    padding: 0;
+    background: transparent;
   }
   .skills-pin {
     height: 100vh;
     min-height: 640px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 88px 0 36px;
+    justify-content: flex-start;
+    padding: 96px 0 28px;
     overflow: hidden;
   }
   .skills-top {
     width: min(1140px, calc(100% - 64px));
-    margin: 0 auto 20px;
+    margin: 0 auto 40px; /* double space before the accordion */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -606,6 +644,46 @@
     width: 100%;
     overflow: hidden;
   }
+  .skills-dots {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(200px, 42vw);
+    margin: 22px auto 0;
+    padding: 10px 0;
+  }
+  .skills-dots::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 50%;
+    height: 1px;
+    background: rgba(0,115,140,.16);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .skills-dot {
+    position: relative;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,115,140,.32);
+    background: rgba(255,255,255,.85);
+    cursor: pointer;
+    appearance: none;
+    transition: background .25s, border-color .25s, transform .25s, box-shadow .25s;
+  }
+  .skills-dot:hover { transform: scale(1.12); }
+  .skills-dot.is-active {
+    background: var(--accent-deep);
+    border-color: var(--accent-deep);
+    box-shadow: 0 0 0 4px rgba(0,115,140,.1);
+    transform: scale(1.18);
+  }
   .skills-track {
     display: flex;
     width: max-content;
@@ -629,19 +707,28 @@
     border: 1px solid rgba(0,115,140,.12);
     box-shadow: 0 20px 50px rgba(10,69,84,.08);
   }
-  .skill-slide .num {
-    font-family: var(--hand);
-    font-size: 28px;
-    color: var(--accent);
-    display: block;
-    line-height: 1;
-  }
   .skill-slide h3 {
     font-family: var(--serif);
-    font-size: clamp(26px, 3vw, 36px);
+    font-size: clamp(24px, 2.8vw, 34px);
     font-weight: 600;
-    margin-top: 6px;
     letter-spacing: -.015em;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    line-height: 1.15;
+  }
+  .skill-slide h3 .num {
+    font-family: var(--hand);
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .skill-slide h3 .title {
+    min-width: 0;
   }
   .skill-slide .lede {
     color: var(--ink-soft);
@@ -761,7 +848,7 @@
     .intro-pin { height: auto; min-height: 100vh; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
     .hero-fg { position: relative; inset: auto; }
-    #about { position: relative; inset: auto; display: block; overflow: visible; }
+    .about-stage { position: relative; inset: auto; display: block; overflow: visible; }
     .about-arch { width: 100%; min-height: 90vh; border-radius: 48% 48% 0 0 / 28% 28% 0 0; }
     .skills-pin { height: auto; min-height: 0; padding: 48px 0 80px; overflow: visible; }
     .skills-viewport { overflow: visible; }
@@ -778,6 +865,8 @@
     }
     .skills-scroll-hint { display: none; }
     .proof-stage .stage-shot { transition: none; }
+    nav { transition: none; }
+    nav.is-hidden { transform: none; pointer-events: auto; }
   }
 
   /* ---------- Projects (Ben's large list on a timeline) ---------- */
@@ -831,20 +920,268 @@
   }
   .cta-note { font-family: var(--hand); font-size: 21px; color: var(--ink-soft); margin-top: 6px; }
 
-  /* ---------- Personas ---------- */
-  .persona-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .persona { border-radius: 24px; padding: 38px 32px; display: flex; flex-direction: column; transition: transform .3s, box-shadow .3s; }
-  .persona:hover { transform: translateY(-6px) rotate(-.4deg); box-shadow: 0 22px 50px rgba(30,42,68,.12); }
-  .persona .icon {
-    width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center;
-    font-size: 23px; margin-bottom: 22px; background: rgba(91,127,217,.14);
-    color: var(--accent-deep); transform: rotate(-3deg);
+  /* ---------- How I work (instincts) ---------- */
+  #how.how-work {
+    position: relative;
+    padding-top: 110px;
+    padding-bottom: 110px;
+    overflow: hidden;
+    /* Mint-cream bridge between arch hydrangea + hero ice sky */
+    background:
+      linear-gradient(180deg, #EAF3E8 0%, #F2F6E6 42%, #EEF3F8 100%);
   }
-  .persona .kicker { font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-deep); font-weight: 600; }
-  .persona h3 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-top: 6px; }
-  .persona p { color: var(--ink-soft); font-size: 15px; margin-top: 12px; flex: 1; }
-  .persona .proof { margin-top: 16px; font-size: 13.5px; color: var(--ink); font-weight: 500; }
-  .persona .proof b { color: var(--accent-deep); }
+  .how-work::before {
+    content: "";
+    position: absolute;
+    inset: 4% auto auto 8%;
+    width: min(420px, 48vw);
+    height: min(420px, 48vw);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(214,234,212,.55), transparent 68%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .how-work::after {
+    content: "";
+    position: absolute;
+    right: -4%;
+    bottom: 4%;
+    width: min(400px, 48vw);
+    height: min(400px, 48vw);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,220,247,.45), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* Soft florals on the free corners (top-right + bottom-left) */
+  .how-flowers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .how-flower {
+    position: absolute;
+    width: min(720px, 68vw);
+    user-select: none;
+    opacity: .9;
+  }
+  .how-flower img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform-origin: 80% 15%;
+    animation: howFlowerSway 9s ease-in-out infinite;
+  }
+  .how-flower--tr {
+    top: -8%;
+    right: -10%;
+  }
+  .how-flower--bl {
+    left: -12%;
+    bottom: -12%;
+    transform: rotate(180deg); /* same branch, rising from bottom-left */
+  }
+  .how-flower--bl img {
+    animation-delay: -4.5s;
+  }
+  @keyframes howFlowerSway {
+    0%, 100% { transform: rotate(-1deg) translate3d(0, 0, 0); }
+    50% { transform: rotate(2deg) translate3d(-6px, 10px, 0); }
+  }
+  .how-work > .wrap { position: relative; z-index: 2; }
+  .how-work .sec-head h2 {
+    font-size: clamp(34px, 4.4vw, 48px);
+    letter-spacing: -.02em;
+  }
+  .how-work .sec-head p {
+    max-width: none;
+    width: 100%;
+    font-size: 17px;
+    margin-top: 14px;
+  }
+  .instincts {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    align-items: stretch;
+    margin-top: 8px;
+  }
+  .instinct {
+    position: relative;
+    border-radius: 28px;
+    padding: 34px 28px 30px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    border: 1px solid rgba(255,255,255,.72);
+    box-shadow: 0 16px 44px rgba(30,42,68,.07), inset 0 1px 0 rgba(255,255,255,.85);
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
+    overflow: hidden;
+  }
+  .instinct::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .9;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .instinct--decode { background: rgba(255,255,255,.42); }
+  .instinct--decode::before {
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(201,220,247,.85), transparent 55%),
+      linear-gradient(160deg, rgba(201,220,247,.35), transparent 60%);
+  }
+  .instinct--derisk { background: rgba(255,255,255,.42); }
+  .instinct--derisk::before {
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(217,212,245,.85), transparent 55%),
+      linear-gradient(200deg, rgba(217,212,245,.35), transparent 60%);
+  }
+  .instinct--amplify { background: rgba(255,255,255,.42); }
+  .instinct--amplify::before {
+    background:
+      radial-gradient(120% 80% at 50% 100%, rgba(205,237,228,.9), transparent 55%),
+      linear-gradient(180deg, rgba(205,237,228,.28), transparent 65%);
+  }
+  /* Keep tilt after .reveal.in clears transform */
+  .instinct--decode.reveal.in { transform: rotate(-1.1deg); }
+  .instinct--derisk.reveal.in { transform: rotate(.9deg) translateY(18px); }
+  .instinct--amplify.reveal.in { transform: rotate(-.7deg); }
+  .instinct.reveal.in:hover {
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow: 0 26px 56px rgba(30,42,68,.12), inset 0 1px 0 rgba(255,255,255,.95);
+  }
+  .instinct > * { position: relative; z-index: 1; }
+  .instinct-num {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    opacity: .75;
+  }
+  .instinct-mark {
+    position: absolute;
+    right: 18px;
+    top: 16px;
+    font-size: 42px;
+    line-height: 1;
+    color: var(--accent-deep);
+    opacity: .14;
+    transform: rotate(8deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .instinct h3 {
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.4vw, 32px);
+    font-weight: 600;
+    margin-top: 14px;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .instinct .tagline {
+    margin-top: 14px;
+    font-family: var(--serif);
+    font-size: clamp(17px, 1.5vw, 19px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.35;
+    letter-spacing: -.01em;
+    color: var(--accent-deep);
+  }
+  .instinct .desc {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-top: 16px;
+    flex: 1;
+    line-height: 1.6;
+  }
+  .how-work-cta {
+    margin-top: 56px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 18px 28px;
+    text-align: center;
+  }
+  .how-work-cta-note {
+    font-family: var(--hand);
+    font-size: 26px;
+    color: var(--ink-soft);
+    transform: rotate(-2deg);
+  }
+  .how-work-cta-action {
+    position: relative;
+    display: inline-flex;
+  }
+  .how-work-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent-deep);
+    box-shadow: 0 12px 28px rgba(61,92,184,.28);
+    transition: transform .3s ease, background .25s ease, box-shadow .3s ease;
+  }
+  .how-work-cta-btn span {
+    transition: transform .3s ease;
+  }
+  .how-work-cta-btn:hover,
+  .how-work-cta-action:focus-within .how-work-cta-btn {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(61,92,184,.34);
+  }
+  .how-work-cta-btn:hover span { transform: translateX(4px); }
+  /* Hover “show me” → photo peek */
+  .how-work-cta-peek {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 18px);
+    width: min(260px, 56vw);
+    aspect-ratio: 4 / 5;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    transform: translateX(-50%) translateY(12px) rotate(-2deg) scale(.96);
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255,255,255,.72);
+    box-shadow: 0 22px 50px rgba(30,42,68,.18), inset 0 1px 0 rgba(255,255,255,.85);
+    transition: opacity .28s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+    z-index: 5;
+  }
+  .how-work-cta-peek img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .how-work-cta-action:hover .how-work-cta-peek,
+  .how-work-cta-action:focus-within .how-work-cta-peek {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) rotate(-2deg) scale(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .how-work-cta-peek { transition: opacity .2s ease; }
+  }
 
   /* ---------- Testimonials (Ben's "What's it like working with me?") ---------- */
   .testi-head { text-align: center; margin-bottom: 54px; }
@@ -912,13 +1249,22 @@
     .t-row { grid-template-columns: 1fr; gap: 14px; }
     .t-year::after { display: none; }
     .proj-card { grid-template-columns: 1fr; }
-    .persona-grid, .testi-grid { grid-template-columns: 1fr; }
+    .instincts, .testi-grid { grid-template-columns: 1fr; }
+    .instinct--decode.reveal.in,
+    .instinct--derisk.reveal.in,
+    .instinct--amplify.reveal.in { transform: none; }
+    .instinct.reveal.in:hover { transform: translateY(-4px); }
+    .how-work-cta { margin-top: 40px; flex-direction: column; }
+    .how-flower { width: min(380px, 84vw); opacity: .82; }
+    .how-flower--tr { top: -6%; right: -20%; }
+    .how-flower--bl { left: -22%; bottom: -8%; }
     .testi:nth-child(2) { transform: none; }
-    #skills { margin-top: -6vh; }
-    .skills-pin { min-height: 100svh; padding-top: 96px; }
+    #skills { margin-top: -10vh; }
+    .skills-pin { min-height: 100svh; padding-top: 88px; }
     .skill-slide-inner { grid-template-columns: 1fr; min-height: 0; }
     .proof-stage { min-height: 220px; order: -1; }
     .skills-scroll-hint { display: none; }
+    .skills-top { margin-bottom: 32px; }
     section { padding: 64px 0; }
   }
 
@@ -930,8 +1276,8 @@
   <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
 </div>
 
-<!-- Nav: Michael's symbol style, her items -->
-<nav>
+<!-- Nav: directionally aware — hides on scroll down, returns on scroll up -->
+<nav data-nav>
   <div class="nav-inner glass">
     <a class="logo" href="#">Alexandra Irribarren</a>
     <ul class="nav-links">
@@ -943,7 +1289,8 @@
   </div>
 </nav>
 
-<!-- Intro: GSAP pins this — hero exits up, arch grows small → full -->
+<!-- About: one section — part 1 arch (pinned with hero), part 2 hard skills -->
+<section id="about" data-ph-section="about" aria-label="About">
 <div class="intro-pin">
     <header class="hero" id="hero">
       <div class="hero-fg" data-hero-fg>
@@ -1001,27 +1348,29 @@
       </div>
     </header>
 
-    <section id="about" data-ph-section="about">
+    <div class="about-stage">
       <div class="about-arch" data-about-arch>
         <div class="about-arch-body">
           <p class="about-eyebrow">strategic investigator</p>
-          <p class="statement">Hey, glad you're here. I'm a senior UX researcher based in the SF Bay Area. I lead strategic research in complex systems where trust is the product — security, privacy, and now AI.</p>
-          <p class="statement" style="margin-top:18px;font-size:clamp(18px,2.2vw,26px);">Trained in experimental science, I bring a lab scientist's rigor to a very human question: <em>what should we build, and why?</em></p>
-          <div class="about-spine" aria-hidden="true"></div>
+          <p class="statement" data-split-lines>👋 Hey, glad you're&nbsp;here.</p>
+          <p class="statement" data-split-lines>I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area 📍</p>
+          <p class="statement" data-split-lines>I&nbsp;lead strategic research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+          <p class="statement" data-split-lines>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question:</p>
+          <p class="statement statement-hook" data-split-lines>what should we build, and&nbsp;why?</p>
         </div>
       </div>
-    </section>
+    </div>
 </div>
 
-<!-- Section 2: pinned horizontal scroll through hard skills -->
-<section id="skills" data-ph-section="skills" aria-label="Hard skills">
+  <!-- Part 2: hard skills horizontal scroll -->
+  <div id="skills" aria-label="Hard skills">
   <div class="skills-pin" data-skills>
     <div class="skills-top">
       <div class="skills-chips" role="tablist" aria-label="Practice areas">
-        <button type="button" class="chip glass is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
-        <button type="button" class="chip glass" role="tab" data-skill="conv" aria-selected="false">convergence + revamp</button>
-        <button type="button" class="chip glass" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
-        <button type="button" class="chip glass" role="tab" data-skill="amp" aria-selected="false">research influence</button>
+        <button type="button" class="chip glass is-active" role="tab" data-skill="ai" aria-selected="true">AI + Trust</button>
+        <button type="button" class="chip glass" role="tab" data-skill="conv" aria-selected="false">Convergence + Legacy Revamp</button>
+        <button type="button" class="chip glass" role="tab" data-skill="zero" aria-selected="false">0→1 Product Builds</button>
+        <button type="button" class="chip glass" role="tab" data-skill="amp" aria-selected="false">Amplify Research Influence</button>
       </div>
       <p class="skills-scroll-hint" aria-hidden="true">keep scrolling →</p>
     </div>
@@ -1031,8 +1380,7 @@
         <article class="skill-slide" data-skill-slide="ai" id="skill-ai">
           <div class="skill-slide-inner">
             <div>
-              <span class="num">01</span>
-              <h3>AI + Trust</h3>
+              <h3><span class="num">01</span><span class="title">AI + Trust</span></h3>
               <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks back.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="sa">
@@ -1056,8 +1404,7 @@
         <article class="skill-slide" data-skill-slide="conv" id="skill-conv">
           <div class="skill-slide-inner">
             <div>
-              <span class="num">02</span>
-              <h3>Product Convergence &amp; Legacy Revamp</h3>
+              <h3><span class="num">02</span><span class="title">Convergence + Legacy Revamp</span></h3>
               <p class="lede">I design UX architecture for products that outgrew their own structure.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="shopping">
@@ -1086,8 +1433,7 @@
         <article class="skill-slide" data-skill-slide="zero" id="skill-zero">
           <div class="skill-slide-inner">
             <div>
-              <span class="num">03</span>
-              <h3>0→1 Product Builds</h3>
+              <h3><span class="num">03</span><span class="title">0→1 Product Builds</span></h3>
               <p class="lede">Build product from concept to launch in both traditional and AI-native environments.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="ai-native">
@@ -1111,8 +1457,7 @@
         <article class="skill-slide" data-skill-slide="amp" id="skill-amp">
           <div class="skill-slide-inner">
             <div>
-              <span class="num">04</span>
-              <h3>Amplify Research Influence</h3>
+              <h3><span class="num">04</span><span class="title">Amplify Research Influence</span></h3>
               <p class="lede">I make the value of research visible — so teams act on it, and users feel it.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="participatory">
@@ -1139,6 +1484,14 @@
         </article>
       </div>
     </div>
+
+    <div class="skills-dots" role="tablist" aria-label="Skill slides" data-skills-dots>
+      <button type="button" class="skills-dot is-active" data-skill="ai" aria-label="AI + Trust" aria-selected="true"></button>
+      <button type="button" class="skills-dot" data-skill="conv" aria-label="Convergence + Legacy Revamp" aria-selected="false"></button>
+      <button type="button" class="skills-dot" data-skill="zero" aria-label="0→1 Product Builds" aria-selected="false"></button>
+      <button type="button" class="skills-dot" data-skill="amp" aria-label="Amplify Research Influence" aria-selected="false"></button>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -1146,8 +1499,7 @@
 <section id="work" data-ph-section="work">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="hand-label">selected work</span>
-      <h2>Some recent work</h2>
+      <h2>Selected work sample</h2>
       <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
     </div>
     <div class="timeline">
@@ -1204,32 +1556,54 @@
   </div>
 </section>
 
-<!-- What makes me, me -->
-<section data-ph-section="personas">
+<!-- How I work — instincts + hook to about -->
+<section class="how-work" id="how" data-ph-section="personas" aria-label="How I work">
+  <div class="how-flowers" aria-hidden="true">
+    <div class="how-flower how-flower--tr">
+      <img src="assets/images/how/bougainvillea-corner-tr.png?v=8" alt="" width="1536" height="1024" decoding="async">
+    </div>
+    <div class="how-flower how-flower--bl">
+      <img src="assets/images/how/bougainvillea-corner-bl.png?v=6" alt="" width="1536" height="1024" decoding="async">
+    </div>
+  </div>
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="hand-label">how I work</span>
-      <h2>What makes me, me</h2>
-      <p>Three instincts that show up in every project — how I read evidence, protect the plan, and let the work land.</p>
+      <h2>What makes me,&nbsp;me</h2>
+      <p>At the end of the day, who I&nbsp;am.</p>
     </div>
-    <div class="persona-grid">
-      <div class="persona glass reveal">
-        <div class="icon">◈</div>
-        <div class="kicker">Mechanism</div>
+    <ol class="instincts">
+      <li class="instinct instinct--decode reveal">
+        <span class="instinct-mark" aria-hidden="true">◈</span>
+        <span class="instinct-num">01</span>
         <h3>Decoder</h3>
-        <p><b>Not just numbers, but the mechanism behind it.</b> I don't just report what the data says — I validate the evidence, uncover the mechanism behind it, and turn it into sound decisions.</p>
-      </div>
-      <div class="persona glass reveal">
-        <div class="icon">◎</div>
-        <div class="kicker">Foresight</div>
+        <p class="tagline">Not just numbers, but the&nbsp;mechanism.</p>
+        <p class="desc">I don't just report what the data says — I validate the evidence, uncover the mechanism behind it, and turn it into sound&nbsp;decisions.</p>
+      </li>
+      <li class="instinct instinct--derisk reveal">
+        <span class="instinct-mark" aria-hidden="true">◎</span>
+        <span class="instinct-num">02</span>
         <h3>De-risker</h3>
-        <p><b>Measure twice. Cut once.</b> I think ahead, pressure-test the plan, and eliminate risks before they become problems.</p>
-      </div>
-      <div class="persona glass reveal">
-        <div class="icon">✦</div>
-        <div class="kicker">Delivery</div>
+        <p class="tagline">Measure twice. Cut&nbsp;once.</p>
+        <p class="desc">I think ahead, pressure-test the plan, and eliminate risks before they become&nbsp;problems.</p>
+      </li>
+      <li class="instinct instinct--amplify reveal">
+        <span class="instinct-mark" aria-hidden="true">✦</span>
+        <span class="instinct-num">03</span>
         <h3>Amplifier</h3>
-        <p><b>Let the work speak for itself.</b> I earn respect by delivering beyond what's expected.</p>
+        <p class="tagline">Let the work speak for&nbsp;itself.</p>
+        <p class="desc">I earn respect by delivering beyond what's&nbsp;expected.</p>
+      </li>
+    </ol>
+    <div class="how-work-cta reveal">
+      <p class="how-work-cta-note">Curious how I became this&nbsp;person?</p>
+      <div class="how-work-cta-action">
+        <figure class="how-work-cta-peek" aria-hidden="true">
+          <!-- Drop your photo here → assets/images/about/show-me.jpg -->
+          <img src="assets/images/about/show-me.jpg" alt="" width="520" height="650" decoding="async">
+        </figure>
+        <a class="how-work-cta-btn" href="#about" data-ph="nav" data-ph-label="about-from-how-i-work">
+          show me
+        </a>
       </div>
     </div>
   </div>
@@ -1272,6 +1646,84 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script>
+  // Typographic runts / orphans — keep short words with their phrase; avoid one-word lines.
+  // Opt out: .allow-runts or [data-allow-runts]
+  (function preventRunts() {
+    const roots = document.querySelectorAll(
+      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof > span, .foot-line"
+    );
+
+    const glueEnd = (text) => {
+      const trail = (text.match(/\s*$/) || [""])[0];
+      const core = text.slice(0, text.length - trail.length);
+      const parts = core.split(/(\s+)/);
+      const wordAt = [];
+      for (let i = 0; i < parts.length; i += 2) {
+        if (parts[i]) wordAt.push(i);
+      }
+      if (wordAt.length < 2) return text;
+      const last = parts[wordAt[wordAt.length - 1]].replace(/[^\p{L}\p{N}?]/gu, "");
+      const nGlue = last.length <= 4 ? Math.min(3, wordAt.length) : 2;
+      const from = wordAt.length - nGlue;
+      for (let k = from; k < wordAt.length - 1; k++) {
+        const spaceIdx = wordAt[k] + 1;
+        if (parts[spaceIdx]) parts[spaceIdx] = "\u00A0";
+      }
+      return parts.join("") + trail;
+    };
+
+    roots.forEach((root) => {
+      if (root.closest(".allow-runts, [data-allow-runts]")) return;
+      const nodes = [];
+      const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      let n;
+      while ((n = walk.nextNode())) {
+        if (!n.nodeValue || !/\S/.test(n.nodeValue)) continue;
+        if (n.parentElement && n.parentElement.closest("script, style, code, pre, .allow-runts, [data-allow-runts]")) continue;
+        nodes.push(n);
+      }
+      nodes.forEach((node, i) => {
+        let t = node.nodeValue;
+        // Pronoun "I" + next word stay together (avoids dangling "I" at line end)
+        t = t.replace(/\bI(\s+)(?=\S)/g, "I\u00A0");
+        // Last text chunk in the block: kill one-word / short last lines
+        if (i === nodes.length - 1) t = glueEnd(t);
+        node.nodeValue = t;
+      });
+    });
+  })();
+
+  // Directionally aware nav — hide on scroll down, show on scroll up
+  const nav = document.querySelector("[data-nav]");
+  if (nav && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const topReveal = 48;   // always show near top
+    const deltaMin = 6;     // ignore tiny jitter
+
+    const updateNav = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      nav.classList.toggle("is-scrolled", y > 24);
+      if (y <= topReveal) {
+        nav.classList.remove("is-hidden");
+      } else if (delta > deltaMin) {
+        nav.classList.add("is-hidden");
+      } else if (delta < -deltaMin) {
+        nav.classList.remove("is-hidden");
+      }
+      lastY = y;
+      ticking = false;
+    };
+
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateNav);
+    }, { passive: true });
+    updateNav();
+  }
+
   // Hero entrance (cloud slide-in + title rise)
   const hero = document.getElementById("hero");
   requestAnimationFrame(() => {
@@ -1282,9 +1734,6 @@
   const canHover = window.matchMedia("(hover: hover)").matches;
   const clouds = document.querySelectorAll(".cloud");
   if (canHover) {
-    // Track hover on the whole cloud band by X position — more reliable than
-    // per-button :hover when the left art spills across the midline.
-    const band = document.querySelector(".hero-clouds");
     let leaveTimer;
     const setHot = (side) => {
       clouds.forEach((c) => {
@@ -1292,29 +1741,16 @@
         c.classList.toggle("is-hot", on);
       });
     };
-    if (band) {
-      band.style.pointerEvents = "auto";
-      band.addEventListener("pointermove", (e) => {
+    // Per-cloud hit zones (tighter than the full band) + leave buffer
+    clouds.forEach((cloud) => {
+      cloud.addEventListener("pointerenter", () => {
         clearTimeout(leaveTimer);
-        const rect = band.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        // Bias toward left — its cloud graphic is wider
-        setHot(x < 0.58 ? "cloud-left" : "cloud-right");
+        setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
       });
-      band.addEventListener("pointerleave", () => {
+      cloud.addEventListener("pointerleave", () => {
         leaveTimer = setTimeout(() => setHot(null), 160);
       });
-    } else {
-      clouds.forEach((cloud) => {
-        cloud.addEventListener("pointerenter", () => {
-          clearTimeout(leaveTimer);
-          setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
-        });
-        cloud.addEventListener("pointerleave", () => {
-          leaveTimer = setTimeout(() => setHot(null), 160);
-        });
-      });
-    }
+    });
   } else {
     clouds.forEach((cloud) => {
       cloud.addEventListener("click", () => {
@@ -1332,7 +1768,7 @@
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
   // Stagger grids
-  document.querySelectorAll(".persona-grid, .testi-grid, .skills-chips").forEach(grid => {
+  document.querySelectorAll(".instincts, .testi-grid, .skills-chips").forEach(grid => {
     [...grid.children].forEach((c, i) => c.style.transitionDelay = (i * 0.07) + "s");
   });
 
@@ -1343,6 +1779,91 @@
   const aboutArch = document.querySelector("[data-about-arch]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Responsive visual-line split for about statements (reflows on resize)
+  const splitLineTargets = [...document.querySelectorAll("[data-split-lines]")];
+  let aboutLineInners = [];
+
+  const wrapWords = (el) => {
+    const walk = (parent) => {
+      [...parent.childNodes].forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const parts = node.nodeValue.split(/(\s+)/);
+          const frag = document.createDocumentFragment();
+          parts.forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(part));
+            } else {
+              const span = document.createElement("span");
+              span.className = "split-word";
+              span.textContent = part;
+              frag.appendChild(span);
+            }
+          });
+          parent.replaceChild(frag, node);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          walk(node);
+        }
+      });
+    };
+    walk(el);
+  };
+
+  const splitElementLines = (el) => {
+    if (!el.dataset.splitHtml) el.dataset.splitHtml = el.innerHTML;
+    el.innerHTML = el.dataset.splitHtml;
+    wrapWords(el);
+    const words = [...el.querySelectorAll(".split-word")];
+    if (!words.length) return [];
+
+    const groups = [];
+    words.forEach((word) => {
+      const top = Math.round(word.offsetTop);
+      const last = groups[groups.length - 1];
+      if (!last || Math.abs(last.top - top) > 1) groups.push({ top, words: [word] });
+      else last.words.push(word);
+    });
+
+    el.textContent = "";
+    const inners = [];
+    groups.forEach(({ words: lineWords }) => {
+      const line = document.createElement("span");
+      line.className = "split-line";
+      const inner = document.createElement("span");
+      inner.className = "split-line-inner";
+      lineWords.forEach((word, i) => {
+        if (i) inner.appendChild(document.createTextNode(" "));
+        const sw = document.createElement("span");
+        sw.className = "split-word";
+        sw.textContent = word.textContent;
+        inner.appendChild(sw);
+      });
+      line.appendChild(inner);
+      el.appendChild(line);
+      inners.push(inner);
+    });
+    return inners;
+  };
+
+  const resplitAboutLines = () => {
+    aboutLineInners = splitLineTargets.flatMap((el) => splitElementLines(el));
+    return aboutLineInners;
+  };
+
+  const applyAboutLineProgress = (p) => {
+    const lines = aboutLineInners;
+    const n = lines.length;
+    if (!n) return;
+    const ease = gsap.parseEase("power2.out");
+    lines.forEach((line, i) => {
+      const start = 0.28 + (i / n) * 0.52;
+      const end = start + 0.16;
+      const t = gsap.utils.clamp(0, 1, (p - start) / (end - start));
+      const e = ease(t);
+      gsap.set(line, { yPercent: (1 - e) * 110, opacity: e });
+    });
+  };
+
   if (introPin && heroFg && aboutArch && !reduceMotion) {
     // Landing: just the tip of the arch peeks under the hero clouds
     gsap.set(aboutArch, {
@@ -1351,11 +1872,14 @@
       transformOrigin: "50% 100%",
     });
 
+    resplitAboutLines();
+    applyAboutLineProgress(0);
+
     const introTl = gsap.timeline({
       scrollTrigger: {
         trigger: introPin,
         start: "top top",
-        end: () => "+=" + Math.round(window.innerHeight * 1.6),
+        end: () => "+=" + Math.round(window.innerHeight * 2),
         pin: true,
         pinSpacing: true,
         scrub: true, // 1:1 with scroll so reverse/up isn't laggy or sticky
@@ -1368,6 +1892,7 @@
           heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
           // Only the grown arch should capture clicks; tip must stay pass-through
           aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
+          applyAboutLineProgress(p);
         },
       },
       defaults: { ease: "none" },
@@ -1384,13 +1909,23 @@
     introTl.to(aboutArch, {
       scale: 1,
       yPercent: 0,
-      duration: 1,
+      duration: 0.7,
       ease: "power1.out", // front-loads growth so it arrives sooner
     }, 0);
 
-    // Keep pin math correct after fonts/layout settle
-    const refreshIntro = () => ScrollTrigger.refresh();
+    // Re-measure visual lines when type/layout settles or viewport changes
+    const refreshIntro = () => {
+      resplitAboutLines();
+      const st = introTl.scrollTrigger;
+      applyAboutLineProgress(st ? st.progress : 0);
+      ScrollTrigger.refresh();
+    };
     window.addEventListener("load", refreshIntro);
+    let splitResizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(splitResizeTimer);
+      splitResizeTimer = setTimeout(refreshIntro, 120);
+    });
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(refreshIntro).catch(() => {});
     }
@@ -1434,21 +1969,31 @@
   if (skillsRoot && skillsTrack && !reduceMotion) {
     const slides = gsap.utils.toArray("[data-skill-slide]");
     const chips = [...skillsRoot.querySelectorAll(".skills-chips [data-skill]")];
+    const dots = [...skillsRoot.querySelectorAll("[data-skills-dots] [data-skill]")];
     const getTravel = () => Math.max(0, skillsTrack.scrollWidth - window.innerWidth);
     const snapStep = slides.length > 1 ? 1 / (slides.length - 1) : 1;
 
-    const syncChips = (progress) => {
+    const syncNav = (progress) => {
       if (!slides.length) return;
       const idx = Math.min(
         slides.length - 1,
         Math.max(0, Math.round(progress / snapStep))
       );
       const key = slides[idx].dataset.skillSlide;
-      chips.forEach((chip) => {
-        const on = chip.dataset.skill === key;
-        chip.classList.toggle("is-active", on);
-        chip.setAttribute("aria-selected", on ? "true" : "false");
+      [...chips, ...dots].forEach((el) => {
+        const on = el.dataset.skill === key;
+        el.classList.toggle("is-active", on);
+        el.setAttribute("aria-selected", on ? "true" : "false");
       });
+    };
+
+    const goToSkill = (key) => {
+      const st = skillsScrollTween && skillsScrollTween.scrollTrigger;
+      if (!st) return;
+      const idx = slides.findIndex((s) => s.dataset.skillSlide === key);
+      if (idx < 0) return;
+      const p = slides.length <= 1 ? 0 : idx / (slides.length - 1);
+      window.scrollTo(0, st.start + (st.end - st.start) * p);
     };
 
     skillsScrollTween = gsap.to(skillsTrack, {
@@ -1469,19 +2014,12 @@
         anticipatePin: 1,
         invalidateOnRefresh: true,
         fastScrollEnd: true,
-        onUpdate: (self) => syncChips(self.progress),
+        onUpdate: (self) => syncNav(self.progress),
       },
     });
 
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const st = skillsScrollTween && skillsScrollTween.scrollTrigger;
-        if (!st) return;
-        const idx = slides.findIndex((s) => s.dataset.skillSlide === chip.dataset.skill);
-        if (idx < 0) return;
-        const p = slides.length <= 1 ? 0 : idx / (slides.length - 1);
-        window.scrollTo(0, st.start + (st.end - st.start) * p);
-      });
+    [...chips, ...dots].forEach((el) => {
+      el.addEventListener("click", () => goToSkill(el.dataset.skill));
     });
 
     wireProofHover(skillsRoot);
@@ -1494,15 +2032,16 @@
   } else if (skillsRoot) {
     // Reduced motion: stacked slides + hover proofs still work
     wireProofHover(skillsRoot);
-    skillsRoot.querySelectorAll(".skills-chips [data-skill]").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const slide = document.querySelector(`[data-skill-slide="${chip.dataset.skill}"]`);
+    const nav = [...skillsRoot.querySelectorAll(".skills-chips [data-skill], [data-skills-dots] [data-skill]")];
+    nav.forEach((el) => {
+      el.addEventListener("click", () => {
+        const slide = document.querySelector(`[data-skill-slide="${el.dataset.skill}"]`);
         if (!slide) return;
         window.scrollTo(0, slide.getBoundingClientRect().top + window.scrollY - 88);
-        skillsRoot.querySelectorAll(".skills-chips [data-skill]").forEach((c) => {
-          const on = c === chip;
-          c.classList.toggle("is-active", on);
-          c.setAttribute("aria-selected", on ? "true" : "false");
+        nav.forEach((n) => {
+          const on = n.dataset.skill === el.dataset.skill;
+          n.classList.toggle("is-active", on);
+          n.setAttribute("aria-selected", on ? "true" : "false");
         });
       });
     });

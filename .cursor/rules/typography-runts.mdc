@@ -1,0 +1,21 @@
+---
+description: Prevent typographic orphans/runts — no single-word lines or dangling short words
+alwaysApply: true
+---
+
+# Typography: orphans & runts
+
+Avoid unbalanced line breaks in all project copy unless the user opts out (`.allow-runts` / `[data-allow-runts]`).
+
+## What to prevent
+- A **short word left at the end of a line** when the rest of its phrase continues below (e.g. dangling “I” before “lead…”).
+- A **one-word (or very short) last line** of a paragraph (e.g. lone “why?”) — a **runt** / widow-like break.
+
+## How to fix (prefer in this order)
+1. Keep `text-wrap: pretty` on the document (already on `body`).
+2. Use a non-breaking space so the fragment stays with its phrase: `I&nbsp;lead`, `and&nbsp;why?`, `now&nbsp;AI`.
+3. Rely on the site’s `preventRunts()` script for prose (`p`, `q`, headings, `.lede`, etc.) — do not remove it without a replacement.
+4. For new copy, write or mark up so short sentence-starters and short endings don’t strand alone; glue with `&nbsp;` when a break is known-bad at the design width.
+
+## Exceptions
+Only skip this when the user explicitly allows runts, or marks the node with `.allow-runts` / `data-allow-runts`.
