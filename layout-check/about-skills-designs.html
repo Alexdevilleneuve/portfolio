@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About B — cohesion explorations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ice-sky: #E8F0FA;
+    --mint: #D6EAD4;
+    --cream: #EFF3D8;
+    --ink: #0A4554;
+    --ink-soft: #5E7F82;
+    --accent: #00738C;
+    --accent-deep: #005A6E;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: #EEF2F4;
+    padding: 40px 24px 100px;
+  }
+  h1.page { font-family: var(--serif); font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+  .note { color: var(--ink-soft); font-size: 14px; margin-bottom: 36px; max-width: 62em; line-height: 1.55; }
+  .design { margin-bottom: 72px; }
+  .label {
+    display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 14px;
+  }
+  .label span { font-weight: 500; letter-spacing: .02em; text-transform: none; color: var(--ink-soft); }
+
+  .stage {
+    background: var(--ice-sky);
+    border-radius: 24px;
+    padding: 40px 20px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arch-fill {
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
+      linear-gradient(180deg, var(--mint) 0%, #E4EFC8 48%, var(--cream) 100%);
+  }
+  .quiet-fill {
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,255,255,.55), transparent 55%),
+      linear-gradient(180deg, #F2F6F0 0%, #F4F6F1 55%, #F5F6F2 100%);
+  }
+  /* Continuous cream → quiet so B1 shell doesn't jump */
+  .skills-cont {
+    background: linear-gradient(180deg, var(--cream) 0%, #F2F6E6 40%, #F4F6F1 100%);
+  }
+
+  .arch {
+    width: min(1100px, 100%);
+    padding: clamp(56px, 8vh, 88px) clamp(28px, 4vw, 64px) clamp(36px, 4vh, 48px);
+    text-align: center;
+    box-shadow: 0 -14px 48px rgba(0,115,140,.1);
+  }
+  .greeting { font-size: 14px; color: var(--ink-soft); margin-bottom: 10px; }
+  .statement {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 600;
+    line-height: 1.25;
+    max-width: 18em;
+    margin: 0 auto 36px;
+    text-wrap: pretty;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 24px 36px;
+    align-items: center;
+    text-align: left;
+    padding: 22px 0;
+  }
+  .pair + .pair { border-top: 1px solid rgba(10,69,84,.1); }
+  .pair-copy {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .pair-copy .hook {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--accent);
+  }
+  .logos {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px 18px;
+  }
+  .logos li {
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 0;
+    border-right: 1px solid rgba(10,69,84,.12);
+  }
+  .logos li:last-child { border-right: 0; padding-right: 0; }
+  .logos img { display: block; width: auto; height: 22px; object-fit: contain; }
+  .logos--uni img { height: 28px; }
+
+  .skills {
+    width: min(1100px, 100%);
+    padding: clamp(24px, 3vw, 36px) clamp(28px, 4vw, 56px) clamp(28px, 3.5vw, 44px);
+    box-shadow: 0 24px 64px rgba(30, 42, 68, .08);
+  }
+
+  /* Chips as section header */
+  .skills-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .chip {
+    appearance: none;
+    border: 1px solid rgba(0,115,140,.14);
+    border-radius: 999px;
+    padding: 9px 16px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--ink);
+    background: rgba(255,255,255,.5);
+    transition: background .2s, color .2s, box-shadow .2s;
+  }
+  .chip.is-active {
+    background: var(--accent-deep);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(0,90,110,.16);
+  }
+
+  .acc { display: flex; flex-direction: column; gap: 8px; }
+  .acc-item {
+    border-radius: 16px;
+    border: 1px solid rgba(0,115,140,.12);
+    background: rgba(255,255,255,.45);
+    overflow: hidden;
+  }
+  .acc-item.is-open { background: rgba(255,255,255,.72); border-color: rgba(0,115,140,.22); }
+  .acc-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    color: var(--ink);
+  }
+  .acc-btn .num { font-family: var(--serif); font-size: 13px; color: var(--ink-soft); margin-right: 10px; }
+  .acc-btn .title { font-family: var(--serif); font-size: 18px; font-weight: 600; }
+  .acc-btn .chev { width: 18px; height: 18px; flex-shrink: 0; opacity: .55; transition: transform .25s; }
+  .acc-item.is-open .chev { transform: rotate(180deg); }
+  .acc-panel {
+    display: none;
+    padding: 0 18px 18px;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 20px;
+  }
+  .acc-item.is-open .acc-panel { display: grid; }
+  .acc-panel .lede { font-size: 14.5px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 12px; }
+  .acc-proof {
+    display: block; width: 100%; text-align: left;
+    padding: 10px 12px; margin: 0 0 8px; border: 0; border-radius: 10px;
+    background: rgba(214,234,212,.35); color: var(--ink); font: inherit;
+  }
+  .acc-proof strong { display: block; font-size: 13.5px; margin-bottom: 2px; }
+  .acc-proof span { font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; }
+  .acc-stage {
+    min-height: 140px; border-radius: 14px;
+    background: linear-gradient(165deg, rgba(214,234,212,.45), rgba(201,220,247,.35));
+    display: grid; place-items: center; text-align: center;
+    font-family: var(--serif); font-size: 18px; color: rgba(10,69,84,.4); padding: 16px;
+  }
+
+  /* ----- B1: continuous shell (tuck) ----- */
+  .b1-stack { width: min(1100px, 100%); display: flex; flex-direction: column; }
+  .b1-stack .arch {
+    width: 100%;
+    border-radius: 48% 48% 0 0 / 26% 26% 0 0;
+  }
+  .b1-stack .skills {
+    width: 100%;
+    margin-top: -2px; /* erase hairline */
+    border-radius: 0 0 36px 36px;
+    box-shadow: 0 28px 48px -12px rgba(30, 42, 68, .1);
+  }
+
+  /* ----- B2: matched pair, tight gap ----- */
+  .b2-stack { width: min(1100px, 100%); display: flex; flex-direction: column; gap: 12px; }
+  .b2-stack .arch {
+    width: 100%;
+    border-radius: 48% 48% 28px 28px / 26% 26% 28px 28px;
+  }
+  .b2-stack .skills {
+    width: 100%;
+    border-radius: 28px;
+  }
+
+  /* ----- B3: scroll fold / page-turn experiments ----- */
+  .fold-scene {
+    position: relative;
+    height: 170vh;
+    margin: 0 -8px;
+  }
+  .fold-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .fold-pin .stage {
+    flex: 1;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .b-fold-stack {
+    width: min(1100px, 100%);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.82);
+    transform-origin: 50% 20%;
+  }
+  .b-fold-stack .arch {
+    width: 100%;
+    border-radius: 48% 48% 0 0 / 26% 26% 0 0;
+    position: relative;
+    z-index: 2;
+    padding: 48px 40px 32px;
+  }
+  .b-fold-stack .statement { margin-bottom: 24px; font-size: clamp(20px, 2.4vw, 28px); }
+  .b-fold-stack .pair { padding: 14px 0; }
+  .fold-hinge {
+    perspective: 1600px;
+    perspective-origin: 50% 0%;
+    transform-style: preserve-3d;
+    z-index: 1;
+  }
+  .fold-page {
+    width: 100%;
+    transform-origin: 50% 0%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    border-radius: 0 0 36px 36px;
+    will-change: transform, box-shadow, filter;
+  }
+  .fold-page .skills-chips { margin-bottom: 16px; }
+  .fold-hint {
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 8px 0 0;
+    font-family: var(--sans);
+  }
+  .fold-hint em { font-family: var(--serif); font-style: italic; color: var(--accent); }
+
+  @media (max-width: 800px) {
+    .pair, .acc-item.is-open .acc-panel { grid-template-columns: 1fr; }
+    .logos { justify-content: flex-start; }
+    .fold-scene { height: 150vh; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page">Design B — cohesion + fold explorations</h1>
+<p class="note">
+  <strong>B1 / B2</strong> kept. <strong>B3</strong> is now scroll-animation tries — skills card folds down from the arch like a book page.
+  Scroll inside each B3 demo. Live site untouched. Copy: no pin · chips as header · science line updated.
+</p>
+
+<!-- shared arch body helper via duplicate markup -->
+
+<section class="design" id="design-b1" data-design="b1">
+  <p class="label">B1 — Continuous shell <span>same mint→cream wash · flat join · skills tucked as lower half</span></p>
+  <div class="stage">
+    <div class="b1-stack">
+      <div class="arch arch-fill">
+        <p class="greeting">👋 Hey, glad you're here</p>
+        <p class="statement">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
+        <div class="pair">
+          <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+          <ul class="logos" aria-label="Companies">
+            <li><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></li>
+            <li><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></li>
+            <li><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></li>
+            <li><img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px"></li>
+          </ul>
+        </div>
+        <div class="pair">
+          <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+          <ul class="logos logos--uni" aria-label="Universities">
+            <li><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State"></li>
+            <li><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou"></li>
+            <li><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="BFA" style="height:26px"></li>
+          </ul>
+        </div>
+      </div>
+      <div class="skills skills-cont">
+        <div class="skills-chips" role="tablist" aria-label="Practice areas">
+          <button type="button" class="chip is-active">AI + Trust</button>
+          <button type="button" class="chip">Product Convergence</button>
+          <button type="button" class="chip">0→1 Product Builds</button>
+          <button type="button" class="chip">Research Ops & Scale</button>
+        </div>
+        <div class="acc" data-acc>
+          <div class="acc-item is-open">
+            <button type="button" class="acc-btn" aria-expanded="true"><span><span class="num">01</span><span class="title">AI + Trust</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel">
+              <div>
+                <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks back.</p>
+                <div class="acc-proof"><strong>Security Advisor</strong><span>Conversational advisor research arc at Malwarebytes.</span></div>
+                <div class="acc-proof"><strong>Automation scaling</strong><span>How much autonomy users grant — and where they need a human.</span></div>
+              </div>
+              <div class="acc-stage">Security Advisor</div>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">02</span><span class="title">Product Convergence</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel"><div><p class="lede">UX architecture for products that outgrew their structure.</p></div><div class="acc-stage">proof</div></div>
+          </div>
+          <div class="acc-item">
+            <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">03</span><span class="title">0→1 Product Builds</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel"><div><p class="lede">Concept to launch.</p></div><div class="acc-stage">proof</div></div>
+          </div>
+          <div class="acc-item">
+            <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">04</span><span class="title">Research Ops & Scale</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel"><div><p class="lede">Research that ships.</p></div><div class="acc-stage">proof</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="design" id="design-b2" data-design="b2">
+  <p class="label">B2 — Matched pair <span>same width · 12px gap · shared corner language · two cards, clearly related</span></p>
+  <div class="stage">
+    <div class="b2-stack">
+      <div class="arch arch-fill">
+        <p class="greeting">👋 Hey, glad you're here</p>
+        <p class="statement">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
+        <div class="pair">
+          <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+          <ul class="logos" aria-label="Companies">
+            <li><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></li>
+            <li><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></li>
+            <li><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></li>
+            <li><img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px"></li>
+          </ul>
+        </div>
+        <div class="pair">
+          <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+          <ul class="logos logos--uni" aria-label="Universities">
+            <li><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State"></li>
+            <li><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou"></li>
+            <li><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="BFA" style="height:26px"></li>
+          </ul>
+        </div>
+      </div>
+      <div class="skills quiet-fill">
+        <div class="skills-chips" role="tablist" aria-label="Practice areas">
+          <button type="button" class="chip is-active">AI + Trust</button>
+          <button type="button" class="chip">Product Convergence</button>
+          <button type="button" class="chip">0→1 Product Builds</button>
+          <button type="button" class="chip">Research Ops & Scale</button>
+        </div>
+        <div class="acc" data-acc>
+          <div class="acc-item is-open">
+            <button type="button" class="acc-btn" aria-expanded="true"><span><span class="num">01</span><span class="title">AI + Trust</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel">
+              <div>
+                <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks back.</p>
+                <div class="acc-proof"><strong>Security Advisor</strong><span>Conversational advisor research arc.</span></div>
+              </div>
+              <div class="acc-stage">proof</div>
+            </div>
+          </div>
+          <div class="acc-item">
+            <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">02</span><span class="title">Product Convergence</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel"><div><p class="lede">Convergence.</p></div><div class="acc-stage">proof</div></div>
+          </div>
+          <div class="acc-item">
+            <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">03</span><span class="title">0→1 Product Builds</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel"><div><p class="lede">0→1.</p></div><div class="acc-stage">proof</div></div>
+          </div>
+          <div class="acc-item">
+            <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">04</span><span class="title">Research Ops & Scale</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+            <div class="acc-panel"><div><p class="lede">Ops.</p></div><div class="acc-stage">proof</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="design" id="design-b3a" data-design="b3a">
+  <p class="label">B3a — Book page fold <span>skills rotates down from the arch hinge (rotateX) · scrub scroll</span></p>
+  <p class="fold-hint">Scroll this block → <em>page turns open</em></p>
+  <div class="fold-scene" data-fold="page">
+    <div class="fold-pin">
+      <div class="stage">
+        <div class="b-fold-stack">
+          <div class="arch arch-fill" data-arch></div>
+          <div class="fold-hinge">
+            <div class="skills skills-cont fold-page" data-fold-page></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="design" id="design-b3b" data-design="b3b">
+  <p class="label">B3b — Soft uncurl <span>gentler rotateX + scale + fade · feels like paper relaxing flat</span></p>
+  <p class="fold-hint">Scroll this block → <em>uncurl</em></p>
+  <div class="fold-scene" data-fold="uncurl">
+    <div class="fold-pin">
+      <div class="stage">
+        <div class="b-fold-stack">
+          <div class="arch arch-fill" data-arch></div>
+          <div class="fold-hinge">
+            <div class="skills skills-cont fold-page" data-fold-page></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="design" id="design-b3c" data-design="b3c">
+  <p class="label">B3c — Peel + shadow <span>fold with deepening under-shadow · more “book page” depth</span></p>
+  <p class="fold-hint">Scroll this block → <em>peel open</em></p>
+  <div class="fold-scene" data-fold="peel">
+    <div class="fold-pin">
+      <div class="stage">
+        <div class="b-fold-stack">
+          <div class="arch arch-fill" data-arch></div>
+          <div class="fold-hinge">
+            <div class="skills skills-cont fold-page" data-fold-page></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<template id="tpl-arch">
+  <p class="greeting">👋 Hey, glad you're here</p>
+  <p class="statement">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
+  <div class="pair">
+    <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+    <ul class="logos" aria-label="Companies">
+      <li><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></li>
+      <li><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></li>
+      <li><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></li>
+      <li><img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px"></li>
+    </ul>
+  </div>
+  <div class="pair">
+    <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+    <ul class="logos logos--uni" aria-label="Universities">
+      <li><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State"></li>
+      <li><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou"></li>
+      <li><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="BFA" style="height:26px"></li>
+    </ul>
+  </div>
+</template>
+
+<template id="tpl-skills">
+  <div class="skills-chips" role="tablist" aria-label="Practice areas">
+    <button type="button" class="chip is-active">AI + Trust</button>
+    <button type="button" class="chip">Product Convergence</button>
+    <button type="button" class="chip">0→1 Product Builds</button>
+    <button type="button" class="chip">Research Ops & Scale</button>
+  </div>
+  <div class="acc" data-acc>
+    <div class="acc-item is-open">
+      <button type="button" class="acc-btn" aria-expanded="true"><span><span class="num">01</span><span class="title">AI + Trust</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <div class="acc-panel">
+        <div>
+          <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks back.</p>
+          <div class="acc-proof"><strong>Security Advisor</strong><span>Conversational advisor research arc.</span></div>
+        </div>
+        <div class="acc-stage">proof</div>
+      </div>
+    </div>
+    <div class="acc-item">
+      <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">02</span><span class="title">Product Convergence</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <div class="acc-panel"><div><p class="lede">Convergence.</p></div><div class="acc-stage">proof</div></div>
+    </div>
+    <div class="acc-item">
+      <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">03</span><span class="title">0→1 Product Builds</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <div class="acc-panel"><div><p class="lede">0→1.</p></div><div class="acc-stage">proof</div></div>
+    </div>
+    <div class="acc-item">
+      <button type="button" class="acc-btn" aria-expanded="false"><span><span class="num">04</span><span class="title">Research Ops & Scale</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <div class="acc-panel"><div><p class="lede">Ops.</p></div><div class="acc-stage">proof</div></div>
+    </div>
+  </div>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+  const archTpl = document.getElementById("tpl-arch");
+  const skillsTpl = document.getElementById("tpl-skills");
+  document.querySelectorAll("[data-arch]").forEach((el) => {
+    el.appendChild(archTpl.content.cloneNode(true));
+  });
+  document.querySelectorAll("[data-fold-page]").forEach((el) => {
+    el.appendChild(skillsTpl.content.cloneNode(true));
+  });
+
+  const wireAcc = (root) => {
+    root.querySelectorAll("[data-acc]").forEach((acc) => {
+      acc.querySelectorAll(".acc-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".acc-item");
+          const open = item.classList.contains("is-open");
+          acc.querySelectorAll(".acc-item").forEach((el) => {
+            el.classList.remove("is-open");
+            el.querySelector(".acc-btn")?.setAttribute("aria-expanded", "false");
+          });
+          if (!open) {
+            item.classList.add("is-open");
+            btn.setAttribute("aria-expanded", "true");
+          }
+        });
+      });
+    });
+    root.querySelectorAll(".skills-chips").forEach((row) => {
+      row.querySelectorAll(".chip").forEach((chip, i) => {
+        chip.addEventListener("click", () => {
+          row.querySelectorAll(".chip").forEach((c) => c.classList.remove("is-active"));
+          chip.classList.add("is-active");
+          const acc = row.parentElement?.querySelector("[data-acc]");
+          if (!acc) return;
+          acc.querySelectorAll(".acc-item").forEach((el, j) => {
+            const on = j === i;
+            el.classList.toggle("is-open", on);
+            el.querySelector(".acc-btn")?.setAttribute("aria-expanded", on ? "true" : "false");
+          });
+        });
+      });
+    });
+  };
+  wireAcc(document);
+
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll(".fold-scene").forEach((scene) => {
+    const page = scene.querySelector("[data-fold-page]");
+    const mode = scene.dataset.fold;
+    if (!page) return;
+
+    if (reduce) {
+      gsap.set(page, { clearProps: "all" });
+      return;
+    }
+
+    if (mode === "page") {
+      gsap.fromTo(
+        page,
+        { rotateX: -88, transformOrigin: "50% 0%", boxShadow: "0 0 0 rgba(0,0,0,0)" },
+        {
+          rotateX: 0,
+          boxShadow: "0 28px 48px -12px rgba(30,42,68,.12)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: scene,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+          },
+        }
+      );
+    } else if (mode === "uncurl") {
+      gsap.fromTo(
+        page,
+        { rotateX: -72, scaleY: 0.86, opacity: 0.35, transformOrigin: "50% 0%" },
+        {
+          rotateX: 0,
+          scaleY: 1,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: scene,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+          },
+        }
+      );
+    } else if (mode === "peel") {
+      gsap.fromTo(
+        page,
+        {
+          rotateX: -95,
+          y: -12,
+          filter: "brightness(0.92)",
+          transformOrigin: "50% 0%",
+          boxShadow: "0 -40px 60px rgba(0,0,0,.18)",
+        },
+        {
+          rotateX: 0,
+          y: 0,
+          filter: "brightness(1)",
+          boxShadow: "0 28px 48px -12px rgba(30,42,68,.12)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: scene,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+          },
+        }
+      );
+    }
+  });
+</script>
+</body>
+</html>

@@ -545,9 +545,9 @@
     position: relative;
     /* Big card — side gutters; skills continues this same shell below */
     width: min(1100px, calc(100% - 64px));
-    min-height: min(104vh, 880px);
+    min-height: min(96vh, 820px);
     margin: 0 auto;
-    padding: clamp(80px, 12vh, 140px) clamp(28px, 5vw, 72px) clamp(28px, 4vh, 44px);
+    padding: clamp(72px, 10vh, 120px) clamp(28px, 5vw, 72px) clamp(28px, 4vh, 40px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -574,7 +574,7 @@
   .about-hello {
     text-align: center;
     max-width: 720px;
-    margin: 0 auto 56px;
+    margin: 0 auto 28px;
   }
   .about-hello .about-greeting {
     font-family: var(--sans);
@@ -582,52 +582,40 @@
     letter-spacing: .02em;
     color: var(--ink-soft);
     font-weight: 400;
-    margin-bottom: 14px;
+    margin-bottom: 8px;
   }
-  .about-hello .statement {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: clamp(26px, 3.2vw, 36px);
-    line-height: 1.28;
-    letter-spacing: -.015em;
-    color: var(--ink);
+  .about-hello .about-identity {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    font-weight: 400;
+    letter-spacing: .01em;
+    color: var(--ink-soft);
+    margin: 0 auto;
+    max-width: 36em;
   }
   .about-pair {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 36px 48px;
+    gap: 28px 48px;
     align-items: center;
   }
   .about-pair + .about-pair {
-    margin-top: 40px;
-    padding-top: 40px;
+    margin-top: 28px;
+    padding-top: 28px;
     border-top: 1px solid rgba(10, 69, 84, .1);
   }
   .about-pair .pair-copy {
-    font-family: var(--sans);
+    font-family: var(--serif);
     font-weight: 400;
-    font-size: 17px;
-    line-height: 1.6;
-    letter-spacing: 0;
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.38;
+    letter-spacing: -.01em;
     color: var(--ink);
     text-align: left;
   }
   .about-pair .pair-copy .hook {
-    display: block;
-    margin-top: .55em;
-    font-family: var(--serif);
-    font-size: 1.05em;
-    font-weight: 400;
-    letter-spacing: -.01em;
-    color: var(--accent);
     font-style: italic;
-  }
-  .about-pair .pair-copy .aside {
-    font-size: 0.88em;
-    font-weight: 400;
-    font-style: normal;
-    color: var(--ink-soft);
-    letter-spacing: 0;
+    color: var(--accent);
   }
   .about-logo-strip {
     list-style: none;
@@ -665,14 +653,14 @@
   .about-logo-strip li[data-brand="lanzhou"] img { height: 32px; max-width: 160px; }
   .about-logo-strip li[data-brand="bfa"] img { height: 34px; max-width: 168px; }
   @media (max-width: 800px) {
-    .about-hello { margin-bottom: 40px; }
+    .about-hello { margin-bottom: 22px; }
     .about-pair {
       grid-template-columns: 1fr;
       gap: 20px;
     }
     .about-pair + .about-pair {
-      margin-top: 32px;
-      padding-top: 32px;
+      margin-top: 24px;
+      padding-top: 24px;
     }
     .about-pair .pair-copy { text-align: center; }
     .about-logo-strip li { min-height: 56px; padding: 12px 6px; }
@@ -680,50 +668,38 @@
     .about-logo-strip li[data-brand="kerr"] img { height: 26px; }
     .about-logo-strip li[data-brand="bfa"] img { height: 26px; max-width: 130px; }
   }
-  /* Part 2 — hard skills = lower half of the same arch card */
+  /* Part 2 — hard skills = lower half of the same arch card (accordion) */
   #skills {
     position: relative;
     z-index: 2;
-    /* Tight tuck — one continuous mint shell, not a tall extra slab */
     margin-top: -14vh;
-    padding: 0;
-    background: transparent; /* #about ice-sky shows in gutters */
+    padding: 0 0 8px;
+    background: transparent;
     display: flex;
     justify-content: center;
   }
   .skills-pin {
     width: min(1100px, calc(100% - 64px));
     height: auto;
-    min-height: min(78vh, 640px);
+    min-height: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 20px 0 36px;
-    overflow: hidden;
-    /* Exact arch exit color at top — no tint shift at the join */
-    background: linear-gradient(180deg, #EFF3D8 0%, #EFF3D8 28%, #F2F6E6 65%, #EEF3EA 100%);
+    padding: clamp(24px, 3vw, 36px) clamp(28px, 4vw, 56px) clamp(28px, 3.5vw, 44px);
+    overflow: visible;
+    background: linear-gradient(180deg, #EFF3D8 0%, #F2F6E6 40%, #F4F6F1 100%);
     border-radius: 0 0 36px 36px;
-    /* Downward-only shadow — avoids a hairline seam at the arch join */
     box-shadow: 0 28px 48px -12px rgba(30, 42, 68, .10);
-  }
-  .skills-top {
-    width: calc(100% - 56px);
-    max-width: none;
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
   }
   .skills-chips {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    margin-bottom: 18px;
   }
   .skills-chips .chip {
     appearance: none;
-    border: 1px solid rgba(0,115,140,.12);
+    border: 1px solid rgba(0,115,140,.14);
     border-radius: 999px;
     padding: 9px 16px;
     font: inherit;
@@ -731,10 +707,8 @@
     font-weight: 500;
     cursor: pointer;
     color: var(--ink);
-    background: rgba(255,255,255,.45);
+    background: rgba(255,255,255,.5);
     box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     transition: transform .25s, background .25s, color .25s, box-shadow .25s, border-color .25s;
   }
   .skills-chips .chip:hover { transform: translateY(-2px); background: rgba(255,255,255,.7); }
@@ -742,115 +716,76 @@
     background: var(--accent-deep);
     color: #fff;
     border-color: transparent;
-    box-shadow: 0 10px 24px rgba(0,90,110,.18);
+    box-shadow: 0 8px 20px rgba(0,90,110,.16);
   }
-  .skills-scroll-hint {
-    font-family: var(--hand);
-    font-size: 22px;
-    color: var(--accent);
-    white-space: nowrap;
+  .skills-acc {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-  .skills-viewport {
-    width: 100%;
+  .acc-item {
+    border-radius: 16px;
+    border: 1px solid rgba(0,115,140,.12);
+    background: rgba(255,255,255,.45);
     overflow: hidden;
   }
-  .skills-dots {
-    position: relative;
+  .acc-item.is-open {
+    background: rgba(255,255,255,.72);
+    border-color: rgba(0,115,140,.22);
+  }
+  .acc-btn {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: min(200px, 42vw);
-    margin: 22px auto 0;
-    padding: 10px 0;
-  }
-  .skills-dots::before {
-    content: "";
-    position: absolute;
-    left: 6px;
-    right: 6px;
-    top: 50%;
-    height: 1px;
-    background: rgba(0,115,140,.16);
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-  .skills-dot {
-    position: relative;
-    z-index: 1;
-    width: 11px;
-    height: 11px;
-    padding: 0;
-    border-radius: 50%;
-    border: 1.5px solid rgba(0,115,140,.32);
-    background: rgba(255,255,255,.85);
-    cursor: pointer;
-    appearance: none;
-    transition: background .25s, border-color .25s, transform .25s, box-shadow .25s;
-  }
-  .skills-dot:hover { transform: scale(1.12); }
-  .skills-dot.is-active {
-    background: var(--accent-deep);
-    border-color: var(--accent-deep);
-    box-shadow: 0 0 0 4px rgba(0,115,140,.1);
-    transform: scale(1.18);
-  }
-  .skills-track {
-    display: flex;
-    width: max-content;
-    will-change: transform;
-  }
-  .skill-slide {
-    /* Slide width = arch card width (not full viewport) */
-    width: min(1100px, calc(100vw - 64px));
-    flex: 0 0 min(1100px, calc(100vw - 64px));
-    padding: 0 28px;
-    box-sizing: border-box;
-  }
-  .skill-slide-inner {
-    display: grid;
-    grid-template-columns: 1.05fr .95fr;
-    gap: clamp(24px, 4vw, 48px);
-    align-items: center;
-    min-height: min(48vh, 440px);
-    padding: clamp(12px, 2vh, 22px) clamp(8px, 2vw, 20px);
-    /* Quiet panel — not a nested floating card */
-    border-radius: 0;
-    background: transparent;
+    gap: 16px;
+    padding: 16px 18px;
     border: 0;
-    box-shadow: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    color: var(--ink);
   }
-  .skill-slide h3 {
+  .acc-btn .num {
     font-family: var(--serif);
-    font-size: clamp(24px, 2.8vw, 34px);
-    font-weight: 600;
-    letter-spacing: -.015em;
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    line-height: 1.15;
-  }
-  .skill-slide h3 .num {
-    font-family: var(--hand);
-    font-size: 0.9em;
-    font-weight: 600;
-    color: var(--accent);
-    line-height: 1;
-    flex: 0 0 auto;
-  }
-  .skill-slide h3 .title {
-    min-width: 0;
-  }
-  .skill-slide .lede {
+    font-size: 13px;
     color: var(--ink-soft);
-    font-size: 15.5px;
-    margin-top: 12px;
-    max-width: 44ch;
+    margin-right: 10px;
+  }
+  .acc-btn .title {
+    font-family: var(--serif);
+    font-size: clamp(17px, 1.6vw, 20px);
+    font-weight: 500;
+  }
+  .acc-btn .chev {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: .55;
+    transition: transform .25s;
+  }
+  .acc-item.is-open .chev { transform: rotate(180deg); }
+  .acc-panel {
+    display: none;
+    padding: 0 18px 18px;
+  }
+  .acc-item.is-open .acc-panel { display: block; }
+  .acc-panel-inner {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: clamp(20px, 3vw, 32px);
+    align-items: start;
+  }
+  .acc-panel .lede {
+    color: var(--ink-soft);
+    font-size: 15px;
     line-height: 1.55;
+    max-width: 48ch;
+    margin: 0 0 14px;
   }
   .skill-proofs {
-    margin: 18px 0 0;
+    margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
@@ -895,7 +830,7 @@
   .proof-stage {
     position: relative;
     align-self: stretch;
-    min-height: min(40vh, 360px);
+    min-height: min(32vh, 280px);
     border-radius: 16px;
     overflow: hidden;
     background:
@@ -912,7 +847,7 @@
     place-items: center;
     margin: 0;
     font-family: var(--hand);
-    font-size: 24px;
+    font-size: 22px;
     color: rgba(10,69,84,.3);
     transition: opacity .3s;
   }
@@ -938,7 +873,7 @@
     text-align: center;
     padding: 22px;
     font-family: var(--hand);
-    font-size: 24px;
+    font-size: 22px;
     color: rgba(30,42,68,.55);
     line-height: 1.25;
   }
@@ -956,6 +891,11 @@
   .ph-zero { background: linear-gradient(145deg, #F3DCE9, #D9D4F5); }
   .ph-amp { background: linear-gradient(145deg, #E4EFC8, #CDEDE4); }
 
+  @media (max-width: 800px) {
+    .acc-panel-inner { grid-template-columns: 1fr; }
+    .proof-stage { min-height: 200px; order: -1; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .intro-pin { height: auto; min-height: 100vh; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
@@ -969,31 +909,10 @@
     #skills { margin-top: -8vh; padding-bottom: 40px; }
     .skills-pin {
       width: min(1100px, calc(100% - 32px));
-      height: auto;
-      min-height: 0;
-      padding: 20px 0 36px;
-      overflow: visible;
       border-radius: 0 0 28px 28px;
     }
-    .skill-slide {
-      width: min(1100px, calc(100vw - 32px));
-      flex: 0 0 min(1100px, calc(100vw - 32px));
-      padding: 0 16px;
-    }
-    .skills-viewport { overflow: visible; }
-    .skills-track {
-      width: 100%;
-      flex-direction: column;
-      gap: 20px;
-      transform: none !important;
-    }
-    .skill-slide {
-      width: 100%;
-      flex: none;
-      padding: 0 32px;
-    }
-    .skills-scroll-hint { display: none; }
     .proof-stage .stage-shot { transition: none; }
+    .acc-btn .chev { transition: none; }
     nav { transition: none; }
     nav.is-hidden { transform: none; pointer-events: auto; }
   }
@@ -1899,8 +1818,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: clamp(18px, 3vw, 40px);
-    width: min(1080px, 100%);
+    gap: clamp(14px, 2vw, 28px);
+    width: min(1140px, 100%);
     margin: 44px auto 0;
     padding: 16px 22px;
     border-radius: 16px;
@@ -1914,6 +1833,7 @@
     align-items: center;
     gap: 12px;
     min-width: 0;
+    flex: 1 1 auto;
   }
   .endorse-strip .ava {
     width: 44px;
@@ -1947,6 +1867,8 @@
     display: block;
     font-size: 12px;
     color: var(--ink-soft);
+    line-height: 1.35;
+    max-width: 28em;
   }
   .endorse-strip .name-row span {
     font-size: 12px;
@@ -1955,13 +1877,16 @@
   .endorse-strip .strip-brands {
     display: flex;
     align-items: center;
-    gap: clamp(20px, 3vw, 36px);
-    flex-shrink: 0;
+    gap: clamp(16px, 2.5vw, 28px);
+    flex-shrink: 1;
+    min-width: 0;
   }
-  .endorse-strip .strip-brands img {
-    display: block;
-    height: 34px;
-    width: auto;
+  .endorse-strip .strip-brands .strip-org {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .endorse-strip .strip-brands .strip-org .meta span {
+    white-space: nowrap;
   }
   .endorse-strip .strip-org {
     display: flex;
@@ -1974,6 +1899,8 @@
     width: 44px;
     height: 44px;
     border-radius: 10px;
+    object-fit: contain;
+    background: #fff;
   }
   .endorse-strip .strip-org .meta b {
     display: block;
@@ -2025,51 +1952,117 @@
   .endorse-more a:hover::after { opacity: .85; transform: scaleX(1); }
   .endorse-more a:hover .arrow { transform: translateX(4px); }
 
-  /* ---------- Footer (Michael's) ---------- */
-  footer { padding: 110px 0 70px; text-align: center; }
-  footer .foot-line { font-family: var(--serif); font-size: clamp(26px, 3.6vw, 40px); font-weight: 400; line-height: 1.3; }
-  footer .curious {
+  /* ---------- Footer: sketch · farewell · nav ---------- */
+  footer {
+    padding: 96px 0 72px;
+    background: var(--ice-sky);
+  }
+  .footer-card {
+    width: min(1100px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: clamp(36px, 4.5vw, 52px) clamp(32px, 4vw, 56px);
+    border-radius: 40px;
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,255,255,.7), transparent 55%),
+      linear-gradient(180deg, #F2F6F0 0%, #F4F6F1 55%, #F5F6F2 100%);
+    box-shadow:
+      0 24px 64px rgba(30, 42, 68, .08),
+      0 2px 0 rgba(255,255,255,.55) inset;
+    display: grid;
+    grid-template-columns: auto 1.4fr 0.85fr;
+    gap: clamp(28px, 4vw, 48px);
+    align-items: center;
+  }
+  .footer-col-title {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .footer-sketch {
     display: block;
-    width: fit-content;
-    margin: 22px auto 0;
+    width: clamp(88px, 12vw, 130px);
+    height: auto;
+    color: var(--ink);
+    opacity: .5;
+    flex-shrink: 0;
+  }
+  footer .foot-line {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.6vw, 30px);
+    font-weight: 400;
+    line-height: 1.3;
+    text-align: left;
+    margin: 0;
+  }
+  footer .curious {
+    display: inline-block;
+    margin-top: 12px;
     font-family: var(--hand);
-    font-size: 26px;
+    font-size: 24px;
     color: var(--accent);
     text-decoration: none;
     transform: rotate(-2deg);
   }
   footer .curious:hover { text-decoration: underline; }
+  footer .small {
+    margin-top: 14px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    text-align: left;
+  }
   footer .mail {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    margin-top: 30px;
+    gap: 8px;
+    margin-top: 16px;
     padding: 0;
     border: 0;
     background: none;
     cursor: pointer;
     font: inherit;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--ink);
     transition: color .2s ease;
   }
   footer .mail:hover,
   footer .mail:focus-visible { color: var(--accent-deep); }
-  footer .mail:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  footer .mail:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   footer .mail-icon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
-    opacity: .72;
+    opacity: .7;
     transition: opacity .2s ease, transform .2s ease;
   }
   footer .mail:hover .mail-icon { opacity: 1; }
   footer .mail.is-copied .mail-icon { transform: scale(1.08); }
   footer .mail-label { transition: opacity .15s ease; }
-  footer .small { margin-top: 44px; color: var(--ink-soft); font-size: 13.5px; }
+  .footer-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+  }
+  .footer-list a {
+    display: inline-flex;
+    font-size: 15.5px;
+    font-weight: 400;
+    color: var(--ink);
+    text-decoration: none;
+    width: fit-content;
+    transition: color .2s ease;
+  }
+  .footer-list a:hover,
+  .footer-list a:focus-visible { color: var(--accent-deep); }
+  .footer-list a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
 
   @media (max-width: 900px) {
     .nav-inner {
@@ -2112,12 +2105,7 @@
     .skills-pin {
       width: min(100% - 24px, 1100px);
       border-radius: 0 0 28px 28px;
-      padding-top: 24px;
-    }
-    .skill-slide {
-      width: min(100vw - 24px, 1100px);
-      flex: 0 0 min(100vw - 24px, 1100px);
-      padding: 0 16px;
+      padding: 24px 20px 28px;
     }
     .timeline::before { display: none; }
     .t-group { grid-template-columns: 1fr; gap: 14px; margin-bottom: 48px; }
@@ -2196,15 +2184,24 @@
       gap: 16px;
       margin-top: 32px;
     }
-    .endorse-strip .strip-brands { padding-left: 56px; }
+    .endorse-strip .strip-brands {
+      padding-left: 56px;
+      flex-wrap: wrap;
+    }
+    .endorse-strip .strip-who .meta > span { max-width: none; }
     .endorse-more { margin-top: 28px; }
     #skills { margin-top: -10vh; }
-    .skills-pin { min-height: 0; padding-top: 20px; padding-bottom: 28px; }
-    .skill-slide-inner { grid-template-columns: 1fr; min-height: 0; }
-    .proof-stage { min-height: 220px; order: -1; }
-    .skills-scroll-hint { display: none; }
-    .skills-top { margin-bottom: 32px; }
+    .skills-pin { padding: 20px 18px 28px; }
     section { padding: 64px 0; }
+    .footer-card {
+      width: min(100% - 24px, 1100px);
+      padding: 32px 28px;
+      border-radius: 28px;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      justify-items: start;
+    }
+    .footer-sketch { width: 100px; }
   }
 
 </style>
@@ -2292,7 +2289,7 @@
         <div class="about-arch-body">
           <header class="about-hello">
             <p class="about-greeting">👋 Hey, glad you're&nbsp;here</p>
-            <p class="statement">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area&nbsp;📍</p>
+            <p class="about-identity">Alexandra · senior UX researcher · SF Bay&nbsp;Area</p>
           </header>
 
           <div class="about-pair">
@@ -2314,7 +2311,7 @@
           </div>
 
           <div class="about-pair">
-            <p class="pair-copy">Trained in experimental science <span class="aside">and&nbsp;more</span>, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
             <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
               <li data-brand="oregon-state">
                 <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
@@ -2330,36 +2327,36 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 
-  <!-- Part 2: hard skills horizontal scroll -->
-  <div id="skills" aria-label="Hard skills">
+  <!-- Part 2: hard skills accordion (continuous B1 shell) -->
+  <div id="skills" aria-label="Practice areas">
   <div class="skills-pin" data-skills>
-    <div class="skills-top">
-      <div class="skills-chips" role="tablist" aria-label="Practice areas">
-        <button type="button" class="chip glass is-active" role="tab" data-skill="ai" aria-selected="true">AI + Trust</button>
-        <button type="button" class="chip glass" role="tab" data-skill="conv" aria-selected="false">Product Convergence</button>
-        <button type="button" class="chip glass" role="tab" data-skill="zero" aria-selected="false">0→1 Product Builds</button>
-        <button type="button" class="chip glass" role="tab" data-skill="amp" aria-selected="false">Research Ops & Scale</button>
-      </div>
-      <p class="skills-scroll-hint" aria-hidden="true">keep scrolling →</p>
+    <div class="skills-chips" role="tablist" aria-label="Practice areas">
+      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">AI + Trust</button>
+      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">Product Convergence</button>
+      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 Product Builds</button>
+      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">Research Ops & Scale</button>
     </div>
 
-    <div class="skills-viewport">
-      <div class="skills-track" data-skills-track>
-        <article class="skill-slide" data-skill-slide="ai" id="skill-ai">
-          <div class="skill-slide-inner">
+    <div class="skills-acc" data-skills-acc>
+      <div class="acc-item is-open" data-skill="ai" id="skill-ai">
+        <button type="button" class="acc-btn" aria-expanded="true">
+          <span><span class="num">01</span><span class="title">AI + Trust</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
             <div>
-              <h3><span class="num">01</span><span class="title">AI + Trust</span></h3>
-              <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks back.</p>
+              <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks&nbsp;back.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="sa">
                   <strong>Security Advisor</strong>
-                  <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for it.</span>
+                  <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</span>
                 </button>
                 <button type="button" class="skill-proof" data-proof="automation">
                   <strong>Automation scaling</strong>
-                  <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the loop.</span>
+                  <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</span>
                 </button>
               </div>
             </div>
@@ -2369,25 +2366,30 @@
               <div class="stage-shot" data-shot="automation"><div class="proof-ph ph-ai">Automation scaling<br><small>autonomy framework</small></div></div>
             </div>
           </div>
-        </article>
+        </div>
+      </div>
 
-        <article class="skill-slide" data-skill-slide="conv" id="skill-conv">
-          <div class="skill-slide-inner">
+      <div class="acc-item" data-skill="conv" id="skill-conv">
+        <button type="button" class="acc-btn" aria-expanded="false">
+          <span><span class="num">02</span><span class="title">Product Convergence</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
             <div>
-              <h3><span class="num">02</span><span class="title">Product Convergence</span></h3>
-              <p class="lede">I design UX architecture for products that outgrew their own structure.</p>
+              <p class="lede">I design UX architecture for products that outgrew their own&nbsp;structure.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="shopping">
                   <strong>Google Express → Shopping</strong>
-                  <span>Foundational and concept-validation research as Express folded into the new Shopping tab.</span>
+                  <span>Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</span>
                 </button>
                 <button type="button" class="skill-proof" data-proof="mb5">
                   <strong>Malwarebytes 5.0</strong>
-                  <span>Converged four standalone products into one coherent app — mental models defining the unified structure.</span>
+                  <span>Converged four standalone products into one coherent app — mental models defining the unified&nbsp;structure.</span>
                 </button>
                 <button type="button" class="skill-proof" data-proof="console">
                   <strong>Enterprise console rebuild</strong>
-                  <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture assessment.</span>
+                  <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture&nbsp;assessment.</span>
                 </button>
               </div>
             </div>
@@ -2398,21 +2400,26 @@
               <div class="stage-shot" data-shot="console"><div class="proof-ph ph-conv">Enterprise console<br><small>before → after</small></div></div>
             </div>
           </div>
-        </article>
+        </div>
+      </div>
 
-        <article class="skill-slide" data-skill-slide="zero" id="skill-zero">
-          <div class="skill-slide-inner">
+      <div class="acc-item" data-skill="zero" id="skill-zero">
+        <button type="button" class="acc-btn" aria-expanded="false">
+          <span><span class="num">03</span><span class="title">0→1 Product Builds</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
             <div>
-              <h3><span class="num">03</span><span class="title">0→1 Product Builds</span></h3>
-              <p class="lede">Build product from concept to launch in both traditional and AI-native environments.</p>
+              <p class="lede">Build product from concept to launch in both traditional and AI-native&nbsp;environments.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="ai-native">
                   <strong>AI-native builds</strong>
-                  <span>From pain point to vision to working product — strategy-first discipline in AI-native contexts.</span>
+                  <span>From pain point to vision to working product — strategy-first discipline in AI-native&nbsp;contexts.</span>
                 </button>
                 <button type="button" class="skill-proof" data-proof="vpn">
                   <strong>Privacy VPN</strong>
-                  <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was built.</span>
+                  <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was&nbsp;built.</span>
                 </button>
               </div>
             </div>
@@ -2422,25 +2429,30 @@
               <div class="stage-shot" data-shot="vpn"><div class="proof-ph ph-zero">Privacy VPN<br><small>concept → launch</small></div></div>
             </div>
           </div>
-        </article>
+        </div>
+      </div>
 
-        <article class="skill-slide" data-skill-slide="amp" id="skill-amp">
-          <div class="skill-slide-inner">
+      <div class="acc-item" data-skill="amp" id="skill-amp">
+        <button type="button" class="acc-btn" aria-expanded="false">
+          <span><span class="num">04</span><span class="title">Research Ops & Scale</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
             <div>
-              <h3><span class="num">04</span><span class="title">Research Ops & Scale</span></h3>
-              <p class="lede">I make the value of research visible — so teams act on it, and users feel it.</p>
+              <p class="lede">I make the value of research visible — so teams act on it, and users feel&nbsp;it.</p>
               <div class="skill-proofs">
                 <button type="button" class="skill-proof" data-proof="participatory">
                   <strong>Participatory Research Program</strong>
-                  <span>Bridged teams and users — boosting engagement, buy-in, and org empathy.</span>
+                  <span>Bridged teams and users — boosting engagement, buy-in, and org&nbsp;empathy.</span>
                 </button>
                 <button type="button" class="skill-proof" data-proof="dashboard">
                   <strong>Google Ads recruiting dashboard</strong>
-                  <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and PMs.</span>
+                  <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and&nbsp;PMs.</span>
                 </button>
                 <button type="button" class="skill-proof" data-proof="practice">
                   <strong>Built the UX research practice</strong>
-                  <span>Grew the team from 2 to 5; streamlined research ops and standardized practices.</span>
+                  <span>Grew the team from 2 to 5; streamlined research ops and standardized&nbsp;practices.</span>
                 </button>
               </div>
             </div>
@@ -2451,15 +2463,8 @@
               <div class="stage-shot" data-shot="practice"><div class="proof-ph ph-amp">Research ops<br><small>intake / planning</small></div></div>
             </div>
           </div>
-        </article>
+        </div>
       </div>
-    </div>
-
-    <div class="skills-dots" role="tablist" aria-label="Skill slides" data-skills-dots>
-      <button type="button" class="skills-dot is-active" data-skill="ai" aria-label="AI + Trust" aria-selected="true"></button>
-      <button type="button" class="skills-dot" data-skill="conv" aria-label="Product Convergence" aria-selected="false"></button>
-      <button type="button" class="skills-dot" data-skill="zero" aria-label="0→1 Product Builds" aria-selected="false"></button>
-      <button type="button" class="skills-dot" data-skill="amp" aria-label="Research Ops & Scale" aria-selected="false"></button>
     </div>
   </div>
   </div>
@@ -2783,7 +2788,7 @@
     </div>
 
     <!-- LinkedIn-style strip: profile · past teams · Malwarebytes -->
-    <aside class="endorse-strip reveal" aria-label="Alexandra's LinkedIn profile, past teams Huawei and Google, and Malwarebytes">
+    <aside class="endorse-strip reveal" aria-label="Alexandra's LinkedIn profile and companies Huawei, Google, and Malwarebytes">
       <div class="strip-who">
         <div class="ava"><img src="assets/images/about/LinkedIn Profile 1.png" alt="" width="88" height="88" loading="lazy" decoding="async"></div>
         <div class="meta">
@@ -2793,15 +2798,26 @@
             <span aria-hidden="true">· 1st</span>
           </div>
           <span>Senior UX Researcher | Mixed-Methods | Ex-Google, Huawei,&nbsp;Malwarebytes</span>
-          <span>2yr</span>
         </div>
       </div>
       <div class="strip-brands">
-        <img src="assets/images/shared/brand/huawei.svg" alt="Huawei" width="34" height="34" loading="lazy" decoding="async">
-        <img src="assets/images/shared/brand/google.svg" alt="Google" width="34" height="34" loading="lazy" decoding="async">
+        <div class="strip-org">
+          <img src="assets/images/shared/brand/huawei.svg" alt="" width="44" height="44" loading="lazy" decoding="async">
+          <div class="meta">
+            <b>Huawei</b>
+            <span>5,456,806 followers</span>
+          </div>
+        </div>
+        <div class="strip-org">
+          <img src="assets/images/shared/brand/google.svg" alt="" width="44" height="44" loading="lazy" decoding="async">
+          <div class="meta">
+            <b>Google</b>
+            <span>41,804,610 followers</span>
+          </div>
+        </div>
       </div>
       <div class="strip-org">
-        <img src="assets/images/shared/brand/malwarebytes.svg" alt="Malwarebytes" width="44" height="44" loading="lazy" decoding="async">
+        <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="44" height="44" loading="lazy" decoding="async">
         <div class="meta">
           <b>Malwarebytes</b>
           <span>56,904 followers</span>
@@ -2825,26 +2841,58 @@
   </div>
 </section>
 
-<!-- Footer: Michael's -->
+<!-- Footer: upside-down foot sketch · farewell · nav -->
 <footer data-ph-section="footer">
-  <div class="wrap reveal">
-    <p class="foot-line">You've hit the footer,<br>thanks for stopping by.</p>
-    <a class="curious" href="#about" data-ph="nav" data-ph-label="still-curious">Still curious?</a>
-    <button
-      type="button"
-      class="mail"
-      data-copy-email="alex@alexandra-irribarren.com"
-      data-ph="connect"
-      data-ph-location="footer"
-      aria-label="Copy email address alex@alexandra-irribarren.com"
-    >
-      <svg class="mail-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="8.5" y="8.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/>
-        <path d="M15.5 8.5V6.8A2.3 2.3 0 0 0 13.2 4.5H6.8A2.3 2.3 0 0 0 4.5 6.8v6.4A2.3 2.3 0 0 0 6.8 15.5H8.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-      </svg>
-      <span class="mail-label">alex@alexandra-irribarren.com</span>
-    </button>
-    <p class="small">© Alexandra Irribarren 2026</p>
+  <div class="footer-card reveal">
+    <!-- Foot on top, leg below (upside-down / hanging from ceiling) -->
+    <svg class="footer-sketch" viewBox="0 0 110 200" fill="none" aria-hidden="true">
+      <!-- sole + toes facing up (upside-down foot) -->
+      <path d="M78 8c8 2 16 10 18 20 2 8-1 16-8 22L72 68H38L18 42C10 32 10 18 18 10c8-8 20-8 32-4l28 2z" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- toe crease marks -->
+      <path d="M42 22c8-3 18-3 28 0M38 36c9-2 20-2 30 1M40 50c8-1 18 0 26 2" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" opacity=".55"/>
+      <!-- ankle ring -->
+      <path d="M42 68c-1 10 2 18 10 22h18c8-3 12-12 10-22" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- shin / calf down -->
+      <path d="M48 90v88M72 90v88" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+      <!-- knee hint -->
+      <path d="M48 128c6 4 14 4 24 0" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".45"/>
+      <!-- lower leg end -->
+      <path d="M48 178c6 10 14 14 24 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+
+    <div class="footer-col footer-col--farewell">
+      <p class="foot-line">You've hit the footer,<br>thanks for stopping by.</p>
+      <a class="curious" href="#about" data-ph="nav" data-ph-label="still-curious">Still curious?</a>
+      <p class="small">© Alexandra Irribarren 2026</p>
+      <button
+        type="button"
+        class="mail"
+        data-copy-email="alex@alexandra-irribarren.com"
+        data-ph="connect"
+        data-ph-location="footer"
+        aria-label="Copy email address alex@alexandra-irribarren.com"
+      >
+        <svg class="mail-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="8.5" y="8.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M15.5 8.5V6.8A2.3 2.3 0 0 0 13.2 4.5H6.8A2.3 2.3 0 0 0 4.5 6.8v6.4A2.3 2.3 0 0 0 6.8 15.5H8.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <span class="mail-label">alex@alexandra-irribarren.com</span>
+      </button>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-col-title">Navigation</p>
+      <ul class="footer-list">
+        <li><a href="#work" data-ph="nav" data-ph-label="footer-project">project</a></li>
+        <li><a href="#about" data-ph="nav" data-ph-label="footer-about">about</a></li>
+        <li>
+          <a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume">resume</a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="footer">connect</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </footer>
 
@@ -3043,15 +3091,14 @@
     gsap.set(aboutArch, { clearProps: "all" });
   }
 
-  // Hard skills: pinned horizontal scroll + hover bullet → proof
+  // Hard skills: accordion (one open) + chip sync + hover bullet → proof
   const skillsRoot = document.querySelector("[data-skills]");
-  const skillsTrack = document.querySelector("[data-skills-track]");
-  let skillsScrollTween = null;
+  const skillsAcc = document.querySelector("[data-skills-acc]");
 
   const wireProofHover = (root) => {
-    root.querySelectorAll(".skill-slide").forEach((slide) => {
-      const stage = slide.querySelector("[data-proof-stage]");
-      const proofs = [...slide.querySelectorAll(".skill-proof")];
+    root.querySelectorAll(".acc-item").forEach((item) => {
+      const stage = item.querySelector("[data-proof-stage]");
+      const proofs = [...item.querySelectorAll(".skill-proof")];
       if (!stage || !proofs.length) return;
       const shots = [...stage.querySelectorAll(".stage-shot")];
 
@@ -3071,90 +3118,38 @@
         proof.addEventListener("click", () => showProof(key));
       });
 
-      // Warm first proof when the slide is the active one (chip sync also covers this)
       showProof(proofs[0].dataset.proof);
     });
   };
 
-  if (skillsRoot && skillsTrack && !reduceMotion) {
-    const slides = gsap.utils.toArray("[data-skill-slide]");
+  if (skillsRoot && skillsAcc) {
     const chips = [...skillsRoot.querySelectorAll(".skills-chips [data-skill]")];
-    const dots = [...skillsRoot.querySelectorAll("[data-skills-dots] [data-skill]")];
-    const getTravel = () => Math.max(0, skillsTrack.scrollWidth - skillsRoot.clientWidth);
-    const snapStep = slides.length > 1 ? 1 / (slides.length - 1) : 1;
+    const items = [...skillsAcc.querySelectorAll(".acc-item")];
 
-    const syncNav = (progress) => {
-      if (!slides.length) return;
-      const idx = Math.min(
-        slides.length - 1,
-        Math.max(0, Math.round(progress / snapStep))
-      );
-      const key = slides[idx].dataset.skillSlide;
-      [...chips, ...dots].forEach((el) => {
-        const on = el.dataset.skill === key;
-        el.classList.toggle("is-active", on);
-        el.setAttribute("aria-selected", on ? "true" : "false");
+    const openAt = (index) => {
+      items.forEach((el, j) => {
+        const on = j === index;
+        el.classList.toggle("is-open", on);
+        el.querySelector(".acc-btn")?.setAttribute("aria-expanded", on ? "true" : "false");
+      });
+      chips.forEach((chip, j) => {
+        const on = j === index;
+        chip.classList.toggle("is-active", on);
+        chip.setAttribute("aria-selected", on ? "true" : "false");
       });
     };
 
-    const goToSkill = (key) => {
-      const st = skillsScrollTween && skillsScrollTween.scrollTrigger;
-      if (!st) return;
-      const idx = slides.findIndex((s) => s.dataset.skillSlide === key);
-      if (idx < 0) return;
-      const p = slides.length <= 1 ? 0 : idx / (slides.length - 1);
-      window.scrollTo(0, st.start + (st.end - st.start) * p);
-    };
-
-    skillsScrollTween = gsap.to(skillsTrack, {
-      x: () => -getTravel(),
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#skills",
-        start: "top top",
-        end: () => "+=" + Math.round(getTravel() * 0.85),
-        pin: true,
-        scrub: true, // 1:1 with wheel — snappy
-        snap: {
-          snapTo: snapStep,
-          duration: 0.18,
-          delay: 0,
-          ease: "power2.out",
-        },
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        fastScrollEnd: true,
-        onUpdate: (self) => syncNav(self.progress),
-      },
+    chips.forEach((chip, i) => {
+      chip.addEventListener("click", () => openAt(i));
     });
 
-    [...chips, ...dots].forEach((el) => {
-      el.addEventListener("click", () => goToSkill(el.dataset.skill));
-    });
-
-    wireProofHover(skillsRoot);
-
-    const refreshSkills = () => ScrollTrigger.refresh();
-    window.addEventListener("load", refreshSkills);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(refreshSkills).catch(() => {});
-    }
-  } else if (skillsRoot) {
-    // Reduced motion: stacked slides + hover proofs still work
-    wireProofHover(skillsRoot);
-    const nav = [...skillsRoot.querySelectorAll(".skills-chips [data-skill], [data-skills-dots] [data-skill]")];
-    nav.forEach((el) => {
-      el.addEventListener("click", () => {
-        const slide = document.querySelector(`[data-skill-slide="${el.dataset.skill}"]`);
-        if (!slide) return;
-        window.scrollTo(0, slide.getBoundingClientRect().top + window.scrollY - 88);
-        nav.forEach((n) => {
-          const on = n.dataset.skill === el.dataset.skill;
-          n.classList.toggle("is-active", on);
-          n.setAttribute("aria-selected", on ? "true" : "false");
-        });
+    items.forEach((item, i) => {
+      item.querySelector(".acc-btn")?.addEventListener("click", () => {
+        openAt(item.classList.contains("is-open") ? -1 : i);
       });
     });
+
+    wireProofHover(skillsRoot);
   }
 
   // Anchor links: instant jump (smooth CSS scroll breaks pinned sections)

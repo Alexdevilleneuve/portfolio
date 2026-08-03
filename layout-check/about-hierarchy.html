@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About arch — hierarchy treatments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ice-sky: #E8F0FA;
+    --mint: #D6EAD4;
+    --cream: #EFF3D8;
+    --ink: #0A4554;
+    --ink-soft: #5E7F82;
+    --accent: #00738C;
+    --accent-deep: #005A6E;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: #EEF2F4;
+    padding: 40px 24px 100px;
+  }
+  h1.page { font-family: var(--serif); font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+  .note { color: var(--ink-soft); font-size: 14px; margin-bottom: 36px; max-width: 60em; line-height: 1.55; }
+  .design { margin-bottom: 64px; }
+  .label {
+    display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 14px;
+  }
+  .label span { font-weight: 500; letter-spacing: .02em; text-transform: none; color: var(--ink-soft); }
+
+  .stage {
+    background: var(--ice-sky);
+    border-radius: 24px;
+    padding: 36px 20px 44px;
+  }
+  .arch {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: clamp(52px, 7vh, 80px) clamp(28px, 4vw, 64px) clamp(40px, 5vh, 56px);
+    border-radius: 48% 48% 0 0 / 26% 26% 0 0;
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
+      linear-gradient(180deg, var(--mint) 0%, #E4EFC8 48%, var(--cream) 100%);
+    box-shadow: 0 -14px 48px rgba(0,115,140,.1);
+  }
+
+  .greeting {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .identity {
+    text-align: center;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    margin: 0 auto 28px;
+    max-width: 36em;
+  }
+  .identity strong { color: var(--ink); font-weight: 600; }
+
+  .lede-hero {
+    font-family: var(--serif);
+    font-size: clamp(26px, 3.2vw, 38px);
+    font-weight: 500;
+    line-height: 1.28;
+    text-align: center;
+    max-width: 18em;
+    margin: 0 auto 36px;
+    text-wrap: pretty;
+  }
+  .lede-hero .hook {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .pair {
+    display: grid;
+    grid-template-columns: 1.15fr .95fr;
+    gap: 24px 40px;
+    align-items: center;
+    text-align: left;
+    padding: 26px 0;
+  }
+  .pair + .pair { border-top: 1px solid rgba(10,69,84,.1); }
+  .pair-copy {
+    font-family: var(--serif);
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .pair-copy .hook {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .pair-copy--soft {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .logos {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px 18px;
+  }
+  .logos li {
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 0;
+    border-right: 1px solid rgba(10,69,84,.12);
+  }
+  .logos li:last-child { border-right: 0; padding-right: 0; }
+  .logos img { display: block; width: auto; height: 22px; object-fit: contain; }
+  .logos--uni img { height: 28px; }
+
+  /* T1: stacked hero statements, tiny identity */
+  .t1 .pair { grid-template-columns: 1.2fr .9fr; }
+
+  /* T2: one combined hero lede, then logo strips as proof */
+  .t2-proof {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 8px;
+  }
+  .t2-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    align-items: center;
+    text-align: left;
+  }
+  .t2-row .tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+  }
+  .t2-row .logos { justify-content: flex-start; }
+
+  /* T3: identity as eyebrow; pairs as magazine pull-quotes + logos */
+  .t3 .greeting { margin-bottom: 4px; }
+  .t3 .identity {
+    font-size: 13px;
+    margin-bottom: 32px;
+    letter-spacing: .01em;
+  }
+  .t3 .pair-copy {
+    font-size: clamp(22px, 2.6vw, 30px);
+  }
+  .t3 .pair-kicker {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 800px) {
+    .pair, .t2-row { grid-template-columns: 1fr; }
+    .logos { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page">Arch hierarchy — 3 treatments</h1>
+<p class="note">
+  Goal: the lines next to the logos carry the message. “I'm Alexandra…” steps back.
+  B1 shell (full arch) assumed — skills accordion comes after. Live site untouched.
+</p>
+
+<!-- T1 -->
+<section class="design" id="design-t1">
+  <p class="label">T1 — Pair lines as headlines <span>identity is a quiet subline under the greeting</span></p>
+  <div class="stage">
+    <div class="arch t1">
+      <p class="greeting">👋 Hey, glad you're here</p>
+      <p class="identity">Alexandra · senior UX researcher · SF Bay&nbsp;Area</p>
+
+      <div class="pair">
+        <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+        <ul class="logos" aria-label="Companies">
+          <li><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></li>
+          <li><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></li>
+          <li><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></li>
+          <li><img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px"></li>
+        </ul>
+      </div>
+      <div class="pair">
+        <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+        <ul class="logos logos--uni" aria-label="Universities">
+          <li><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State"></li>
+          <li><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou"></li>
+          <li><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="BFA" style="height:26px"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- T2 -->
+<section class="design" id="design-t2">
+  <p class="label">T2 — One hero thought <span>science/hook leads; logos as labeled proof rows; name stays small</span></p>
+  <div class="stage">
+    <div class="arch t2">
+      <p class="greeting">👋 Hey, glad you're here</p>
+      <p class="identity">Alexandra · senior UX researcher · SF Bay&nbsp;Area</p>
+
+      <p class="lede-hero">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+
+      <div class="t2-proof">
+        <div class="t2-row">
+          <span class="tag">Where</span>
+          <ul class="logos" aria-label="Companies">
+            <li><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></li>
+            <li><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></li>
+            <li><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></li>
+            <li><img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px"></li>
+          </ul>
+        </div>
+        <p class="pair-copy--soft" style="text-align:left;max-width:36em">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+        <div class="t2-row">
+          <span class="tag">Trained</span>
+          <ul class="logos logos--uni" aria-label="Universities">
+            <li><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State"></li>
+            <li><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou"></li>
+            <li><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="BFA" style="height:26px"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- T3 -->
+<section class="design" id="design-t3">
+  <p class="label">T3 — Magazine pairs <span>kickers + big serif lines; identity as tiny eyebrow only</span></p>
+  <div class="stage">
+    <div class="arch t3">
+      <p class="greeting">👋 Hey, glad you're here</p>
+      <p class="identity">Alexandra · senior UX researcher · SF Bay&nbsp;Area</p>
+
+      <div class="pair">
+        <div>
+          <p class="pair-kicker">Practice</p>
+          <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+        </div>
+        <ul class="logos" aria-label="Companies">
+          <li><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></li>
+          <li><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></li>
+          <li><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></li>
+          <li><img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px"></li>
+        </ul>
+      </div>
+      <div class="pair">
+        <div>
+          <p class="pair-kicker">Training</p>
+          <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+        </div>
+        <ul class="logos logos--uni" aria-label="Universities">
+          <li><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State"></li>
+          <li><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou"></li>
+          <li><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="BFA" style="height:26px"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
