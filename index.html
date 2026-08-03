@@ -117,11 +117,21 @@
   /* ---------- Intro: GSAP pins this viewport for the scroll sequence ---------- */
   .intro-pin {
     position: relative;
-    height: 100vh;
-    min-height: 640px;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    /* Clip to one viewport on load so only the arch tip peeks; JS expands on scroll */
+    max-height: 100vh;
+    max-height: 100svh;
     overflow: hidden;
     /* Same canvas as the rest of the page — kills the hero→about seam */
     background: var(--ice-sky);
+  }
+  /* After the hero pin, shell must own its full height — else it overlaps #work */
+  .intro-pin.is-expanded {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
   }
 
   /* ---------- Hero (sky grades down into the shared ice-sky canvas) ---------- */
@@ -132,9 +142,13 @@
     --accent: #5B7FD9;
     --accent-deep: #3D5CB8;
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
     width: 100%;
-    height: 100%;
+    height: 100vh;
+    height: 100svh;
     min-height: 0;
     margin: 0;
     display: flex;
@@ -524,57 +538,61 @@
     position: relative;
     z-index: 1;
     margin: 0;
-    padding: 0 0 48px;
+    padding: 0 0 40px;
     /* Continuous ice-sky canvas — same token as body / hero exit / work */
     background: var(--ice-sky);
   }
-  /* Part 1 — arch layer inside the hero pin */
+  /* Part 1 — arch layer inside the hero pin (skills nested = one shell) */
   .about-stage {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
+    position: relative;
+    z-index: 1;
     margin: 0;
     padding: 0 0 8px;
+    min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
     pointer-events: none;
   }
   .about-arch {
     position: relative;
-    /* Big card — side gutters; skills continues this same shell below */
     width: min(1100px, calc(100% - 64px));
-    min-height: min(96vh, 820px);
+    min-height: 0;
     margin: 0 auto;
-    padding: clamp(72px, 10vh, 120px) clamp(28px, 5vw, 72px) clamp(28px, 4vh, 40px);
+    /* Clear the dome — greeting needs room under the arch curve */
+    padding: clamp(72px, 11vh, 120px) clamp(32px, 5vw, 72px) 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
-    /* Tip peeks over clouds visually, but must not steal their hover */
     pointer-events: none;
     transform-origin: 50% 100%;
+    /* One continuous wash — arch through skills, no second fill */
     background:
       radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
-      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 50%, #EFF3D8 100%);
-    /* Arched top only — skills pin is the card’s lower half */
-    border-radius: 48% 48% 0 0 / 26% 26% 0 0;
-    box-shadow: 0 -18px 60px rgba(0,115,140,.10);
+      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 32%, #EFF3D8 55%, #F2F6E6 78%, #F4F6F1 100%);
+    /* Lower dome so “hey…” doesn’t float in empty mint */
+    border-radius: 48% 48% 36px 36px / 12% 12% 36px 36px;
+    box-shadow:
+      0 -18px 60px rgba(0,115,140,.10),
+      0 28px 48px -12px rgba(30, 42, 68, .10);
     will-change: transform;
+    overflow: hidden;
   }
   .about-arch-body {
     position: relative;
     z-index: 1;
     width: min(920px, 100%);
     max-width: 920px;
-    margin-top: 0;
+    margin: 0 0 clamp(20px, 3vh, 36px);
   }
   .about-hello {
     text-align: center;
     max-width: 720px;
-    margin: 0 auto 28px;
+    margin: 0 auto 36px;
   }
   .about-hello .about-greeting {
     font-family: var(--sans);
@@ -582,40 +600,49 @@
     letter-spacing: .02em;
     color: var(--ink-soft);
     font-weight: 400;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
   }
-  .about-hello .about-identity {
-    font-family: var(--sans);
-    font-size: 14.5px;
-    font-weight: 400;
-    letter-spacing: .01em;
-    color: var(--ink-soft);
+  .about-hello .statement {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.25;
+    letter-spacing: -.015em;
+    color: var(--ink);
+    max-width: 18em;
     margin: 0 auto;
-    max-width: 36em;
   }
   .about-pair {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 28px 48px;
+    gap: 32px 52px;
     align-items: center;
   }
   .about-pair + .about-pair {
-    margin-top: 28px;
-    padding-top: 28px;
+    margin-top: 36px;
+    padding-top: 36px;
     border-top: 1px solid rgba(10, 69, 84, .1);
   }
   .about-pair .pair-copy {
-    font-family: var(--serif);
+    font-family: var(--sans);
     font-weight: 400;
-    font-size: clamp(20px, 2.4vw, 28px);
-    line-height: 1.38;
-    letter-spacing: -.01em;
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: 0;
     color: var(--ink);
     text-align: left;
   }
   .about-pair .pair-copy .hook {
-    font-style: italic;
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -.01em;
     color: var(--accent);
+    font-style: italic;
+  }
+  .about-pair .pair-copy .hook--break {
+    display: block;
+    margin-top: .55em;
+    font-size: 1.05em;
   }
   .about-logo-strip {
     list-style: none;
@@ -671,31 +698,34 @@
   /* Part 2 — hard skills = lower half of the same arch card (accordion) */
   #skills {
     position: relative;
-    z-index: 2;
-    margin-top: -14vh;
-    padding: 0 0 8px;
+    z-index: 1;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     background: transparent;
-    display: flex;
-    justify-content: center;
+    display: block;
   }
   .skills-pin {
-    width: min(1100px, calc(100% - 64px));
+    position: relative;
+    width: 100%;
     height: auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: clamp(24px, 3vw, 36px) clamp(28px, 4vw, 56px) clamp(28px, 3.5vw, 44px);
+    padding: clamp(16px, 2.5vw, 28px) clamp(12px, 2vw, 24px) clamp(36px, 4.5vw, 52px);
     overflow: visible;
-    background: linear-gradient(180deg, #EFF3D8 0%, #F2F6E6 40%, #F4F6F1 100%);
-    border-radius: 0 0 36px 36px;
-    box-shadow: 0 28px 48px -12px rgba(30, 42, 68, .10);
+    /* Transparent — parent .about-arch paints the continuous shell */
+    background: transparent;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
   }
   .skills-chips {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
   }
   .skills-chips .chip {
     appearance: none;
@@ -721,7 +751,7 @@
   .skills-acc {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
   .acc-item {
     border-radius: 16px;
@@ -739,7 +769,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 16px 18px;
+    padding: 18px 20px;
     border: 0;
     background: none;
     cursor: pointer;
@@ -897,20 +927,17 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .intro-pin { height: auto; min-height: 100vh; overflow: visible; }
+    .intro-pin { height: auto; min-height: 100vh; max-height: none; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
     .hero-fg { position: relative; inset: auto; }
     .about-stage { position: relative; inset: auto; display: flex; overflow: visible; padding: 24px 0 32px; }
+    .intro-pin { max-height: none; overflow: visible; }
     .about-arch {
       width: min(1100px, calc(100% - 32px));
-      min-height: 90vh;
-      border-radius: 40% 40% 0 0 / 18% 18% 0 0;
+      border-radius: 40% 40% 28px 28px / 16% 16% 28px 28px;
     }
-    #skills { margin-top: -8vh; padding-bottom: 40px; }
-    .skills-pin {
-      width: min(1100px, calc(100% - 32px));
-      border-radius: 0 0 28px 28px;
-    }
+    #skills { margin-top: 0; }
+    .skills-pin { width: 100%; }
     .proof-stage .stage-shot { transition: none; }
     .acc-btn .chev { transition: none; }
     nav { transition: none; }
@@ -919,7 +946,7 @@
 
   /* ---------- Projects (featured timeline + more grid) ---------- */
   #work {
-    padding-top: 96px;
+    padding-top: 88px;
     padding-bottom: 110px;
   }
   #work > .wrap {
@@ -945,7 +972,8 @@
   .work-card-inner {
     position: relative;
     z-index: 1;
-    padding: clamp(40px, 5vw, 64px) clamp(28px, 4vw, 56px) clamp(40px, 5vw, 64px);
+    /* Extra top so the first project title isn’t kissing the rounded card edge */
+    padding: clamp(64px, 7.5vw, 96px) clamp(28px, 4vw, 56px) clamp(40px, 5vw, 64px);
   }
   .work-card--more .work-card-inner {
     padding-top: clamp(32px, 4vw, 48px);
@@ -2022,19 +2050,20 @@
     background: none;
     cursor: pointer;
     font: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--ink);
+    /* Match .small — quiet copyright weight/color */
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--ink-soft);
     transition: color .2s ease;
   }
   footer .mail:hover,
   footer .mail:focus-visible { color: var(--accent-deep); }
   footer .mail:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   footer .mail-icon {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
-    opacity: .7;
+    opacity: .65;
     transition: opacity .2s ease, transform .2s ease;
   }
   footer .mail:hover .mail-icon { opacity: 1; }
@@ -2050,6 +2079,8 @@
   }
   .footer-list a {
     display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 15.5px;
     font-weight: 400;
     color: var(--ink);
@@ -2063,6 +2094,14 @@
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
+  .footer-list .nav-arrow {
+    font-size: 0.95em;
+    line-height: 1;
+    opacity: .55;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .footer-list a:hover .nav-arrow,
+  .footer-list a:focus-visible .nav-arrow { opacity: .9; }
 
   @media (max-width: 900px) {
     .nav-inner {
@@ -2096,17 +2135,12 @@
     .cloud-frame { aspect-ratio: 16 / 11; }
     .about-arch {
       width: min(100% - 24px, 1100px);
-      min-height: 100vh;
-      padding-top: 14vh;
-      border-radius: 42% 42% 0 0 / 20% 20% 0 0;
+      padding-top: clamp(64px, 10vh, 96px);
+      border-radius: 42% 42% 28px 28px / 14% 14% 28px 28px;
     }
     .section-card { width: min(1100px, calc(100% - 32px)); border-radius: 28px; }
-    #skills { margin-top: -10vh; }
-    .skills-pin {
-      width: min(100% - 24px, 1100px);
-      border-radius: 0 0 28px 28px;
-      padding: 24px 20px 28px;
-    }
+    #skills { margin-top: 0; }
+    .skills-pin { width: 100%; padding: 16px 12px 28px; }
     .timeline::before { display: none; }
     .t-group { grid-template-columns: 1fr; gap: 14px; margin-bottom: 48px; }
     .t-company::after { display: none; }
@@ -2190,8 +2224,8 @@
     }
     .endorse-strip .strip-who .meta > span { max-width: none; }
     .endorse-more { margin-top: 28px; }
-    #skills { margin-top: -10vh; }
-    .skills-pin { padding: 20px 18px 28px; }
+    #skills { margin-top: 0; }
+    .skills-pin { padding: 16px 12px 28px; }
     section { padding: 64px 0; }
     .footer-card {
       width: min(100% - 24px, 1100px);
@@ -2289,11 +2323,11 @@
         <div class="about-arch-body">
           <header class="about-hello">
             <p class="about-greeting">👋 Hey, glad you're&nbsp;here</p>
-            <p class="about-identity">Alexandra · senior UX researcher · SF Bay&nbsp;Area</p>
+            <p class="statement">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
           </header>
 
           <div class="about-pair">
-            <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — security, privacy, and now&nbsp;AI.</p>
+            <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
             <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
               <li data-brand="malwarebytes">
                 <img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async">
@@ -2311,7 +2345,7 @@
           </div>
 
           <div class="about-pair">
-            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook hook--break">what should we build, and&nbsp;why?</span></p>
             <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
               <li data-brand="oregon-state">
                 <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
@@ -2325,13 +2359,10 @@
             </ul>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Part 2: hard skills accordion (continuous B1 shell) -->
-  <div id="skills" aria-label="Practice areas">
-  <div class="skills-pin" data-skills>
+        <!-- Skills: continuous lower half of the same arch shell -->
+        <div id="skills" aria-label="Practice areas">
+          <div class="skills-pin" data-skills>
     <div class="skills-chips" role="tablist" aria-label="Practice areas">
       <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">AI + Trust</button>
       <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">Product Convergence</button>
@@ -2466,8 +2497,12 @@
         </div>
       </div>
     </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  </div>
+
 </section>
 
 <!-- Projects: featured timeline + more studies grid -->
@@ -2883,13 +2918,13 @@
     <div class="footer-col">
       <p class="footer-col-title">Navigation</p>
       <ul class="footer-list">
-        <li><a href="#work" data-ph="nav" data-ph-label="footer-project">project</a></li>
-        <li><a href="#about" data-ph="nav" data-ph-label="footer-about">about</a></li>
+        <li><a href="#work" data-ph="nav" data-ph-label="footer-project">project <span class="nav-arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#about" data-ph="nav" data-ph-label="footer-about">about <span class="nav-arrow" aria-hidden="true">→</span></a></li>
         <li>
-          <a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume">resume</a>
+          <a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume">resume <span class="nav-arrow" aria-hidden="true">↗</span></a>
         </li>
         <li>
-          <a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="footer">connect</a>
+          <a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="footer">connect <span class="nav-arrow" aria-hidden="true">↗</span></a>
         </li>
       </ul>
     </div>
@@ -3058,6 +3093,27 @@
           // Only the grown arch should capture clicks; tip must stay pass-through
           aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
         },
+        // Unpin: grow pin to full shell height + strip transform.
+        // (A bare refresh() was re-applying yPercent:28 and sliding the arch over #work.)
+        onLeave: () => {
+          introPin.classList.add("is-expanded");
+          gsap.set(introPin, { clearProps: "height,maxHeight,overflow" });
+          aboutArch.style.willChange = "auto";
+          const lockArch = () => {
+            gsap.set(aboutArch, { scale: 1, x: 0, y: 0, yPercent: 0, clearProps: "transform" });
+            aboutArch.style.transform = "none";
+          };
+          lockArch();
+          requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+            lockArch();
+          });
+        },
+        onEnterBack: () => {
+          introPin.classList.remove("is-expanded");
+          aboutArch.style.willChange = "transform";
+          aboutArch.style.removeProperty("transform");
+        },
       },
       defaults: { ease: "none" },
     });
@@ -3089,6 +3145,7 @@
     }
   } else if (aboutArch) {
     gsap.set(aboutArch, { clearProps: "all" });
+    introPin?.classList.add("is-expanded");
   }
 
   // Hard skills: accordion (one open) + chip sync + hover bullet → proof
