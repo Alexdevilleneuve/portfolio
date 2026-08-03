@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alexandra Irribarren — From Insights to Influence</title>
+<title>Wash experiment — Alexandra Irribarren</title>
 <script>
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
   posthog.init("phc_r2cEAGp2HpvrfN22KtJUx2YuiNPY7YWuwbwLfbc9qTYp", {
@@ -26,12 +26,11 @@
     --sage: #97A675;
 
     --bg: var(--cream);
-    --ice-sky: #E8F0FA;          /* hero ice-sky — page canvas (matches hero exit) */
     --ink: #0A4554;              /* deep teal ink */
     --ink-soft: #5E7F82;         /* dusty-muted body */
     --accent: var(--teal);
     --accent-deep: #005A6E;
-    --pastel-1: #C9DCF7;         /* powder blue — ambient blobs */
+    --pastel-1: #C9DCF7;         /* powder blue — ambient blobs match work+ */
     --pastel-2: #D9D4F5;         /* lavender */
     --pastel-3: #CDEDE4;         /* mint */
     --pastel-4: #F3DCE9;         /* blush */
@@ -46,7 +45,8 @@
   /* Avoid scroll-behavior: smooth — it fights ScrollTrigger pin and blocks scrolling back up */
   html { scroll-behavior: auto; }
   body {
-    background: var(--ice-sky); /* homepage canvas = hero ice-sky */
+    position: relative;
+    background: #EFF3FA; /* fallback under the continuous wash */
     color: var(--ink);
     font-family: var(--sans);
     font-size: 16px;
@@ -60,13 +60,16 @@
   ::selection { background: var(--accent); color: #fff; }
   .wrap { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
 
-  /* ---------- Ambient blobs (baked into work card only; canvas stays ice-sky) ---------- */
-  .blobs { display: none; }
+  /* ---------- Liquid glass background blobs ---------- */
+  .blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
   .blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .75; }
-  .b1 { width: 560px; height: 560px; background: var(--pastel-1); top: -140px; left: -120px; }
-  .b2 { width: 480px; height: 480px; background: var(--pastel-2); top: 30%; right: -160px; }
-  .b3 { width: 420px; height: 420px; background: var(--pastel-3); bottom: -120px; left: 22%; }
-  .b4 { width: 340px; height: 340px; background: var(--pastel-4); top: 58%; left: -100px; opacity: .55; }
+  .b1 { width: 560px; height: 560px; background: var(--pastel-1); top: -140px; left: -120px; animation: drift1 26s ease-in-out infinite alternate; }
+  .b2 { width: 480px; height: 480px; background: var(--pastel-2); top: 30%; right: -160px; animation: drift2 32s ease-in-out infinite alternate; }
+  .b3 { width: 420px; height: 420px; background: var(--pastel-3); bottom: -120px; left: 22%; animation: drift3 29s ease-in-out infinite alternate; }
+  .b4 { width: 340px; height: 340px; background: var(--pastel-4); top: 58%; left: -100px; animation: drift2 36s ease-in-out infinite alternate-reverse; opacity: .55; }
+  @keyframes drift1 { to { transform: translate(70px, 60px) scale(1.08); } }
+  @keyframes drift2 { to { transform: translate(-60px, -50px) scale(1.1); } }
+  @keyframes drift3 { to { transform: translate(50px, -60px) scale(.95); } }
 
   /* ---------- Glass utility ---------- */
   .glass {
@@ -120,11 +123,9 @@
     height: 100vh;
     min-height: 640px;
     overflow: hidden;
-    /* Same canvas as the rest of the page — kills the hero→about seam */
-    background: var(--ice-sky);
   }
 
-  /* ---------- Hero (sky grades down into the shared ice-sky canvas) ---------- */
+  /* ---------- Hero (keeps original sky blues — palette stops here) ---------- */
   .hero {
     /* local tokens so hero stays ice-sky, not hydrangea */
     --ink: #1E2A44;
@@ -146,7 +147,7 @@
     z-index: 1;
     background:
       radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
-      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, var(--ice-sky) 100%);
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 65%, #E8F0FA 100%);
   }
   /* Foreground layer — GSAP moves this up; sky stays behind */
   .hero-fg {
@@ -488,11 +489,11 @@
   .sec-head p { color: var(--ink-soft); margin-top: 8px; max-width: none; width: 100%; }
   .hand-label { font-family: var(--hand); font-size: 23px; color: var(--accent); display: inline-block; transform: rotate(-2deg); margin-bottom: 6px; }
 
-  /* From Selected work down — ice-sky canvas (no live blob wash in gutters) */
+  /* From Selected work down — ice-blue tokens; continuous wash + blobs show through */
   #work,
   #work ~ section,
   footer {
-    --bg: var(--ice-sky);
+    --bg: #EFF3FA;
     --ink: #1E2A44;
     --ink-soft: #5A6B8C;
     --accent: #5B7FD9;
@@ -502,31 +503,39 @@
     --pastel-3: #CDEDE4;
     --pastel-4: #F3DCE9;
     --sage: #5B7FD9;
-    background: var(--ice-sky);
+    background: transparent;
   }
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
 
-  /* ---------- Shared floating section cards (Ben-style) ---------- */
-  .section-card {
-    position: relative;
-    width: min(1100px, calc(100% - 64px));
-    margin: 0 auto;
-    border-radius: 40px;
-    overflow: hidden;
-    box-shadow:
-      0 24px 64px rgba(30, 42, 68, .08),
-      0 2px 0 rgba(255,255,255,.55) inset;
+  /* ---------- Continuous page wash (experiment) ----------
+     One atmosphere: mint → cream → ice. Sections stay transparent;
+     How keeps a soft tinted personality. Blobs sit above this wash. */
+  .page-wash {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        #D6EAD4 0%,
+        #E4EFC8 12%,
+        #EFF3D8 22%,
+        #F2F6E6 32%,
+        #EFF3FA 48%,
+        #EEF1F8 68%,
+        #E9EDF7 85%,
+        #EFF3FA 100%
+      );
   }
 
   /* ---------- About: intro arch + hard skills (one section, two parts) ---------- */
   #about {
-    position: relative;
-    z-index: 1;
     margin: 0;
-    padding: 0 0 48px;
-    /* Continuous ice-sky canvas — same token as body / hero exit / work */
-    background: var(--ice-sky);
+    padding: 0;
+    /* Arch carries mint; below dissolves into the shared wash */
+    background: linear-gradient(180deg, #D6EAD4 0%, #EFF3D8 35%, rgba(239, 243, 250, 0) 78%);
   }
   /* Part 1 — arch layer inside the hero pin */
   .about-stage {
@@ -534,7 +543,7 @@
     inset: 0;
     z-index: 3;
     margin: 0;
-    padding: 0 0 8px;
+    padding: 0;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -543,11 +552,10 @@
   }
   .about-arch {
     position: relative;
-    /* Big card — side gutters; skills continues this same shell below */
-    width: min(1100px, calc(100% - 64px));
-    min-height: min(104vh, 880px);
+    width: 130%;
+    min-height: 110vh;
     margin: 0 auto;
-    padding: clamp(80px, 12vh, 140px) clamp(28px, 5vw, 72px) clamp(28px, 4vh, 44px);
+    padding: clamp(96px, 16vh, 180px) clamp(32px, 9vw, 110px) clamp(48px, 8vh, 88px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -558,10 +566,9 @@
     transform-origin: 50% 100%;
     background:
       radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
-      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 50%, #EFF3D8 100%);
-    /* Arched top only — skills pin is the card’s lower half */
-    border-radius: 48% 48% 0 0 / 26% 26% 0 0;
-    box-shadow: 0 -18px 60px rgba(0,115,140,.10);
+      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 45%, #EFF3D8 100%);
+    border-radius: 50% 50% 0 0 / 42% 42% 0 0;
+    box-shadow: 0 -24px 80px rgba(0,115,140,.12);
     will-change: transform;
   }
   .about-arch-body {
@@ -680,36 +687,26 @@
     .about-logo-strip li[data-brand="kerr"] img { height: 26px; }
     .about-logo-strip li[data-brand="bfa"] img { height: 26px; max-width: 130px; }
   }
-  /* Part 2 — hard skills = lower half of the same arch card */
+  /* Part 2 — hard skills (continues the same about section) */
   #skills {
     position: relative;
     z-index: 2;
-    /* Tight tuck — one continuous mint shell, not a tall extra slab */
-    margin-top: -14vh;
+    margin-top: -28vh;
     padding: 0;
-    background: transparent; /* #about ice-sky shows in gutters */
-    display: flex;
-    justify-content: center;
+    background: transparent;
   }
   .skills-pin {
-    width: min(1100px, calc(100% - 64px));
-    height: auto;
-    min-height: min(78vh, 640px);
+    height: 100vh;
+    min-height: 640px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 20px 0 36px;
+    padding: 64px 0 28px;
     overflow: hidden;
-    /* Exact arch exit color at top — no tint shift at the join */
-    background: linear-gradient(180deg, #EFF3D8 0%, #EFF3D8 28%, #F2F6E6 65%, #EEF3EA 100%);
-    border-radius: 0 0 36px 36px;
-    /* Downward-only shadow — avoids a hairline seam at the arch join */
-    box-shadow: 0 28px 48px -12px rgba(30, 42, 68, .10);
   }
   .skills-top {
-    width: calc(100% - 56px);
-    max-width: none;
-    margin: 0 auto 20px;
+    width: min(1140px, calc(100% - 64px));
+    margin: 0 auto 40px; /* double space before the accordion */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -723,7 +720,7 @@
   }
   .skills-chips .chip {
     appearance: none;
-    border: 1px solid rgba(0,115,140,.12);
+    border: 0;
     border-radius: 999px;
     padding: 9px 16px;
     font: inherit;
@@ -731,17 +728,12 @@
     font-weight: 500;
     cursor: pointer;
     color: var(--ink);
-    background: rgba(255,255,255,.45);
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    transition: transform .25s, background .25s, color .25s, box-shadow .25s, border-color .25s;
+    transition: transform .25s, background .25s, color .25s, box-shadow .25s;
   }
-  .skills-chips .chip:hover { transform: translateY(-2px); background: rgba(255,255,255,.7); }
+  .skills-chips .chip:hover { transform: translateY(-2px); }
   .skills-chips .chip.is-active {
     background: var(--accent-deep);
     color: #fff;
-    border-color: transparent;
     box-shadow: 0 10px 24px rgba(0,90,110,.18);
   }
   .skills-scroll-hint {
@@ -800,10 +792,9 @@
     will-change: transform;
   }
   .skill-slide {
-    /* Slide width = arch card width (not full viewport) */
-    width: min(1100px, calc(100vw - 64px));
-    flex: 0 0 min(1100px, calc(100vw - 64px));
-    padding: 0 28px;
+    width: 100vw;
+    flex: 0 0 100vw;
+    padding: 0 max(32px, calc((100vw - 1140px) / 2));
     box-sizing: border-box;
   }
   .skill-slide-inner {
@@ -811,13 +802,12 @@
     grid-template-columns: 1.05fr .95fr;
     gap: clamp(24px, 4vw, 48px);
     align-items: center;
-    min-height: min(48vh, 440px);
-    padding: clamp(12px, 2vh, 22px) clamp(8px, 2vw, 20px);
-    /* Quiet panel — not a nested floating card */
-    border-radius: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
+    min-height: min(62vh, 560px);
+    padding: clamp(22px, 3vh, 36px) clamp(22px, 3vw, 40px);
+    border-radius: 28px;
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(0,115,140,.12);
+    box-shadow: 0 20px 50px rgba(10,69,84,.08);
   }
   .skill-slide h3 {
     font-family: var(--serif);
@@ -895,13 +885,13 @@
   .proof-stage {
     position: relative;
     align-self: stretch;
-    min-height: min(40vh, 360px);
-    border-radius: 16px;
+    min-height: min(48vh, 420px);
+    border-radius: 20px;
     overflow: hidden;
     background:
-      radial-gradient(circle at 28% 24%, rgba(255,255,255,.55), transparent 55%),
-      linear-gradient(165deg, rgba(214,234,212,.55), rgba(220,232,214,.4));
-    border: 1px solid rgba(0,115,140,.08);
+      radial-gradient(circle at 28% 24%, rgba(255,255,255,.78), transparent 55%),
+      linear-gradient(165deg, rgba(214,234,212,.75), rgba(201,220,247,.5));
+    border: 1px solid rgba(0,115,140,.12);
     isolation: isolate;
   }
   .proof-stage .idle,
@@ -960,26 +950,9 @@
     .intro-pin { height: auto; min-height: 100vh; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
     .hero-fg { position: relative; inset: auto; }
-    .about-stage { position: relative; inset: auto; display: flex; overflow: visible; padding: 24px 0 32px; }
-    .about-arch {
-      width: min(1100px, calc(100% - 32px));
-      min-height: 90vh;
-      border-radius: 40% 40% 0 0 / 18% 18% 0 0;
-    }
-    #skills { margin-top: -8vh; padding-bottom: 40px; }
-    .skills-pin {
-      width: min(1100px, calc(100% - 32px));
-      height: auto;
-      min-height: 0;
-      padding: 20px 0 36px;
-      overflow: visible;
-      border-radius: 0 0 28px 28px;
-    }
-    .skill-slide {
-      width: min(1100px, calc(100vw - 32px));
-      flex: 0 0 min(1100px, calc(100vw - 32px));
-      padding: 0 16px;
-    }
+    .about-stage { position: relative; inset: auto; display: block; overflow: visible; }
+    .about-arch { width: 100%; min-height: 90vh; border-radius: 48% 48% 0 0 / 28% 28% 0 0; }
+    .skills-pin { height: auto; min-height: 0; padding: 48px 0 80px; overflow: visible; }
     .skills-viewport { overflow: visible; }
     .skills-track {
       width: 100%;
@@ -999,38 +972,7 @@
   }
 
   /* ---------- Projects (featured timeline + more grid) ---------- */
-  #work {
-    padding-top: 96px;
-    padding-bottom: 110px;
-  }
-  #work > .wrap {
-    margin-bottom: 28px;
-  }
-  #work .sec-head {
-    margin-bottom: 0;
-    text-align: center;
-  }
-  #work .sec-head p {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .work-card {
-    /* Quiet hydrangea tint — whisper of mint/cream, not full arch green */
-    background:
-      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,255,255,.7), transparent 55%),
-      linear-gradient(180deg, #F2F6F0 0%, #F4F6F1 55%, #F5F6F2 100%);
-  }
-  .work-card--more {
-    margin-top: 28px;
-  }
-  .work-card-inner {
-    position: relative;
-    z-index: 1;
-    padding: clamp(40px, 5vw, 64px) clamp(28px, 4vw, 56px) clamp(40px, 5vw, 64px);
-  }
-  .work-card--more .work-card-inner {
-    padding-top: clamp(32px, 4vw, 48px);
-  }
+  .work-part + .work-part { margin-top: 80px; }
   .work-part-label {
     font-size: 13px;
     letter-spacing: .14em;
@@ -1209,48 +1151,41 @@
   /* ---------- How I work (instincts) ---------- */
   #how.how-work {
     position: relative;
-    padding-top: 96px;
+    padding-top: 110px;
     padding-bottom: 110px;
-    overflow: visible;
-    background: transparent;
-  }
-  .how-work > .wrap {
-    position: relative;
-    z-index: 2;
-    margin-bottom: 28px;
-  }
-  .how-card {
+    overflow: hidden;
+    /* Soft tinted personality on the shared wash — no opaque slab */
     background:
-      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,.55), transparent 60%),
-      linear-gradient(180deg, #EAF3E8 0%, #F2F6E6 48%, #EEF3F8 100%);
+      linear-gradient(
+        180deg,
+        rgba(234, 243, 232, .0) 0%,
+        rgba(234, 243, 232, .42) 28%,
+        rgba(242, 246, 230, .38) 55%,
+        rgba(238, 243, 248, .0) 100%
+      );
   }
-  .how-card::before {
+  .how-work::before {
     content: "";
     position: absolute;
-    inset: 6% auto auto 6%;
-    width: min(380px, 48%);
-    height: min(380px, 48%);
+    inset: 4% auto auto 8%;
+    width: min(420px, 48vw);
+    height: min(420px, 48vw);
     border-radius: 50%;
     background: radial-gradient(circle, rgba(214,234,212,.55), transparent 68%);
     pointer-events: none;
     z-index: 0;
   }
-  .how-card::after {
+  .how-work::after {
     content: "";
     position: absolute;
-    right: -2%;
+    right: -4%;
     bottom: 4%;
-    width: min(360px, 46%);
-    height: min(360px, 46%);
+    width: min(400px, 48vw);
+    height: min(400px, 48vw);
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,220,247,.4), transparent 70%);
+    background: radial-gradient(circle, rgba(201,220,247,.45), transparent 70%);
     pointer-events: none;
     z-index: 0;
-  }
-  .how-card-inner {
-    position: relative;
-    z-index: 2;
-    padding: clamp(40px, 5vw, 64px) clamp(28px, 4vw, 56px) clamp(36px, 4vw, 56px);
   }
   /* Soft florals on the free corners (top-right + bottom-left) */
   .how-flowers {
@@ -1289,10 +1224,7 @@
     0%, 100% { transform: rotate(-1deg) translate3d(0, 0, 0); }
     50% { transform: rotate(2deg) translate3d(-6px, 10px, 0); }
   }
-  .how-work .sec-head {
-    margin-bottom: 0;
-    text-align: center;
-  }
+  .how-work > .wrap { position: relative; z-index: 2; }
   .how-work .sec-head h2 {
     font-size: clamp(34px, 4.4vw, 48px);
     letter-spacing: -.02em;
@@ -1300,8 +1232,6 @@
   .how-work .sec-head p {
     max-width: 38em;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
     font-size: 17px;
     margin-top: 14px;
   }
@@ -1516,23 +1446,23 @@
 
   /* ---------- Endorsements collage ---------- */
   #endorsements.endorse {
-    background: transparent;
+    /* Ride the shared wash — faint cool veil only */
+    background: linear-gradient(
+      180deg,
+      rgba(239, 243, 250, 0) 0%,
+      rgba(232, 236, 247, .35) 40%,
+      rgba(239, 243, 250, .2) 100%
+    );
     padding-top: 72px;
     padding-bottom: 80px;
-    overflow: visible;
+    overflow: hidden;
   }
   .endorse-head {
     text-align: center;
     max-width: 720px;
-    margin: 0 auto 28px;
+    margin: 0 auto 8px;
     position: relative;
     z-index: 2;
-  }
-  .endorse-card-panel {
-    background:
-      radial-gradient(ellipse 80% 45% at 50% 0%, rgba(255,255,255,.65), transparent 55%),
-      linear-gradient(180deg, #F7F5F0 0%, #F4F1EA 50%, #EEF2F8 100%);
-    padding: clamp(28px, 3.5vw, 48px) clamp(20px, 3vw, 40px) clamp(36px, 4vw, 56px);
   }
   .endorse-head h2 {
     font-family: var(--serif);
@@ -1550,8 +1480,7 @@
   }
   .endorse-stage {
     position: relative;
-    width: 100%;
-    max-width: 1080px;
+    width: min(1080px, 100%);
     margin: 0 auto;
     /* Compact cluster — two card columns flanking the portrait */
     min-height: 730px;
@@ -2102,22 +2031,10 @@
     .cloud-right .cloud-bob { width: min(140%, 420px); }
     .cloud-frame { aspect-ratio: 16 / 11; }
     .about-arch {
-      width: min(100% - 24px, 1100px);
+      width: 160vw;
       min-height: 100vh;
       padding-top: 14vh;
-      border-radius: 42% 42% 0 0 / 20% 20% 0 0;
-    }
-    .section-card { width: min(1100px, calc(100% - 32px)); border-radius: 28px; }
-    #skills { margin-top: -10vh; }
-    .skills-pin {
-      width: min(100% - 24px, 1100px);
-      border-radius: 0 0 28px 28px;
-      padding-top: 24px;
-    }
-    .skill-slide {
-      width: min(100vw - 24px, 1100px);
-      flex: 0 0 min(100vw - 24px, 1100px);
-      padding: 0 16px;
+      border-radius: 50% 50% 0 0 / 36% 36% 0 0;
     }
     .timeline::before { display: none; }
     .t-group { grid-template-columns: 1fr; gap: 14px; margin-bottom: 48px; }
@@ -2198,8 +2115,8 @@
     }
     .endorse-strip .strip-brands { padding-left: 56px; }
     .endorse-more { margin-top: 28px; }
-    #skills { margin-top: -10vh; }
-    .skills-pin { min-height: 0; padding-top: 20px; padding-bottom: 28px; }
+    #skills { margin-top: -22vh; }
+    .skills-pin { min-height: 100svh; padding-top: 56px; }
     .skill-slide-inner { grid-template-columns: 1fr; min-height: 0; }
     .proof-stage { min-height: 220px; order: -1; }
     .skills-scroll-hint { display: none; }
@@ -2211,6 +2128,7 @@
 </head>
 <body>
 
+<div class="page-wash" aria-hidden="true"></div>
 <div class="blobs">
   <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
 </div>
@@ -2218,12 +2136,13 @@
 <!-- Nav: directionally aware — hides on scroll down, returns on scroll up -->
 <nav data-nav>
   <div class="nav-inner glass">
-    <a class="logo" href="#">Alexandra Irribarren</a>
+    <a class="logo" href="index.html">Alexandra Irribarren</a>
     <ul class="nav-links">
       <li><a href="#work" data-ph="nav" data-ph-label="project"><b>⌘ |</b> project</a></li>
       <li><a href="#about" data-ph="nav" data-ph-label="about"><b>? |</b> about</a></li>
       <li><a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume"><b>⌗ |</b> resume</a></li>
       <li><a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="nav"><b>⌲ |</b> connect</a></li>
+      <li><a href="index.html" style="opacity:.7">↩ live</a></li>
     </ul>
   </div>
 </nav>
@@ -2472,10 +2391,7 @@
       <h2>Selected work sample</h2>
       <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
     </div>
-  </div>
 
-  <div class="section-card work-card">
-    <div class="work-card-inner">
     <!-- Part 1 — featured studies grouped by company -->
     <div class="work-part">
       <div class="timeline">
@@ -2541,61 +2457,56 @@
         </div>
       </div>
     </div>
-    </div>
-  </div>
 
-  <!-- More studies — own floating card -->
-  <div class="section-card work-card work-card--more">
-    <div class="work-card-inner">
-      <div class="work-part work-part--more">
-        <p class="work-part-label reveal">More studies</p>
-        <p class="work-part-note reveal">Quick one-pagers — the supporting research that shaped teams, ops, and product&nbsp;direction.</p>
-        <div class="work-grid">
-          <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="personas-with-purpose" data-ph-company="malwarebytes">
-            <span class="work-mini-co">
-              <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
-              Malwarebytes
-            </span>
-            <h3>Personas with Purpose <span class="arrow">→</span></h3>
-            <p>Building data-driven personas for consumer and corporate UX — the foundation later studies (and strategy bets) stood&nbsp;on.</p>
-          </a>
+    <!-- Part 2 — more studies as simple one-pager links -->
+    <div class="work-part work-part--more">
+      <p class="work-part-label reveal">More studies</p>
+      <p class="work-part-note reveal">Quick one-pagers — the supporting research that shaped teams, ops, and product&nbsp;direction.</p>
+      <div class="work-grid">
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="personas-with-purpose" data-ph-company="malwarebytes">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
+            Malwarebytes
+          </span>
+          <h3>Personas with Purpose <span class="arrow">→</span></h3>
+          <p>Building data-driven personas for consumer and corporate UX — the foundation later studies (and strategy bets) stood&nbsp;on.</p>
+        </a>
 
-          <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="power-of-desktop-research" data-ph-company="google">
-            <span class="work-mini-co">
-              <img src="assets/images/shared/brand/google.svg" alt="" width="18" height="18">
-              Google
-            </span>
-            <h3>Power of Desktop Research <span class="arrow">→</span></h3>
-            <p>A methodology case study featuring Google Shopping SRP competitor audits — when desktop research moves the&nbsp;needle.</p>
-          </a>
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="power-of-desktop-research" data-ph-company="google">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/google.svg" alt="" width="18" height="18">
+            Google
+          </span>
+          <h3>Power of Desktop Research <span class="arrow">→</span></h3>
+          <p>A methodology case study featuring Google Shopping SRP competitor audits — when desktop research moves the&nbsp;needle.</p>
+        </a>
 
-          <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="clarity-in-the-chaos" data-ph-company="google">
-            <span class="work-mini-co">
-              <img src="assets/images/shared/brand/google.svg" alt="" width="18" height="18">
-              Google
-            </span>
-            <h3>Clarity in the Chaos <span class="arrow">→</span></h3>
-            <p>Visualizing UX research recruiting at scale for Google Ads — dashboards that made a messy pipeline&nbsp;strategic.</p>
-          </a>
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="clarity-in-the-chaos" data-ph-company="google">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/google.svg" alt="" width="18" height="18">
+            Google
+          </span>
+          <h3>Clarity in the Chaos <span class="arrow">→</span></h3>
+          <p>Visualizing UX research recruiting at scale for Google Ads — dashboards that made a messy pipeline&nbsp;strategic.</p>
+        </a>
 
-          <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="democratizing-with-strategy" data-ph-company="malwarebytes">
-            <span class="work-mini-co">
-              <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
-              Malwarebytes
-            </span>
-            <h3>Democratizing with Strategy <span class="arrow">→</span></h3>
-            <p>Building — and knowing when to let go of — a participatory research program so more teams could sit with&nbsp;users.</p>
-          </a>
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="democratizing-with-strategy" data-ph-company="malwarebytes">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
+            Malwarebytes
+          </span>
+          <h3>Democratizing with Strategy <span class="arrow">→</span></h3>
+          <p>Building — and knowing when to let go of — a participatory research program so more teams could sit with&nbsp;users.</p>
+        </a>
 
-          <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="from-fragmented-tools-to-unified-app" data-ph-company="malwarebytes">
-            <span class="work-mini-co">
-              <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
-              Malwarebytes
-            </span>
-            <h3>From Fragmented Tools to a Unified App <span class="arrow">→</span></h3>
-            <p>Building Malwarebytes 5.0 — converging four standalone products into one coherent, consumer-first security&nbsp;experience.</p>
-          </a>
-        </div>
+        <a class="work-mini reveal" href="#" data-ph="project" data-ph-project="from-fragmented-tools-to-unified-app" data-ph-company="malwarebytes">
+          <span class="work-mini-co">
+            <img src="assets/images/shared/brand/malwarebytes.svg" alt="" width="18" height="18">
+            Malwarebytes
+          </span>
+          <h3>From Fragmented Tools to a Unified App <span class="arrow">→</span></h3>
+          <p>Building Malwarebytes 5.0 — converging four standalone products into one coherent, consumer-first security&nbsp;experience.</p>
+        </a>
       </div>
     </div>
   </div>
@@ -2603,55 +2514,51 @@
 
 <!-- How I work — instincts + hook to about -->
 <section class="how-work" id="how" data-ph-section="personas" aria-label="How I work">
+  <div class="how-flowers" aria-hidden="true">
+    <div class="how-flower how-flower--tr">
+      <img src="assets/images/how/bougainvillea-corner-tr.png?v=8" alt="" width="1536" height="1024" decoding="async">
+    </div>
+    <div class="how-flower how-flower--bl">
+      <img src="assets/images/how/bougainvillea-corner-bl.png?v=6" alt="" width="1536" height="1024" decoding="async">
+    </div>
+  </div>
   <div class="wrap">
     <div class="sec-head reveal">
       <h2>Who I&nbsp;am</h2>
       <p>At the end of the day, the instincts behind the&nbsp;work.</p>
     </div>
-  </div>
-  <div class="section-card how-card">
-    <div class="how-flowers" aria-hidden="true">
-      <div class="how-flower how-flower--tr">
-        <img src="assets/images/how/bougainvillea-corner-tr.png?v=8" alt="" width="1536" height="1024" decoding="async">
-      </div>
-      <div class="how-flower how-flower--bl">
-        <img src="assets/images/how/bougainvillea-corner-bl.png?v=6" alt="" width="1536" height="1024" decoding="async">
-      </div>
-    </div>
-    <div class="how-card-inner">
-      <ol class="instincts">
-        <li class="instinct instinct--decode reveal">
-          <span class="instinct-mark" aria-hidden="true">◈</span>
-          <span class="instinct-num">01</span>
-          <h3>Decoder</h3>
-          <p class="tagline">Not just numbers, but the&nbsp;mechanism.</p>
-          <p class="desc">I don't just report what the data says — I validate the evidence, uncover the mechanism behind it, and turn it into sound&nbsp;decisions.</p>
-        </li>
-        <li class="instinct instinct--derisk reveal">
-          <span class="instinct-mark" aria-hidden="true">◎</span>
-          <span class="instinct-num">02</span>
-          <h3>De-risker</h3>
-          <p class="tagline">Measure twice. Cut&nbsp;once.</p>
-          <p class="desc">I think ahead, pressure-test the plan, and eliminate risks before they become&nbsp;problems.</p>
-        </li>
-        <li class="instinct instinct--amplify reveal">
-          <span class="instinct-mark" aria-hidden="true">✦</span>
-          <span class="instinct-num">03</span>
-          <h3>Amplifier</h3>
-          <p class="tagline">Let the work speak for&nbsp;itself.</p>
-          <p class="desc">I earn respect by delivering beyond what's&nbsp;expected.</p>
-        </li>
-      </ol>
-      <div class="how-work-cta reveal">
-        <p class="how-work-cta-note">Curious how I became this&nbsp;person?</p>
-        <div class="how-work-cta-action">
-          <figure class="how-work-cta-peek" aria-hidden="true">
-            <img src="assets/images/how/show-me.png" alt="" width="520" height="650" decoding="async">
-          </figure>
-          <a class="how-work-cta-btn" href="#about" data-ph="nav" data-ph-label="about-from-how-i-work">
-            show me <span class="arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
+    <ol class="instincts">
+      <li class="instinct instinct--decode reveal">
+        <span class="instinct-mark" aria-hidden="true">◈</span>
+        <span class="instinct-num">01</span>
+        <h3>Decoder</h3>
+        <p class="tagline">Not just numbers, but the&nbsp;mechanism.</p>
+        <p class="desc">I don't just report what the data says — I validate the evidence, uncover the mechanism behind it, and turn it into sound&nbsp;decisions.</p>
+      </li>
+      <li class="instinct instinct--derisk reveal">
+        <span class="instinct-mark" aria-hidden="true">◎</span>
+        <span class="instinct-num">02</span>
+        <h3>De-risker</h3>
+        <p class="tagline">Measure twice. Cut&nbsp;once.</p>
+        <p class="desc">I think ahead, pressure-test the plan, and eliminate risks before they become&nbsp;problems.</p>
+      </li>
+      <li class="instinct instinct--amplify reveal">
+        <span class="instinct-mark" aria-hidden="true">✦</span>
+        <span class="instinct-num">03</span>
+        <h3>Amplifier</h3>
+        <p class="tagline">Let the work speak for&nbsp;itself.</p>
+        <p class="desc">I earn respect by delivering beyond what's&nbsp;expected.</p>
+      </li>
+    </ol>
+    <div class="how-work-cta reveal">
+      <p class="how-work-cta-note">Curious how I became this&nbsp;person?</p>
+      <div class="how-work-cta-action">
+        <figure class="how-work-cta-peek" aria-hidden="true">
+          <img src="assets/images/how/show-me.png" alt="" width="520" height="650" decoding="async">
+        </figure>
+        <a class="how-work-cta-btn" href="#about" data-ph="nav" data-ph-label="about-from-how-i-work">
+          show me <span class="arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </div>
@@ -2664,9 +2571,7 @@
       <h2>What's it like working with&nbsp;me?</h2>
       <p>I believe by working hard, being kind — amazing things will&nbsp;happen.</p>
     </div>
-  </div>
 
-  <div class="section-card endorse-card-panel">
     <div class="endorse-stage" data-endorse-stage>
       <div class="endorse-cutout reveal" aria-hidden="true">
         <!-- alt pose: profile-halfbody.png (crossed arms) -->
@@ -3080,7 +2985,7 @@
     const slides = gsap.utils.toArray("[data-skill-slide]");
     const chips = [...skillsRoot.querySelectorAll(".skills-chips [data-skill]")];
     const dots = [...skillsRoot.querySelectorAll("[data-skills-dots] [data-skill]")];
-    const getTravel = () => Math.max(0, skillsTrack.scrollWidth - skillsRoot.clientWidth);
+    const getTravel = () => Math.max(0, skillsTrack.scrollWidth - window.innerWidth);
     const snapStep = slides.length > 1 ? 1 / (slides.length - 1) : 1;
 
     const syncNav = (progress) => {
