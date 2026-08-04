@@ -99,7 +99,7 @@
   }
   .nav-inner {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 28px; max-width: 1100px; margin: 0 auto; border-radius: 999px;
+    padding: 10px 28px; max-width: 1100px; margin: 0 auto; border-radius: 999px;
   }
   .logo { font-family: var(--serif); font-size: 21px; font-weight: 600; text-decoration: none; color: var(--ink); }
   .nav-links { display: flex; gap: 26px; list-style: none; }
@@ -681,7 +681,13 @@
     font-family: var(--serif);
     font-weight: 400;
     letter-spacing: -.01em;
+    color: var(--accent);
     font-style: italic;
+  }
+  .about-pair .pair-copy .hook--break {
+    display: block;
+    margin-top: .55em;
+    font-size: 1.05em;
   }
   .about-logo-strip {
     list-style: none;
@@ -2364,8 +2370,8 @@
     z-index: 2;
     width: min(1040px, calc(100% - 48px));
     margin: 0 auto;
-    padding: clamp(40px, 4.5vw, 52px) clamp(36px, 4vw, 56px);
-    border-radius: 36px;
+    padding: clamp(24px, 3vw, 32px) clamp(32px, 3.5vw, 48px);
+    border-radius: 32px;
     background: rgba(255, 255, 255, .42);
     border: 1px solid rgba(255, 255, 255, .72);
     box-shadow:
@@ -2376,7 +2382,7 @@
     overflow: hidden;
     display: grid;
     grid-template-columns: 3fr 4fr 2fr;
-    gap: clamp(24px, 3vw, 40px);
+    gap: clamp(20px, 2.5vw, 32px);
     align-items: center;
   }
   .footer-card::before {
@@ -2393,7 +2399,7 @@
   .footer-card > * { position: relative; z-index: 1; }
   .footer-sketch-wrap {
     width: 100%;
-    max-width: 240px;
+    max-width: 168px;
     aspect-ratio: 1;
     display: grid;
     place-items: center;
@@ -2407,41 +2413,47 @@
   .footer-col--farewell { min-width: 0; }
   footer .foot-line {
     font-family: var(--serif);
-    font-weight: 600;
-    font-size: clamp(24px, 3vw, 34px);
-    line-height: 1.25;
-    letter-spacing: -.015em;
+    font-weight: 400;
+    font-size: clamp(20px, 2.3vw, 26px);
+    line-height: 1.28;
+    letter-spacing: -.01em;
     text-align: left;
     margin: 0;
-    color: var(--ink);
+    color: #0A4554;
   }
   footer .curious {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: 0.72em;
-    letter-spacing: -.01em;
-    color: var(--ink-soft);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color .2s ease;
-  }
-  footer .curious:hover,
-  footer .curious:focus-visible {
-    color: var(--accent-deep);
-    text-decoration: underline;
-  }
-  footer .small {
+    display: block;
+    width: fit-content;
     margin-top: 12px;
+    font-family: var(--hand);
+    font-size: 20px;
+    font-weight: 500;
+    color: #5B7FD9;
+    text-decoration: none;
+    transform: rotate(-1.5deg);
+  }
+  footer .curious:hover { text-decoration: underline; }
+  footer .small {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
     color: var(--ink-soft);
     font-size: 13.5px;
     text-align: left;
   }
+  footer .small-icon,
+  footer .mail-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    opacity: .65;
+  }
   footer .mail {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 22px;
+    margin-top: 18px;
     padding: 0;
     border: 0;
     background: none;
@@ -2456,10 +2468,6 @@
   footer .mail:focus-visible { color: var(--accent-deep); }
   footer .mail:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   footer .mail-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    opacity: .85;
     transition: opacity .2s ease, transform .2s ease;
   }
   footer .mail:hover .mail-icon { opacity: 1; }
@@ -2473,39 +2481,34 @@
     justify-self: stretch;
     padding-left: clamp(24px, 3vw, 36px);
     border-left: 1px solid rgba(90, 107, 140, .18);
-    transform: translateX(10px);
+    transform: translateX(-4px);
+    font-family: var(--sans);
+    font-size: 16px;
+    color: #0A4554;
   }
   .footer-col-title {
-    font-family: var(--serif);
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--ink);
-    margin: 0 0 8px;
-  }
-  .footer-col-title::after {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 1px;
-    margin-top: 10px;
-    background: rgba(90, 107, 140, .35);
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    color: #0A4554;
+    margin: 0 0 16px;
   }
   .footer-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin: 6px 0 0;
+    gap: 12px;
+    margin: 0;
     padding: 0;
   }
   .footer-list a {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-family: var(--serif);
-    font-size: 16px;
+    font-family: var(--sans);
+    font-size: 15.5px;
     font-weight: 400;
-    color: var(--ink);
+    color: #1E2A44;
     text-decoration: none;
     width: fit-content;
     transition: color .2s ease;
@@ -2517,9 +2520,11 @@
     outline-offset: 3px;
   }
   .footer-list .nav-arrow {
-    font-size: 0.9em;
-    line-height: 1;
-    opacity: .5;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    opacity: .55;
     transition: opacity .2s ease, transform .2s ease;
   }
   .footer-list a:hover .nav-arrow,
@@ -2700,14 +2705,14 @@
     .footer-scene { padding: 64px 0 48px; }
     .footer-card {
       width: calc(100% - 28px);
-      padding: 32px 28px;
+      padding: 24px 24px;
       border-radius: 28px;
       grid-template-columns: 1fr;
-      gap: 28px;
+      gap: 20px;
       justify-items: start;
     }
     .footer-sketch-wrap {
-      max-width: 180px;
+      max-width: 132px;
       justify-self: start;
     }
     .footer-col--nav {
@@ -2830,7 +2835,7 @@
           </div>
 
           <div class="about-pair">
-            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook hook--break">what should we build, and&nbsp;why?</span></p>
             <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
               <li data-brand="oregon-state">
                 <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
@@ -3535,7 +3540,8 @@
       </div>
 
       <div class="footer-col footer-col--farewell">
-        <p class="foot-line">You've hit the footer, thanks for stopping&nbsp;by. <a class="curious" href="#about" data-ph="nav" data-ph-label="still-curious">Still&nbsp;curious?</a></p>
+        <p class="foot-line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
+        <a class="curious" href="#about" data-ph="nav" data-ph-label="still-curious">Still curious?</a>
         <button
           type="button"
           class="mail"
@@ -3545,24 +3551,54 @@
           aria-label="Copy email address alex@alexandra-irribarren.com"
         >
           <svg class="mail-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="9" y="9" width="11" height="11" rx="2.2" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M6.5 15H5.2A2.2 2.2 0 0 1 3 12.8V5.2A2.2 2.2 0 0 1 5.2 3h7.6A2.2 2.2 0 0 1 15 5.2V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <rect x="8.5" y="8.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M15.5 8.5V6.8A2.3 2.3 0 0 0 13.2 4.5H6.8A2.3 2.3 0 0 0 4.5 6.8v6.4A2.3 2.3 0 0 0 6.8 15.5H8.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
           </svg>
           <span class="mail-label">alex@alexandra-irribarren.com</span>
         </button>
-        <p class="small">© Alexandra Irribarren 2026</p>
+        <p class="small">
+          <svg class="small-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M15.1 9.2a3.85 3.85 0 1 0 0 5.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+          Alexandra Irribarren 2026
+        </p>
       </div>
 
       <div class="footer-col footer-col--nav">
         <p class="footer-col-title">Navigation</p>
         <ul class="footer-list">
-          <li><a href="#work" data-ph="nav" data-ph-label="footer-project">project</a></li>
-          <li><a href="#about" data-ph="nav" data-ph-label="footer-about">about</a></li>
           <li>
-            <a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume">resume</a>
+            <a href="#work" data-ph="nav" data-ph-label="footer-project">
+              project
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h9M8.5 4.5 12.5 8 8.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </li>
           <li>
-            <a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="footer">connect</a>
+            <a href="#about" data-ph="nav" data-ph-label="footer-about">
+              about
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h9M8.5 4.5 12.5 8 8.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume">
+              resume
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="footer">
+              connect
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </li>
         </ul>
       </div>
