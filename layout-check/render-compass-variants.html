@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Compass variants render</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: transparent;
+  }
+  .frame {
+    width: 1024px;
+    height: 1024px;
+    background: transparent;
+    position: relative;
+  }
+  svg { display: block; width: 1024px; height: 1024px; }
+</style>
+</head>
+<body>
+
+<!-- ========== A: Classic — blue mist, N pin ========== -->
+<div class="frame" id="vA">
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="aGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E8F2FC" stop-opacity=".75"/>
+      <stop offset="45%" stop-color="#C9DCF7" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#C9DCF7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="aBlur"><feGaussianBlur stdDeviation="28"/></filter>
+    <filter id="aCloud"><feGaussianBlur stdDeviation="1.6"/></filter>
+    <filter id="aDepth"><feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#0B1730" flood-opacity=".2"/></filter>
+    <radialGradient id="aPuff" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#Eef4fb" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#C9DCF7" stop-opacity=".35"/>
+    </radialGradient>
+    <mask id="aGap">
+      <rect width="1024" height="1024" fill="#fff"/>
+      <ellipse cx="340" cy="300" rx="110" ry="80" fill="#000" transform="rotate(-20 340 300)"/>
+    </mask>
+  </defs>
+  <ellipse cx="512" cy="520" rx="200" ry="200" fill="url(#aGlow)" filter="url(#aBlur)"/>
+  <ellipse cx="512" cy="520" rx="310" ry="180" fill="none" stroke="#2A4578" stroke-width="1.8"
+    stroke-dasharray="2.2 7.8" stroke-linecap="round" stroke-opacity=".55"
+    transform="rotate(-30 512 520)" mask="url(#aGap)"/>
+  <g filter="url(#aCloud)" opacity=".92">
+    <ellipse cx="395" cy="655" rx="70" ry="30" fill="url(#aPuff)"/>
+    <ellipse cx="355" cy="645" rx="46" ry="26" fill="url(#aPuff)"/>
+    <ellipse cx="432" cy="644" rx="48" ry="24" fill="url(#aPuff)"/>
+    <ellipse cx="380" cy="635" rx="32" ry="20" fill="#fff" opacity=".9"/>
+  </g>
+  <g transform="translate(512 175)">
+    <path d="M0-36c-4.8 0-8.6 3.7-8.6 8.2 0 6 8.6 14.8 8.6 14.8s8.6-8.8 8.6-14.8c0-4.5-3.8-8.2-8.6-8.2z" fill="#1A3058"/>
+    <circle cx="0" cy="-28.2" r="2.9" fill="#F7FAFE"/>
+    <text x="0" y="10" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="600" fill="#1A3058">N</text>
+  </g>
+  <g filter="url(#aDepth)">
+    <path d="M512 215 L521 395 L512 500 L503 395 Z" fill="#152A50"/>
+    <path d="M512 215 L521 395 L512 500 Z" fill="#3D608F"/>
+    <path d="M515 485 L516 240" stroke="#F0F5FC" stroke-width="1.45" stroke-linecap="round" opacity=".75"/>
+    <path d="M512 825 L503 645 L512 540 L521 645 Z" fill="#152A50"/>
+    <path d="M512 825 L503 645 L512 540 Z" fill="#3D608F"/>
+    <path d="M509 555 L508 800" stroke="#F0F5FC" stroke-width="1.45" stroke-linecap="round" opacity=".5"/>
+    <path d="M215 520 L395 529 L500 520 L395 511 Z" fill="#152A50"/>
+    <path d="M215 520 L395 511 L500 520 Z" fill="#3D608F"/>
+    <path d="M485 517 L240 516" stroke="#F0F5FC" stroke-width="1.45" stroke-linecap="round" opacity=".6"/>
+    <path d="M809 520 L629 511 L524 520 L629 529 Z" fill="#152A50"/>
+    <path d="M809 520 L629 529 L524 520 Z" fill="#3D608F"/>
+    <path d="M539 523 L784 524" stroke="#F0F5FC" stroke-width="1.45" stroke-linecap="round" opacity=".65"/>
+  </g>
+  <circle cx="512" cy="520" r="18" fill="#F8FBFE" stroke="#1A3058" stroke-width="2.6"/>
+  <circle cx="512" cy="520" r="5" fill="#1A3058"/>
+  <path d="M305 310l2.8 7.4 7.4 2.8-7.4 2.8L305 330.4l-2.8-7.4-7.4-2.8 7.4-2.8z" fill="#8FA8C8" opacity=".7"/>
+  <path d="M755 350l2.2 5.8 5.8 2.2-5.8 2.2L755 365.8l-2.2-5.8-5.8-2.2 5.8-2.2z" fill="#C4A574" opacity=".65"/>
+  <path d="M690 690l2 5.2 5.2 2-5.2 2L690 704.4l-2-5.2-5.2-2 5.2-2z" fill="#A8BFD0" opacity=".55"/>
+</svg>
+</div>
+
+<!-- ========== B: Green mist — sage glow, quieter ========== -->
+<div class="frame" id="vB">
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E8F3E4" stop-opacity=".8"/>
+      <stop offset="42%" stop-color="#D6EAD4" stop-opacity=".4"/>
+      <stop offset="100%" stop-color="#97A675" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bBlur"><feGaussianBlur stdDeviation="30"/></filter>
+    <filter id="bCloud"><feGaussianBlur stdDeviation="1.8"/></filter>
+    <filter id="bDepth"><feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#2A3A1E" flood-opacity=".16"/></filter>
+    <radialGradient id="bPuff" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#F2F7F0" stop-opacity=".92"/>
+      <stop offset="100%" stop-color="#D6EAD4" stop-opacity=".4"/>
+    </radialGradient>
+    <mask id="bGap">
+      <rect width="1024" height="1024" fill="#fff"/>
+      <ellipse cx="360" cy="290" rx="100" ry="75" fill="#000" transform="rotate(-18 360 290)"/>
+    </mask>
+  </defs>
+  <ellipse cx="512" cy="520" rx="210" ry="210" fill="url(#bGlow)" filter="url(#bBlur)"/>
+  <ellipse cx="512" cy="520" rx="300" ry="175" fill="none" stroke="#3D4F2E" stroke-width="1.65"
+    stroke-dasharray="2 8" stroke-linecap="round" stroke-opacity=".4"
+    transform="rotate(-28 512 520)" mask="url(#bGap)"/>
+  <g filter="url(#bCloud)" opacity=".9">
+    <ellipse cx="400" cy="650" rx="68" ry="28" fill="url(#bPuff)"/>
+    <ellipse cx="362" cy="640" rx="44" ry="24" fill="url(#bPuff)"/>
+    <ellipse cx="435" cy="638" rx="46" ry="22" fill="url(#bPuff)"/>
+    <ellipse cx="388" cy="630" rx="30" ry="18" fill="#fff" opacity=".92"/>
+  </g>
+  <!-- research pin only (no letter) — quieter north marker -->
+  <g transform="translate(512 200)">
+    <path d="M0-22c-5 0-9 3.8-9 8.5 0 6.2 9 15.2 9 15.2s9-9 9-15.2c0-4.7-4-8.5-9-8.5z" fill="#1E3A2A"/>
+    <circle cx="0" cy="-14" r="3" fill="#F7FAFE"/>
+  </g>
+  <g filter="url(#bDepth)">
+    <path d="M512 230 L520 400 L512 502 L504 400 Z" fill="#1A3050"/>
+    <path d="M512 230 L520 400 L512 502 Z" fill="#3A5C82"/>
+    <path d="M515 488 L516 255" stroke="#F2F6FC" stroke-width="1.35" stroke-linecap="round" opacity=".7"/>
+    <path d="M512 810 L504 640 L512 538 L520 640 Z" fill="#1A3050"/>
+    <path d="M512 810 L504 640 L512 538 Z" fill="#3A5C82"/>
+    <path d="M509 552 L508 785" stroke="#F2F6FC" stroke-width="1.35" stroke-linecap="round" opacity=".48"/>
+    <path d="M230 520 L400 528 L502 520 L400 512 Z" fill="#1A3050"/>
+    <path d="M230 520 L400 512 L502 520 Z" fill="#3A5C82"/>
+    <path d="M488 517 L250 516" stroke="#F2F6FC" stroke-width="1.35" stroke-linecap="round" opacity=".55"/>
+    <path d="M794 520 L624 512 L522 520 L624 528 Z" fill="#1A3050"/>
+    <path d="M794 520 L624 528 L522 520 Z" fill="#3A5C82"/>
+    <path d="M536 523 L774 524" stroke="#F2F6FC" stroke-width="1.35" stroke-linecap="round" opacity=".6"/>
+  </g>
+  <circle cx="512" cy="520" r="17" fill="#F8FBFE" stroke="#1A3050" stroke-width="2.4"/>
+  <circle cx="512" cy="520" r="4.5" fill="#1A3050"/>
+  <path d="M310 300l2.4 6.4 6.4 2.4-6.4 2.4L310 317.6l-2.4-6.4-6.4-2.4 6.4-2.4z" fill="#97A675" opacity=".65"/>
+  <path d="M740 360l2 5.2 5.2 2-5.2 2L740 374.4l-2-5.2-5.2-2 5.2-2z" fill="#8FA8C8" opacity=".55"/>
+</svg>
+</div>
+
+<!-- ========== C: Sparse line — outline rose, minimal ========== -->
+<div class="frame" id="vC">
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="cGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F4F7FB" stop-opacity=".55"/>
+      <stop offset="50%" stop-color="#D9E4F2" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#D9E4F2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cBlur"><feGaussianBlur stdDeviation="32"/></filter>
+    <filter id="cCloud"><feGaussianBlur stdDeviation="2"/></filter>
+    <radialGradient id="cPuff" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".95"/>
+      <stop offset="100%" stop-color="#D4E2F5" stop-opacity=".3"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="512" cy="520" rx="190" ry="190" fill="url(#cGlow)" filter="url(#cBlur)"/>
+  <ellipse cx="512" cy="520" rx="295" ry="168" fill="none" stroke="#5A6B8C" stroke-width="1.5"
+    stroke-dasharray="1.8 8.5" stroke-linecap="round" stroke-opacity=".42"
+    transform="rotate(-32 512 520)"/>
+  <g filter="url(#cCloud)" opacity=".85">
+    <ellipse cx="405" cy="660" rx="62" ry="26" fill="url(#cPuff)"/>
+    <ellipse cx="370" cy="650" rx="40" ry="22" fill="url(#cPuff)"/>
+    <ellipse cx="438" cy="648" rx="42" ry="20" fill="url(#cPuff)"/>
+  </g>
+  <!-- tiny N only -->
+  <text x="512" y="210" text-anchor="middle" font-family="Georgia, serif" font-size="28" font-weight="500" fill="#1A3058" opacity=".85">N</text>
+  <!-- Line-weight 4-point rose — open, breathable -->
+  <g fill="none" stroke="#1A3058" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M512 240 L520 400 L512 505 L504 400 Z" stroke-width="1.7" fill="rgba(26,48,88,.08)"/>
+    <path d="M512 240 L520 400 L512 505" stroke-width="1.5" stroke="#3D5CB8" opacity=".35"/>
+    <path d="M512 800 L504 640 L512 535 L520 640 Z" stroke-width="1.7" fill="rgba(26,48,88,.06)"/>
+    <path d="M240 520 L400 528 L505 520 L400 512 Z" stroke-width="1.7" fill="rgba(26,48,88,.07)"/>
+    <path d="M784 520 L624 512 L519 520 L624 528 Z" stroke-width="1.7" fill="rgba(26,48,88,.07)"/>
+  </g>
+  <circle cx="512" cy="520" r="16" fill="#F8FBFE" stroke="#1A3058" stroke-width="2.2"/>
+  <circle cx="512" cy="520" r="4" fill="#1A3058"/>
+  <path d="M300 320l2 5.4 5.4 2-5.4 2L300 334.8l-2-5.4-5.4-2 5.4-2z" fill="#8FA8C8" opacity=".6"/>
+  <path d="M730 370l1.8 4.8 4.8 1.8-4.8 1.8L730 383.2l-1.8-4.8-4.8-1.8 4.8-1.8z" fill="#C4A574" opacity=".5"/>
+  <circle cx="700" cy="680" r="2" fill="#8FA8C8" opacity=".45"/>
+</svg>
+</div>
+
+</body>
+</html>

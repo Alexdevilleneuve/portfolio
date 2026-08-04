@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Compass render</title>
+<style>
+  html, body {
+    margin: 0;
+    width: 1024px;
+    height: 1024px;
+    background: transparent;
+    overflow: hidden;
+  }
+</style>
+</head>
+<body>
+<!--
+  From reference:
+  - 4-point faceted navy star
+  - soft GREEN glow behind star (not blue)
+  - no dial / tick-ring / heavy wash “compass background”
+  - N + pin above north
+  - dotted orbits kept (light)
+  - one small cloud
+  - only a few 菱形 diamond stars
+-->
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Soft sage/mint glow — site green, not powder blue -->
+    <radialGradient id="greenGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#D6EAD4" stop-opacity="0.85"/>
+      <stop offset="40%" stop-color="#B8D4B0" stop-opacity="0.45"/>
+      <stop offset="72%" stop-color="#97A675" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#97A675" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glowBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="cloudSoft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <filter id="depth" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3D4F2E" flood-opacity="0.18"/>
+    </filter>
+    <radialGradient id="puff" cx="38%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="55%" stop-color="#F2F7F0" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#D5E4D0" stop-opacity="0.45"/>
+    </radialGradient>
+    <mask id="orbitGap">
+      <rect width="1024" height="1024" fill="white"/>
+      <ellipse cx="340" cy="280" rx="120" ry="88" fill="black" transform="rotate(-16 340 280)"/>
+    </mask>
+  </defs>
+
+  <!-- Green shadow / glow behind the star only — no blue wash, no dial -->
+  <ellipse cx="512" cy="520" rx="210" ry="210" fill="url(#greenGlow)" filter="url(#glowBlur)"/>
+
+  <!-- Light dotted orbits (kept from reference, quieter) -->
+  <ellipse
+    cx="512" cy="520" rx="300" ry="175"
+    fill="none" stroke="#5A6B8C" stroke-width="1.6"
+    stroke-linecap="round" stroke-dasharray="2 7.5"
+    stroke-opacity="0.45"
+    transform="rotate(-32 512 520)"
+    mask="url(#orbitGap)"
+  />
+  <ellipse
+    cx="512" cy="520" rx="255" ry="145"
+    fill="none" stroke="#5A6B8C" stroke-width="1.35"
+    stroke-linecap="round" stroke-dasharray="1.8 8"
+    stroke-opacity="0.32"
+    transform="rotate(18 512 520)"
+  />
+
+  <!-- Small soft cloud — lower left -->
+  <g filter="url(#cloudSoft)" opacity="0.9">
+    <ellipse cx="400" cy="640" rx="72" ry="32" fill="url(#puff)"/>
+    <ellipse cx="360" cy="630" rx="48" ry="28" fill="url(#puff)"/>
+    <ellipse cx="440" cy="628" rx="50" ry="26" fill="url(#puff)"/>
+    <ellipse cx="385" cy="618" rx="34" ry="22" fill="#FFFFFF" opacity="0.92"/>
+    <ellipse cx="400" cy="652" rx="55" ry="16" fill="#C5D8BE" opacity="0.28"/>
+  </g>
+
+  <!-- N + pin above north tip -->
+  <g transform="translate(512 168)">
+    <!-- pin -->
+    <path d="M0-38c-5.2 0-9.4 4-9.4 9 0 6.6 9.4 16 9.4 16s9.4-9.4 9.4-16c0-5-4.2-9-9.4-9z" fill="#1A3058"/>
+    <circle cx="0" cy="-29.5" r="3.2" fill="#F7FAFE"/>
+    <!-- N -->
+    <text
+      x="0" y="8"
+      text-anchor="middle"
+      font-family="Georgia, 'Times New Roman', serif"
+      font-size="36"
+      font-weight="600"
+      fill="#1A3058"
+    >N</text>
+  </g>
+
+  <!-- Four-point faceted star -->
+  <g filter="url(#depth)">
+    <!-- N -->
+    <path d="M512 210 L522 400 L512 498 L502 400 Z" fill="#152A50"/>
+    <path d="M512 210 L522 400 L512 498 Z" fill="#3A5C92"/>
+    <path d="M515 485 L516 235" stroke="#F2F6FC" stroke-width="1.55" stroke-linecap="round" opacity="0.8"/>
+    <!-- S -->
+    <path d="M512 830 L502 640 L512 542 L522 640 Z" fill="#152A50"/>
+    <path d="M512 830 L502 640 L512 542 Z" fill="#3A5C92"/>
+    <path d="M509 555 L508 805" stroke="#F2F6FC" stroke-width="1.55" stroke-linecap="round" opacity="0.55"/>
+    <!-- W -->
+    <path d="M210 520 L400 530 L498 520 L400 510 Z" fill="#152A50"/>
+    <path d="M210 520 L400 510 L498 520 Z" fill="#3A5C92"/>
+    <path d="M485 517 L235 516" stroke="#F2F6FC" stroke-width="1.55" stroke-linecap="round" opacity="0.65"/>
+    <!-- E -->
+    <path d="M814 520 L624 510 L526 520 L624 530 Z" fill="#152A50"/>
+    <path d="M814 520 L624 530 L526 520 Z" fill="#3A5C92"/>
+    <path d="M539 523 L789 524" stroke="#F2F6FC" stroke-width="1.55" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <!-- Hub -->
+  <circle cx="512" cy="520" r="20" fill="#F8FBFE" stroke="#1A3058" stroke-width="2.8"/>
+  <circle cx="512" cy="520" r="5.5" fill="#1A3058"/>
+
+  <!-- Only a few 菱形 diamond stars (3) -->
+  <g>
+    <path d="M300 300l3.2 8.5 8.5 3.2-8.5 3.2L300 323.4l-3.2-8.5-8.5-3.2 8.5-3.2z" fill="#8FA8C8" opacity="0.75"/>
+    <path d="M760 340l2.6 7 7 2.6-7 2.6L760 359.2l-2.6-7-7-2.6 7-2.6z" fill="#A8BFD0" opacity="0.7"/>
+    <path d="M700 680l2.2 5.8 5.8 2.2-5.8 2.2L700 695.8l-2.2-5.8-5.8-2.2 5.8-2.2z" fill="#97A675" opacity="0.55"/>
+  </g>
+</svg>
+</body>
+</html>
