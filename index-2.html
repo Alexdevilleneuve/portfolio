@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alexandra Irribarren — From Insights to Influence</title>
+<title>Alexandra Irribarren — Homepage 2.0</title>
 <script>
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
   posthog.init("phc_r2cEAGp2HpvrfN22KtJUx2YuiNPY7YWuwbwLfbc9qTYp", {
@@ -15,7 +15,7 @@
   });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     /* Hydrangea palette (site below hero) */
@@ -40,6 +40,7 @@
     --glass-border: rgba(255,255,255,.78);
     --serif: "Fraunces", serif;
     --sans: "Inter", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     --hand: "Caveat", cursive;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -114,22 +115,19 @@
   }
   .nav-links a:hover { color: var(--ink); }
   .nav-links a:hover::after { width: 100%; }
+  .nav-links a[aria-current="page"] { color: var(--ink); }
+  .nav-links a[aria-current="page"]::after { width: 100%; }
 
-  /* ---------- Intro: GSAP pins this viewport for the scroll sequence ---------- */
+  /* ---------- Intro: hero + open about continuum (variant D) ---------- */
   .intro-pin {
     position: relative;
-    z-index: 3; /* above #work while pinned / during scroll-up */
+    z-index: 3;
     height: auto;
-    min-height: 100vh;
-    min-height: 100svh;
-    /* Clip to one viewport on load so only the arch tip peeks; JS expands on scroll */
-    max-height: 100vh;
-    max-height: 100svh;
-    overflow: hidden;
-    /* Same canvas as the rest of the page — kills the hero→about seam */
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
     background: var(--ice-sky);
   }
-  /* After the hero pin, shell must own its full height — else it overlaps #work */
   .intro-pin.is-expanded {
     height: auto !important;
     max-height: none !important;
@@ -143,15 +141,15 @@
     --ink-soft: #5A6B8C;
     --accent: #5B7FD9;
     --accent-deep: #3D5CB8;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
     z-index: 2;
     width: 100%;
     height: 100vh;
     height: 100svh;
-    min-height: 0;
+    min-height: 640px;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -159,7 +157,6 @@
     justify-content: flex-start;
     text-align: center;
     overflow: hidden;
-    z-index: 1;
     background:
       radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
       linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, var(--ice-sky) 100%);
@@ -173,12 +170,12 @@
   }
   .hero-inner {
     position: relative;
-    z-index: 3;
+    z-index: 5; /* above .hero-clouds — pointer-events none lets cloud hover pass through */
     width: 100%;
     height: 100%;
-    max-width: 920px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: clamp(88px, 14vh, 140px) 32px clamp(72px, 14vh, 120px);
+    padding: clamp(88px, 14vh, 140px) 32px clamp(64px, 12vh, 110px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -186,28 +183,35 @@
   }
 
   .hero-copy {
-    max-width: 760px;
+    max-width: 920px;
+    text-align: center;
+    margin: 0 auto;
     opacity: 0;
     transform: translateY(120px);
     transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
   }
-  .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
+  .hero.is-in .hero-copy {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .hero-role {
     font-size: 15px;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--accent-deep);
+    /* Match site sections (hydrangea ink-soft), not hero-local blue */
+    color: #5E7F82;
     font-weight: 600;
   }
   .hero h1 {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(48px, 8.5vw, 128px);
-    line-height: 1.08;
+    font-size: clamp(36px, 6.2vw, 78px);
+    line-height: 1.1;
     margin-top: 14px;
-    letter-spacing: -.02em;
+    letter-spacing: -.03em;
     color: var(--ink);
+    white-space: nowrap;
   }
   .hero h1 em { font-style: italic; color: var(--accent); }
 
@@ -569,69 +573,93 @@
     /* Continuous ice-sky canvas — same token as body / hero exit / work */
     background: var(--ice-sky);
   }
-  /* Part 1 — arch layer inside the hero pin (skills nested = one shell) */
+  /* Part 1 — open continuum (no arch shell) */
   .about-stage {
     position: relative;
     z-index: 1;
     margin: 0;
     padding: 0 0 8px;
-    min-height: 100vh;
-    min-height: 100svh;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    min-height: 0;
+    display: block;
     overflow: visible;
-    pointer-events: none;
+    pointer-events: auto;
   }
   .about-arch {
     position: relative;
-    width: min(1100px, calc(100% - 64px));
+    width: min(920px, calc(100% - 48px));
     min-height: 0;
     margin: 0 auto;
-    /* Clear the dome — greeting needs room under the arch curve */
-    padding: clamp(72px, 11vh, 120px) clamp(32px, 5vw, 72px) 0;
+    padding: clamp(48px, 8vh, 88px) clamp(16px, 3vw, 32px) 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     text-align: center;
+    pointer-events: auto;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+  /* Soft ambient washes — the only “atmosphere” behind copy */
+  .about-wash {
+    position: absolute;
+    inset: -8% -18% 10%;
+    z-index: 0;
     pointer-events: none;
-    transform-origin: 50% 100%;
-    /* One continuous wash — arch through skills, no second fill */
-    background:
-      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
-      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 32%, #EFF3D8 55%, #F2F6E6 78%, #F4F6F1 100%);
-    /* Lower dome so “hey…” doesn’t float in empty mint */
-    border-radius: 48% 48% 36px 36px / 12% 12% 36px 36px;
-    box-shadow:
-      0 -18px 60px rgba(0,115,140,.10),
-      0 28px 48px -12px rgba(30, 42, 68, .10);
+    overflow: visible;
+  }
+  .about-wash-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(56px);
+    opacity: .7;
     will-change: transform;
-    overflow: hidden;
+  }
+  .about-wash-blob.b1 {
+    width: min(520px, 70vw);
+    height: min(520px, 70vw);
+    left: -8%;
+    top: 4%;
+    background: rgba(214, 234, 212, .85);
+  }
+  .about-wash-blob.b2 {
+    width: min(460px, 62vw);
+    height: min(460px, 62vw);
+    right: -10%;
+    top: 28%;
+    background: rgba(201, 224, 245, .7);
+  }
+  .about-wash-blob.b3 {
+    width: min(380px, 50vw);
+    height: min(380px, 50vw);
+    left: 28%;
+    bottom: 8%;
+    background: rgba(239, 243, 216, .65);
   }
   .about-arch-body {
     position: relative;
     z-index: 1;
-    width: min(920px, 100%);
-    max-width: 920px;
-    margin: 0 0 clamp(20px, 3vh, 36px);
+    width: min(800px, 100%);
+    max-width: 800px;
+    margin: 0 0 clamp(28px, 4vh, 48px);
   }
   .about-hello {
     text-align: center;
-    max-width: 720px;
-    margin: 0 auto 36px;
+    max-width: 640px;
+    margin: 0 auto 28px;
   }
   .about-hello .about-kicker {
     display: inline-flex;
     align-items: baseline;
     justify-content: center;
     gap: 10px;
-    margin: 0 auto 14px;
+    margin: 0 auto 10px;
   }
   .about-hello .sec-num {
     display: inline-block;
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: .02em;
     line-height: 1.4;
@@ -641,111 +669,120 @@
   }
   .about-hello .about-greeting {
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: .02em;
     color: var(--ink-soft);
     font-weight: 400;
     margin: 0;
   }
+  /* Quiet bio line — not the visual lead */
   .about-hello .statement {
-    font-family: var(--serif);
-    font-weight: 600;
-    font-size: clamp(24px, 3vw, 34px);
-    line-height: 1.25;
-    letter-spacing: -.015em;
-    color: var(--ink);
-    max-width: 18em;
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 14.5px;
+    line-height: 1.45;
+    letter-spacing: .01em;
+    color: rgba(94, 127, 130, .88);
+    max-width: 36em;
     margin: 0 auto;
   }
   .about-pair {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 32px 52px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 18px;
+    text-align: center;
   }
   .about-pair + .about-pair {
-    margin-top: 36px;
-    padding-top: 36px;
+    margin-top: 40px;
+    padding-top: 40px;
     border-top: 1px solid rgba(10, 69, 84, .1);
   }
+  /* The two real headlines */
   .about-pair .pair-copy {
-    font-family: var(--sans);
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 1.6;
-    letter-spacing: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 2.9vw, 32px);
+    line-height: 1.28;
+    letter-spacing: -.018em;
     color: var(--ink);
-    text-align: left;
+    text-align: center;
+    max-width: 22em;
+    margin: 0;
   }
   .about-pair .pair-copy .hook {
     font-family: var(--serif);
-    font-weight: 400;
-    letter-spacing: -.01em;
+    font-weight: 500;
+    letter-spacing: -.015em;
     color: var(--accent);
     font-style: italic;
   }
   .about-pair .pair-copy .hook--break {
     display: block;
-    margin-top: .55em;
-    font-size: 1.05em;
+    margin-top: .4em;
+    font-size: 1.02em;
   }
+  /* Compact mono-tint logo row (dusty teal, not B&W) */
   .about-logo-strip {
     list-style: none;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
+    gap: 10px 22px;
     width: 100%;
-    margin: 0;
+    max-width: 440px;
+    margin: 0 auto;
     padding: 0;
   }
-  .about-logo-strip--4 { grid-template-columns: repeat(4, 1fr); }
-  .about-logo-strip--3 { grid-template-columns: repeat(3, 1fr); }
+  .about-logo-strip--4,
+  .about-logo-strip--3 { grid-template-columns: unset; }
   .about-logo-strip li {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 72px;
-    padding: 16px 12px;
-    border-left: 1px solid rgba(10, 69, 84, .12);
+    min-height: 0;
+    padding: 0;
+    border: 0;
   }
-  .about-logo-strip li:first-child { border-left: 0; }
   .about-logo-strip img {
     display: block;
     width: auto;
-    height: 28px;
-    max-width: 140px;
+    height: 16px;
+    max-width: 92px;
     object-fit: contain;
-    opacity: .92;
-    filter: saturate(1.05) contrast(1.02);
+    opacity: .78;
+    /* Single dusty-teal mono wash — matches --ink-soft / --dusty */
+    filter: brightness(0) saturate(100%) invert(48%) sepia(14%) saturate(720%) hue-rotate(143deg) brightness(94%) contrast(86%);
+    transition: opacity .25s ease;
   }
-  .about-logo-strip li[data-brand="malwarebytes"] img { height: 22px; max-width: 150px; }
-  .about-logo-strip li[data-brand="google"] img { height: 30px; }
-  .about-logo-strip li[data-brand="huawei"] img { height: 26px; }
-  .about-logo-strip li[data-brand="kerr"] img { height: 34px; max-width: 120px; }
-  .about-logo-strip li[data-brand="oregon-state"] img { height: 30px; max-width: 150px; }
-  .about-logo-strip li[data-brand="lanzhou"] img { height: 32px; max-width: 160px; }
-  .about-logo-strip li[data-brand="bfa"] img { height: 34px; max-width: 168px; }
+  .about-logo-strip li:hover img { opacity: .95; }
+  .about-logo-strip li[data-brand="malwarebytes"] img { height: 13px; max-width: 108px; }
+  .about-logo-strip li[data-brand="google"] img { height: 18px; max-width: 72px; }
+  .about-logo-strip li[data-brand="huawei"] img { height: 15px; max-width: 88px; }
+  .about-logo-strip li[data-brand="kerr"] img { height: 20px; max-width: 72px; }
+  .about-logo-strip li[data-brand="oregon-state"] img { height: 18px; max-width: 100px; }
+  .about-logo-strip li[data-brand="lanzhou"] img { height: 18px; max-width: 104px; }
+  .about-logo-strip li[data-brand="bfa"] img { height: 18px; max-width: 112px; }
   @media (max-width: 800px) {
-    .about-hello { margin-bottom: 22px; }
-    .about-pair {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
+    .about-hello { margin-bottom: 20px; }
+    .about-pair { gap: 14px; }
     .about-pair + .about-pair {
-      margin-top: 24px;
-      padding-top: 24px;
+      margin-top: 28px;
+      padding-top: 28px;
     }
-    .about-pair .pair-copy { text-align: center; }
-    .about-logo-strip li { min-height: 56px; padding: 12px 6px; }
-    .about-logo-strip img { height: 22px; max-width: 110px; }
-    .about-logo-strip li[data-brand="kerr"] img { height: 26px; }
-    .about-logo-strip li[data-brand="bfa"] img { height: 26px; max-width: 130px; }
+    .about-pair .pair-copy { font-size: clamp(20px, 5.4vw, 26px); }
+    .about-logo-strip { gap: 8px 16px; max-width: 100%; }
+    .about-logo-strip img { height: 14px; max-width: 84px; }
+    .about-logo-strip li[data-brand="kerr"] img { height: 18px; }
+    .about-logo-strip li[data-brand="bfa"] img { height: 16px; max-width: 96px; }
   }
-  /* Part 2 — hard skills = lower half of the same arch card (accordion) */
+  /* Part 2 — editorial practice areas (tight, tabbed) */
   #skills {
     position: relative;
     z-index: 1;
     width: 100%;
-    margin: 0;
+    margin: 4px 0 0;
     padding: 0;
     background: transparent;
     display: block;
@@ -753,119 +790,121 @@
   .skills-pin {
     position: relative;
     width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
     height: auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
-    padding: clamp(16px, 2.5vw, 28px) clamp(12px, 2vw, 24px) clamp(36px, 4.5vw, 52px);
+    padding: clamp(8px, 1.5vw, 16px) 4px clamp(40px, 5vw, 64px);
     overflow: visible;
-    /* Transparent — parent .about-arch paints the continuous shell */
     background: transparent;
-    border-radius: 0;
     border: 0;
+    border-radius: 0;
     box-shadow: none;
+    text-align: left;
+  }
+  .skills-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
   }
   .skills-chips {
-    display: flex;
-    gap: 8px;
+    display: inline-flex;
     flex-wrap: wrap;
-    margin-bottom: 22px;
+    align-self: flex-start;
+    gap: 0;
+    margin: 0 0 28px;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 69, 84, .16);
+    background: rgba(255,255,255,.35);
   }
   .skills-chips .chip {
     appearance: none;
-    border: 1px solid rgba(0,115,140,.14);
+    border: 0;
     border-radius: 999px;
-    padding: 9px 16px;
-    font: inherit;
-    font-size: 13.5px;
+    padding: 8px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
     font-weight: 500;
+    letter-spacing: -.01em;
+    text-transform: lowercase;
     cursor: pointer;
-    color: var(--ink);
-    background: rgba(255,255,255,.5);
+    color: var(--ink-soft);
+    background: transparent;
     box-shadow: none;
-    transition: transform .25s, background .25s, color .25s, box-shadow .25s, border-color .25s;
+    transition: background .2s, color .2s;
   }
-  .skills-chips .chip:hover { transform: translateY(-2px); background: rgba(255,255,255,.7); }
+  .skills-chips .chip:hover { color: var(--ink); }
   .skills-chips .chip.is-active {
-    background: var(--accent-deep);
+    background: var(--ink);
     color: #fff;
-    border-color: transparent;
-    box-shadow: 0 8px 20px rgba(0,90,110,.16);
   }
   .skills-acc {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: block;
   }
   .acc-item {
-    border-radius: 16px;
-    border: 1px solid rgba(0,115,140,.12);
-    background: rgba(255,255,255,.45);
-    overflow: hidden;
-  }
-  .acc-item.is-open {
-    background: rgba(255,255,255,.72);
-    border-color: rgba(0,115,140,.22);
-  }
-  .acc-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 18px 20px;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    font: inherit;
-    text-align: left;
-    color: var(--ink);
-  }
-  .acc-btn .num {
-    font-family: var(--serif);
-    font-size: 13px;
-    color: var(--ink-soft);
-    margin-right: 10px;
-  }
-  .acc-btn .title {
-    font-family: var(--serif);
-    font-size: clamp(17px, 1.6vw, 20px);
-    font-weight: 500;
-  }
-  .acc-btn .chev {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-    opacity: .55;
-    transition: transform .25s;
-  }
-  .acc-item.is-open .chev { transform: rotate(180deg); }
-  .acc-panel {
     display: none;
-    padding: 0 18px 18px;
+    border: 0;
+    background: transparent;
+    overflow: visible;
   }
-  .acc-item.is-open .acc-panel { display: block; }
+  .acc-item.is-open { display: block; }
+  .acc-btn {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .acc-panel { display: block; padding: 0; }
   .acc-panel-inner {
-    display: grid;
-    grid-template-columns: 1.1fr .9fr;
-    gap: clamp(20px, 3vw, 32px);
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: none;
+    margin: 0;
   }
+  /* Editorial statement — soft body, ink emphasis */
   .acc-panel .lede {
-    color: var(--ink-soft);
-    font-size: 15px;
-    line-height: 1.55;
-    max-width: 48ch;
-    margin: 0 0 14px;
+    text-align: left;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(26px, 3.4vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .42);
+    max-width: 18em;
+    margin: 0 0 28px;
+    padding: 0;
+  }
+  .acc-panel .lede::after { display: none; }
+  .acc-panel .lede em,
+  .acc-panel .lede .emph {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--ink);
   }
   .skill-proofs {
     margin: 0;
-    padding: 0;
+    padding: 0 0 8px;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 16px;
+    /* room for absolute reveal without shoving the page */
+    min-height: 12em;
   }
   .skill-proof {
     appearance: none;
@@ -876,79 +915,105 @@
     font: inherit;
     color: inherit;
     cursor: pointer;
-    padding: 11px 12px;
-    border-radius: 12px;
-    border-left: 2px solid rgba(0,115,140,.18);
-    transition: background .22s, border-color .22s, transform .22s;
+    padding: 0 0 0 18px;
+    border-radius: 0;
+    position: relative;
+  }
+  .skill-proof::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 0 0 3px rgba(10, 69, 84, .1);
+    transition: background .15s ease, box-shadow .15s ease;
   }
   .skill-proof:hover,
   .skill-proof:focus-visible,
   .skill-proof.is-active {
-    background: rgba(239,243,216,.8);
-    border-left-color: var(--accent);
+    background: transparent;
+    border: 0;
     outline: none;
-    transform: translateX(2px);
+    box-shadow: none;
+    z-index: 2;
+  }
+  .skill-proof:hover::before,
+  .skill-proof:focus-visible::before,
+  .skill-proof.is-active::before {
+    box-shadow: 0 0 0 4px rgba(0, 115, 140, .16);
+    background: var(--accent);
   }
   .skill-proof strong {
-    display: block;
-    color: var(--accent-deep);
-    font-size: 14.5px;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .skill-proof span {
-    display: block;
+    display: inline;
+    font-family: var(--mono);
     font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    text-transform: lowercase;
+    color: var(--ink);
+    border-bottom: 1px solid rgba(10, 69, 84, .35);
+    padding-bottom: 1px;
+    margin: 0;
+    transition: border-color .15s ease;
+  }
+  .skill-proof:hover strong,
+  .skill-proof:focus-visible strong,
+  .skill-proof.is-active strong {
+    border-bottom-color: var(--accent);
+  }
+  /* Fade-only reveal — no height expand (avoids layout thrash / motion sickness) */
+  .skill-proof-reveal {
+    position: absolute;
+    left: 18px;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .18s ease, visibility .18s ease;
+    padding: 10px 12px 12px;
+    border-radius: 12px;
+    background: rgba(232, 240, 250, .94);
+    border: 1px solid rgba(255,255,255,.75);
+    box-shadow: 0 10px 28px rgba(30, 42, 68, .08);
+  }
+  .skill-proof:hover .skill-proof-reveal,
+  .skill-proof:focus-visible .skill-proof-reveal,
+  .skill-proof.is-active .skill-proof-reveal {
+    opacity: 1;
+    visibility: visible;
+  }
+  .skill-proof-reveal > span {
+    display: block;
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 400;
     color: var(--ink-soft);
     line-height: 1.45;
+    max-width: 42ch;
   }
-  .proof-stage {
-    position: relative;
-    align-self: stretch;
-    min-height: min(32vh, 280px);
-    border-radius: 16px;
+  .skill-proof-media {
+    margin-top: 10px;
+  }
+  .skill-proof-media-clip {
     overflow: hidden;
-    background:
-      radial-gradient(circle at 28% 24%, rgba(255,255,255,.55), transparent 55%),
-      linear-gradient(165deg, rgba(214,234,212,.55), rgba(220,232,214,.4));
-    border: 1px solid rgba(0,115,140,.08);
-    isolation: isolate;
-  }
-  .proof-stage .idle,
-  .proof-stage .stage-shot { position: absolute; inset: 16px; }
-  .proof-stage .idle {
-    inset: 0;
-    display: grid;
-    place-items: center;
-    margin: 0;
-    font-family: var(--hand);
-    font-size: 22px;
-    color: rgba(10,69,84,.3);
-    transition: opacity .3s;
-  }
-  .proof-stage.has-image .idle { opacity: 0; pointer-events: none; }
-  .proof-stage .stage-shot {
-    border-radius: 14px;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(10px) scale(.98);
-    transition: opacity .32s ease, transform .38s cubic-bezier(.2,.7,.2,1);
-    pointer-events: none;
-  }
-  .proof-stage .stage-shot.is-on {
-    opacity: 1;
-    transform: none;
+    min-height: 0;
   }
   .proof-ph {
     width: 100%;
-    height: 100%;
-    min-height: 100%;
+    min-height: 120px;
     display: grid;
     place-items: center;
     text-align: center;
-    padding: 22px;
+    padding: 16px;
+    border-radius: 10px;
     font-family: var(--hand);
-    font-size: 22px;
+    font-size: 18px;
     color: rgba(30,42,68,.55);
     line-height: 1.25;
   }
@@ -967,23 +1032,22 @@
   .ph-amp { background: linear-gradient(145deg, #E4EFC8, #CDEDE4); }
 
   @media (max-width: 800px) {
-    .acc-panel-inner { grid-template-columns: 1fr; }
-    .proof-stage { min-height: 200px; order: -1; }
+    .skills-pin { max-width: none; padding-left: 2px; padding-right: 2px; }
+    .skills-chips { width: 100%; }
+    .skills-chips .chip { flex: 1 1 auto; text-align: center; padding: 8px 10px; font-size: 12px; }
+    .acc-panel .lede { font-size: clamp(22px, 6.2vw, 30px); margin-bottom: 22px; }
+    .proof-ph { min-height: 120px; font-size: 18px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .intro-pin { height: auto; min-height: 100vh; max-height: none; overflow: visible; }
+    .intro-pin { height: auto; max-height: none; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
     .hero-fg { position: relative; inset: auto; }
-    .about-stage { position: relative; inset: auto; display: flex; overflow: visible; padding: 24px 0 32px; }
-    .intro-pin { max-height: none; overflow: visible; }
-    .about-arch {
-      width: min(1100px, calc(100% - 32px));
-      border-radius: 40% 40% 28px 28px / 16% 16% 28px 28px;
-    }
+    .about-stage { position: relative; display: block; overflow: visible; padding: 24px 0 32px; }
+    .about-arch { width: min(920px, calc(100% - 32px)); }
     #skills { margin-top: 0; }
     .skills-pin { width: 100%; }
-    .proof-stage .stage-shot { transition: none; }
+    .skill-proof-reveal { transition: none; }
     .acc-btn .chev { transition: none; }
     nav[data-nav] { transition: none; }
     nav[data-nav].is-hidden { transform: none; pointer-events: auto; }
@@ -2540,16 +2604,20 @@
     .nav-links { gap: 12px; }
     .nav-links a { font-size: 12.5px; white-space: nowrap; }
     .nav-links a b { display: none; }
-    .intro-pin { min-height: 100svh; }
+    .intro-pin { min-height: 0; }
     .hero {
-      position: absolute;
-      inset: 0;
-      height: 100%;
-      min-height: 0;
+      position: relative;
+      inset: auto;
+      height: 100svh;
+      min-height: 560px;
       padding-bottom: 0;
     }
-    .hero-inner { padding-top: 88px; }
-    .hero h1 { font-size: clamp(36px, 9vw, 56px); }
+    .hero-inner { padding-top: 88px; padding-bottom: clamp(48px, 10vh, 80px); }
+    .hero h1 {
+      font-size: clamp(26px, 7.2vw, 40px);
+      white-space: nowrap;
+      letter-spacing: -.035em;
+    }
     .hero-stats { margin-top: auto; }
     .cloud-top { width: min(88vw, 520px); top: -2%; }
     .cloud-back {
@@ -2561,10 +2629,10 @@
     .cloud-right .cloud-bob { width: min(140%, 420px); }
     .cloud-frame { aspect-ratio: 16 / 11; }
     .about-arch {
-      width: min(100% - 24px, 1100px);
-      padding-top: clamp(64px, 10vh, 96px);
-      border-radius: 42% 42% 28px 28px / 14% 14% 28px 28px;
+      width: min(100% - 24px, 920px);
+      padding-top: clamp(36px, 6vh, 64px);
     }
+    .about-wash-blob { filter: blur(40px); }
     .section-card { width: min(1100px, calc(100% - 32px)); border-radius: 28px; }
     #skills { margin-top: 0; }
     .skills-pin { width: 100%; padding: 16px 12px 28px; }
@@ -2736,13 +2804,14 @@
 <!-- Nav: directionally aware — hides on scroll down, returns on scroll up -->
 <nav data-nav>
   <div class="nav-inner glass">
-    <a class="logo" href="#">Alexandra Irribarren</a>
+    <a class="logo" href="index-2.html">Alexandra Irribarren</a>
     <ul class="nav-links">
       <li><a href="#work" data-ph="nav" data-ph-label="project"><b>⌘ |</b> project</a></li>
       <li><a href="#about" data-ph="nav" data-ph-label="about"><b>? |</b> about</a></li>
       <li><a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume"><b>⌗ |</b> resume</a></li>
       <li><a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="nav"><b>⌲ |</b> connect</a></li>
-      <li><a href="index-2.html" data-ph="nav" data-ph-label="v2"><b>✦ |</b> 2.0</a></li>
+      <li><a href="index-2.html" aria-current="page" data-ph="nav" data-ph-label="v2"><b>✦ |</b> 2.0</a></li>
+      <li><a href="index.html" data-ph="nav" data-ph-label="v1"><b>← |</b> 1.0</a></li>
     </ul>
   </div>
 </nav>
@@ -2755,7 +2824,7 @@
         <div class="hero-inner">
           <div class="hero-copy">
             <p class="hero-role">Senior UX Researcher/Manager</p>
-            <h1 id="slogan">From <em>insights</em> to<br>influence</h1>
+            <h1 id="slogan">From <em>insights</em> to influence</h1>
           </div>
           <div class="hero-stats">
             <p><strong><span>9</span>+</strong> Years</p>
@@ -2807,7 +2876,12 @@
     </header>
 
     <div class="about-stage">
-      <div class="about-arch" data-about-arch>
+      <div class="about-arch" data-about-arch data-variant="d">
+        <div class="about-wash" aria-hidden="true">
+          <span class="about-wash-blob b1" data-wash="far"></span>
+          <span class="about-wash-blob b2" data-wash="mid"></span>
+          <span class="about-wash-blob b3" data-wash="near"></span>
+        </div>
         <div class="about-arch-body">
           <header class="about-hello">
             <p class="about-kicker">
@@ -2851,138 +2925,167 @@
           </div>
         </div>
 
-        <!-- Skills: continuous lower half of the same arch shell -->
+        <!-- Skills: editorial practice areas -->
         <div id="skills" aria-label="Practice areas">
           <div class="skills-pin" data-skills>
+    <p class="skills-label" aria-hidden="true">.practice areas</p>
     <div class="skills-chips" role="tablist" aria-label="Practice areas">
-      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">AI + Trust</button>
-      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">Product Convergence</button>
-      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 Product Builds</button>
-      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">Research Ops & Scale</button>
+      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product convergence</button>
+      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research ops</button>
     </div>
 
     <div class="skills-acc" data-skills-acc>
       <div class="acc-item is-open" data-skill="ai" id="skill-ai">
-        <button type="button" class="acc-btn" aria-expanded="true">
-          <span><span class="num">01</span><span class="title">AI + Trust</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="true">AI + Trust</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks&nbsp;back.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="sa">
-                  <strong>Security Advisor</strong>
-                  <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="automation">
-                  <strong>Automation scaling</strong>
-                  <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</span>
-                </button>
+            <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people <em>trust a system that talks&nbsp;back</em>.</p>
+            <div class="skill-proofs">
+              <button type="button" class="skill-proof" data-proof="sa">
+                <strong>security advisor</strong>
+                <div class="skill-proof-reveal">
+                <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-ai">Security Advisor<br><small>sanitized SA / SAM mockup</small></div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="sa"><div class="proof-ph ph-ai">Security Advisor<br><small>sanitized SA / SAM mockup</small></div></div>
-              <div class="stage-shot" data-shot="automation"><div class="proof-ph ph-ai">Automation scaling<br><small>autonomy framework</small></div></div>
+              </button>
+              <button type="button" class="skill-proof" data-proof="automation">
+                <strong>automation scaling</strong>
+                <div class="skill-proof-reveal">
+                <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-ai">Automation scaling<br><small>autonomy framework</small></div>
+                  </div>
+                </div>
+              </div>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       <div class="acc-item" data-skill="conv" id="skill-conv">
-        <button type="button" class="acc-btn" aria-expanded="false">
-          <span><span class="num">02</span><span class="title">Product Convergence</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="false">Product Convergence</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">I design UX architecture for products that outgrew their own&nbsp;structure.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="shopping">
-                  <strong>Google Express → Shopping</strong>
-                  <span>Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="mb5">
-                  <strong>Malwarebytes 5.0</strong>
-                  <span>Converged four standalone products into one coherent app — mental models defining the unified&nbsp;structure.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="console">
-                  <strong>Enterprise console rebuild</strong>
-                  <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture&nbsp;assessment.</span>
-                </button>
+            <p class="lede">I design UX architecture for products that <em>outgrew their own&nbsp;structure</em>.</p>
+            <div class="skill-proofs">
+              <button type="button" class="skill-proof" data-proof="shopping">
+                <strong>google express → shopping</strong>
+                <div class="skill-proof-reveal">
+                <span>Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-conv">Google Shopping tab<br><small>Express → Shopping</small></div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="shopping"><div class="proof-ph ph-conv">Google Shopping tab<br><small>Express → Shopping</small></div></div>
-              <div class="stage-shot" data-shot="mb5"><div class="proof-ph ph-conv">Malwarebytes 5.0<br><small>unified app</small></div></div>
-              <div class="stage-shot" data-shot="console"><div class="proof-ph ph-conv">Enterprise console<br><small>before → after</small></div></div>
+              </button>
+              <button type="button" class="skill-proof" data-proof="mb5">
+                <strong>malwarebytes 5.0</strong>
+                <div class="skill-proof-reveal">
+                <span>Converged four standalone products into one coherent app — mental models defining the unified&nbsp;structure.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-conv">Malwarebytes 5.0<br><small>unified app</small></div>
+                  </div>
+                </div>
+              </div>
+              </button>
+              <button type="button" class="skill-proof" data-proof="console">
+                <strong>enterprise console rebuild</strong>
+                <div class="skill-proof-reveal">
+                <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture&nbsp;assessment.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-conv">Enterprise console<br><small>before → after</small></div>
+                  </div>
+                </div>
+              </div>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       <div class="acc-item" data-skill="zero" id="skill-zero">
-        <button type="button" class="acc-btn" aria-expanded="false">
-          <span><span class="num">03</span><span class="title">0→1 Product Builds</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="false">0→1 Product Builds</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">Build product from concept to launch in both traditional and AI-native&nbsp;environments.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="ai-native">
-                  <strong>AI-native builds</strong>
-                  <span>From pain point to vision to working product — strategy-first discipline in AI-native&nbsp;contexts.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="vpn">
-                  <strong>Privacy VPN</strong>
-                  <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was&nbsp;built.</span>
-                </button>
+            <p class="lede">Build product from concept to launch in both <em>traditional and AI-native</em>&nbsp;environments.</p>
+            <div class="skill-proofs">
+              <button type="button" class="skill-proof" data-proof="ai-native">
+                <strong>ai-native builds</strong>
+                <div class="skill-proof-reveal">
+                <span>From pain point to vision to working product — strategy-first discipline in AI-native&nbsp;contexts.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-zero">AI-native build<br><small>personal project</small></div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="ai-native"><div class="proof-ph ph-zero">AI-native build<br><small>personal project</small></div></div>
-              <div class="stage-shot" data-shot="vpn"><div class="proof-ph ph-zero">Privacy VPN<br><small>concept → launch</small></div></div>
+              </button>
+              <button type="button" class="skill-proof" data-proof="vpn">
+                <strong>privacy vpn</strong>
+                <div class="skill-proof-reveal">
+                <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was&nbsp;built.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-zero">Privacy VPN<br><small>concept → launch</small></div>
+                  </div>
+                </div>
+              </div>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       <div class="acc-item" data-skill="amp" id="skill-amp">
-        <button type="button" class="acc-btn" aria-expanded="false">
-          <span><span class="num">04</span><span class="title">Research Ops & Scale</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="false">Research Ops & Scale</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">I make the value of research visible — so teams act on it, and users feel&nbsp;it.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="participatory">
-                  <strong>Participatory Research Program</strong>
-                  <span>Bridged teams and users — boosting engagement, buy-in, and org&nbsp;empathy.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="dashboard">
-                  <strong>Google Ads recruiting dashboard</strong>
-                  <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and&nbsp;PMs.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="practice">
-                  <strong>Built the UX research practice</strong>
-                  <span>Grew the team from 2 to 5; streamlined research ops and standardized&nbsp;practices.</span>
-                </button>
+            <p class="lede">I make the value of research visible — so <em>teams act on&nbsp;it</em>, and users feel&nbsp;it.</p>
+            <div class="skill-proofs">
+              <button type="button" class="skill-proof" data-proof="participatory">
+                <strong>participatory research program</strong>
+                <div class="skill-proof-reveal">
+                <span>Bridged teams and users — boosting engagement, buy-in, and org&nbsp;empathy.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-amp">Participatory program<br><small>three-phase diagram</small></div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="participatory"><div class="proof-ph ph-amp">Participatory program<br><small>three-phase diagram</small></div></div>
-              <div class="stage-shot" data-shot="dashboard"><div class="proof-ph ph-amp">Ads recruiting dashboard<br><small>pipeline view</small></div></div>
-              <div class="stage-shot" data-shot="practice"><div class="proof-ph ph-amp">Research ops<br><small>intake / planning</small></div></div>
+              </button>
+              <button type="button" class="skill-proof" data-proof="dashboard">
+                <strong>ads recruiting dashboard</strong>
+                <div class="skill-proof-reveal">
+                <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and&nbsp;PMs.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-amp">Ads recruiting dashboard<br><small>pipeline view</small></div>
+                  </div>
+                </div>
+              </div>
+              </button>
+              <button type="button" class="skill-proof" data-proof="practice">
+                <strong>ux research practice</strong>
+                <div class="skill-proof-reveal">
+                <span>Grew the team from 2 to 5; streamlined research ops and standardized&nbsp;practices.</span>
+                <div class="skill-proof-media" aria-hidden="true">
+                  <div class="skill-proof-media-clip">
+                    <div class="proof-ph ph-amp">Research ops<br><small>intake / planning</small></div>
+                  </div>
+                </div>
+              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -3617,7 +3720,7 @@
   // Opt out: .allow-runts or [data-allow-runts]
   (function preventRunts() {
     const roots = document.querySelectorAll(
-      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof > span, .foot-line"
+      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof-reveal > span, .foot-line"
     );
 
     const glueEnd = (text) => {
@@ -3739,113 +3842,90 @@
     [...grid.children].forEach((c, i) => c.style.transitionDelay = (i * 0.07) + "s");
   });
 
-  // Intro: pinned ScrollTrigger — hero exits up, arch grows small → full
+  // Intro: open continuum — hero fades on scroll, soft wash parallax (no arch grow)
   gsap.registerPlugin(ScrollTrigger);
   const introPin = document.querySelector(".intro-pin");
+  const heroEl = document.getElementById("hero");
   const heroFg = document.querySelector("[data-hero-fg]");
   const aboutArch = document.querySelector("[data-about-arch]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (introPin && heroFg && aboutArch && !reduceMotion) {
-    // Landing: just the tip of the arch peeks under the hero clouds
-    gsap.set(aboutArch, {
-      scale: 0.3,
-      yPercent: 28,
-      transformOrigin: "50% 100%",
-    });
+  introPin?.classList.add("is-expanded");
+  if (aboutArch) {
+    gsap.set(aboutArch, { clearProps: "transform,scale" });
+    aboutArch.style.pointerEvents = "auto";
+  }
 
-    const lockArch = () => {
-      gsap.set(aboutArch, { scale: 1, x: 0, y: 0, yPercent: 0, clearProps: "transform" });
-      aboutArch.style.transform = "none";
-    };
-
-    const expandIntro = ({ refresh = false, lock = false } = {}) => {
-      if (!introPin.classList.contains("is-expanded")) {
-        introPin.classList.add("is-expanded");
-        gsap.set(introPin, { clearProps: "height,maxHeight,overflow" });
-      }
-      if (lock) {
-        aboutArch.style.willChange = "auto";
-        lockArch();
-      }
-      if (refresh) {
-        requestAnimationFrame(() => {
-          ScrollTrigger.refresh();
-          if (lock) lockArch();
-        });
-      }
-    };
-
-    const introTl = gsap.timeline({
+  if (heroEl && heroFg && !reduceMotion) {
+    gsap.to(heroFg, {
+      y: () => -window.innerHeight * 0.18,
+      opacity: 0.15,
+      ease: "none",
       scrollTrigger: {
-        trigger: introPin,
+        trigger: heroEl,
         start: "top top",
-        end: () => "+=" + Math.round(window.innerHeight * 2),
-        pin: true,
-        pinSpacing: true,
-        scrub: true, // 1:1 with scroll so reverse/up isn't laggy or sticky
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        fastScrollEnd: true,
-        preventOverlaps: true,
-        onUpdate: (self) => {
-          const p = self.progress;
-          heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
-          // Only the grown arch should capture clicks; tip must stay pass-through
-          aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
-
-          // Expand before unpin so pin-spacer / #work never see a collapsed 100vh shell.
-          // First scroll-up was overlapping the arch when expand waited until onLeave.
-          if (p >= 0.7) expandIntro();
-        },
-        // Unpin: lock full shell height + strip transform.
-        // (A bare refresh() was re-applying yPercent:28 and sliding the arch over #work.)
-        onLeave: () => {
-          expandIntro({ refresh: true, lock: true });
-        },
-        // Scroll-up into the pin: keep expanded — never collapse here.
-        onEnterBack: () => {
-          expandIntro();
-          aboutArch.style.willChange = "transform";
-          aboutArch.style.removeProperty("transform");
-        },
-        // Fully back at the hero — safe to re-clip for the tip peek.
-        onLeaveBack: () => {
-          introPin.classList.remove("is-expanded");
-          aboutArch.style.willChange = "transform";
-        },
+        end: "bottom top",
+        scrub: true,
       },
-      defaults: { ease: "none" },
     });
+  }
 
-    // Hero clears immediately as arch takes over
-    introTl.to(heroFg, {
-      y: () => -window.innerHeight * 0.45,
-      opacity: 0,
-      duration: 0.12,
-    }, 0);
+  if (aboutArch && !reduceMotion) {
+    const washFar = aboutArch.querySelector('[data-wash="far"]');
+    const washMid = aboutArch.querySelector('[data-wash="mid"]');
+    const washNear = aboutArch.querySelector('[data-wash="near"]');
+    const body = aboutArch.querySelector(".about-arch-body");
 
-    // From the first scroll: tip → filling the screen
-    introTl.to(aboutArch, {
-      scale: 1,
-      yPercent: 0,
-      duration: 0.7,
-      ease: "power1.out", // front-loads growth so it arrives sooner
-    }, 0);
-
-    const refreshIntro = () => ScrollTrigger.refresh();
-    window.addEventListener("load", refreshIntro);
-    let introResizeTimer;
-    window.addEventListener("resize", () => {
-      clearTimeout(introResizeTimer);
-      introResizeTimer = setTimeout(refreshIntro, 120);
-    });
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(refreshIntro).catch(() => {});
+    if (body) {
+      gsap.fromTo(body, { opacity: 0.35, y: 36 }, {
+        opacity: 1,
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: aboutArch,
+          start: "top 85%",
+          end: "top 45%",
+          scrub: true,
+        },
+      });
     }
-  } else if (aboutArch) {
-    gsap.set(aboutArch, { clearProps: "all" });
-    introPin?.classList.add("is-expanded");
+
+    if (washFar) {
+      gsap.to(washFar, {
+        y: -40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: aboutArch,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }
+    if (washMid) {
+      gsap.to(washMid, {
+        y: -80,
+        ease: "none",
+        scrollTrigger: {
+          trigger: aboutArch,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }
+    if (washNear) {
+      gsap.to(washNear, {
+        y: -120,
+        ease: "none",
+        scrollTrigger: {
+          trigger: aboutArch,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }
   }
 
   // Featured work — Dia-style sticky tabs + scrolling panels
@@ -3931,34 +4011,33 @@
     });
   })();
 
-  // Hard skills: accordion (one open) + chip sync + hover bullet → proof
+  // Hard skills: accordion (one open) + chip sync + per-bullet image reveal
   const skillsRoot = document.querySelector("[data-skills]");
   const skillsAcc = document.querySelector("[data-skills-acc]");
 
   const wireProofHover = (root) => {
-    root.querySelectorAll(".acc-item").forEach((item) => {
-      const stage = item.querySelector("[data-proof-stage]");
-      const proofs = [...item.querySelectorAll(".skill-proof")];
-      if (!stage || !proofs.length) return;
-      const shots = [...stage.querySelectorAll(".stage-shot")];
+    const canHover = () => matchMedia("(hover: hover)").matches;
 
-      const showProof = (key) => {
-        if (!key) return;
-        proofs.forEach((b) => b.classList.toggle("is-active", b.dataset.proof === key));
-        shots.forEach((shot) => shot.classList.toggle("is-on", shot.dataset.shot === key));
-        stage.classList.add("has-image");
-      };
+    root.querySelectorAll(".acc-item").forEach((item) => {
+      const proofs = [...item.querySelectorAll(".skill-proof")];
+      if (!proofs.length) return;
 
       proofs.forEach((proof) => {
-        const key = proof.dataset.proof;
-        proof.addEventListener("pointerenter", () => {
-          if (matchMedia("(hover: hover)").matches) showProof(key);
+        // CSS :hover handles desktop reveal; is-active for focus + touch toggle
+        proof.addEventListener("focus", () => {
+          proofs.forEach((b) => b.classList.toggle("is-active", b === proof));
         });
-        proof.addEventListener("focus", () => showProof(key));
-        proof.addEventListener("click", () => showProof(key));
+        proof.addEventListener("blur", () => {
+          if (!canHover()) return;
+          proof.classList.remove("is-active");
+        });
+        proof.addEventListener("click", () => {
+          if (canHover()) return; // hover CSS already reveals
+          const on = !proof.classList.contains("is-active");
+          proofs.forEach((b) => b.classList.remove("is-active"));
+          if (on) proof.classList.add("is-active");
+        });
       });
-
-      showProof(proofs[0].dataset.proof);
     });
   };
 
@@ -3983,10 +4062,9 @@
       chip.addEventListener("click", () => openAt(i));
     });
 
+    // Editorial tabs: always one panel open (no accordion collapse)
     items.forEach((item, i) => {
-      item.querySelector(".acc-btn")?.addEventListener("click", () => {
-        openAt(item.classList.contains("is-open") ? -1 : i);
-      });
+      item.querySelector(".acc-btn")?.addEventListener("click", () => openAt(i));
     });
 
     wireProofHover(skillsRoot);
