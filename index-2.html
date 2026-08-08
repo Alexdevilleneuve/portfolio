@@ -118,16 +118,20 @@
   .nav-links a[aria-current="page"] { color: var(--ink); }
   .nav-links a[aria-current="page"]::after { width: 100%; }
 
-  /* ---------- Intro: hero + open about continuum (variant D) ---------- */
+  /* ---------- Intro: hero + arch pin (grows on scroll) ---------- */
   .intro-pin {
     position: relative;
-    z-index: 3;
+    z-index: 3; /* above #work while pinned / during scroll-up */
     height: auto;
-    min-height: 0;
-    max-height: none;
-    overflow: visible;
+    min-height: 100vh;
+    min-height: 100svh;
+    /* Clip to one viewport on load so only the arch tip peeks; JS expands on scroll */
+    max-height: 100vh;
+    max-height: 100svh;
+    overflow: hidden;
     background: var(--ice-sky);
   }
+  /* After the hero pin, shell must own its full height — else it overlaps #work */
   .intro-pin.is-expanded {
     height: auto !important;
     max-height: none !important;
@@ -141,15 +145,15 @@
     --ink-soft: #5A6B8C;
     --accent: #5B7FD9;
     --accent-deep: #3D5CB8;
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
     width: 100%;
     height: 100vh;
     height: 100svh;
-    min-height: 640px;
+    min-height: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -185,7 +189,7 @@
   .hero-copy {
     max-width: 920px;
     text-align: center;
-    margin: 0 auto;
+    margin: 12vh auto 0;
     opacity: 0;
     transform: translateY(120px);
     transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
@@ -416,7 +420,7 @@
     display: block;
     mix-blend-mode: screen;
     pointer-events: none;
-    transition: opacity 1s ease;
+    transition: opacity .85s cubic-bezier(.4, 0, .2, 1);
   }
   .cloud-media img.gif {
     position: absolute;
@@ -431,9 +435,24 @@
     opacity: 0;
     border-radius: 40%;
     filter: blur(0.2px);
-    transition: opacity 1s ease;
+    transition: opacity .85s cubic-bezier(.4, 0, .2, 1);
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
     mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
+  }
+  /* Compass / team-leader gif — slight left bias inside the left cloud */
+  .cloud-left .cloud-media img.gif {
+    transform: translateX(-6%);
+    object-position: 42% center;
+  }
+
+  /* Auto demo peek — slower GIF crossfade only (no caption size jump) */
+  .cloud.is-peeking .cloud-media img.gif {
+    opacity: 1;
+    transition: opacity 1.45s cubic-bezier(.45, 0, .2, 1);
+  }
+  .cloud.is-peeking .cloud-media img.cloud-face {
+    opacity: .42;
+    transition: opacity 1.45s cubic-bezier(.45, 0, .2, 1);
   }
 
   .cloud.is-hot .cloud-media img.gif,
@@ -573,81 +592,81 @@
     /* Continuous ice-sky canvas — same token as body / hero exit / work */
     background: var(--ice-sky);
   }
-  /* Part 1 — open continuum (no arch shell) */
+  /* Part 1 — arch layer inside the hero pin (skills nested = one shell) */
   .about-stage {
     position: relative;
     z-index: 1;
     margin: 0;
     padding: 0 0 8px;
-    min-height: 0;
-    display: block;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     overflow: visible;
-    pointer-events: auto;
+    pointer-events: none;
   }
   .about-arch {
     position: relative;
-    width: min(920px, calc(100% - 48px));
+    width: min(1100px, calc(100% - 64px));
     min-height: 0;
     margin: 0 auto;
-    padding: clamp(48px, 8vh, 88px) clamp(16px, 3vw, 32px) 0;
+    /* Clear the dome — greeting needs room under the arch curve */
+    padding: clamp(72px, 11vh, 120px) clamp(32px, 5vw, 72px) clamp(20px, 2.5vw, 32px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     text-align: center;
-    pointer-events: auto;
-    background: transparent;
-    border-radius: 0;
-    box-shadow: none;
-    overflow: visible;
-  }
-  /* Soft ambient washes — the only “atmosphere” behind copy */
-  .about-wash {
-    position: absolute;
-    inset: -8% -18% 10%;
-    z-index: 0;
     pointer-events: none;
+    transform-origin: 50% 100%;
+    /* One continuous wash — arch through skills */
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
+      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 32%, #EFF3D8 55%, #F2F6E6 78%, #F4F6F1 100%);
+    /* Lower dome so “hey…” doesn’t float in empty mint */
+    border-radius: 48% 48% 36px 36px / 12% 12% 36px 36px;
+    border: 0;
+    box-shadow:
+      0 -18px 60px rgba(0,115,140,.10),
+      0 28px 48px -12px rgba(30, 42, 68, .10);
+    will-change: transform;
+    /* Hero tip-peek: clip to the mint dome; expanded allows skill-card bleed */
+    overflow: hidden;
+  }
+  /* FOUC / pre-GSAP: only a tiny tip at the bottom (mint only) */
+  .intro-pin:not(.is-expanded) .about-arch {
+    transform: scale(0.28) translateY(14%);
+    transform-origin: 50% 100%;
+  }
+  .intro-pin.is-expanded .about-arch {
     overflow: visible;
   }
-  .about-wash-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(56px);
-    opacity: .7;
-    will-change: transform;
+  /* No copy over the hero — content appears after the arch has grown */
+  .about-arch:not(.is-content-visible) .about-arch-body,
+  .about-arch:not(.is-content-visible) #skills {
+    opacity: 0;
+    visibility: hidden;
   }
-  .about-wash-blob.b1 {
-    width: min(520px, 70vw);
-    height: min(520px, 70vw);
-    left: -8%;
-    top: 4%;
-    background: rgba(214, 234, 212, .85);
+  .about-arch.is-content-visible .about-arch-body,
+  .about-arch.is-content-visible #skills {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .35s ease, visibility .35s ease;
   }
-  .about-wash-blob.b2 {
-    width: min(460px, 62vw);
-    height: min(460px, 62vw);
-    right: -10%;
-    top: 28%;
-    background: rgba(201, 224, 245, .7);
-  }
-  .about-wash-blob.b3 {
-    width: min(380px, 50vw);
-    height: min(380px, 50vw);
-    left: 28%;
-    bottom: 8%;
-    background: rgba(239, 243, 216, .65);
-  }
+  /* Washes unused with arch fill — keep DOM for other variants */
+  .about-wash { display: none; }
   .about-arch-body {
     position: relative;
     z-index: 1;
-    width: min(800px, 100%);
-    max-width: 800px;
-    margin: 0 0 clamp(28px, 4vh, 48px);
+    width: min(920px, 100%);
+    max-width: 920px;
+    margin: 0 0 clamp(20px, 3vh, 36px);
   }
   .about-hello {
     text-align: center;
     max-width: 640px;
-    margin: 0 auto 28px;
+    margin: 0 auto 32px;
   }
   .about-hello .about-kicker {
     display: inline-flex;
@@ -686,27 +705,53 @@
     max-width: 36em;
     margin: 0 auto;
   }
-  .about-pair {
+  /* Pair rows: headline left · logos right (balances hard-skills left stack) */
+  .about-pairs {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    gap: 0;
+    text-align: left;
+  }
+  .about-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 20px 48px;
     align-items: center;
-    gap: 18px;
-    text-align: center;
+    text-align: left;
+    min-width: 0;
   }
   .about-pair + .about-pair {
-    margin-top: 40px;
-    padding-top: 40px;
+    margin-top: 32px;
+    padding-top: 32px;
     border-top: 1px solid rgba(10, 69, 84, .1);
+  }
+  .about-pair-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+  .about-pair-rule {
+    display: block;
+    width: 28px;
+    height: 3px;
+    margin: 0;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: .7;
+    flex-shrink: 0;
   }
   /* The two real headlines */
   .about-pair .pair-copy {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(22px, 2.9vw, 32px);
-    line-height: 1.28;
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.3;
     letter-spacing: -.018em;
     color: var(--ink);
-    text-align: center;
+    text-align: left;
     max-width: 22em;
     margin: 0;
   }
@@ -718,21 +763,21 @@
     font-style: italic;
   }
   .about-pair .pair-copy .hook--break {
-    display: block;
-    margin-top: .4em;
-    font-size: 1.02em;
+    display: inline;
+    margin-top: 0;
+    font-size: inherit;
   }
-  /* Compact mono-tint logo row (dusty teal, not B&W) */
+  /* Compact mono-tint logo cluster (right column) */
   .about-logo-strip {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    gap: 10px 22px;
+    gap: 12px 20px;
     width: 100%;
-    max-width: 440px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     padding: 0;
   }
   .about-logo-strip--4,
@@ -749,7 +794,7 @@
     display: block;
     width: auto;
     height: 16px;
-    max-width: 92px;
+    max-width: 96px;
     object-fit: contain;
     opacity: .78;
     /* Single dusty-teal mono wash — matches --ink-soft / --dusty */
@@ -765,24 +810,30 @@
   .about-logo-strip li[data-brand="lanzhou"] img { height: 18px; max-width: 104px; }
   .about-logo-strip li[data-brand="bfa"] img { height: 18px; max-width: 112px; }
   @media (max-width: 800px) {
-    .about-hello { margin-bottom: 20px; }
-    .about-pair { gap: 14px; }
+    .about-hello { margin-bottom: 24px; }
+    .about-pair {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
     .about-pair + .about-pair {
       margin-top: 28px;
       padding-top: 28px;
     }
-    .about-pair .pair-copy { font-size: clamp(20px, 5.4vw, 26px); }
-    .about-logo-strip { gap: 8px 16px; max-width: 100%; }
+    .about-pair .pair-copy { font-size: clamp(20px, 5.2vw, 26px); max-width: none; }
+    .about-logo-strip {
+      justify-content: flex-start;
+      gap: 8px 16px;
+    }
     .about-logo-strip img { height: 14px; max-width: 84px; }
     .about-logo-strip li[data-brand="kerr"] img { height: 18px; }
     .about-logo-strip li[data-brand="bfa"] img { height: 16px; max-width: 96px; }
   }
-  /* Part 2 — editorial practice areas (tight, tabbed) */
+  /* Part 2 — practice areas nest inside the soft panel */
   #skills {
     position: relative;
     z-index: 1;
     width: 100%;
-    margin: 4px 0 0;
+    margin: 0;
     padding: 0;
     background: transparent;
     display: block;
@@ -798,7 +849,7 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    padding: clamp(8px, 1.5vw, 16px) 4px clamp(40px, 5vw, 64px);
+    padding: clamp(8px, 1.5vw, 16px) 4px clamp(12px, 2vw, 24px);
     overflow: visible;
     background: transparent;
     border: 0;
@@ -817,18 +868,18 @@
   .skills-chips {
     display: inline-flex;
     flex-wrap: wrap;
-    align-self: flex-start;
+    align-self: center;
     gap: 0;
-    margin: 0 0 28px;
+    margin: 0 auto 28px;
     padding: 4px;
-    border-radius: 999px;
+    border-radius: 12px;
     border: 1px solid rgba(10, 69, 84, .16);
     background: rgba(255,255,255,.35);
   }
   .skills-chips .chip {
     appearance: none;
     border: 0;
-    border-radius: 999px;
+    border-radius: 8px;
     padding: 8px 14px;
     font-family: var(--sans);
     font-size: 13px;
@@ -868,16 +919,21 @@
     border: 0;
   }
   .acc-panel { display: block; padding: 0; }
+  /* Stage: lede + list sit left; large reveal card floats over / bleeds right */
   .acc-panel-inner {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
     max-width: none;
     margin: 0;
+    min-height: 300px;
   }
-  /* Editorial statement — soft body, ink emphasis */
+  /* Editorial statement — soft body, ink emphasis (card may cover this) */
   .acc-panel .lede {
+    position: relative;
+    z-index: 1;
     text-align: left;
     font-family: var(--sans);
     font-weight: 500;
@@ -885,7 +941,8 @@
     line-height: 1.2;
     letter-spacing: -.03em;
     color: rgba(10, 69, 84, .42);
-    max-width: 18em;
+    width: 100%;
+    max-width: none;
     margin: 0 0 28px;
     padding: 0;
   }
@@ -897,33 +954,49 @@
     color: var(--ink);
   }
   .skill-proofs {
+    position: static;
     margin: 0;
-    padding: 0 0 8px;
+    padding: 0 0 12px;
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    /* room for absolute reveal without shoving the page */
-    min-height: 12em;
+    width: max-content;
+    max-width: min(100%, 280px);
+    min-height: 0;
   }
   .skill-proof {
     appearance: none;
     border: 0;
     background: transparent;
-    width: 100%;
+    width: max-content;
+    max-width: 100%;
     text-align: left;
     font: inherit;
     color: inherit;
     cursor: pointer;
     padding: 0 0 0 18px;
     border-radius: 0;
-    position: relative;
+    /* static so reveal docks to .acc-panel-inner (shared floating stage) */
+    position: static;
   }
   .skill-proof::before {
     content: "";
     position: absolute;
-    left: 0;
-    top: .55em;
+    /* approx: next to this label’s strong; absolute under static parent is panel — use relative wrapper trick */
+    display: none;
+  }
+  /* bullet lives on a relative shell around strong */
+  .skill-proof > strong {
+    position: relative;
+    display: inline;
+    padding-left: 0;
+  }
+  .skill-proof > strong::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: .45em;
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -938,16 +1011,15 @@
     border: 0;
     outline: none;
     box-shadow: none;
-    z-index: 2;
+    z-index: 3;
   }
-  .skill-proof:hover::before,
-  .skill-proof:focus-visible::before,
-  .skill-proof.is-active::before {
+  .skill-proof:hover > strong::before,
+  .skill-proof:focus-visible > strong::before,
+  .skill-proof.is-active > strong::before {
     box-shadow: 0 0 0 4px rgba(0, 115, 140, .16);
     background: var(--accent);
   }
   .skill-proof strong {
-    display: inline;
     font-family: var(--mono);
     font-size: 13.5px;
     font-weight: 500;
@@ -964,67 +1036,114 @@
   .skill-proof.is-active strong {
     border-bottom-color: var(--accent);
   }
-  /* Fade-only reveal — no height expand (avoids layout thrash / motion sickness) */
+  /*
+   * Floating case card (Framer-style hover stage)
+   * — light glass panel, title + outcome pills + single wide media
+   * — docks over lede/list, may bleed past soft panel
+   */
   .skill-proof-reveal {
     position: absolute;
-    left: 18px;
-    right: 0;
-    top: calc(100% + 8px);
-    z-index: 3;
+    left: clamp(200px, 40%, 300px);
+    top: -12px;
+    z-index: 30;
+    width: min(460px, 58vw);
+    max-width: none;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity .18s ease, visibility .18s ease;
-    padding: 10px 12px 12px;
-    border-radius: 12px;
-    background: rgba(232, 240, 250, .94);
-    border: 1px solid rgba(255,255,255,.75);
-    box-shadow: 0 10px 28px rgba(30, 42, 68, .08);
+    transform: translateY(10px) scale(.985);
+    transition: opacity .22s ease, visibility .22s ease, transform .28s cubic-bezier(.2, .8, .2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 22px 18px;
+    border-radius: 28px;
+    background: rgba(244, 247, 241, .97);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow:
+      0 28px 64px rgba(30, 42, 68, .14),
+      0 2px 0 rgba(255,255,255,.7) inset;
+    text-align: left;
   }
   .skill-proof:hover .skill-proof-reveal,
   .skill-proof:focus-visible .skill-proof-reveal,
   .skill-proof.is-active .skill-proof-reveal {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
   }
-  .skill-proof-reveal > span {
+  .skill-proof-title {
     display: block;
     margin: 0;
     font-family: var(--sans);
-    font-size: 13.5px;
-    font-weight: 400;
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .skill-proof-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+  .skill-proof-tags > span {
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 69, 84, .22);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -.01em;
     color: var(--ink-soft);
-    line-height: 1.45;
-    max-width: 42ch;
+    white-space: nowrap;
+    background: rgba(255,255,255,.45);
   }
   .skill-proof-media {
-    margin-top: 10px;
+    display: block;
+    margin: 0;
+    width: 100%;
   }
   .skill-proof-media-clip {
     overflow: hidden;
+    border-radius: 14px;
     min-height: 0;
+    background: rgba(10, 69, 84, .04);
+  }
+  .skill-proof-media-clip img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .proof-ph {
     width: 100%;
-    min-height: 120px;
+    /* same overall stage as two 3:4 portrait tiles side-by-side */
+    aspect-ratio: 3 / 2;
+    min-height: 0;
+    height: auto;
     display: grid;
     place-items: center;
     text-align: center;
-    padding: 16px;
-    border-radius: 10px;
+    padding: 16px 14px;
+    border-radius: 14px;
     font-family: var(--hand);
-    font-size: 18px;
+    font-size: clamp(16px, 1.8vw, 20px);
     color: rgba(30,42,68,.55);
-    line-height: 1.25;
+    line-height: 1.2;
   }
   .proof-ph small {
     display: block;
     font-family: var(--sans);
-    font-size: 10.5px;
+    font-size: 9px;
     letter-spacing: .12em;
     text-transform: uppercase;
     color: rgba(30,42,68,.38);
-    margin-top: 8px;
+    margin-top: 6px;
   }
   .ph-ai { background: linear-gradient(145deg, #C9E0F5, #D8D2F0); }
   .ph-conv { background: linear-gradient(145deg, #D2EDE4, #C9E0F5); }
@@ -1032,22 +1151,85 @@
   .ph-amp { background: linear-gradient(145deg, #E4EFC8, #CDEDE4); }
 
   @media (max-width: 800px) {
-    .skills-pin { max-width: none; padding-left: 2px; padding-right: 2px; }
+    .skills-pin {
+      max-width: none;
+      padding-left: 2px;
+      padding-right: 2px;
+      overflow: visible;
+    }
     .skills-chips { width: 100%; }
     .skills-chips .chip { flex: 1 1 auto; text-align: center; padding: 8px 10px; font-size: 12px; }
-    .acc-panel .lede { font-size: clamp(22px, 6.2vw, 30px); margin-bottom: 22px; }
-    .proof-ph { min-height: 120px; font-size: 18px; }
+    .acc-panel-inner { min-height: 0; }
+    .acc-panel .lede {
+      width: 100%;
+      max-width: none;
+      font-size: clamp(22px, 6.2vw, 30px);
+      margin-bottom: 22px;
+    }
+    .skill-proofs {
+      width: 100%;
+      max-width: none;
+    }
+    .skill-proof {
+      position: relative;
+      width: 100%;
+    }
+    /* stack under the label on small screens */
+    .skill-proof-reveal {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      max-width: none;
+      margin-top: 12px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 14px;
+      border: 0;
+      box-shadow: none;
+      visibility: hidden;
+      transform: none;
+      transition: opacity .18s ease, max-height .25s ease, padding .18s ease, visibility .18s ease;
+    }
+    .skill-proof:hover .skill-proof-reveal,
+    .skill-proof:focus-visible .skill-proof-reveal,
+    .skill-proof.is-active .skill-proof-reveal {
+      opacity: 1;
+      visibility: visible;
+      max-height: 520px;
+      padding: 18px 16px 14px;
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 16px 40px rgba(30, 42, 68, .12);
+      transform: none;
+    }
+    .proof-ph {
+      aspect-ratio: 3 / 2;
+      font-size: 15px;
+      padding: 12px 10px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .intro-pin { height: auto; max-height: none; overflow: visible; }
+    .intro-pin { height: auto; min-height: 100vh; max-height: none; overflow: visible; }
     .hero { position: relative; height: 100vh; min-height: 640px; }
     .hero-fg { position: relative; inset: auto; }
-    .about-stage { position: relative; display: block; overflow: visible; padding: 24px 0 32px; }
-    .about-arch { width: min(920px, calc(100% - 32px)); }
+    .about-stage { position: relative; inset: auto; display: flex; overflow: visible; padding: 24px 0 32px; }
+    .about-arch {
+      width: min(1100px, calc(100% - 32px));
+      border-radius: 40% 40% 28px 28px / 16% 16% 28px 28px;
+      overflow: visible;
+      transform: none !important;
+    }
+    .intro-pin:not(.is-expanded) .about-arch { transform: none !important; }
+    .about-arch .about-arch-body,
+    .about-arch #skills {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
     #skills { margin-top: 0; }
     .skills-pin { width: 100%; }
-    .skill-proof-reveal { transition: none; }
+    .skill-proof-reveal { transition: none; transform: none; }
     .acc-btn .chev { transition: none; }
     nav[data-nav] { transition: none; }
     nav[data-nav].is-hidden { transform: none; pointer-events: auto; }
@@ -2604,15 +2786,16 @@
     .nav-links { gap: 12px; }
     .nav-links a { font-size: 12.5px; white-space: nowrap; }
     .nav-links a b { display: none; }
-    .intro-pin { min-height: 0; }
+    .intro-pin { min-height: 100svh; }
     .hero {
-      position: relative;
-      inset: auto;
-      height: 100svh;
-      min-height: 560px;
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      min-height: 0;
       padding-bottom: 0;
     }
     .hero-inner { padding-top: 88px; padding-bottom: clamp(48px, 10vh, 80px); }
+    .hero-copy { margin-top: 8vh; }
     .hero h1 {
       font-size: clamp(26px, 7.2vw, 40px);
       white-space: nowrap;
@@ -2629,10 +2812,10 @@
     .cloud-right .cloud-bob { width: min(140%, 420px); }
     .cloud-frame { aspect-ratio: 16 / 11; }
     .about-arch {
-      width: min(100% - 24px, 920px);
-      padding-top: clamp(36px, 6vh, 64px);
+      width: min(100% - 24px, 1100px);
+      padding-top: clamp(64px, 10vh, 96px);
+      border-radius: 42% 42% 28px 28px / 14% 14% 28px 28px;
     }
-    .about-wash-blob { filter: blur(40px); }
     .section-card { width: min(1100px, calc(100% - 32px)); border-radius: 28px; }
     #skills { margin-top: 0; }
     .skills-pin { width: 100%; padding: 16px 12px 28px; }
@@ -2876,7 +3059,7 @@
     </header>
 
     <div class="about-stage">
-      <div class="about-arch" data-about-arch data-variant="d">
+      <div class="about-arch" data-about-arch data-variant="a">
         <div class="about-wash" aria-hidden="true">
           <span class="about-wash-blob b1" data-wash="far"></span>
           <span class="about-wash-blob b2" data-wash="mid"></span>
@@ -2891,37 +3074,45 @@
             <p class="statement">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
           </header>
 
-          <div class="about-pair">
-            <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
-            <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
-              <li data-brand="malwarebytes">
-                <img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async">
-              </li>
-              <li data-brand="google">
-                <img src="assets/images/shared/brand/google-wordmark.png" alt="Google" width="120" height="40" decoding="async">
-              </li>
-              <li data-brand="huawei">
-                <img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" width="140" height="36" decoding="async">
-              </li>
-              <li data-brand="kerr">
-                <img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" width="110" height="70" decoding="async">
-              </li>
-            </ul>
-          </div>
+          <div class="about-pairs">
+            <div class="about-pair">
+              <div class="about-pair-text">
+                <span class="about-pair-rule" aria-hidden="true"></span>
+                <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
+              </div>
+              <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
+                <li data-brand="malwarebytes">
+                  <img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async">
+                </li>
+                <li data-brand="google">
+                  <img src="assets/images/shared/brand/google-wordmark.png" alt="Google" width="120" height="40" decoding="async">
+                </li>
+                <li data-brand="huawei">
+                  <img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" width="140" height="36" decoding="async">
+                </li>
+                <li data-brand="kerr">
+                  <img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" width="110" height="70" decoding="async">
+                </li>
+              </ul>
+            </div>
 
-          <div class="about-pair">
-            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook hook--break">what should we build, and&nbsp;why?</span></p>
-            <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
-              <li data-brand="oregon-state">
-                <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
-              </li>
-              <li data-brand="lanzhou">
-                <img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" width="180" height="56" decoding="async">
-              </li>
-              <li data-brand="bfa">
-                <img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" width="200" height="54" decoding="async">
-              </li>
-            </ul>
+            <div class="about-pair">
+              <div class="about-pair-text">
+                <span class="about-pair-rule" aria-hidden="true"></span>
+                <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+              </div>
+              <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
+                <li data-brand="oregon-state">
+                  <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
+                </li>
+                <li data-brand="lanzhou">
+                  <img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" width="180" height="56" decoding="async">
+                </li>
+                <li data-brand="bfa">
+                  <img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" width="200" height="54" decoding="async">
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -2943,28 +3134,32 @@
           <div class="acc-panel-inner">
             <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people <em>trust a system that talks&nbsp;back</em>.</p>
             <div class="skill-proofs">
-              <button type="button" class="skill-proof" data-proof="sa">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="sa">
                 <strong>security advisor</strong>
                 <div class="skill-proof-reveal">
-                <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-ai">Security Advisor<br><small>sanitized SA / SAM mockup</small></div>
+                  <span class="skill-proof-title">Security Advisor</span>
+                  <span class="skill-proof-tags"><span>Conversational trust</span>
+                    <span>Personalized, adaptive guidance</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-ai">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
-              <button type="button" class="skill-proof" data-proof="automation">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="automation">
                 <strong>automation scaling</strong>
                 <div class="skill-proof-reveal">
-                <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-ai">Automation scaling<br><small>autonomy framework</small></div>
+                  <span class="skill-proof-title">Automation scaling</span>
+                  <span class="skill-proof-tags"><span>Autonomy framework</span>
+                    <span>Human in the loop</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-ai">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
             </div>
           </div>
         </div>
@@ -2976,39 +3171,45 @@
           <div class="acc-panel-inner">
             <p class="lede">I design UX architecture for products that <em>outgrew their own&nbsp;structure</em>.</p>
             <div class="skill-proofs">
-              <button type="button" class="skill-proof" data-proof="shopping">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="shopping">
                 <strong>google express → shopping</strong>
                 <div class="skill-proof-reveal">
-                <span>Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-conv">Google Shopping tab<br><small>Express → Shopping</small></div>
+                  <span class="skill-proof-title">Google Express → Shopping</span>
+                  <span class="skill-proof-tags"><span>Foundational research</span>
+                    <span>Concept validation</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
-              <button type="button" class="skill-proof" data-proof="mb5">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="mb5">
                 <strong>malwarebytes 5.0</strong>
                 <div class="skill-proof-reveal">
-                <span>Converged four standalone products into one coherent app — mental models defining the unified&nbsp;structure.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-conv">Malwarebytes 5.0<br><small>unified app</small></div>
+                  <span class="skill-proof-title">Malwarebytes 5.0</span>
+                  <span class="skill-proof-tags"><span>Four products → one app</span>
+                    <span>Shared mental models</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
-              <button type="button" class="skill-proof" data-proof="console">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="console">
                 <strong>enterprise console rebuild</strong>
                 <div class="skill-proof-reveal">
-                <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture&nbsp;assessment.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-conv">Enterprise console<br><small>before → after</small></div>
+                  <span class="skill-proof-title">Enterprise console rebuild</span>
+                  <span class="skill-proof-tags"><span>Security posture core</span>
+                    <span>All-in-one system</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
             </div>
           </div>
         </div>
@@ -3020,28 +3221,32 @@
           <div class="acc-panel-inner">
             <p class="lede">Build product from concept to launch in both <em>traditional and AI-native</em>&nbsp;environments.</p>
             <div class="skill-proofs">
-              <button type="button" class="skill-proof" data-proof="ai-native">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
                 <strong>ai-native builds</strong>
                 <div class="skill-proof-reveal">
-                <span>From pain point to vision to working product — strategy-first discipline in AI-native&nbsp;contexts.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-zero">AI-native build<br><small>personal project</small></div>
+                  <span class="skill-proof-title">AI-native builds</span>
+                  <span class="skill-proof-tags"><span>Pain point → vision</span>
+                    <span>Strategy-first shipping</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-zero">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
-              <button type="button" class="skill-proof" data-proof="vpn">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="vpn">
                 <strong>privacy vpn</strong>
                 <div class="skill-proof-reveal">
-                <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was&nbsp;built.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-zero">Privacy VPN<br><small>concept → launch</small></div>
+                  <span class="skill-proof-title">Privacy VPN</span>
+                  <span class="skill-proof-tags"><span>Net-new consumer product</span>
+                    <span>Who it's for, first</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-zero">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
             </div>
           </div>
         </div>
@@ -3053,39 +3258,45 @@
           <div class="acc-panel-inner">
             <p class="lede">I make the value of research visible — so <em>teams act on&nbsp;it</em>, and users feel&nbsp;it.</p>
             <div class="skill-proofs">
-              <button type="button" class="skill-proof" data-proof="participatory">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="participatory">
                 <strong>participatory research program</strong>
                 <div class="skill-proof-reveal">
-                <span>Bridged teams and users — boosting engagement, buy-in, and org&nbsp;empathy.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-amp">Participatory program<br><small>three-phase diagram</small></div>
+                  <span class="skill-proof-title">Participatory research program</span>
+                  <span class="skill-proof-tags"><span>Team ↔ user bridge</span>
+                    <span>Org empathy &amp; buy-in</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
-              <button type="button" class="skill-proof" data-proof="dashboard">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="dashboard">
                 <strong>ads recruiting dashboard</strong>
                 <div class="skill-proof-reveal">
-                <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and&nbsp;PMs.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-amp">Ads recruiting dashboard<br><small>pipeline view</small></div>
+                  <span class="skill-proof-title">Ads recruiting dashboard</span>
+                  <span class="skill-proof-tags"><span>3 years of archive → UI</span>
+                    <span>Self-serve for UX + PM</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
-              <button type="button" class="skill-proof" data-proof="practice">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="practice">
                 <strong>ux research practice</strong>
                 <div class="skill-proof-reveal">
-                <span>Grew the team from 2 to 5; streamlined research ops and standardized&nbsp;practices.</span>
-                <div class="skill-proof-media" aria-hidden="true">
-                  <div class="skill-proof-media-clip">
-                    <div class="proof-ph ph-amp">Research ops<br><small>intake / planning</small></div>
+                  <span class="skill-proof-title">UX research practice</span>
+                  <span class="skill-proof-tags"><span>Team 2 → 5</span>
+                    <span>Ops &amp; standards</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
                   </div>
                 </div>
               </div>
-              </button>
             </div>
           </div>
         </div>
@@ -3720,7 +3931,7 @@
   // Opt out: .allow-runts or [data-allow-runts]
   (function preventRunts() {
     const roots = document.querySelectorAll(
-      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof-reveal > span, .foot-line"
+      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof-title, .foot-line"
     );
 
     const glueEnd = (text) => {
@@ -3800,27 +4011,60 @@
     requestAnimationFrame(() => hero.classList.add("is-in"));
   });
 
-  // Cloud GIF reveal — pointer-driven with leave buffer (avoids flaky CSS :hover)
+  // Cloud GIF reveal — dual auto peek, then pointer-driven with leave buffer
   const canHover = window.matchMedia("(hover: hover)").matches;
+  const reduceMotionClouds = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const clouds = document.querySelectorAll(".cloud");
   if (canHover) {
     let leaveTimer;
+    let peekTimers = [];
+    let peekDone = false;
+
     const setHot = (side) => {
       clouds.forEach((c) => {
         const on = side && c.classList.contains(side);
         c.classList.toggle("is-hot", on);
       });
     };
-    // Per-cloud hit zones (tighter than the full band) + leave buffer
+
+    const cancelPeek = () => {
+      peekDone = true;
+      peekTimers.forEach(clearTimeout);
+      peekTimers = [];
+      clouds.forEach((c) => c.classList.remove("is-hot"));
+    };
+
     clouds.forEach((cloud) => {
       cloud.addEventListener("pointerenter", () => {
         clearTimeout(leaveTimer);
+        cancelPeek();
         setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
       });
       cloud.addEventListener("pointerleave", () => {
         leaveTimer = setTimeout(() => setHot(null), 160);
       });
     });
+
+    // Left @ 1.0s, right @ 1.8s
+    if (!reduceMotionClouds) {
+      const holdMs = 1200;
+      const schedulePeek = (selector, delayMs) => {
+        const startId = setTimeout(() => {
+          if (peekDone) return;
+          const el = document.querySelector(selector);
+          if (!el) return;
+          el.classList.add("is-hot");
+          const endId = setTimeout(() => {
+            if (peekDone) return;
+            el.classList.remove("is-hot");
+          }, holdMs);
+          peekTimers.push(endId);
+        }, delayMs);
+        peekTimers.push(startId);
+      };
+      schedulePeek(".cloud-left", 1000);
+      schedulePeek(".cloud-right", 1800);
+    }
   } else {
     clouds.forEach((cloud) => {
       cloud.addEventListener("click", () => {
@@ -3842,90 +4086,120 @@
     [...grid.children].forEach((c, i) => c.style.transitionDelay = (i * 0.07) + "s");
   });
 
-  // Intro: open continuum — hero fades on scroll, soft wash parallax (no arch grow)
+  // Intro: pinned ScrollTrigger — hero exits up, arch grows small → full
   gsap.registerPlugin(ScrollTrigger);
   const introPin = document.querySelector(".intro-pin");
-  const heroEl = document.getElementById("hero");
   const heroFg = document.querySelector("[data-hero-fg]");
   const aboutArch = document.querySelector("[data-about-arch]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  introPin?.classList.add("is-expanded");
-  if (aboutArch) {
-    gsap.set(aboutArch, { clearProps: "transform,scale" });
-    aboutArch.style.pointerEvents = "auto";
-  }
-
-  if (heroEl && heroFg && !reduceMotion) {
-    gsap.to(heroFg, {
-      y: () => -window.innerHeight * 0.18,
-      opacity: 0.15,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroEl,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-      },
+  if (introPin && heroFg && aboutArch && !reduceMotion) {
+    // Landing: just the tip of the arch peeks under the hero clouds
+    gsap.set(aboutArch, {
+      scale: 0.28,
+      yPercent: 32,
+      transformOrigin: "50% 100%",
     });
-  }
+    aboutArch.classList.remove("is-content-visible");
 
-  if (aboutArch && !reduceMotion) {
-    const washFar = aboutArch.querySelector('[data-wash="far"]');
-    const washMid = aboutArch.querySelector('[data-wash="mid"]');
-    const washNear = aboutArch.querySelector('[data-wash="near"]');
-    const body = aboutArch.querySelector(".about-arch-body");
+    const setArchContent = (show) => {
+      aboutArch.classList.toggle("is-content-visible", show);
+    };
 
-    if (body) {
-      gsap.fromTo(body, { opacity: 0.35, y: 36 }, {
-        opacity: 1,
-        y: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: aboutArch,
-          start: "top 85%",
-          end: "top 45%",
-          scrub: true,
-        },
-      });
-    }
+    const lockArch = () => {
+      gsap.set(aboutArch, { scale: 1, x: 0, y: 0, yPercent: 0, clearProps: "transform" });
+      aboutArch.style.transform = "none";
+      setArchContent(true);
+    };
 
-    if (washFar) {
-      gsap.to(washFar, {
-        y: -40,
-        ease: "none",
-        scrollTrigger: {
-          trigger: aboutArch,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
+    const expandIntro = ({ refresh = false, lock = false } = {}) => {
+      if (!introPin.classList.contains("is-expanded")) {
+        introPin.classList.add("is-expanded");
+        gsap.set(introPin, { clearProps: "height,maxHeight,overflow" });
+      }
+      if (lock) {
+        aboutArch.style.willChange = "auto";
+        lockArch();
+      }
+      if (refresh) {
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          if (lock) lockArch();
+        });
+      }
+    };
+
+    const introTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: introPin,
+        start: "top top",
+        end: () => "+=" + Math.round(window.innerHeight * 2),
+        pin: true,
+        pinSpacing: true,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        fastScrollEnd: true,
+        preventOverlaps: true,
+        onUpdate: (self) => {
+          const p = self.progress;
+          heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
+          // Only the grown arch should capture clicks; tip must stay pass-through
+          aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
+          // Keep intro copy off the hero; fade in only after the dome has grown in
+          setArchContent(p > 0.22);
+
+          // Expand before unpin so pin-spacer / #work never see a collapsed 100vh shell.
+          if (p >= 0.7) expandIntro();
         },
-      });
-    }
-    if (washMid) {
-      gsap.to(washMid, {
-        y: -80,
-        ease: "none",
-        scrollTrigger: {
-          trigger: aboutArch,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
+        onLeave: () => {
+          expandIntro({ refresh: true, lock: true });
         },
-      });
-    }
-    if (washNear) {
-      gsap.to(washNear, {
-        y: -120,
-        ease: "none",
-        scrollTrigger: {
-          trigger: aboutArch,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
+        onEnterBack: () => {
+          expandIntro();
+          aboutArch.style.willChange = "transform";
+          aboutArch.style.removeProperty("transform");
+          setArchContent(true);
         },
-      });
+        onLeaveBack: () => {
+          introPin.classList.remove("is-expanded");
+          aboutArch.style.willChange = "transform";
+          setArchContent(false);
+        },
+      },
+      defaults: { ease: "none" },
+    });
+
+    // Hero clears immediately as arch takes over
+    introTl.to(heroFg, {
+      y: () => -window.innerHeight * 0.45,
+      opacity: 0,
+      duration: 0.12,
+    }, 0);
+
+    // From the first scroll: tip → filling the screen
+    introTl.to(aboutArch, {
+      scale: 1,
+      yPercent: 0,
+      duration: 0.7,
+      ease: "power1.out",
+    }, 0);
+
+    const refreshIntro = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refreshIntro);
+    let introResizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(introResizeTimer);
+      introResizeTimer = setTimeout(refreshIntro, 120);
+    });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(refreshIntro).catch(() => {});
     }
+  } else if (aboutArch) {
+    gsap.set(aboutArch, { clearProps: "all" });
+    introPin?.classList.add("is-expanded");
+    aboutArch.classList.add("is-content-visible");
+    aboutArch.style.pointerEvents = "auto";
   }
 
   // Featured work — Dia-style sticky tabs + scrolling panels
@@ -4036,6 +4310,11 @@
           const on = !proof.classList.contains("is-active");
           proofs.forEach((b) => b.classList.remove("is-active"));
           if (on) proof.classList.add("is-active");
+        });
+        proof.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          proof.click();
         });
       });
     });

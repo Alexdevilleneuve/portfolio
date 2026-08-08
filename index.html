@@ -15,7 +15,7 @@
   });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     /* Hydrangea palette (site below hero) */
@@ -41,6 +41,7 @@
     --serif: "Fraunces", serif;
     --sans: "Inter", sans-serif;
     --hand: "Caveat", cursive;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   /* Avoid scroll-behavior: smooth — it fights ScrollTrigger pin and blocks scrolling back up */
@@ -186,28 +187,35 @@
   }
 
   .hero-copy {
-    max-width: 760px;
+    max-width: 920px;
+    text-align: center;
+    margin: 12vh auto 0;
     opacity: 0;
     transform: translateY(120px);
     transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
   }
-  .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
+  .hero.is-in .hero-copy {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .hero-role {
     font-size: 15px;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--accent-deep);
+    /* Match site sections (hydrangea ink-soft), not hero-local blue */
+    color: #5E7F82;
     font-weight: 600;
   }
   .hero h1 {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(48px, 8.5vw, 128px);
-    line-height: 1.08;
+    font-size: clamp(36px, 6.2vw, 78px);
+    line-height: 1.1;
     margin-top: 14px;
-    letter-spacing: -.02em;
+    letter-spacing: -.03em;
     color: var(--ink);
+    white-space: nowrap;
   }
   .hero h1 em { font-style: italic; color: var(--accent); }
 
@@ -412,7 +420,7 @@
     display: block;
     mix-blend-mode: screen;
     pointer-events: none;
-    transition: opacity 1s ease;
+    transition: opacity 1.6s cubic-bezier(.45, 0, .2, 1);
   }
   .cloud-media img.gif {
     position: absolute;
@@ -426,15 +434,58 @@
     display: block;
     opacity: 0;
     border-radius: 40%;
-    filter: blur(0.2px);
-    transition: opacity 1s ease;
+    filter: blur(1.2px);
+    transform: scale(.94);
+    transition:
+      opacity 1.65s cubic-bezier(.45, 0, .15, 1),
+      transform 1.85s cubic-bezier(.33, .1, .2, 1),
+      filter 1.65s cubic-bezier(.45, 0, .15, 1);
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
     mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
+  }
+  /* Compass / team-leader gif — slight left bias inside the left cloud */
+  .cloud-left .cloud-media img.gif {
+    transform: translateX(-6%) scale(.94);
+    object-position: 42% center;
+  }
+
+  /*
+   * Auto demo peek — long ease-in (no snappy is-hot jump).
+   * Caption stays whisper-size so only media eases.
+   */
+  .cloud.is-peeking .cloud-media img.gif {
+    opacity: 1;
+    filter: blur(0.2px);
+    transform: scale(1);
+    transition:
+      opacity 2.15s cubic-bezier(.35, 0, .15, 1),
+      transform 2.35s cubic-bezier(.3, .05, .15, 1),
+      filter 2.15s cubic-bezier(.35, 0, .15, 1);
+  }
+  .cloud-left.is-peeking .cloud-media img.gif {
+    transform: translateX(-6%) scale(1);
+  }
+  .cloud.is-peeking .cloud-media img.cloud-face {
+    opacity: .48;
+    transition: opacity 2.15s cubic-bezier(.35, 0, .15, 1);
   }
 
   .cloud.is-hot .cloud-media img.gif,
   .cloud:focus-within .cloud-media img.gif,
-  .cloud.is-revealed .cloud-media img.gif { opacity: 1; }
+  .cloud.is-revealed .cloud-media img.gif {
+    opacity: 1;
+    filter: blur(0.2px);
+    transform: scale(1);
+    transition:
+      opacity .85s cubic-bezier(.4, 0, .2, 1),
+      transform .9s cubic-bezier(.33, .1, .2, 1),
+      filter .85s cubic-bezier(.4, 0, .2, 1);
+  }
+  .cloud-left.is-hot .cloud-media img.gif,
+  .cloud-left:focus-within .cloud-media img.gif,
+  .cloud-left.is-revealed .cloud-media img.gif {
+    transform: translateX(-6%) scale(1);
+  }
   .cloud.is-hot .cloud-media img.cloud-face,
   .cloud:focus-within .cloud-media img.cloud-face,
   .cloud.is-revealed .cloud-media img.cloud-face { opacity: .28; }
@@ -607,7 +658,28 @@
       0 -18px 60px rgba(0,115,140,.10),
       0 28px 48px -12px rgba(30, 42, 68, .10);
     will-change: transform;
+    /* Hero tip-peek: clip to the mint dome; expanded allows skill-card bleed */
     overflow: hidden;
+  }
+  /* FOUC / pre-GSAP: only a tiny tip at the bottom (mint only) */
+  .intro-pin:not(.is-expanded) .about-arch {
+    transform: scale(0.28) translateY(14%);
+    transform-origin: 50% 100%;
+  }
+  .intro-pin.is-expanded .about-arch {
+    overflow: visible;
+  }
+  /* No copy over the hero — content appears after the arch has grown */
+  .about-arch:not(.is-content-visible) .about-arch-body,
+  .about-arch:not(.is-content-visible) #skills {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .about-arch.is-content-visible .about-arch-body,
+  .about-arch.is-content-visible #skills {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .35s ease, visibility .35s ease;
   }
   .about-arch-body {
     position: relative;
@@ -685,9 +757,9 @@
     font-style: italic;
   }
   .about-pair .pair-copy .hook--break {
-    display: block;
-    margin-top: .55em;
-    font-size: 1.05em;
+    display: inline;
+    margin-top: 0;
+    font-size: inherit;
   }
   .about-logo-strip {
     list-style: none;
@@ -740,7 +812,7 @@
     .about-logo-strip li[data-brand="kerr"] img { height: 26px; }
     .about-logo-strip li[data-brand="bfa"] img { height: 26px; max-width: 130px; }
   }
-  /* Part 2 — hard skills = lower half of the same arch card (accordion) */
+  /* Part 2 — practice areas nest inside the soft panel */
   #skills {
     position: relative;
     z-index: 1;
@@ -753,213 +825,309 @@
   .skills-pin {
     position: relative;
     width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
     height: auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
-    padding: clamp(16px, 2.5vw, 28px) clamp(12px, 2vw, 24px) clamp(36px, 4.5vw, 52px);
+    padding: clamp(8px, 1.5vw, 16px) 4px clamp(12px, 2vw, 24px);
     overflow: visible;
-    /* Transparent — parent .about-arch paints the continuous shell */
     background: transparent;
-    border-radius: 0;
     border: 0;
+    border-radius: 0;
     box-shadow: none;
+    text-align: left;
+  }
+  .skills-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
   }
   .skills-chips {
-    display: flex;
-    gap: 8px;
+    display: inline-flex;
     flex-wrap: wrap;
-    margin-bottom: 22px;
+    align-self: center;
+    gap: 0;
+    margin: 0 auto 28px;
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid rgba(10, 69, 84, .16);
+    background: rgba(255,255,255,.35);
   }
   .skills-chips .chip {
     appearance: none;
-    border: 1px solid rgba(0,115,140,.14);
-    border-radius: 999px;
-    padding: 9px 16px;
-    font: inherit;
-    font-size: 13.5px;
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
     font-weight: 500;
+    letter-spacing: -.01em;
+    text-transform: lowercase;
     cursor: pointer;
-    color: var(--ink);
-    background: rgba(255,255,255,.5);
+    color: var(--ink-soft);
+    background: transparent;
     box-shadow: none;
-    transition: transform .25s, background .25s, color .25s, box-shadow .25s, border-color .25s;
+    transition: background .2s, color .2s;
   }
-  .skills-chips .chip:hover { transform: translateY(-2px); background: rgba(255,255,255,.7); }
+  .skills-chips .chip:hover { color: var(--ink); }
   .skills-chips .chip.is-active {
-    background: var(--accent-deep);
+    background: var(--ink);
     color: #fff;
-    border-color: transparent;
-    box-shadow: 0 8px 20px rgba(0,90,110,.16);
   }
   .skills-acc {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: block;
   }
   .acc-item {
-    border-radius: 16px;
-    border: 1px solid rgba(0,115,140,.12);
-    background: rgba(255,255,255,.45);
-    overflow: hidden;
-  }
-  .acc-item.is-open {
-    background: rgba(255,255,255,.72);
-    border-color: rgba(0,115,140,.22);
-  }
-  .acc-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 18px 20px;
+    display: none;
     border: 0;
-    background: none;
-    cursor: pointer;
-    font: inherit;
+    background: transparent;
+    overflow: visible;
+  }
+  .acc-item.is-open { display: block; }
+  .acc-btn {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .acc-panel { display: block; padding: 0; }
+  /* Stage: lede + list sit left; large reveal card floats over / bleeds right */
+  .acc-panel-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: none;
+    margin: 0;
+    min-height: 300px;
+  }
+  /* Editorial statement — soft body, ink emphasis (card may cover this) */
+  .acc-panel .lede {
+    position: relative;
+    z-index: 1;
     text-align: left;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(26px, 3.4vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .42);
+    width: 100%;
+    max-width: none;
+    margin: 0 0 28px;
+    padding: 0;
+  }
+  .acc-panel .lede::after { display: none; }
+  .acc-panel .lede em,
+  .acc-panel .lede .emph {
+    font-style: normal;
+    font-weight: 600;
     color: var(--ink);
   }
-  .acc-btn .num {
-    font-family: var(--serif);
-    font-size: 13px;
-    color: var(--ink-soft);
-    margin-right: 10px;
-  }
-  .acc-btn .title {
-    font-family: var(--serif);
-    font-size: clamp(17px, 1.6vw, 20px);
-    font-weight: 500;
-  }
-  .acc-btn .chev {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-    opacity: .55;
-    transition: transform .25s;
-  }
-  .acc-item.is-open .chev { transform: rotate(180deg); }
-  .acc-panel {
-    display: none;
-    padding: 0 18px 18px;
-  }
-  .acc-item.is-open .acc-panel { display: block; }
-  .acc-panel-inner {
-    display: grid;
-    grid-template-columns: 1.1fr .9fr;
-    gap: clamp(20px, 3vw, 32px);
-    align-items: start;
-  }
-  .acc-panel .lede {
-    color: var(--ink-soft);
-    font-size: 15px;
-    line-height: 1.55;
-    max-width: 48ch;
-    margin: 0 0 14px;
-  }
   .skill-proofs {
+    position: static;
     margin: 0;
-    padding: 0;
+    padding: 0 0 12px;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 16px;
+    width: max-content;
+    max-width: min(100%, 280px);
+    min-height: 0;
   }
   .skill-proof {
     appearance: none;
     border: 0;
     background: transparent;
-    width: 100%;
+    width: max-content;
+    max-width: 100%;
     text-align: left;
     font: inherit;
     color: inherit;
     cursor: pointer;
-    padding: 11px 12px;
-    border-radius: 12px;
-    border-left: 2px solid rgba(0,115,140,.18);
-    transition: background .22s, border-color .22s, transform .22s;
+    padding: 0 0 0 18px;
+    border-radius: 0;
+    /* static so reveal docks to .acc-panel-inner (shared floating stage) */
+    position: static;
+  }
+  .skill-proof::before {
+    content: "";
+    position: absolute;
+    /* approx: next to this label’s strong; absolute under static parent is panel — use relative wrapper trick */
+    display: none;
+  }
+  /* bullet lives on a relative shell around strong */
+  .skill-proof > strong {
+    position: relative;
+    display: inline;
+    padding-left: 0;
+  }
+  .skill-proof > strong::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: .45em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 0 0 3px rgba(10, 69, 84, .1);
+    transition: background .15s ease, box-shadow .15s ease;
   }
   .skill-proof:hover,
   .skill-proof:focus-visible,
   .skill-proof.is-active {
-    background: rgba(239,243,216,.8);
-    border-left-color: var(--accent);
+    background: transparent;
+    border: 0;
     outline: none;
-    transform: translateX(2px);
+    box-shadow: none;
+    z-index: 3;
+  }
+  .skill-proof:hover > strong::before,
+  .skill-proof:focus-visible > strong::before,
+  .skill-proof.is-active > strong::before {
+    box-shadow: 0 0 0 4px rgba(0, 115, 140, .16);
+    background: var(--accent);
   }
   .skill-proof strong {
-    display: block;
-    color: var(--accent-deep);
-    font-size: 14.5px;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .skill-proof span {
-    display: block;
+    font-family: var(--mono);
     font-size: 13.5px;
-    color: var(--ink-soft);
-    line-height: 1.45;
-  }
-  .proof-stage {
-    position: relative;
-    align-self: stretch;
-    min-height: min(32vh, 280px);
-    border-radius: 16px;
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 28% 24%, rgba(255,255,255,.55), transparent 55%),
-      linear-gradient(165deg, rgba(214,234,212,.55), rgba(220,232,214,.4));
-    border: 1px solid rgba(0,115,140,.08);
-    isolation: isolate;
-  }
-  .proof-stage .idle,
-  .proof-stage .stage-shot { position: absolute; inset: 16px; }
-  .proof-stage .idle {
-    inset: 0;
-    display: grid;
-    place-items: center;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    text-transform: lowercase;
+    color: var(--ink);
+    border-bottom: 1px solid rgba(10, 69, 84, .35);
+    padding-bottom: 1px;
     margin: 0;
-    font-family: var(--hand);
-    font-size: 22px;
-    color: rgba(10,69,84,.3);
-    transition: opacity .3s;
+    transition: border-color .15s ease;
   }
-  .proof-stage.has-image .idle { opacity: 0; pointer-events: none; }
-  .proof-stage .stage-shot {
-    border-radius: 14px;
-    overflow: hidden;
+  .skill-proof:hover strong,
+  .skill-proof:focus-visible strong,
+  .skill-proof.is-active strong {
+    border-bottom-color: var(--accent);
+  }
+  /*
+   * Floating case card (Framer-style hover stage)
+   * — light glass panel, title + outcome pills + single wide media
+   * — docks over lede/list, may bleed past soft panel
+   */
+  .skill-proof-reveal {
+    position: absolute;
+    left: clamp(200px, 40%, 300px);
+    top: -12px;
+    z-index: 30;
+    width: min(460px, 58vw);
+    max-width: none;
     opacity: 0;
-    transform: translateY(10px) scale(.98);
-    transition: opacity .32s ease, transform .38s cubic-bezier(.2,.7,.2,1);
+    visibility: hidden;
     pointer-events: none;
+    transform: translateY(10px) scale(.985);
+    transition: opacity .22s ease, visibility .22s ease, transform .28s cubic-bezier(.2, .8, .2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 22px 18px;
+    border-radius: 28px;
+    background: rgba(244, 247, 241, .97);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow:
+      0 28px 64px rgba(30, 42, 68, .14),
+      0 2px 0 rgba(255,255,255,.7) inset;
+    text-align: left;
   }
-  .proof-stage .stage-shot.is-on {
+  .skill-proof:hover .skill-proof-reveal,
+  .skill-proof:focus-visible .skill-proof-reveal,
+  .skill-proof.is-active .skill-proof-reveal {
     opacity: 1;
-    transform: none;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .skill-proof-title {
+    display: block;
+    margin: 0;
+    font-family: var(--sans);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .skill-proof-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+  .skill-proof-tags > span {
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 69, 84, .22);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    background: rgba(255,255,255,.45);
+  }
+  .skill-proof-media {
+    display: block;
+    margin: 0;
+    width: 100%;
+  }
+  .skill-proof-media-clip {
+    overflow: hidden;
+    border-radius: 14px;
+    min-height: 0;
+    background: rgba(10, 69, 84, .04);
+  }
+  .skill-proof-media-clip img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .proof-ph {
     width: 100%;
-    height: 100%;
-    min-height: 100%;
+    /* same overall stage as two 3:4 portrait tiles side-by-side */
+    aspect-ratio: 3 / 2;
+    min-height: 0;
+    height: auto;
     display: grid;
     place-items: center;
     text-align: center;
-    padding: 22px;
+    padding: 16px 14px;
+    border-radius: 14px;
     font-family: var(--hand);
-    font-size: 22px;
+    font-size: clamp(16px, 1.8vw, 20px);
     color: rgba(30,42,68,.55);
-    line-height: 1.25;
+    line-height: 1.2;
   }
   .proof-ph small {
     display: block;
     font-family: var(--sans);
-    font-size: 10.5px;
+    font-size: 9px;
     letter-spacing: .12em;
     text-transform: uppercase;
     color: rgba(30,42,68,.38);
-    margin-top: 8px;
+    margin-top: 6px;
   }
   .ph-ai { background: linear-gradient(145deg, #C9E0F5, #D8D2F0); }
   .ph-conv { background: linear-gradient(145deg, #D2EDE4, #C9E0F5); }
@@ -967,8 +1135,63 @@
   .ph-amp { background: linear-gradient(145deg, #E4EFC8, #CDEDE4); }
 
   @media (max-width: 800px) {
-    .acc-panel-inner { grid-template-columns: 1fr; }
-    .proof-stage { min-height: 200px; order: -1; }
+    .skills-pin {
+      max-width: none;
+      padding-left: 2px;
+      padding-right: 2px;
+      overflow: visible;
+    }
+    .skills-chips { width: 100%; }
+    .skills-chips .chip { flex: 1 1 auto; text-align: center; padding: 8px 10px; font-size: 12px; }
+    .acc-panel-inner { min-height: 0; }
+    .acc-panel .lede {
+      width: 100%;
+      max-width: none;
+      font-size: clamp(22px, 6.2vw, 30px);
+      margin-bottom: 22px;
+    }
+    .skill-proofs {
+      width: 100%;
+      max-width: none;
+    }
+    .skill-proof {
+      position: relative;
+      width: 100%;
+    }
+    /* stack under the label on small screens */
+    .skill-proof-reveal {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      max-width: none;
+      margin-top: 12px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 14px;
+      border: 0;
+      box-shadow: none;
+      visibility: hidden;
+      transform: none;
+      transition: opacity .18s ease, max-height .25s ease, padding .18s ease, visibility .18s ease;
+    }
+    .skill-proof:hover .skill-proof-reveal,
+    .skill-proof:focus-visible .skill-proof-reveal,
+    .skill-proof.is-active .skill-proof-reveal {
+      opacity: 1;
+      visibility: visible;
+      max-height: 520px;
+      padding: 18px 16px 14px;
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 16px 40px rgba(30, 42, 68, .12);
+      transform: none;
+    }
+    .proof-ph {
+      aspect-ratio: 3 / 2;
+      font-size: 15px;
+      padding: 12px 10px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -980,10 +1203,18 @@
     .about-arch {
       width: min(1100px, calc(100% - 32px));
       border-radius: 40% 40% 28px 28px / 16% 16% 28px 28px;
+      overflow: visible;
+      transform: none !important;
+    }
+    .intro-pin:not(.is-expanded) .about-arch { transform: none !important; }
+    .about-arch .about-arch-body,
+    .about-arch #skills {
+      opacity: 1 !important;
+      visibility: visible !important;
     }
     #skills { margin-top: 0; }
     .skills-pin { width: 100%; }
-    .proof-stage .stage-shot { transition: none; }
+    .skill-proof-reveal { transition: none; transform: none; }
     .acc-btn .chev { transition: none; }
     nav[data-nav] { transition: none; }
     nav[data-nav].is-hidden { transform: none; pointer-events: auto; }
@@ -2548,8 +2779,13 @@
       min-height: 0;
       padding-bottom: 0;
     }
-    .hero-inner { padding-top: 88px; }
-    .hero h1 { font-size: clamp(36px, 9vw, 56px); }
+    .hero-inner { padding-top: 88px; padding-bottom: clamp(48px, 10vh, 80px); }
+    .hero-copy { margin-top: 8vh; }
+    .hero h1 {
+      font-size: clamp(26px, 7.2vw, 40px);
+      white-space: nowrap;
+      letter-spacing: -.035em;
+    }
     .hero-stats { margin-top: auto; }
     .cloud-top { width: min(88vw, 520px); top: -2%; }
     .cloud-back {
@@ -2755,7 +2991,7 @@
         <div class="hero-inner">
           <div class="hero-copy">
             <p class="hero-role">Senior UX Researcher/Manager</p>
-            <h1 id="slogan">From <em>insights</em> to<br>influence</h1>
+            <h1 id="slogan">From <em>insights</em> to influence</h1>
           </div>
           <div class="hero-stats">
             <p><strong><span>9</span>+</strong> Years</p>
@@ -2818,7 +3054,7 @@
           </header>
 
           <div class="about-pair">
-            <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product — <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
+            <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
             <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
               <li data-brand="malwarebytes">
                 <img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async">
@@ -2836,7 +3072,7 @@
           </div>
 
           <div class="about-pair">
-            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook hook--break">what should we build, and&nbsp;why?</span></p>
+            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
             <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
               <li data-brand="oregon-state">
                 <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
@@ -2851,138 +3087,187 @@
           </div>
         </div>
 
-        <!-- Skills: continuous lower half of the same arch shell -->
+        <!-- Skills: editorial practice areas -->
         <div id="skills" aria-label="Practice areas">
           <div class="skills-pin" data-skills>
+    <p class="skills-label" aria-hidden="true">.practice areas</p>
     <div class="skills-chips" role="tablist" aria-label="Practice areas">
-      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">AI + Trust</button>
-      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">Product Convergence</button>
-      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 Product Builds</button>
-      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">Research Ops & Scale</button>
+      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product convergence</button>
+      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research ops</button>
     </div>
 
     <div class="skills-acc" data-skills-acc>
       <div class="acc-item is-open" data-skill="ai" id="skill-ai">
-        <button type="button" class="acc-btn" aria-expanded="true">
-          <span><span class="num">01</span><span class="title">AI + Trust</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="true">AI + Trust</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people trust a system that talks&nbsp;back.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="sa">
-                  <strong>Security Advisor</strong>
-                  <span>Led the research arc behind Malwarebytes' conversational security advisor — trust in a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="automation">
-                  <strong>Automation scaling</strong>
-                  <span>Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</span>
-                </button>
+            <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people <em>trust a system that talks&nbsp;back</em>.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="sa">
+                <strong>security advisor</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Security Advisor</span>
+                  <span class="skill-proof-tags"><span>Conversational trust</span>
+                    <span>Personalized, adaptive guidance</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-ai">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="sa"><div class="proof-ph ph-ai">Security Advisor<br><small>sanitized SA / SAM mockup</small></div></div>
-              <div class="stage-shot" data-shot="automation"><div class="proof-ph ph-ai">Automation scaling<br><small>autonomy framework</small></div></div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="automation">
+                <strong>automation scaling</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Automation scaling</span>
+                  <span class="skill-proof-tags"><span>Autonomy framework</span>
+                    <span>Human in the loop</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-ai">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="acc-item" data-skill="conv" id="skill-conv">
-        <button type="button" class="acc-btn" aria-expanded="false">
-          <span><span class="num">02</span><span class="title">Product Convergence</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="false">Product Convergence</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">I design UX architecture for products that outgrew their own&nbsp;structure.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="shopping">
-                  <strong>Google Express → Shopping</strong>
-                  <span>Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="mb5">
-                  <strong>Malwarebytes 5.0</strong>
-                  <span>Converged four standalone products into one coherent app — mental models defining the unified&nbsp;structure.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="console">
-                  <strong>Enterprise console rebuild</strong>
-                  <span>Rebuilt a patchwork console into an all-in-one system anchored in security posture&nbsp;assessment.</span>
-                </button>
+            <p class="lede">I design UX architecture for products that <em>outgrew their own&nbsp;structure</em>.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="shopping">
+                <strong>google express → shopping</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Google Express → Shopping</span>
+                  <span class="skill-proof-tags"><span>Foundational research</span>
+                    <span>Concept validation</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="shopping"><div class="proof-ph ph-conv">Google Shopping tab<br><small>Express → Shopping</small></div></div>
-              <div class="stage-shot" data-shot="mb5"><div class="proof-ph ph-conv">Malwarebytes 5.0<br><small>unified app</small></div></div>
-              <div class="stage-shot" data-shot="console"><div class="proof-ph ph-conv">Enterprise console<br><small>before → after</small></div></div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="mb5">
+                <strong>malwarebytes 5.0</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Malwarebytes 5.0</span>
+                  <span class="skill-proof-tags"><span>Four products → one app</span>
+                    <span>Shared mental models</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="console">
+                <strong>enterprise console rebuild</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Enterprise console rebuild</span>
+                  <span class="skill-proof-tags"><span>Security posture core</span>
+                    <span>All-in-one system</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="acc-item" data-skill="zero" id="skill-zero">
-        <button type="button" class="acc-btn" aria-expanded="false">
-          <span><span class="num">03</span><span class="title">0→1 Product Builds</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="false">0→1 Product Builds</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">Build product from concept to launch in both traditional and AI-native&nbsp;environments.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="ai-native">
-                  <strong>AI-native builds</strong>
-                  <span>From pain point to vision to working product — strategy-first discipline in AI-native&nbsp;contexts.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="vpn">
-                  <strong>Privacy VPN</strong>
-                  <span>Research for a net-new consumer product from concept through launch — defining who it was for before anything was&nbsp;built.</span>
-                </button>
+            <p class="lede">Build product from concept to launch in both <em>traditional and AI-native</em>&nbsp;environments.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
+                <strong>ai-native builds</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">AI-native builds</span>
+                  <span class="skill-proof-tags"><span>Pain point → vision</span>
+                    <span>Strategy-first shipping</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-zero">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="ai-native"><div class="proof-ph ph-zero">AI-native build<br><small>personal project</small></div></div>
-              <div class="stage-shot" data-shot="vpn"><div class="proof-ph ph-zero">Privacy VPN<br><small>concept → launch</small></div></div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="vpn">
+                <strong>privacy vpn</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Privacy VPN</span>
+                  <span class="skill-proof-tags"><span>Net-new consumer product</span>
+                    <span>Who it's for, first</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-zero">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="acc-item" data-skill="amp" id="skill-amp">
-        <button type="button" class="acc-btn" aria-expanded="false">
-          <span><span class="num">04</span><span class="title">Research Ops & Scale</span></span>
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
+        <button type="button" class="acc-btn" aria-expanded="false">Research Ops & Scale</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <div>
-              <p class="lede">I make the value of research visible — so teams act on it, and users feel&nbsp;it.</p>
-              <div class="skill-proofs">
-                <button type="button" class="skill-proof" data-proof="participatory">
-                  <strong>Participatory Research Program</strong>
-                  <span>Bridged teams and users — boosting engagement, buy-in, and org&nbsp;empathy.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="dashboard">
-                  <strong>Google Ads recruiting dashboard</strong>
-                  <span>Turned three years of archived recruiting data into a self-serve pipeline view for UXers and&nbsp;PMs.</span>
-                </button>
-                <button type="button" class="skill-proof" data-proof="practice">
-                  <strong>Built the UX research practice</strong>
-                  <span>Grew the team from 2 to 5; streamlined research ops and standardized&nbsp;practices.</span>
-                </button>
+            <p class="lede">I make the value of research visible — so <em>teams act on&nbsp;it</em>, and users feel&nbsp;it.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="participatory">
+                <strong>participatory research program</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Participatory research program</span>
+                  <span class="skill-proof-tags"><span>Team ↔ user bridge</span>
+                    <span>Org empathy &amp; buy-in</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="proof-stage" data-proof-stage aria-live="polite">
-              <p class="idle" aria-hidden="true">hover a bullet</p>
-              <div class="stage-shot" data-shot="participatory"><div class="proof-ph ph-amp">Participatory program<br><small>three-phase diagram</small></div></div>
-              <div class="stage-shot" data-shot="dashboard"><div class="proof-ph ph-amp">Ads recruiting dashboard<br><small>pipeline view</small></div></div>
-              <div class="stage-shot" data-shot="practice"><div class="proof-ph ph-amp">Research ops<br><small>intake / planning</small></div></div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="dashboard">
+                <strong>ads recruiting dashboard</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Ads recruiting dashboard</span>
+                  <span class="skill-proof-tags"><span>3 years of archive → UI</span>
+                    <span>Self-serve for UX + PM</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="practice">
+                <strong>ux research practice</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">UX research practice</span>
+                  <span class="skill-proof-tags"><span>Team 2 → 5</span>
+                    <span>Ops &amp; standards</span></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -3617,7 +3902,7 @@
   // Opt out: .allow-runts or [data-allow-runts]
   (function preventRunts() {
     const roots = document.querySelectorAll(
-      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof > span, .foot-line"
+      "p, q, h1, h2, h3, .lede, .cloud-caption, .skill-proof-title, .foot-line"
     );
 
     const glueEnd = (text) => {
@@ -3697,27 +3982,61 @@
     requestAnimationFrame(() => hero.classList.add("is-in"));
   });
 
-  // Cloud GIF reveal — pointer-driven with leave buffer (avoids flaky CSS :hover)
+  // Cloud GIF reveal — soft dual auto peek, then pointer-driven
   const canHover = window.matchMedia("(hover: hover)").matches;
+  const reduceMotionClouds = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const clouds = document.querySelectorAll(".cloud");
   if (canHover) {
     let leaveTimer;
+    let peekTimers = [];
+    let peekDone = false;
+
     const setHot = (side) => {
       clouds.forEach((c) => {
         const on = side && c.classList.contains(side);
         c.classList.toggle("is-hot", on);
+        if (on) c.classList.remove("is-peeking");
       });
     };
-    // Per-cloud hit zones (tighter than the full band) + leave buffer
+
+    const cancelPeek = () => {
+      peekDone = true;
+      peekTimers.forEach(clearTimeout);
+      peekTimers = [];
+      document.querySelectorAll(".cloud.is-peeking").forEach((c) => c.classList.remove("is-peeking"));
+    };
+
     clouds.forEach((cloud) => {
       cloud.addEventListener("pointerenter", () => {
         clearTimeout(leaveTimer);
+        cancelPeek();
         setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
       });
       cloud.addEventListener("pointerleave", () => {
         leaveTimer = setTimeout(() => setHot(null), 160);
       });
     });
+
+    // Soft demos: is-peeking (slow ease). Left @ 1.0s, right @ 1.8s.
+    if (!reduceMotionClouds) {
+      const holdMs = 3400; // ease in + hold + room for ease out after class removes
+      const schedulePeek = (selector, delayMs) => {
+        const startId = setTimeout(() => {
+          if (peekDone) return;
+          const el = document.querySelector(selector);
+          if (!el) return;
+          el.classList.add("is-peeking");
+          const endId = setTimeout(() => {
+            if (peekDone) return;
+            el.classList.remove("is-peeking");
+          }, holdMs);
+          peekTimers.push(endId);
+        }, delayMs);
+        peekTimers.push(startId);
+      };
+      schedulePeek(".cloud-left", 1000);
+      schedulePeek(".cloud-right", 1800);
+    }
   } else {
     clouds.forEach((cloud) => {
       cloud.addEventListener("click", () => {
@@ -3749,14 +4068,20 @@
   if (introPin && heroFg && aboutArch && !reduceMotion) {
     // Landing: just the tip of the arch peeks under the hero clouds
     gsap.set(aboutArch, {
-      scale: 0.3,
-      yPercent: 28,
+      scale: 0.28,
+      yPercent: 32,
       transformOrigin: "50% 100%",
     });
+    aboutArch.classList.remove("is-content-visible");
+
+    const setArchContent = (show) => {
+      aboutArch.classList.toggle("is-content-visible", show);
+    };
 
     const lockArch = () => {
       gsap.set(aboutArch, { scale: 1, x: 0, y: 0, yPercent: 0, clearProps: "transform" });
       aboutArch.style.transform = "none";
+      setArchContent(true);
     };
 
     const expandIntro = ({ refresh = false, lock = false } = {}) => {
@@ -3793,6 +4118,8 @@
           heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
           // Only the grown arch should capture clicks; tip must stay pass-through
           aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
+          // Keep intro copy off the hero; fade in only after the dome has grown in
+          setArchContent(p > 0.22);
 
           // Expand before unpin so pin-spacer / #work never see a collapsed 100vh shell.
           // First scroll-up was overlapping the arch when expand waited until onLeave.
@@ -3808,11 +4135,13 @@
           expandIntro();
           aboutArch.style.willChange = "transform";
           aboutArch.style.removeProperty("transform");
+          setArchContent(true);
         },
         // Fully back at the hero — safe to re-clip for the tip peek.
         onLeaveBack: () => {
           introPin.classList.remove("is-expanded");
           aboutArch.style.willChange = "transform";
+          setArchContent(false);
         },
       },
       defaults: { ease: "none" },
@@ -3846,6 +4175,7 @@
   } else if (aboutArch) {
     gsap.set(aboutArch, { clearProps: "all" });
     introPin?.classList.add("is-expanded");
+    aboutArch.classList.add("is-content-visible");
   }
 
   // Featured work — Dia-style sticky tabs + scrolling panels
@@ -3931,34 +4261,38 @@
     });
   })();
 
-  // Hard skills: accordion (one open) + chip sync + hover bullet → proof
+  // Hard skills: accordion (one open) + chip sync + per-bullet image reveal
   const skillsRoot = document.querySelector("[data-skills]");
   const skillsAcc = document.querySelector("[data-skills-acc]");
 
   const wireProofHover = (root) => {
-    root.querySelectorAll(".acc-item").forEach((item) => {
-      const stage = item.querySelector("[data-proof-stage]");
-      const proofs = [...item.querySelectorAll(".skill-proof")];
-      if (!stage || !proofs.length) return;
-      const shots = [...stage.querySelectorAll(".stage-shot")];
+    const canHover = () => matchMedia("(hover: hover)").matches;
 
-      const showProof = (key) => {
-        if (!key) return;
-        proofs.forEach((b) => b.classList.toggle("is-active", b.dataset.proof === key));
-        shots.forEach((shot) => shot.classList.toggle("is-on", shot.dataset.shot === key));
-        stage.classList.add("has-image");
-      };
+    root.querySelectorAll(".acc-item").forEach((item) => {
+      const proofs = [...item.querySelectorAll(".skill-proof")];
+      if (!proofs.length) return;
 
       proofs.forEach((proof) => {
-        const key = proof.dataset.proof;
-        proof.addEventListener("pointerenter", () => {
-          if (matchMedia("(hover: hover)").matches) showProof(key);
+        // CSS :hover handles desktop reveal; is-active for focus + touch toggle
+        proof.addEventListener("focus", () => {
+          proofs.forEach((b) => b.classList.toggle("is-active", b === proof));
         });
-        proof.addEventListener("focus", () => showProof(key));
-        proof.addEventListener("click", () => showProof(key));
+        proof.addEventListener("blur", () => {
+          if (!canHover()) return;
+          proof.classList.remove("is-active");
+        });
+        proof.addEventListener("click", () => {
+          if (canHover()) return; // hover CSS already reveals
+          const on = !proof.classList.contains("is-active");
+          proofs.forEach((b) => b.classList.remove("is-active"));
+          if (on) proof.classList.add("is-active");
+        });
+        proof.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          proof.click();
+        });
       });
-
-      showProof(proofs[0].dataset.proof);
     });
   };
 
@@ -3983,10 +4317,9 @@
       chip.addEventListener("click", () => openAt(i));
     });
 
+    // Editorial tabs: always one panel open (no accordion collapse)
     items.forEach((item, i) => {
-      item.querySelector(".acc-btn")?.addEventListener("click", () => {
-        openAt(item.classList.contains("is-open") ? -1 : i);
-      });
+      item.querySelector(".acc-btn")?.addEventListener("click", () => openAt(i));
     });
 
     wireProofHover(skillsRoot);
