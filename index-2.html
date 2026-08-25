@@ -434,7 +434,7 @@
     display: block;
     opacity: 0;
     border-radius: 40%;
-    filter: blur(0.2px);
+    filter: blur(0.2px) saturate(0.9);
     transition: opacity .85s cubic-bezier(.4, 0, .2, 1);
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
     mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
@@ -1083,6 +1083,16 @@
     line-height: 1.15;
     color: var(--ink);
   }
+  .skill-proof-desc {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
   .skill-proof-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1090,6 +1100,7 @@
     margin: 0;
     padding: 0;
   }
+  .skill-proof-tags:empty { display: none; }
   .skill-proof-tags > span {
     margin: 0;
     padding: 6px 12px;
@@ -3122,9 +3133,9 @@
     <p class="skills-label" aria-hidden="true">.practice areas</p>
     <div class="skills-chips" role="tablist" aria-label="Practice areas">
       <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
-      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product convergence</button>
+      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
       <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
-      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research ops</button>
+      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
     </div>
 
     <div class="skills-acc" data-skills-acc>
@@ -3132,30 +3143,30 @@
         <button type="button" class="acc-btn" aria-expanded="true">AI + Trust</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <p class="lede">Long before it was called the AI-trust playbook, I studied what makes people <em>trust a system that talks&nbsp;back</em>.</p>
+            <p class="lede">I&nbsp;shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take&nbsp;control.</p>
             <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="sa">
-                <strong>security advisor</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="trust-cal">
+                <strong>trust calibration &amp; explainability</strong>
                 <div class="skill-proof-reveal">
                   <span class="skill-proof-title">Security Advisor</span>
-                  <span class="skill-proof-tags"><span>Conversational trust</span>
-                    <span>Personalized, adaptive guidance</span></span>
+                  <p class="skill-proof-desc">Led the research arc behind Malwarebytes' conversational security advisor: uncovering what makes people trust a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-ai">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-ai">SAM mockup<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="automation">
-                <strong>automation scaling</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="hitl">
+                <strong>human-in-the-loop autonomy</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Automation scaling</span>
-                  <span class="skill-proof-tags"><span>Autonomy framework</span>
-                    <span>Human in the loop</span></span>
+                  <span class="skill-proof-title">Automation Scaling</span>
+                  <p class="skill-proof-desc">Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-ai">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-ai">automation scaling artifact<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
@@ -3166,46 +3177,46 @@
       </div>
 
       <div class="acc-item" data-skill="conv" id="skill-conv">
-        <button type="button" class="acc-btn" aria-expanded="false">Product Convergence</button>
+        <button type="button" class="acc-btn" aria-expanded="false">Product Systems &amp; Convergence</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <p class="lede">I design UX architecture for products that <em>outgrew their own&nbsp;structure</em>.</p>
+            <p class="lede">I&nbsp;lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy&nbsp;structure.</p>
             <div class="skill-proofs">
               <div class="skill-proof" role="button" tabindex="0" data-proof="shopping">
-                <strong>google express → shopping</strong>
+                <strong>google express → google shopping</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Google Express → Shopping</span>
-                  <span class="skill-proof-tags"><span>Foundational research</span>
-                    <span>Concept validation</span></span>
+                  <span class="skill-proof-title">Google Express to Google Shopping Evolution</span>
+                  <p class="skill-proof-desc">Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-conv">Shopping tab<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="mb5">
-                <strong>malwarebytes 5.0</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="ia">
+                <strong>information architecture redesign</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Malwarebytes 5.0</span>
-                  <span class="skill-proof-tags"><span>Four products → one app</span>
-                    <span>Shared mental models</span></span>
+                  <span class="skill-proof-title">Malwarebytes 5.0 Integration</span>
+                  <p class="skill-proof-desc">Converged four standalone products—MB4, Privacy VPN, Browser Guard, and MyAccount—into one coherent app, with mental model research defining the unified&nbsp;structure.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-conv">MB5<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="console">
-                <strong>enterprise console rebuild</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="platform">
+                <strong>complex workflow &amp; platform modernization</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Enterprise console rebuild</span>
-                  <span class="skill-proof-tags"><span>Security posture core</span>
-                    <span>All-in-one system</span></span>
+                  <span class="skill-proof-title">Nebula to ThreatDown Evolution</span>
+                  <p class="skill-proof-desc">Untangled task flows, navigation, and information structures in a fragmented enterprise console into an all-in-one endpoint and data management system anchored in actionable security posture&nbsp;assessment.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-conv">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-conv">homepage before and after<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
@@ -3219,30 +3230,30 @@
         <button type="button" class="acc-btn" aria-expanded="false">0→1 Product Builds</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <p class="lede">Build product from concept to launch in both <em>traditional and AI-native</em>&nbsp;environments.</p>
+            <p class="lede">I&nbsp;turn ambiguous ideas into validated product direction, from early exploration through&nbsp;launch.</p>
             <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
-                <strong>ai-native builds</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="concept-launch">
+                <strong>concept-to-launch research</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">AI-native builds</span>
-                  <span class="skill-proof-tags"><span>Pain point → vision</span>
-                    <span>Strategy-first shipping</span></span>
+                  <span class="skill-proof-title">Malwarebytes Privacy VPN 1.0</span>
+                  <p class="skill-proof-desc">Defined target users, unmet needs, value propositions, interaction models, and launch experience for a net-new consumer privacy&nbsp;product.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-zero">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-zero">Privacy VPN<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="vpn">
-                <strong>privacy vpn</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
+                <strong>ai-native product discovery &amp; build</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Privacy VPN</span>
-                  <span class="skill-proof-tags"><span>Net-new consumer product</span>
-                    <span>Who it's for, first</span></span>
+                  <span class="skill-proof-title">AI-Native Product Discovery &amp; Build</span>
+                  <p class="skill-proof-desc">A researcher who ships—from pain point to vision to working product—using the same strategy-first discipline I&nbsp;bring to enterprise&nbsp;work.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-zero">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-zero">personal project<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
@@ -3253,46 +3264,46 @@
       </div>
 
       <div class="acc-item" data-skill="amp" id="skill-amp">
-        <button type="button" class="acc-btn" aria-expanded="false">Research Ops & Scale</button>
+        <button type="button" class="acc-btn" aria-expanded="false">Research Systems &amp; Influence</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <p class="lede">I make the value of research visible — so <em>teams act on&nbsp;it</em>, and users feel&nbsp;it.</p>
+            <p class="lede">I&nbsp;connect fragmented customer insights into an omnichannel user experience strategy that aligns XFN teams around a shared experience and product&nbsp;vision.</p>
             <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="participatory">
-                <strong>participatory research program</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="xfn">
+                <strong>cross-functional product collaboration</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Participatory research program</span>
-                  <span class="skill-proof-tags"><span>Team ↔ user bridge</span>
-                    <span>Org empathy &amp; buy-in</span></span>
+                  <span class="skill-proof-title">Participatory Research Program</span>
+                  <p class="skill-proof-desc">Built stronger connections between teams and users—bringing stakeholders directly into research, deepening buy-in on findings, and strengthening empathy for the end user across the product&nbsp;organization.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-amp">three-phase program diagram<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="dashboard">
-                <strong>ads recruiting dashboard</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="cross-craft">
+                <strong>cross-craft UX leadership</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Ads recruiting dashboard</span>
-                  <span class="skill-proof-tags"><span>3 years of archive → UI</span>
-                    <span>Self-serve for UX + PM</span></span>
+                  <span class="skill-proof-title">Established the UX Research Practice from the Ground&nbsp;Up</span>
+                  <p class="skill-proof-desc">Led multidisciplinary UX work across research, interaction design, visual design, and content, while growing the research team from 2 to 5 and establishing more consistent research operations and&nbsp;practices.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-amp">intake / planning artifact<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="practice">
-                <strong>ux research practice</strong>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="self-serve">
+                <strong>self-serve research infrastructure</strong>
                 <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">UX research practice</span>
-                  <span class="skill-proof-tags"><span>Team 2 → 5</span>
-                    <span>Ops &amp; standards</span></span>
+                  <span class="skill-proof-title">Google Ads Recruiting Hub</span>
+                  <p class="skill-proof-desc">Turned three years of archived recruiting data plus a live view of the current pipeline into a self-serve dashboard used by UXers and PMs across the Ads&nbsp;org.</p>
+                  <span class="skill-proof-tags"></span>
                   <div class="skill-proof-media" aria-hidden="true">
                     <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-amp">Comparison / case frame<br><small>drop image here</small></div>
+                      <div class="proof-ph ph-amp">dashboard<br><small>drop image here</small></div>
                     </div>
                   </div>
                 </div>
