@@ -1812,7 +1812,7 @@
   .instincts {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px;
     align-items: stretch;
     margin-top: 8px;
@@ -1839,28 +1839,35 @@
     pointer-events: none;
     z-index: 0;
   }
-  .instinct--decode { background: rgba(255,255,255,.42); }
-  .instinct--decode::before {
+  .instinct--system { background: rgba(255,255,255,.42); }
+  .instinct--system::before {
     background:
       radial-gradient(120% 80% at 0% 0%, rgba(201,220,247,.85), transparent 55%),
       linear-gradient(160deg, rgba(201,220,247,.35), transparent 60%);
   }
-  .instinct--derisk { background: rgba(255,255,255,.42); }
-  .instinct--derisk::before {
+  .instinct--why { background: rgba(255,255,255,.42); }
+  .instinct--why::before {
     background:
       radial-gradient(120% 80% at 100% 0%, rgba(217,212,245,.85), transparent 55%),
       linear-gradient(200deg, rgba(217,212,245,.35), transparent 60%);
   }
-  .instinct--amplify { background: rgba(255,255,255,.42); }
-  .instinct--amplify::before {
+  .instinct--compass { background: rgba(255,255,255,.42); }
+  .instinct--compass::before {
     background:
       radial-gradient(120% 80% at 50% 100%, rgba(205,237,228,.9), transparent 55%),
       linear-gradient(180deg, rgba(205,237,228,.28), transparent 65%);
   }
+  .instinct--travel { background: rgba(255,255,255,.42); }
+  .instinct--travel::before {
+    background:
+      radial-gradient(120% 80% at 100% 100%, rgba(243,220,233,.85), transparent 55%),
+      linear-gradient(210deg, rgba(243,220,233,.32), transparent 65%);
+  }
   /* Keep tilt after .reveal.in clears transform */
-  .instinct--decode.reveal.in { transform: rotate(-1.1deg); }
-  .instinct--derisk.reveal.in { transform: rotate(.9deg) translateY(18px); }
-  .instinct--amplify.reveal.in { transform: rotate(-.7deg); }
+  .instinct--system.reveal.in { transform: rotate(-.8deg); }
+  .instinct--why.reveal.in { transform: rotate(.7deg) translateY(10px); }
+  .instinct--compass.reveal.in { transform: rotate(.6deg) translateY(10px); }
+  .instinct--travel.reveal.in { transform: rotate(-.6deg); }
   .instinct.reveal.in:hover {
     transform: rotate(0deg) translateY(-6px);
     box-shadow: 0 26px 56px rgba(30,42,68,.12), inset 0 1px 0 rgba(255,255,255,.95);
@@ -1889,21 +1896,13 @@
   }
   .instinct h3 {
     font-family: var(--serif);
-    font-size: clamp(26px, 2.4vw, 32px);
+    font-size: clamp(22px, 2.1vw, 28px);
     font-weight: 600;
     margin-top: 14px;
     letter-spacing: -.02em;
+    line-height: 1.2;
     color: var(--ink);
-  }
-  .instinct .tagline {
-    margin-top: 14px;
-    font-family: var(--serif);
-    font-size: clamp(17px, 1.5vw, 19px);
-    font-weight: 400;
-    font-style: italic;
-    line-height: 1.35;
-    letter-spacing: -.01em;
-    color: var(--accent-deep);
+    text-wrap: pretty;
   }
   .instinct .desc {
     color: var(--ink-soft);
@@ -1911,6 +1910,11 @@
     margin-top: 16px;
     flex: 1;
     line-height: 1.6;
+    text-wrap: pretty;
+  }
+  .instinct .desc strong {
+    color: var(--ink);
+    font-weight: 600;
   }
   .how-work-cta {
     margin-top: 64px;
@@ -2870,9 +2874,10 @@
     .work-mini h3 { font-size: 18px; }
     .work-mini p { font-size: 14px; }
     .instincts { grid-template-columns: 1fr; }
-    .instinct--decode.reveal.in,
-    .instinct--derisk.reveal.in,
-    .instinct--amplify.reveal.in { transform: none; }
+    .instinct--system.reveal.in,
+    .instinct--why.reveal.in,
+    .instinct--compass.reveal.in,
+    .instinct--travel.reveal.in { transform: none; }
     .instinct.reveal.in:hover { transform: translateY(-4px); }
     .how-work-cta { margin-top: 44px; }
     .how-flower { width: min(380px, 84vw); opacity: .82; }
@@ -2989,7 +2994,6 @@
       <li><a href="#about" data-ph="nav" data-ph-label="about"><b>? |</b> about</a></li>
       <li><a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume"><b>⌗ |</b> resume</a></li>
       <li><a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="nav"><b>⌲ |</b> connect</a></li>
-      <li><a href="index-2.html" data-ph="nav" data-ph-label="v2"><b>✦ |</b> 2.0</a></li>
     </ul>
   </div>
 </nav>
@@ -3065,7 +3069,7 @@
           </header>
 
           <div class="about-pair">
-            <p class="pair-copy">I&nbsp;lead research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
+            <p class="pair-copy">I&nbsp;lead strategic research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
             <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
               <li data-brand="malwarebytes">
                 <img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async">
@@ -3591,12 +3595,12 @@
   </div>
 </section>
 
-<!-- How I work — instincts + hook to about -->
-<section class="how-work" id="how" data-ph-section="personas" aria-label="How I work">
+<!-- Research philosophy + hook to about -->
+<section class="how-work" id="how" data-ph-section="personas" aria-label="My research philosophy">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2><span class="sec-num">04</span> <span>Who I&nbsp;am</span></h2>
-      <p>The habits I bring to every ambiguous&nbsp;problem.</p>
+      <h2><span class="sec-num">04</span> <span>My Research&nbsp;Philosophy</span></h2>
+      <p>Understand the system → explain the mechanism → influence direction early → make the evidence&nbsp;travel.</p>
     </div>
   </div>
   <div class="section-card how-card">
@@ -3610,26 +3614,29 @@
     </div>
     <div class="how-card-inner">
       <ol class="instincts">
-        <li class="instinct instinct--decode reveal">
+        <li class="instinct instinct--system reveal">
           <span class="instinct-mark" aria-hidden="true">◈</span>
           <span class="instinct-num">01</span>
-          <h3>Decoder</h3>
-          <p class="tagline">Not just numbers, but the&nbsp;mechanism.</p>
-          <p class="desc">I don't just report what the data says — I validate the evidence, uncover the mechanism behind it, and turn it into sound&nbsp;decisions.</p>
+          <h3>The feature is rarely the whole&nbsp;problem.</h3>
+          <p class="desc">In a complex, data-heavy system, pain points rarely exist in a single dimension; solving them usually requires a set of features working in synergy. Lately, my research has focused on system-level investigation: reconciling different products, users, workflows, and mental models into a coherent experience rather than optimizing isolated surfaces. Once those relationships have a shared language, the architecture starts to reveal itself: what should be unified, what should remain distinct, where structural debt has accumulated, and what changes need to move as a system. <strong>That UX architecture blueprint is where I&nbsp;believe research creates its highest&nbsp;leverage.</strong></p>
         </li>
-        <li class="instinct instinct--derisk reveal">
+        <li class="instinct instinct--why reveal">
           <span class="instinct-mark" aria-hidden="true">◎</span>
           <span class="instinct-num">02</span>
-          <h3>De-risker</h3>
-          <p class="tagline">Measure twice. Cut&nbsp;once.</p>
-          <p class="desc">I think ahead, pressure-test the plan, and eliminate risks before they become&nbsp;problems.</p>
+          <h3>What happened isn’t enough. I&nbsp;want to know&nbsp;why.</h3>
+          <p class="desc">A result becomes useful when I&nbsp;can explain what produced it. I&nbsp;keep tracing the evidence past the surface finding to the mechanism underneath, because the “why” is what transfers to the next decision. I&nbsp;test alternative explanations and account for competing variables until the causal story holds up and survives&nbsp;scrutiny.</p>
         </li>
-        <li class="instinct instinct--amplify reveal">
+        <li class="instinct instinct--compass reveal">
           <span class="instinct-mark" aria-hidden="true">✦</span>
           <span class="instinct-num">03</span>
-          <h3>Amplifier</h3>
-          <p class="tagline">Let the work speak for&nbsp;itself.</p>
-          <p class="desc">I earn respect by delivering beyond what's&nbsp;expected.</p>
+          <h3>Research as the compass, not the&nbsp;brake.</h3>
+          <p class="desc">Research creates the most leverage before direction hardens. I&nbsp;invest upstream, while assumptions and decisions are still cheap to change. Working in trust and cybersecurity sharpened my instinct for de-risking: move fast when decisions are reversible; apply more rigor when the consequences aren’t. As AI makes execution cheaper and faster, that judgment matters even&nbsp;more.</p>
+        </li>
+        <li class="instinct instinct--travel reveal">
+          <span class="instinct-mark" aria-hidden="true">⇄</span>
+          <span class="instinct-num">04</span>
+          <h3>A finding that doesn’t travel didn’t&nbsp;happen.</h3>
+          <p class="desc">Producing good evidence is half the job. I&nbsp;build the reporting rhythms, dashboards, and programs that put it in front of the people whose decisions it should change. Research scales when evidence travels, not when everyone is asked to become a&nbsp;researcher.</p>
         </li>
       </ol>
       <div class="how-work-cta reveal">
