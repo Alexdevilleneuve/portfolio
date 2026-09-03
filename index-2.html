@@ -3,7 +3,7 @@
   Homepage 2.0 — comparison cut.
 
   Block 1: original ice-sky hero, then watercolor current (01–04).
-  Block 2: 1.0-style ice-sky hero + current camera voyage.
+  Block 2: 1.0-style ice-sky hero + watercolor timeline.
 
   Unique IDs: hero-v1 / hero-v2 / skills-v1.
   Do not ship into index.html / index-3.html until this cut is settled.
@@ -67,7 +67,7 @@
   .hero-copy {
     max-width: 920px; text-align: center; margin: 12vh auto 0;
     opacity: 0; transform: translateY(120px);
-    transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.55s cubic-bezier(.2,.7,.2,1), transform 1.55s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
   .hero-role {
@@ -84,7 +84,7 @@
   .hero-stats {
     margin-top: auto; display: flex; flex-direction: column; gap: 4px; text-align: center;
     opacity: 0; transform: translateY(40px);
-    transition: opacity 1.08s .5s cubic-bezier(.2,.7,.2,1), transform 1.08s .5s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.28s .62s cubic-bezier(.2,.7,.2,1), transform 1.28s .62s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .hero-stats { opacity: 1; transform: translateY(0); }
   .hero-stats p { font-size: 16px; font-weight: 500; color: var(--ink-soft); letter-spacing: .02em; }
@@ -100,7 +100,7 @@
     pointer-events: none;
     opacity: 0;
     transform: translate(-50%, -40px);
-    transition: opacity 1.4s .1s cubic-bezier(.2,.7,.2,1), transform 1.4s .1s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.6s .14s cubic-bezier(.2,.7,.2,1), transform 1.6s .14s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .cloud-top { opacity: .9; transform: translate(-50%, 0); }
   .hero.is-in .cloud-top .cloud-bob { animation: cloudBounce 10s ease-in-out 1.6s infinite; }
@@ -127,7 +127,7 @@
     pointer-events: none;
     opacity: 0;
     transform: translateX(-50%) translateY(24px);
-    transition: opacity 1.5s .25s cubic-bezier(.2,.7,.2,1), transform 1.5s .25s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.7s .32s cubic-bezier(.2,.7,.2,1), transform 1.7s .32s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .cloud-back { opacity: .75; transform: translateX(-50%) translateY(0); }
   .cloud-back .cloud-bob {
@@ -154,11 +154,11 @@
   }
   .cloud-left {
     left: 2%; width: 44%; z-index: 3; transform: translateX(-180px);
-    transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.6s cubic-bezier(.2,.7,.2,1), transform 1.6s cubic-bezier(.2,.7,.2,1);
   }
   .cloud-right {
     right: 2%; left: auto; width: 40%; z-index: 2; transform: translateX(180px);
-    transition: opacity 1.4s .2s cubic-bezier(.2,.7,.2,1), transform 1.4s .2s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.6s .28s cubic-bezier(.2,.7,.2,1), transform 1.6s .28s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .cloud-left, .hero.is-in .cloud-right { opacity: 1; transform: translateX(0); }
   .cloud-bob { position: absolute; bottom: -6%; width: min(124%, 720px); will-change: transform; pointer-events: none; }
@@ -288,151 +288,459 @@
     .cloud-frame { aspect-ratio: 16 / 11; }
   }
 
-  /* ---- voyage: still backdrop; only type + marks move ---- */
-  .voyage { height: 460vh; position: relative; }
-  .voyage-viewport {
-    position: sticky; top: 0;
-    height: 100vh; overflow: hidden;
-    background: var(--paper);
+  /* ---- Block 2: simple watercolor timeline ---- */
+  .voyage.timeline-v2 {
+    position: relative;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background: transparent;
   }
-  .backdrop {
-    position: absolute; inset: 0; z-index: 0;
-    background: url("assets/images/song/explore-06-voyage.png") center / cover no-repeat;
+  .timeline-v2-bg {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, #E8F0FA 86%, var(--paper) 100%);
     pointer-events: none;
   }
-  .backdrop-veil {
-    position: absolute; inset: 0; z-index: 1;
-    background: linear-gradient(90deg, rgba(244,241,234,.42) 0%, transparent 38%, transparent 100%);
-    pointer-events: none;
+  .timeline-v2-ocean {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(-96px, -6vw, -52px);
   }
-
-  .stage { position: absolute; inset: 0; z-index: 2; }
-
-  .cutout {
-    position: absolute; left: 0; top: 0;
-    transform-origin: 50% 100%;
-    will-change: transform, opacity;
-  }
-  .cutout .face {
-    display: grid; place-items: center;
-    width: 100%; height: 100%;
-    padding: 16px 22px;
-    border-radius: 10px;
-    background: rgba(247, 246, 241, .78);
-    border: 1px solid rgba(28, 36, 56, .08);
-    box-shadow: 0 10px 28px rgba(28, 36, 56, .08);
-  }
-  .cutout.mark img {
+  .timeline-v2-ocean img {
     display: block;
-    max-width: 88%;
-    max-height: 58%;
+    width: 108%;
+    max-width: none;
+    height: auto;
+    margin-left: -4%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  .timeline-v2-ocean .wave--far {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    opacity: .5;
+  }
+  .timeline-v2-ocean .wave--near {
+    position: relative;
+    z-index: 2;
+  }
+  .timeline-v2-inner {
+    position: relative;
+    z-index: 1;
+    width: min(1128px, 100%);
+    margin: 0 auto;
+    /* Bottom padding stays light — card 04 is its own full viewport closer. */
+    padding: clamp(92px, 12vh, 138px) 24px 0;
+    isolation: isolate;
+  }
+  .timeline-v2-current {
+    position: absolute;
+    z-index: -2;
+    top: -5%;
+    left: -5%;
+    width: min(58%, 610px);
+    height: 110%;
+    object-fit: fill;
+    opacity: 0;
+    filter: saturate(.86) contrast(.94);
+    pointer-events: none;
+    transition: opacity .2s ease;
+  }
+  .timeline-v2.is-started .timeline-v2-current {
+    opacity: .82;
+  }
+  .timeline-v2::after {
+    display: none;
+  }
+  .timeline-v2-list {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(44px, 6vw, 78px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline-v2-stop {
+    position: relative;
+    width: min(66%, 670px);
+    margin-left: 20%;
+  }
+  .timeline-v2-stop:nth-child(2) {
+    width: min(72%, 740px);
+    margin-left: 26%;
+  }
+  .timeline-v2-stop:nth-child(3) {
+    width: min(74%, 760px);
+    margin-left: 14%;
+  }
+  .timeline-v2-stop:nth-child(2) .timeline-v2-card,
+  .timeline-v2-stop:nth-child(3) .timeline-v2-card {
+    padding-right: clamp(88px, 10vw, 132px);
+  }
+  .timeline-v2-stop:nth-child(2) .timeline-v2-card {
+    padding-right: clamp(64px, 7vw, 96px);
+  }
+  .timeline-v2-stop:nth-child(2) .timeline-v2-logos,
+  .timeline-v2-stop:nth-child(3) .timeline-v2-logos {
+    max-width: 78%;
+    justify-content: flex-start;
+    gap: 28px;
+  }
+  .timeline-v2-stop:nth-child(2) .timeline-v2-logos li,
+  .timeline-v2-stop:nth-child(3) .timeline-v2-logos li {
+    flex: 0 1 auto;
+  }
+  .timeline-v2-stop--scroll {
+    /* Full-bleed closer: parchment fills the last viewport of the voyage. */
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-top: calc(0.8 * clamp(56px, 12vh, 120px) - 0.2 * clamp(44px, 6vw, 78px));
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: stretch;
+  }
+  .timeline-v2-marker {
+    position: absolute;
+    z-index: 4;
+    top: 10px;
+    left: -66px;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    aspect-ratio: 1;
+    border: 1px solid rgba(30,42,68,.18);
+    border-radius: 50%;
+    background: rgba(250,248,242,.94);
+    box-shadow: 0 5px 14px rgba(30,42,68,.06);
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .timeline-v2-marker::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 5px;
+    height: 5px;
+    border: 1.5px solid #d3a13a;
+    border-radius: 50%;
+    background: #fffaf0;
+    transform: translateX(-50%);
+  }
+  .timeline-v2-marker::after {
+    content: "";
+    position: absolute;
+    top: 34px;
+    left: calc(100% + 1px);
+    width: 31px;
+    height: 16px;
+    border-top: 1px solid rgba(30,42,68,.25);
+    border-radius: 50%;
+    transform: rotate(12deg);
+    transform-origin: left center;
+  }
+  .timeline-v2-stop--scroll .timeline-v2-marker {
+    display: none;
+  }
+  .timeline-v2-card {
+    position: relative;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(32px, 4.2vw, 54px) clamp(34px, 5vw, 68px);
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+  }
+  .timeline-v2-card-art {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    opacity: .94;
+    pointer-events: none;
+  }
+  .timeline-v2-card > :not(.timeline-v2-card-art) {
+    position: relative;
+    z-index: 1;
+  }
+  .timeline-v2-card p {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(18px, 2vw, 25px);
+    line-height: 1.48;
+    color: var(--ink);
+  }
+  .timeline-v2-stop:nth-child(2) .timeline-v2-card p,
+  .timeline-v2-stop:nth-child(3) .timeline-v2-card p {
+    font-size: clamp(16px, 1.75vw, 22px);
+  }
+  .timeline-v2-card .timeline-v2-greeting {
+    margin-bottom: 10px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .timeline-v2-card .hook {
+    font-style: italic;
+    color: #795f31;
+  }
+  .timeline-v2-logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 22px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline-v2-logos li {
+    flex: 1 1 0;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+  }
+  .timeline-v2-logos img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 28px;
     object-fit: contain;
   }
-  .cutout.mark.ink img {
-    filter: brightness(0) saturate(100%);
-    opacity: .72;
+  .timeline-v2-logos--schools img { height: 36px; }
+  .timeline-v2-logos [data-brand="kerr"] img { height: 38px; }
+  .timeline-v2-scroll-stage {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    flex: 1 1 auto;
+    display: flex;
   }
-  .cutout.mark.colour img { opacity: .92; }
-
-  .cutout.area .face {
+  .timeline-v2-scroll {
+    position: relative;
+    width: 100%;
+    margin-left: 0;
+    flex: 1 1 auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding:
+      clamp(88px, 12vh, 140px)
+      clamp(72px, 12vw, 160px)
+      clamp(72px, 10vh, 120px)
+      clamp(48px, 8vw, 120px);
+    border: 0;
+    border-radius: 0;
+    /* Cream base fills the viewport; art adds texture / roll / wash. */
+    background:
+      linear-gradient(180deg, rgba(191, 217, 246, .42) 0%, rgba(242, 235, 225, 0) 18%),
+      #f2ebe1;
+    box-shadow: none;
+    clip-path: inset(0 100% 0 0);
+    will-change: clip-path;
+    overflow: hidden;
+  }
+  .timeline-v2-scroll::before,
+  .timeline-v2-scroll::after {
+    display: none;
+  }
+  .timeline-v2-scroll-art {
+    position: absolute;
+    /* Oversized cover so organic edges bleed past the viewport. */
+    inset: -14% -10% -18% -8%;
+    width: 118%;
+    height: 132%;
+    object-fit: cover;
+    object-position: 36% 40%;
+    border-radius: inherit;
+    opacity: 1;
+    filter: none;
+    pointer-events: none;
+  }
+  .timeline-v2-scroll-body {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: min(720px, 100%);
+    margin-top: 0;
+    padding: 0;
+  }
+  .timeline-v2-tabs-label {
+    margin: 0 0 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    color: var(--ink-soft);
+  }
+  .timeline-v2-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 clamp(28px, 3.6vw, 44px);
+  }
+  .timeline-v2-tabs .chip {
+    appearance: none;
+    border: 0;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(255,252,246,.55);
+    color: var(--ink-soft);
+    font: 500 12px/1 var(--sans);
+    letter-spacing: -.01em;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+  }
+  .timeline-v2-tabs .chip:hover { color: var(--ink); }
+  .timeline-v2-tabs .chip.is-active {
+    color: #fff;
+    background: var(--ink);
+  }
+  .timeline-v2-practice {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(20px, 2.8vw, 32px);
+    max-width: 720px;
+  }
+  .timeline-v2-practice.is-active {
+    display: flex;
+  }
+  .timeline-v2-statement {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(24px, 3.1vw, 40px);
+    line-height: 1.36;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .timeline-v2-proofs {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
-    gap: 6px;
-    padding: 22px 24px;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  .cutout.area .num {
-    font-size: 10px;
-    letter-spacing: .2em;
-    color: #9A7A38;
+  .timeline-v2-proof {
+    position: relative;
+    margin: 0;
+    padding: 0 0 0 18px;
+    font: 500 14px/1.35 var(--sans);
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
   }
-  .cutout.area .name {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: 22px;
-    line-height: 1.2;
+  .timeline-v2-proof::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ink);
   }
-
-  .cutout .shadow {
-    position: absolute; left: 50%; bottom: -13%;
-    width: 82%; height: 12%;
-    transform: translateX(-50%);
-    background: radial-gradient(50% 50% at 50% 50%, rgba(28, 36, 56, .22), transparent 70%);
-    filter: blur(4px);
+  @media (max-width: 760px) {
+    .timeline-v2-inner {
+      padding: 74px 14px 0;
+    }
+    .timeline-v2-current {
+      left: -29%;
+      width: 96%;
+    }
+    .timeline-v2.is-started .timeline-v2-current {
+      opacity: .58;
+    }
+    .timeline-v2-list { gap: 42px; }
+    .timeline-v2-stop,
+    .timeline-v2-stop:nth-child(2),
+    .timeline-v2-stop:nth-child(3) {
+      width: calc(100% - 56px);
+      margin-left: 56px;
+    }
+    .timeline-v2-stop--scroll {
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: calc(50% - 50vw);
+    }
+    .timeline-v2-marker {
+      left: -50px;
+      width: 40px;
+      font-size: 14px;
+    }
+    .timeline-v2-marker::after { width: 19px; }
+    .timeline-v2-card {
+      min-height: 0;
+      padding: 28px 24px 32px;
+      border-radius: 20px;
+    }
+    .timeline-v2-card p { font-size: clamp(17px, 5vw, 21px); }
+    .timeline-v2-logos { gap: 10px; margin-top: 22px; }
+    .timeline-v2-logos li { flex: 1 1 0; }
+    .timeline-v2-logos img { height: 18px; }
+    .timeline-v2-logos--schools img { height: 24px; }
+    .timeline-v2-scroll-stage,
+    .timeline-v2-scroll {
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+    .timeline-v2-scroll {
+      width: 100%;
+      margin-left: 0;
+      padding: 72px 20px 88px 18px;
+    }
+    .timeline-v2-scroll-art {
+      inset: -10% -18% -12% -6%;
+      width: 124%;
+      height: 122%;
+      object-position: 22% 36%;
+    }
+    .timeline-v2-scroll-body { max-width: none; }
+    .timeline-v2-tabs-label { margin-bottom: 10px; }
+    .timeline-v2-tabs {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      margin-bottom: 28px;
+      padding-bottom: 5px;
+      scrollbar-width: none;
+    }
+    .timeline-v2-tabs::-webkit-scrollbar { display: none; }
+    .timeline-v2-tabs .chip { flex: 0 0 auto; }
+    .timeline-v2-practice { gap: 24px; max-width: none; }
+    .timeline-v2-statement { font-size: clamp(23px, 7.4vw, 31px); }
+    .timeline-v2-proof { font-size: 13px; }
   }
-
-  /* David: a fixed left column, one stanza in a center aperture.
-     The stack translates up; each block's opacity is its distance from
-     the reading window, so arriving lines rise and departing ones fade. */
-  .textwall {
-    position: absolute; left: 5.5vw; top: 0;
-    width: min(38vw, 520px); height: 100vh;
-    z-index: 650; pointer-events: none; overflow: hidden;
-    -webkit-mask-image: linear-gradient(transparent 6%, #000 22%, #000 58%, transparent 90%);
-    mask-image: linear-gradient(transparent 6%, #000 22%, #000 58%, transparent 90%);
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-v2-current { opacity: .82; }
+    .timeline-v2-scroll { clip-path: inset(0); }
   }
-  .textwall-inner {
-    position: absolute; left: 0; top: 0; width: 100%;
-    padding-top: 8vh;
-    will-change: transform;
-  }
-  .tw-block {
-    min-height: 40vh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding-right: 8px;
-    will-change: opacity, transform;
-  }
-  .tw-block .line {
-    font-family: var(--serif);
-    font-size: clamp(26px, 2.5vw, 38px);
-    line-height: 1.32;
-    font-weight: 400;
-    letter-spacing: -.01em;
-  }
-  .tw-block .line em { font-style: italic; color: #9A7A38; }
-  .tw-block .src {
-    margin-top: 16px;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--ink-soft);
-    opacity: .72;
-  }
-  .tw-block.is-lead .line {
-    font-size: clamp(20px, 1.8vw, 26px);
-    color: var(--ink-soft);
-    font-weight: 400;
-  }
-  .tw-block.is-lead .src {
-    font-style: normal;
-    font-size: 12px;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    opacity: .55;
-    margin-top: 0;
-    margin-bottom: 12px;
-  }
-
-  .trail {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 4;
-  }
-  .trail path {
-    fill: none; stroke: var(--gold); stroke-width: 1.4;
-    stroke-linecap: round; stroke-dasharray: 1; opacity: .45;
-  }
-  .trail path.ghost { stroke-dasharray: 3 10; stroke-width: 1.1; opacity: .12; }
-
-  .compass {
-    position: absolute; right: 4.5vw; bottom: 6vh;
-    width: 88px; height: 88px; z-index: 800; opacity: .55;
-  }
-  .compass svg { width: 100%; height: 100%; overflow: visible; }
-  .compass .ring { fill: none; stroke: rgba(28, 36, 56, .28); stroke-width: 1; }
-  .compass .tick { stroke: rgba(28, 36, 56, .24); stroke-width: 1; }
-  .compass .needle { fill: var(--gold); stroke: rgba(28, 36, 56, .4); stroke-width: .6; }
 
   .ver-nav {
     position: fixed; right: 16px; top: 16px; z-index: 900;
@@ -446,33 +754,7 @@
   .ver-nav a:hover, .ver-nav a[aria-current="page"] { color: var(--ink); }
   .ver-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
 
-  .hud, .controls { opacity: 0; pointer-events: none; }
-  body.voyage-hud .hud, body.voyage-hud .controls { opacity: 1; pointer-events: auto; }
-  .hud {
-    position: fixed; left: 16px; top: 16px; z-index: 900;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px; color: var(--ink-soft);
-    background: rgba(247, 244, 238, .9);
-    border: 1px solid rgba(28, 36, 56, .16);
-    border-radius: 8px; padding: 8px 10px; line-height: 1.5; white-space: pre;
-  }
-  .controls {
-    position: fixed; left: 50%; bottom: 18px; z-index: 900;
-    transform: translateX(-50%);
-    display: flex; align-items: center; gap: 12px;
-    background: rgba(247, 244, 238, .94);
-    border: 1px solid rgba(28, 36, 56, .16);
-    border-radius: 999px; padding: 10px 18px;
-    box-shadow: 0 6px 24px rgba(28, 36, 56, .12);
-  }
-  .controls input[type="range"] { width: 40vw; max-width: 560px; accent-color: var(--ink); }
-  .controls button {
-    font: inherit; font-size: 12px; font-weight: 500;
-    border: 1px solid rgba(28, 36, 56, .22); background: none;
-    border-radius: 999px; padding: 4px 12px; cursor: pointer; color: var(--ink);
-  }
-
-  body.capture .hud, body.capture .controls, body.capture .ver-nav { display: none; }
+  body.capture .ver-nav { display: none; }
   body.capture .hero-copy,
   body.capture .hero-stats,
   body.capture .cloud-left,
@@ -510,7 +792,41 @@
     height: 100svh;
   }
   .block-v2 { position: relative; background: var(--paper); }
-  .block-v2 .hero { position: relative; min-height: 640px; }
+  .v2-intro-pin {
+    position: relative;
+    z-index: 6;
+    height: 100vh;
+    height: 100svh;
+    min-height: 640px;
+    margin-top: -100vh;
+    margin-top: -100svh;
+    overflow: hidden;
+    background: transparent;
+  }
+  .block-v2 .hero {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    height: 100%;
+    min-height: 640px;
+    overflow: visible;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, #E8F0FA 86%, var(--paper) 100%);
+  }
+  .block-v2 .hero-fg { overflow: hidden; }
+  .block-v2 .cloud-back {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 88%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 88%);
+  }
+  .block-v2 .hero-ocean { z-index: 3; }
+  .v2-intro-pin .hero {
+    background: transparent;
+  }
+  .v2-intro-pin .hero-ocean {
+    display: none;
+  }
+  .block-v2 .voyage { z-index: 1; }
   .compare-kicker {
     position: absolute;
     top: 16px;
@@ -617,10 +933,48 @@
   .current {
     position: relative;
     z-index: 2;
-    min-height: 470vh;
     margin-top: -14vh;
-    padding-bottom: 10vh;
-    background: linear-gradient(180deg, rgba(232, 240, 250, 0) 0%, #F5F8FC 9%, #F7F9FC 42%, #F4F7FB 100%);
+    padding-bottom: 8vh;
+    background: transparent;
+  }
+  .current-body {
+    position: relative;
+    min-height: 300vh;
+  }
+  .current-art-wrap {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(34vw, 400px);
+    height: 78%;
+    z-index: 1;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  }
+  .current-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    object-position: center top;
+    mix-blend-mode: multiply;
+    opacity: .82;
+    filter: saturate(1.12);
+    -webkit-mask-image: linear-gradient(#000 0%, transparent 0%);
+    mask-image: linear-gradient(#000 0%, transparent 0%);
+  }
+  .paint-ripple {
+    position: absolute;
+    z-index: 2;
+    width: 148px;
+    height: 90px;
+    margin: -45px 0 0 -74px;
+    object-fit: contain;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0;
   }
   .current-svg {
     position: absolute;
@@ -629,15 +983,8 @@
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    opacity: 0;
   }
-  .current-svg .wash { fill: none; stroke: #c4def0; stroke-width: 78; stroke-linecap: round; opacity: .26; }
-  .current-svg .mid { fill: none; stroke: #9cc6e0; stroke-width: 24; stroke-linecap: round; opacity: .38; }
-  .current-svg .flow { fill: none; stroke: #7eafd0; stroke-width: 6; stroke-linecap: round; opacity: .48; }
-  .current-svg .glint { fill: none; stroke: #ffffff; stroke-width: 1.8; stroke-linecap: round; opacity: .55; }
-  .current-svg .node-gold { fill: #c4b48a; opacity: 0; }
-  .current-svg .node-gold.is-lit { opacity: .92; }
-  .current-svg .ripple-c { fill: none; stroke: rgba(126, 175, 208, .45); stroke-width: 1.2; }
-  .current-head { fill: #d7e8f4; opacity: 0; }
   .node-badge {
     position: absolute;
     z-index: 3;
@@ -683,29 +1030,29 @@
   }
   .stop.is-in { opacity: 1; pointer-events: auto; }
   .stop[data-stop="1"] {
-    width: min(400px, 34vw);
-    top: 16%;
+    width: min(300px, 28vw);
+    top: 22%;
     left: 44%;
     transform: translate(16px, 18px);
   }
   .stop[data-stop="1"].is-in { transform: none; }
   .stop[data-stop="2"] {
-    width: min(620px, 54vw);
-    top: 33%;
-    right: 5%;
+    width: min(460px, 42vw);
+    top: 38%;
+    right: 7%;
     left: auto;
     transform: translate(20px, 18px);
   }
   .stop[data-stop="2"].is-in { transform: none; }
   .stop[data-stop="3"] {
-    width: min(470px, 42vw);
-    top: 50%;
-    left: 6%;
+    width: min(360px, 34vw);
+    top: 54%;
+    left: 7%;
     transform: translate(-14px, 18px);
   }
   .stop[data-stop="3"].is-in { transform: none; }
   .stop[data-stop="4"] {
-    top: 67%;
+    top: 70%;
     left: 50%;
     right: auto;
     width: min(1180px, calc(100% - 36px));
@@ -715,18 +1062,22 @@
   .stop-card {
     position: relative;
     overflow: hidden;
-    background: var(--ivory);
+    background-color: var(--ivory);
+    background-image: url("assets/images/portfolio_watercolor_assets/card-wash.png");
+    background-size: 120% 140%;
+    background-position: 80% 120%;
+    background-repeat: no-repeat;
     border: 1px solid rgba(28, 36, 56, .05);
     box-shadow: none;
-    padding: 28px 30px 30px;
+    padding: 18px 20px 20px;
   }
   .stop[data-stop="1"] .stop-card {
-    border-radius: 34px 42px 28px 38px;
-    padding: 30px 32px 32px;
+    border-radius: 28px 34px 22px 30px;
+    padding: 20px 22px 22px;
   }
   .stop[data-stop="2"] .stop-card {
-    border-radius: 28px 22px 40px 30px;
-    padding: 30px 34px 26px;
+    border-radius: 24px 18px 32px 24px;
+    padding: 20px 22px 18px;
   }
   .stop[data-stop="3"] .stop-card {
     border-radius: 40px 30px 26px 36px;
@@ -750,12 +1101,22 @@
     position: relative;
     z-index: 1;
     font-family: var(--serif);
-    font-size: clamp(18px, 2.05vw, 26px);
-    line-height: 1.4;
+    font-size: clamp(14px, 1.2vw, 17px);
+    line-height: 1.45;
+    font-weight: 400;
     color: var(--ink);
   }
   .stop .hook { font-style: italic; color: #3D5CB8; }
-  .stop .about-logo-strip { position: relative; z-index: 1; margin-top: 18px; }
+  .stop .about-logo-strip { position: relative; z-index: 1; margin-top: 12px; }
+  .stop .about-logo-strip li { min-height: 44px; padding: 8px 8px; }
+  .stop .about-logo-strip img { height: 20px; max-width: 108px; }
+  .stop .about-logo-strip li[data-brand="malwarebytes"] img { height: 16px; max-width: 118px; }
+  .stop .about-logo-strip li[data-brand="google"] img { height: 22px; }
+  .stop .about-logo-strip li[data-brand="huawei"] img { height: 18px; }
+  .stop .about-logo-strip li[data-brand="kerr"] img { height: 24px; max-width: 88px; }
+  .stop .about-logo-strip li[data-brand="oregon-state"] img { height: 22px; max-width: 118px; }
+  .stop .about-logo-strip li[data-brand="lanzhou"] img { height: 22px; max-width: 124px; }
+  .stop .about-logo-strip li[data-brand="bfa"] img { height: 24px; max-width: 128px; }
   .stop .about-logo-strip li { opacity: 0; transform: translateY(8px); transition: opacity .55s ease, transform .55s ease; }
   .stop.is-in .about-logo-strip li { opacity: 1; transform: none; }
   .stop.is-in .about-logo-strip li:nth-child(2) { transition-delay: .12s; }
@@ -770,6 +1131,19 @@
       linear-gradient(180deg, #F8F3E6 0%, #F4EEDC 100%);
     border-radius: 10px 6px 6px 12px;
     overflow: visible;
+  }
+  .stop-04 .scroll-land {
+    position: absolute;
+    left: 0;
+    right: 22px;
+    bottom: 0;
+    width: calc(100% - 10px);
+    height: 46%;
+    object-fit: cover;
+    object-position: right bottom;
+    pointer-events: none;
+    opacity: .42;
+    mix-blend-mode: multiply;
   }
   .stop-04 .scroll-inlet {
     position: absolute;
@@ -840,12 +1214,12 @@
   .stop-04 .acc-panel .lede {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(22px, 2.35vw, 32px);
-    line-height: 1.28;
-    letter-spacing: -.02em;
+    font-size: clamp(17px, 1.7vw, 23px);
+    line-height: 1.35;
+    letter-spacing: -.015em;
     color: var(--ink);
-    margin: 0 0 16px;
-    max-width: 22ch;
+    margin: 0 0 12px;
+    max-width: 28ch;
   }
   .stop-04 .scroll-echo {
     font-size: 13px;
@@ -886,36 +1260,27 @@
   .stop-04 .theme-ico svg { width: 16px; height: 16px; }
   .stop-04 .theme h3 {
     font-family: var(--serif);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.3;
-    margin: 6px 0 6px;
+    margin: 4px 0 4px;
     color: var(--ink);
   }
   .stop-04 .theme p {
     font-family: var(--sans);
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.45;
     color: var(--ink-soft);
-  }
-  .current-close {
-    position: absolute;
-    left: 50%;
-    bottom: 3vh;
-    transform: translateX(-50%);
-    font-family: var(--hand);
-    font-size: clamp(22px, 2.4vw, 30px);
-    color: var(--ink-soft);
-    z-index: 2;
   }
   @media (max-width: 800px) {
     .wake-aside { display: none; }
     .hero--wake .hero-stats { padding-bottom: 18vh; }
     .wake-boat { width: min(36vw, 160px); }
+    .current-art-wrap { width: min(48vw, 220px); }
     .stop[data-stop="1"],
     .stop[data-stop="2"],
     .stop[data-stop="3"] {
-      width: min(88vw, 480px);
+      width: min(78vw, 340px);
       left: 6vw;
       right: auto;
     }
@@ -1569,7 +1934,7 @@
   <li><a href="index-3.html">3.0</a></li>
 </ul>
 
-<section class="block-v1" id="about-v1" aria-label="Watercolor wake">
+<section class="block-v1" id="about-v1" aria-label="Watercolor wake" hidden>
   <p class="compare-kicker">2.0 — watercolor wake</p>
   <div class="wake-pin" data-wake-pin>
     <header class="hero" id="hero-v1" data-hero>
@@ -1631,7 +1996,15 @@
     </header>
   </div>
 
-    <div class="current" data-current>
+    <div class="current">
+    <div class="current-body" data-current>
+    <div class="current-art-wrap">
+    <img class="current-art" data-current-art src="assets/images/portfolio_watercolor_assets/wake-current.png" alt="">
+    </div>
+    <img class="paint-ripple" data-paint-ripple="1" src="assets/images/portfolio_watercolor_assets/wake-ripple.png" alt="">
+    <img class="paint-ripple" data-paint-ripple="2" src="assets/images/portfolio_watercolor_assets/wake-ripple.png" alt="">
+    <img class="paint-ripple" data-paint-ripple="3" src="assets/images/portfolio_watercolor_assets/wake-ripple.png" alt="">
+    <img class="paint-ripple" data-paint-ripple="4" src="assets/images/portfolio_watercolor_assets/wake-ripple.png" alt="">
     <svg class="current-svg" viewBox="0 0 1440 4000" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <filter id="water-edge" x="-8%" y="-8%" width="116%" height="116%">
@@ -1645,10 +2018,7 @@
           <feGaussianBlur stdDeviation="1.4"/>
         </filter>
       </defs>
-      <path class="wash" data-current-path filter="url(#water-wash)" d="M 708 16 C 648 220 548 440 598 660 C 688 960 1148 1120 1058 1380 C 978 1640 348 1780 398 2060 C 438 2340 158 2560 178 2760 C 198 3180 388 3660 698 3990"/>
-      <path class="mid" data-current-path filter="url(#water-edge)" d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 150 2550 170 2750 C 190 3170 380 3650 690 3988"/>
-      <path class="flow" data-current-path data-current-spine filter="url(#water-edge)" d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 150 2550 170 2750 C 190 3170 380 3650 690 3988"/>
-      <path class="glint" data-current-path d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 150 2550 170 2750 C 190 3170 380 3650 690 3988"/>
+      <path class="flow" data-current-path data-current-spine d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 160 2580 210 2880"/>
       <circle class="current-head" r="5" data-current-head/>
       <g class="node" data-node="1"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
       <g class="node" data-node="2"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
@@ -1681,7 +2051,7 @@
 
     <article class="stop" data-stop="3">
       <div class="stop-card">
-        <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+        <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what experience should we build, and&nbsp;why?</span></p>
         <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
           <li data-brand="oregon-state"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async"></li>
           <li data-brand="lanzhou"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" width="180" height="56" decoding="async"></li>
@@ -1693,6 +2063,7 @@
     <div class="stop stop-04" data-stop="4">
       <div class="scroll-shell">
         <span class="scroll-inlet" aria-hidden="true"></span>
+        <img class="scroll-land" src="assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
         <span class="scroll-roll" aria-hidden="true"></span>
         <svg class="scroll-compass" viewBox="0 0 64 64" aria-hidden="true">
           <circle cx="32" cy="32" r="22" fill="none" stroke="#C4B48A" stroke-width="1.2"/>
@@ -1847,13 +2218,19 @@
         </div>
       </div>
     </div>
-
-    <p class="current-close">…the journey continues</p>
-  </div>
+    </div>
+    </div>
 </section>
 
-<section class="block-v2" id="voyage-compare" aria-label="2.0 hero and voyage">
-  <p class="compare-kicker">2.0 — hero + voyage</p>
+<section class="block-v2" id="voyage-compare" aria-label="2.0 hero and watercolor timeline">
+  <p class="compare-kicker">2.0 — hero + timeline</p>
+  <div class="timeline-v2-bg" aria-hidden="true">
+    <div class="timeline-v2-ocean">
+      <img class="wave wave--far" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+      <img class="wave wave--near" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+    </div>
+  </div>
+  <div class="v2-intro-pin" data-v2-intro>
   <header class="hero" id="hero-v2" data-hero>
   <div class="hero-fg" data-hero-fg>
     <div class="hero-inner">
@@ -1911,108 +2288,95 @@
     <img class="wave wave--near" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
   </div>
 </header>
-<section class="voyage" data-voyage>
-  <div class="voyage-viewport">
-    <div class="backdrop" aria-hidden="true"></div>
-    <div class="backdrop-veil" aria-hidden="true"></div>
-    <div class="stage" data-stage>
+  </div>
+<section class="voyage timeline-v2" data-timeline-v2 aria-label="About Alexandra and practice areas">
+  <div class="timeline-v2-inner">
+    <img class="timeline-v2-current" src="assets/images/portfolio_watercolor_assets/wake-path.png" alt="" aria-hidden="true">
+    <ol class="timeline-v2-list">
+      <li class="timeline-v2-stop">
+        <span class="timeline-v2-marker" aria-hidden="true">01</span>
+        <article class="timeline-v2-card">
+          <img class="timeline-v2-card-art" src="assets/images/portfolio_watercolor_assets/card-01.png" alt="" aria-hidden="true">
+          <p class="timeline-v2-greeting">👋 Hey, glad you're&nbsp;here.</p>
+          <p>I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area.</p>
+        </article>
+      </li>
 
-      <div class="cutout mark ink" data-group="1" data-gx="-0.55" data-gy="-0.38" data-gz="-0.35" data-w="240" data-h="96" data-standup="true">
-        <div class="face"><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout mark ink" data-group="1" data-gx="0.85" data-gy="-0.42" data-gz="0.25" data-w="220" data-h="96">
-        <div class="face"><img src="assets/images/shared/brand/google-wordmark.png" alt="Google"></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout mark ink" data-group="1" data-gx="-0.45" data-gy="0.36" data-gz="0.45" data-w="220" data-h="96">
-        <div class="face"><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout mark ink" data-group="1" data-gx="1.00" data-gy="0.32" data-gz="-0.20" data-w="220" data-h="96" data-standup="true">
-        <div class="face"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion"></div>
-        <div class="shadow"></div>
-      </div>
+      <li class="timeline-v2-stop">
+        <span class="timeline-v2-marker" aria-hidden="true">02</span>
+        <article class="timeline-v2-card">
+          <img class="timeline-v2-card-art" src="assets/images/portfolio_watercolor_assets/card-02.png" alt="" aria-hidden="true">
+          <p>I&nbsp;lead strategic research in complex systems<br>where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI.</span></p>
+          <ul class="timeline-v2-logos" aria-label="Companies">
+            <li><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" decoding="async"></li>
+            <li><img src="assets/images/shared/brand/google-wordmark.png" alt="Google" decoding="async"></li>
+            <li><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" decoding="async"></li>
+            <li data-brand="kerr"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" decoding="async"></li>
+          </ul>
+        </article>
+      </li>
 
-      <div class="cutout mark colour" data-group="2" data-gx="-0.70" data-gy="-0.18" data-gz="0.20" data-w="236" data-h="108">
-        <div class="face"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University"></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout mark colour" data-group="2" data-gx="0.55" data-gy="-0.36" data-gz="-0.40" data-w="236" data-h="108" data-standup="true">
-        <div class="face"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University"></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout mark colour" data-group="2" data-gx="0.85" data-gy="0.38" data-gz="0.15" data-w="248" data-h="108">
-        <div class="face"><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy"></div>
-        <div class="shadow"></div>
-      </div>
+      <li class="timeline-v2-stop">
+        <span class="timeline-v2-marker" aria-hidden="true">03</span>
+        <article class="timeline-v2-card">
+          <img class="timeline-v2-card-art" src="assets/images/portfolio_watercolor_assets/card-03.png" alt="" aria-hidden="true">
+          <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what experience should we build, and&nbsp;why?</span></p>
+          <ul class="timeline-v2-logos timeline-v2-logos--schools" aria-label="Universities">
+            <li><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" decoding="async"></li>
+            <li><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" decoding="async"></li>
+            <li><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" decoding="async"></li>
+          </ul>
+        </article>
+      </li>
 
-      <div class="cutout area" data-group="3" data-gx="-0.70" data-gy="-0.36" data-gz="-0.25" data-w="248" data-h="118" data-standup="true">
-        <div class="face"><span class="num">01</span><span class="name">AI + Trust</span></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout area" data-group="3" data-gx="0.85" data-gy="-0.28" data-gz="0.30" data-w="248" data-h="118" data-standup="true">
-        <div class="face"><span class="num">02</span><span class="name">Product Systems</span></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout area" data-group="3" data-gx="-0.75" data-gy="0.40" data-gz="0.35" data-w="248" data-h="118" data-standup="true">
-        <div class="face"><span class="num">03</span><span class="name">0→1 Product Builds</span></div>
-        <div class="shadow"></div>
-      </div>
-      <div class="cutout area" data-group="3" data-gx="0.80" data-gy="0.46" data-gz="-0.15" data-w="248" data-h="118" data-standup="true">
-        <div class="face"><span class="num">04</span><span class="name">Research Influence</span></div>
-        <div class="shadow"></div>
-      </div>
-
-    </div>
-
-    <div class="textwall" aria-hidden="true">
-      <div class="textwall-inner" data-textwall>
-        <div class="tw-block is-lead">
-          <p class="src">Hey, glad you're&nbsp;here</p>
-          <p class="line">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
+      <li class="timeline-v2-stop timeline-v2-stop--scroll">
+        <div class="timeline-v2-scroll-stage" data-scroll-stage>
+        <article class="timeline-v2-scroll">
+          <img class="timeline-v2-scroll-art" src="assets/images/portfolio_watercolor_assets/scroll-sheet.png" alt="" aria-hidden="true">
+          <div class="timeline-v2-scroll-body" data-practice>
+            <p class="timeline-v2-tabs-label" aria-hidden="true">.practice areas</p>
+            <div class="timeline-v2-tabs" role="tablist" aria-label="Practice areas">
+              <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+              <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
+              <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+              <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
+            </div>
+            <div class="timeline-v2-practice is-active" data-skill="ai" role="tabpanel">
+              <p class="timeline-v2-statement">I&nbsp;shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take&nbsp;control.</p>
+              <ul class="timeline-v2-proofs">
+                <li class="timeline-v2-proof">trust calibration &amp; explainability</li>
+                <li class="timeline-v2-proof">human-in-the-loop autonomy</li>
+              </ul>
+            </div>
+            <div class="timeline-v2-practice" data-skill="conv" role="tabpanel" hidden>
+              <p class="timeline-v2-statement">I&nbsp;lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy&nbsp;structure.</p>
+              <ul class="timeline-v2-proofs">
+                <li class="timeline-v2-proof">google express → google shopping</li>
+                <li class="timeline-v2-proof">information architecture redesign</li>
+                <li class="timeline-v2-proof">complex workflow &amp; platform modernization</li>
+              </ul>
+            </div>
+            <div class="timeline-v2-practice" data-skill="zero" role="tabpanel" hidden>
+              <p class="timeline-v2-statement">I&nbsp;turn ambiguous ideas into validated product direction, from early exploration through&nbsp;launch.</p>
+              <ul class="timeline-v2-proofs">
+                <li class="timeline-v2-proof">concept-to-launch research</li>
+                <li class="timeline-v2-proof">ai-native product discovery &amp; build</li>
+              </ul>
+            </div>
+            <div class="timeline-v2-practice" data-skill="amp" role="tabpanel" hidden>
+              <p class="timeline-v2-statement">I&nbsp;connect fragmented customer insights into an omnichannel user experience strategy that aligns XFN teams around a shared experience and product&nbsp;vision.</p>
+              <ul class="timeline-v2-proofs">
+                <li class="timeline-v2-proof">cross-functional product collaboration</li>
+                <li class="timeline-v2-proof">cross-craft UX leadership</li>
+              </ul>
+            </div>
+          </div>
+        </article>
         </div>
-        <div class="tw-block">
-          <p class="line">I&nbsp;lead strategic research in complex systems where trust is the product: <em>security, privacy, and now&nbsp;AI</em>.</p>
-        </div>
-        <div class="tw-block">
-          <p class="line">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <em>what should we build, and&nbsp;why?</em></p>
-        </div>
-        <div class="tw-block">
-          <p class="line">Four places I&nbsp;do my best&nbsp;work.</p>
-          <p class="src">practice areas</p>
-        </div>
-      </div>
-    </div>
-
-    <svg class="trail" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
-      <path class="ghost"
-            d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
-      <path data-trail pathLength="1"
-            d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
-    </svg>
-
-    <div class="compass" aria-hidden="true">
-      <svg viewBox="0 0 104 104">
-        <circle class="ring" cx="52" cy="52" r="40"/>
-        <circle class="ring" cx="52" cy="52" r="31"/>
-        <line class="tick" x1="52" y1="6" x2="52" y2="15"/>
-        <line class="tick" x1="52" y1="89" x2="52" y2="98"/>
-        <line class="tick" x1="6" y1="52" x2="15" y2="52"/>
-        <line class="tick" x1="89" y1="52" x2="98" y2="52"/>
-        <polygon class="needle" data-needle points="52,15 58,52 52,71 46,52"/>
-        <circle cx="52" cy="52" r="3" fill="rgba(28,36,56,.6)"/>
-      </svg>
-    </div>
+      </li>
+    </ol>
   </div>
 </section>
-
-<div class="hud" data-hud>progress 0.000</div>
-
-<div class="controls">
-  <button type="button" data-play>play</button>
-  <input type="range" data-slider min="0" max="1000" value="0">
-</div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
@@ -2020,225 +2384,20 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
 <script>
-  const UNIT = 132;
-  const VIEW_DIST = 9;
-  const VP_X = 0.63;
-  const VP_Y = 0.44;
-
-  const GROUPS = [
-    { wx:    0, wz:  0 },
-    { wx:  8.5, wz:  2.2 },
-    { wx: 17.0, wz: -1.8 },
-    { wx: 25.5, wz:  1.2 },
-  ];
-
-  const CTRL_BACK = 4.2;
-  const CTRL_SWAY = 2.6;
-  const LIFT = 0.30;
-  const LOOK = 0.045;
-  const STAND_ANGLE = 84;
-
-  const SEGMENTS = [
-    { kind: "dwell",   g: 0,           p0: 0.00, p1: 0.11 },
-    { kind: "transit", from: 0, to: 1, p0: 0.11, p1: 0.33 },
-    { kind: "dwell",   g: 1,           p0: 0.33, p1: 0.45 },
-    { kind: "transit", from: 1, to: 2, p0: 0.45, p1: 0.65 },
-    { kind: "dwell",   g: 2,           p0: 0.65, p1: 0.77 },
-    { kind: "transit", from: 2, to: 3, p0: 0.77, p1: 0.95 },
-    { kind: "dwell",   g: 3,           p0: 0.95, p1: 1.00 },
-  ];
-
-  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const lerp = (a, b, n) => a + (b - a) * n;
-  const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-  const remap = (v, a, b) => clamp((v - a) / (b - a), 0, 1);
-  const qbez = (a, c, b, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * c + t * t * b;
-
-  const section = document.querySelector("[data-voyage]");
-  const trail = document.querySelector("[data-trail]");
-  const needle = document.querySelector("[data-needle]");
-  const wall = document.querySelector("[data-textwall]");
-  const hud = document.querySelector("[data-hud]");
-  const slider = document.querySelector("[data-slider]");
-  const playBtn = document.querySelector("[data-play]");
-
-  const items = Array.from(document.querySelectorAll("[data-gx]")).map((el) => ({
-    el,
-    group: parseInt(el.dataset.group, 10),
-    gx: parseFloat(el.dataset.gx) || 0,
-    gy: parseFloat(el.dataset.gy) || 0,
-    gz: parseFloat(el.dataset.gz) || 0,
-    standup: el.dataset.standup === "true",
-    w: parseFloat(el.dataset.w),
-    h: parseFloat(el.dataset.h),
-  }));
-
-  items.forEach((it) => {
-    it.el.style.width = it.w + "px";
-    it.el.style.height = it.h + "px";
-  });
-
-  function segmentAt(p) {
-    for (const s of SEGMENTS) if (p <= s.p1) return s;
-    return SEGMENTS[SEGMENTS.length - 1];
-  }
-
-  function camera(p) {
-    const s = segmentAt(p);
-    if (s.kind === "dwell") {
-      const g = GROUPS[s.g];
-      return { cx: g.wx, cy: 0, cz: g.wz - VIEW_DIST, active: s.g };
-    }
-    const a = GROUPS[s.from];
-    const b = GROUPS[s.to];
-    const t = easeInOutCubic(remap(p, s.p0, s.p1));
-    const dir = s.from % 2 === 0 ? 1 : -1;
-
-    const ax = a.wx, bx = b.wx;
-    const az = a.wz - VIEW_DIST, bz = b.wz - VIEW_DIST;
-    const cxCtrl = (ax + bx) / 2 + CTRL_SWAY * dir;
-    const czCtrl = (az + bz) / 2 - CTRL_BACK;
-
-    return {
-      cx: qbez(ax, cxCtrl, bx, t),
-      cy: Math.sin(t * Math.PI) * LIFT * dir,
-      cz: qbez(az, czCtrl, bz, t),
-      active: s.to,
-    };
-  }
-
-  function arrivalOf(groupIndex, p) {
-    if (groupIndex === 0) return 1;
-    const leg = SEGMENTS.find((s) => s.kind === "transit" && s.to === groupIndex);
-    if (!leg) return 1;
-    if (p >= leg.p1) return 1;
-    if (p <= leg.p0) return 0;
-    return remap(p, leg.p0 + (leg.p1 - leg.p0) * 0.3, leg.p1);
-  }
-
-  const WAYPOINT_ANGLE = [-40, -8, 34, 74];
-  const WALL_TRAVEL = 1.15;
-  const WALL_FOCUS = 0.42;
-  const WALL_WINDOW = 0.26;
-  const blocks = Array.from(document.querySelectorAll(".tw-block"));
-
-  function render(p) {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-    const cam = camera(p);
-    const camAhead = camera(Math.min(1, p + 0.004));
-    const vpx = VP_X - clamp((camAhead.cx - cam.cx) * LOOK * 12, -0.06, 0.06);
-    const arrivals = GROUPS.map((_, i) => arrivalOf(i, p));
-
-    items.forEach((it) => {
-      const g = GROUPS[it.group];
-      const dz = g.wz + it.gz - cam.cz;
-      const dx = g.wx + it.gx - cam.cx;
-
-      if (dz < 1.4) { it.el.style.opacity = "0"; return; }
-
-      const scale = VIEW_DIST / dz;
-      const x = vpx * W + dx * UNIT * scale;
-      const y = VP_Y * H + (it.gy - cam.cy) * UNIT * scale;
-      const stand = it.standup ? STAND_ANGLE * (1 - easeOutCubic(arrivals[it.group])) : 0;
-
-      it.el.style.transform =
-        "translate(-50%,-50%) translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)" +
-        " scale(" + scale.toFixed(4) + ")" +
-        (stand > 0.2 ? " perspective(760px) rotateX(" + stand.toFixed(2) + "deg)" : "");
-
-      const lateral = dx < 0
-        ? 1 - remap(-dx, 1.9, 4.0)
-        : 1 - remap(dx, 5.2, 7.6);
-      const nearFade = remap(dz, 1.4, 4);
-      it.el.style.opacity = (nearFade * lateral).toFixed(3);
-      it.el.style.zIndex = String(Math.round(900 - dz * 12));
-
-      const blur = Math.round(clamp((dz - 10.5) * 0.45, 0, 4));
-      it.el.style.filter = blur ? "blur(" + blur + "px)" : "none";
-    });
-
-    wall.style.transform = "translateY(" + (-p * WALL_TRAVEL * H).toFixed(1) + "px)";
-    blocks.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      const mid = (r.top + r.bottom) / 2 / H;
-      const t = clamp(1 - Math.abs(mid - WALL_FOCUS) / WALL_WINDOW, 0, 1);
-      const ease = t * t * (3 - 2 * t);
-      el.style.opacity = ease.toFixed(3);
-      el.style.transform = "translateY(" + ((mid - WALL_FOCUS) * 22).toFixed(1) + "px)";
-    });
-    trail.style.strokeDashoffset = String(1 - p);
-
-    const seg = segmentAt(p);
-    const a0 = clamp(cam.active, 0, 3);
-    const prev = WAYPOINT_ANGLE[Math.max(0, a0 - 1)];
-    const legT = seg.kind === "transit" ? easeInOutCubic(remap(p, seg.p0, seg.p1)) : 1;
-    needle.setAttribute("transform",
-      "rotate(" + lerp(prev, WAYPOINT_ANGLE[a0], legT).toFixed(2) + " 52 52)");
-
-    hud.textContent =
-      "progress " + p.toFixed(3) +
-      "\nsegment  " + seg.kind + (seg.kind === "dwell" ? " @g" + seg.g : " g" + seg.from + "→g" + seg.to) +
-      "\ncam      x " + cam.cx.toFixed(2) + "  y " + cam.cy.toFixed(2) + "  z " + cam.cz.toFixed(2);
-  }
-
-  let target = 0;
-  let current = 0;
-  let override = null;
-  let playing = false;
-
-  function scrollProgress() {
-    const total = section.offsetHeight - window.innerHeight;
-    const rect = section.getBoundingClientRect();
-    return clamp(-rect.top / total, 0, 1);
-  }
-
-  function pinVoyage() {
-    const top = section.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo(0, top);
-  }
-
-  function tick() {
-    if (playing) {
-      override = Math.min(1, (override ?? 0) + 0.0016);
-      slider.value = String(Math.round(override * 1000));
-      if (override >= 1) { playing = false; playBtn.textContent = "play"; }
-    }
-    target = override !== null ? override : scrollProgress();
-    current = lerp(current, target, 0.09);
-    if (Math.abs(current - target) < 0.0002) current = target;
-    render(current);
-    requestAnimationFrame(tick);
-  }
-
-  slider.addEventListener("input", () => {
-    playing = false;
-    playBtn.textContent = "play";
-    override = slider.value / 1000;
-  });
-  playBtn.addEventListener("click", () => {
-    playing = !playing;
-    if (playing && (override === null || override >= 1)) override = 0;
-    playBtn.textContent = playing ? "pause" : "play";
-  });
-  window.addEventListener("wheel", () => { override = null; playing = false; playBtn.textContent = "play"; }, { passive: true });
-  window.addEventListener("resize", () => render(current));
-
-  window.setProgress = (p) => {
-    pinVoyage();
-    override = clamp(p, 0, 1);
-    playing = false;
-    current = override;
-    target = override;
-    slider.value = String(Math.round(override * 1000));
-    render(current);
-  };
-
-
   function wireHero(hero) {
     if (!hero) return;
-    requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add("is-in")));
+    const revealHero = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => hero.classList.add("is-in"), 160);
+        });
+      });
+    };
+    if (document.visibilityState === "visible") {
+      revealHero();
+    } else {
+      document.addEventListener("visibilitychange", revealHero, { once: true });
+    }
     const clouds = hero.querySelectorAll(".cloud");
     const canHover = window.matchMedia("(hover: hover)").matches;
     const reduceMotionClouds = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2298,22 +2457,235 @@
   }
   document.querySelectorAll("[data-hero]").forEach(wireHero);
 
-  const voyageEl = document.querySelector("[data-voyage]");
-  if (voyageEl && "IntersectionObserver" in window) {
-    const hudWatch = new IntersectionObserver((entries) => {
-      document.body.classList.toggle("voyage-hud", entries.some((e) => e.isIntersecting));
-    }, { threshold: 0.08 });
-    hudWatch.observe(voyageEl);
-  }
-
-  render(0);
-  requestAnimationFrame(tick);
-
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
   if (window.DrawSVGPlugin) gsap.registerPlugin(DrawSVGPlugin);
-  const wakePin = document.querySelector("[data-wake-pin]");
+  const wakePin = document.querySelector(".block-v1:not([hidden]) [data-wake-pin]");
   const heroFg = wakePin && wakePin.querySelector("[data-hero-fg]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const v2Intro = document.querySelector("[data-v2-intro]");
+  const v2HeroFg = v2Intro?.querySelector("[data-hero-fg]");
+  if (v2Intro && v2HeroFg && !reduceMotion) {
+    const v2IntroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: v2Intro,
+        start: "top top",
+        end: () => "+=" + Math.round(window.innerHeight),
+        pin: true,
+        pinSpacing: false,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      },
+      defaults: { ease: "none" },
+    });
+    v2IntroTl
+      .to(v2HeroFg, {
+        y: () => -window.innerHeight * 0.46,
+        autoAlpha: 0,
+        duration: 0.58,
+      }, 0)
+      .to({}, { duration: 0.42 });
+  }
+
+  const timelineV2 = document.querySelector("[data-timeline-v2]");
+  if (timelineV2 && !reduceMotion) {
+    const timelineInner = timelineV2.querySelector(".timeline-v2-inner");
+    const timelineCurrent = timelineV2.querySelector(".timeline-v2-current");
+    const timelineStops = [...timelineV2.querySelectorAll(".timeline-v2-stop")];
+    const pathStops = timelineStops;
+    const scrollStop = timelineStops[3];
+    let stopThresholds = [];
+    let unfoldTl;
+
+    const offsetWithin = (element, ancestor) => {
+      let offset = 0;
+      let node = element;
+      while (node && node !== ancestor) {
+        offset += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      return offset;
+    };
+
+    const measureTimeline = () => {
+      const scrollStage = scrollStop?.querySelector("[data-scroll-stage]");
+      const currentTop = timelineCurrent ? offsetWithin(timelineCurrent, timelineInner) : 0;
+      // Aim near the top of the scroll stage so the wake can slip behind it,
+      // without compressing the 03→04 leg into a few percent of progress.
+      const scrollAim = scrollStage
+        ? offsetWithin(scrollStage, timelineInner) + Math.min(48, scrollStage.offsetHeight * 0.08)
+        : (scrollStop ? offsetWithin(scrollStop, timelineInner) : timelineInner?.offsetHeight || 1);
+      // Slip behind the scroll so the wake still runs over / under card 04.
+      const behindScroll = scrollStage
+        ? Math.min(scrollStage.offsetHeight * 0.34, window.innerHeight * 0.42)
+        : window.innerHeight * 0.28;
+      const currentEnd = scrollAim + behindScroll;
+      const pathHeight = Math.max(1, currentEnd - currentTop);
+      stopThresholds = pathStops.map((stop) => {
+        if (stop.classList.contains("timeline-v2-stop--scroll") && scrollStage) {
+          return Math.max(0, Math.min(1, (scrollAim - currentTop) / pathHeight));
+        }
+        const marker = stop.querySelector(".timeline-v2-marker");
+        const markerCenter = marker
+          ? offsetWithin(marker, timelineInner) + marker.offsetHeight / 2
+          : offsetWithin(stop, timelineInner);
+        return Math.max(0, Math.min(1, (markerCenter - currentTop) / pathHeight));
+      });
+      if (timelineCurrent) {
+        timelineCurrent.style.height = pathHeight + "px";
+      }
+    };
+
+    // Give the 03→04 wake leg a dedicated share of scrub time so it reads as a real beat.
+    const remapWakeProgress = (progress) => {
+      if (stopThresholds.length < 4) return progress;
+      const card3 = stopThresholds[2];
+      const card4 = stopThresholds[3];
+      const pre = Math.max(0.12, card3);
+      const mid = Math.max(pre + 0.06, card4);
+      const p1 = 0.56; // 0 → card 03
+      const p2 = 0.84; // card 03 → card 04
+      if (progress <= p1) return gsap.utils.mapRange(0, p1, 0, pre, progress);
+      if (progress <= p2) return gsap.utils.mapRange(p1, p2, pre, mid, progress);
+      return gsap.utils.mapRange(p2, 1, mid, 1, progress);
+    };
+
+    const progressForThreshold = (threshold) => {
+      if (stopThresholds.length < 4) return threshold;
+      const card3 = stopThresholds[2];
+      const card4 = stopThresholds[3];
+      const pre = Math.max(0.12, card3);
+      const mid = Math.max(pre + 0.06, card4);
+      const p1 = 0.56;
+      const p2 = 0.84;
+      if (threshold <= pre) return gsap.utils.mapRange(0, pre, 0, p1, threshold);
+      if (threshold <= mid) return gsap.utils.mapRange(pre, mid, p1, p2, threshold);
+      return gsap.utils.mapRange(mid, 1, p2, 1, threshold);
+    };
+
+    let scrollUnfoldLatched = false;
+
+    const paintTimeline = (progress) => {
+      const firstStopLead = 0.01;
+      const mapped = remapWakeProgress(progress);
+      const edgeProgress = firstStopLead + mapped * (1 - firstStopLead);
+      const edge = Math.min(100, edgeProgress * 100);
+      const softEdge = Math.min(100, edge + 7);
+      const mask = `linear-gradient(to bottom, #000 0%, #000 ${edge}%, transparent ${softEdge}%)`;
+      if (timelineCurrent) {
+        timelineCurrent.style.webkitMaskImage = mask;
+        timelineCurrent.style.maskImage = mask;
+      }
+
+      pathStops.forEach((stop, index) => {
+        let reached;
+        if (index === 3) {
+          // Open early; keep latched so snap/scrub jitter near 03 doesn't reverse the unfold.
+          const openAt = Math.max(0, stopThresholds[index] - 0.14);
+          const closeAt = Math.max(0, stopThresholds[index] - 0.28);
+          if (!scrollUnfoldLatched && edgeProgress >= openAt) scrollUnfoldLatched = true;
+          if (scrollUnfoldLatched && edgeProgress < closeAt) scrollUnfoldLatched = false;
+          reached = scrollUnfoldLatched;
+        } else {
+          reached = edgeProgress >= Math.min(1, stopThresholds[index] + 0.03);
+        }
+        if (stop.dataset.wakeReached === String(reached)) return;
+        stop.dataset.wakeReached = String(reached);
+        if (index === 3 && unfoldTl) {
+          reached ? unfoldTl.play() : unfoldTl.reverse();
+        }
+        gsap.to(stop, {
+          autoAlpha: reached ? 1 : 0,
+          y: reached ? 0 : 28,
+          duration: reached ? 1.05 : 0.4,
+          ease: reached ? "power2.out" : "power1.in",
+          overwrite: true,
+        });
+      });
+    };
+
+    gsap.set(pathStops, { autoAlpha: 0, y: 28 });
+    measureTimeline();
+    paintTimeline(0);
+    ScrollTrigger.create({
+      trigger: timelineV2,
+      start: "top 42%",
+      endTrigger: scrollStop,
+      end: "top 36%",
+      scrub: 1.55,
+      snap: {
+        snapTo: (value) => {
+          const points = stopThresholds.slice(0, 3).map(progressForThreshold);
+          if (!points.length) return value;
+          const lastCard = points[points.length - 1];
+          // Free the handoff as soon as we leave card 03 — don't fight the 04 unfold.
+          if (value > lastCard + 0.015) return value;
+          return gsap.utils.snap(points, value);
+        },
+        duration: { min: 0.18, max: 0.42 },
+        delay: 0.08,
+        ease: "power1.inOut",
+      },
+      invalidateOnRefresh: true,
+      onRefresh: (self) => {
+        measureTimeline();
+        paintTimeline(self.progress);
+      },
+      onUpdate: (self) => {
+        timelineV2.classList.toggle("is-started", self.isActive || self.progress > 0);
+        paintTimeline(self.progress);
+      },
+      onLeaveBack: () => timelineV2.classList.remove("is-started"),
+    });
+
+    const scrollStage = scrollStop?.querySelector("[data-scroll-stage]");
+    const scrollSheet = scrollStage?.querySelector(".timeline-v2-scroll");
+    const scrollBody = scrollStage?.querySelector(".timeline-v2-scroll-body");
+    if (scrollStop && scrollStage && scrollSheet && scrollBody) {
+      gsap.set(scrollSheet, { clipPath: "inset(0 100% 0 0)" });
+      gsap.set(scrollBody, { autoAlpha: 0, x: -18 });
+
+      unfoldTl = gsap.timeline({
+        paused: true,
+        defaults: { ease: "power2.inOut" },
+      });
+      unfoldTl
+        .to(scrollSheet, {
+          clipPath: "inset(0 0% 0 0)",
+          duration: 1.15,
+        }, 0)
+        .to(scrollBody, {
+          autoAlpha: 1,
+          x: 0,
+          duration: 0.42,
+          ease: "power1.out",
+        }, 0.48);
+
+      if (scrollStop.dataset.wakeReached === "true") unfoldTl.play();
+    }
+
+    const practiceRoot = scrollStop?.querySelector("[data-practice]");
+    if (practiceRoot) {
+      const chips = [...practiceRoot.querySelectorAll(".timeline-v2-tabs [data-skill]")];
+      const panels = [...practiceRoot.querySelectorAll(".timeline-v2-practice[data-skill]")];
+      const openSkill = (skill) => {
+        chips.forEach((chip) => {
+          const on = chip.dataset.skill === skill;
+          chip.classList.toggle("is-active", on);
+          chip.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        panels.forEach((panel) => {
+          const on = panel.dataset.skill === skill;
+          panel.classList.toggle("is-active", on);
+          panel.hidden = !on;
+        });
+      };
+      chips.forEach((chip) => {
+        chip.addEventListener("click", () => openSkill(chip.dataset.skill));
+      });
+    }
+  }
 
   if (wakePin && heroFg && !reduceMotion) {
     const wakeTl = gsap.timeline({
@@ -2343,7 +2715,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshWake).catch(() => {});
   }
 
-  const skillsRoot = document.querySelector("[data-skills]");
+  const skillsRoot = document.querySelector(".block-v1:not([hidden]) [data-skills]");
   const skillsAcc = document.querySelector("[data-skills-acc]");
   let openSkillAt = () => {};
   if (skillsRoot && skillsAcc) {
@@ -2384,15 +2756,15 @@
     openSkillAt = openAt;
   }
 
-  const currentRoot = document.querySelector("[data-current]");
+  const currentRoot = document.querySelector(".block-v1:not([hidden]) [data-current]");
   const spine = currentRoot && currentRoot.querySelector("[data-current-spine]");
-  const paths = currentRoot ? [...currentRoot.querySelectorAll("[data-current-path]")] : [];
+  const currentArt = currentRoot && currentRoot.querySelector("[data-current-art]");
   const stops = currentRoot ? [...currentRoot.querySelectorAll("[data-stop]")] : [];
   const nodes = currentRoot ? [...currentRoot.querySelectorAll("[data-node]")] : [];
-  const head = currentRoot && currentRoot.querySelector("[data-current-head]");
-  const NODE_AT = [0.16, 0.36, 0.54, 0.70];
+  const NODE_AT = [0.18, 0.40, 0.62, 0.90];
   const reached = [false, false, false, false];
   const marks = currentRoot ? [...currentRoot.querySelectorAll("[data-mark]")] : [];
+  const paintRipples = currentRoot ? [...currentRoot.querySelectorAll("[data-paint-ripple]")] : [];
 
   const placeNodes = () => {
     if (!spine) return;
@@ -2403,19 +2775,25 @@
       g.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
       const xPct = (pt.x / 1440) * 100;
       const yPct = (pt.y / 4000) * 100;
+      const stop = stops[i];
       if (marks[i]) {
         marks[i].style.left = xPct + "%";
         marks[i].style.top = yPct + "%";
       }
-      const stop = stops[i];
+      if (paintRipples[i] && stop?.dataset.stop !== "4") {
+        paintRipples[i].style.left = xPct + "%";
+        paintRipples[i].style.top = yPct + "%";
+      }
       if (!stop) return;
       if (stop.dataset.stop === "4") {
         const inlet = stop.querySelector(".scroll-inlet") || stop;
         const curBox = currentRoot.getBoundingClientRect();
         const inBox = inlet.getBoundingClientRect();
-        if (marks[i] && inBox.height) {
-          marks[i].style.left = (((inBox.left + 36) - curBox.left) / curBox.width * 100) + "%";
-          marks[i].style.top = (((inBox.top + inBox.height * 0.42) - curBox.top) / curBox.height * 100) + "%";
+        if (inBox.height) {
+          const lx = (((inBox.left + 36) - curBox.left) / curBox.width * 100) + "%";
+          const ly = (((inBox.top + inBox.height * 0.42) - curBox.top) / curBox.height * 100) + "%";
+          if (marks[i]) { marks[i].style.left = lx; marks[i].style.top = ly; }
+          if (paintRipples[i]) { paintRipples[i].style.left = lx; paintRipples[i].style.top = ly; }
         }
         return;
       }
@@ -2434,36 +2812,29 @@
   };
 
   const setPathProgress = (t) => {
-    paths.forEach((path) => {
-      const len = path.getTotalLength();
-      path.style.strokeDasharray = `${len}`;
-      path.style.strokeDashoffset = `${len * (1 - t)}`;
-    });
-    if (head && spine) {
-      const pt = spine.getPointAtLength(spine.getTotalLength() * t);
-      head.setAttribute("cx", pt.x);
-      head.setAttribute("cy", pt.y);
-      head.style.opacity = t > 0.02 && t < 0.98 ? 0.85 : 0;
+    if (currentArt) {
+      const end = t * 100;
+      const fade = Math.min(100, end + 7);
+      const mask = `linear-gradient(to bottom, #000 0%, #000 ${end}%, transparent ${fade}%)`;
+      currentArt.style.webkitMaskImage = mask;
+      currentArt.style.maskImage = mask;
     }
-    const wash = currentRoot.querySelector(".wash");
-    if (wash) wash.setAttribute("stroke-width", t > 0.66 ? String(78 + (t - 0.66) * 160) : "78");
     NODE_AT.forEach((mark, i) => {
       const on = t >= mark;
       stops[i]?.classList.toggle("is-in", on);
       marks[i]?.classList.toggle("is-in", on);
-      nodes[i]?.querySelector(".node-gold")?.classList.toggle("is-lit", on);
       if (on && !reached[i]) {
         reached[i] = true;
-        const ripples = nodes[i] ? [...nodes[i].querySelectorAll(".ripple-c")] : [];
-        ripples.forEach((c, k) => {
-          gsap.fromTo(c, { attr: { r: 2 }, opacity: 0.5 }, {
-            attr: { r: 18 + k * 8 },
-            opacity: 0,
-            duration: 1.5,
-            delay: k * 0.12,
+        const rip = paintRipples[i];
+        if (rip) {
+          gsap.fromTo(rip, { opacity: 0, scale: 0.62 }, {
+            opacity: 0.8,
+            scale: 1,
+            duration: 1.15,
             ease: "power1.out",
           });
-        });
+          gsap.to(rip, { opacity: 0.28, duration: 1.6, delay: 1, ease: "power1.out" });
+        }
       }
     });
   };
@@ -2478,8 +2849,9 @@
       ScrollTrigger.create({
         trigger: currentRoot,
         start: "top 88%",
-        end: "bottom 70%",
-        scrub: true,
+        endTrigger: currentRoot.querySelector(".stop-04"),
+        end: "center center",
+        scrub: 0.65,
         invalidateOnRefresh: true,
         onUpdate: (self) => setPathProgress(self.progress),
         onRefresh: placeNodes,
