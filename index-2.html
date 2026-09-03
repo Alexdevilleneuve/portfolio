@@ -2,7 +2,7 @@
 <!--
   Homepage 2.0 — comparison cut.
 
-  Block 1: watercolor wake (new hero + boat, path cards, parchment).
+  Block 1: original ice-sky hero, then watercolor current (01–04).
   Block 2: 1.0-style ice-sky hero + current camera voyage.
 
   Unique IDs: hero-v1 / hero-v2 / skills-v1.
@@ -18,10 +18,12 @@
 <style>
   :root {
     --paper: #F3EAE1;
+    --ivory: #F6F1E4;
     --ice-sky: #E8F0FA;
     --ink: #1C2438;
     --ink-soft: #5C6578;
     --gold: #C4B48A;
+    --teal: #1B3A42;
     --serif: "Fraunces", serif;
     --sans: "Inter", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -537,6 +539,13 @@
     height: 100svh;
     overflow: hidden;
   }
+  .wake-pin .hero {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    min-height: 0;
+    height: 100%;
+  }
   .hero--wake {
     position: absolute;
     inset: 0;
@@ -608,8 +617,10 @@
   .current {
     position: relative;
     z-index: 2;
-    min-height: 440vh;
+    min-height: 470vh;
     margin-top: -14vh;
+    padding-bottom: 10vh;
+    background: linear-gradient(180deg, rgba(232, 240, 250, 0) 0%, #F5F8FC 9%, #F7F9FC 42%, #F4F7FB 100%);
   }
   .current-svg {
     position: absolute;
@@ -619,95 +630,274 @@
     pointer-events: none;
     z-index: 1;
   }
-  .current-svg .wash { fill: none; stroke: #c8e0f2; stroke-width: 46; stroke-linecap: round; opacity: .32; }
-  .current-svg .mid { fill: none; stroke: #7eafd0; stroke-width: 15; stroke-linecap: round; opacity: .5; }
-  .current-svg .flow { fill: none; stroke: #4d8ab4; stroke-width: 4.5; stroke-linecap: round; opacity: .72; }
-  .current-svg .glint { fill: none; stroke: #f4f9fc; stroke-width: 1.4; stroke-linecap: round; opacity: .7; }
+  .current-svg .wash { fill: none; stroke: #c4def0; stroke-width: 78; stroke-linecap: round; opacity: .26; }
+  .current-svg .mid { fill: none; stroke: #9cc6e0; stroke-width: 24; stroke-linecap: round; opacity: .38; }
+  .current-svg .flow { fill: none; stroke: #7eafd0; stroke-width: 6; stroke-linecap: round; opacity: .48; }
+  .current-svg .glint { fill: none; stroke: #ffffff; stroke-width: 1.8; stroke-linecap: round; opacity: .55; }
   .current-svg .node-gold { fill: #c4b48a; opacity: 0; }
   .current-svg .node-gold.is-lit { opacity: .92; }
   .current-svg .ripple-c { fill: none; stroke: rgba(126, 175, 208, .45); stroke-width: 1.2; }
   .current-head { fill: #d7e8f4; opacity: 0; }
+  .node-badge {
+    position: absolute;
+    z-index: 3;
+    width: 44px;
+    height: 44px;
+    margin: -22px 0 0 -22px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--serif);
+    font-size: 13px;
+    letter-spacing: .06em;
+    white-space: nowrap;
+    color: var(--ink);
+    background: var(--ivory);
+    border: 1px solid rgba(28, 36, 56, .1);
+    box-shadow: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .7s ease, transform .7s ease;
+    pointer-events: none;
+  }
+  .node-badge::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+  .node-badge.is-in { opacity: 1; transform: none; }
+  .node-badge.is-in::after { opacity: 1; }
   .stop {
     position: absolute;
     z-index: 2;
-    width: min(460px, 40vw);
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity .75s ease, transform .75s ease;
     pointer-events: none;
+    transition: opacity .85s ease, transform .85s ease;
   }
-  .stop.is-in { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .stop--l { left: max(6vw, 32px); }
-  .stop--r { right: max(6vw, 32px); left: auto; }
-  .stop[data-stop="1"] { top: 17%; }
-  .stop[data-stop="2"] { top: 38%; }
-  .stop[data-stop="3"] { top: 58%; }
+  .stop.is-in { opacity: 1; pointer-events: auto; }
+  .stop[data-stop="1"] {
+    width: min(400px, 34vw);
+    top: 16%;
+    left: 44%;
+    transform: translate(16px, 18px);
+  }
+  .stop[data-stop="1"].is-in { transform: none; }
+  .stop[data-stop="2"] {
+    width: min(620px, 54vw);
+    top: 33%;
+    right: 5%;
+    left: auto;
+    transform: translate(20px, 18px);
+  }
+  .stop[data-stop="2"].is-in { transform: none; }
+  .stop[data-stop="3"] {
+    width: min(470px, 42vw);
+    top: 50%;
+    left: 6%;
+    transform: translate(-14px, 18px);
+  }
+  .stop[data-stop="3"].is-in { transform: none; }
   .stop[data-stop="4"] {
-    top: 74%;
+    top: 67%;
     left: 50%;
     right: auto;
-    width: min(1080px, calc(100% - 40px));
-    transform: translate(-50%, 16px);
+    width: min(1180px, calc(100% - 36px));
+    transform: translate(-50%, 22px);
   }
   .stop[data-stop="4"].is-in { transform: translate(-50%, 0); }
-  .stop-num {
-    display: block;
-    font-family: var(--serif);
-    font-size: 14px;
-    letter-spacing: .12em;
-    color: var(--ink-soft);
-    margin-bottom: 10px;
+  .stop-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--ivory);
+    border: 1px solid rgba(28, 36, 56, .05);
+    box-shadow: none;
+    padding: 28px 30px 30px;
   }
-  .stop p {
-    font-size: clamp(18px, 2.15vw, 24px);
-    line-height: 1.45;
-    color: var(--ink);
+  .stop[data-stop="1"] .stop-card {
+    border-radius: 34px 42px 28px 38px;
+    padding: 30px 32px 32px;
   }
-  .stop .hook { font-family: var(--serif); font-style: italic; color: var(--accent); }
-  .stop .about-logo-strip { margin-top: 16px; }
-  .stop .about-logo-strip li { opacity: 0; transform: translateY(8px); transition: opacity .5s ease, transform .5s ease; }
-  .stop.is-in .about-logo-strip li { opacity: 1; transform: none; }
-  .stop.is-in .about-logo-strip li:nth-child(2) { transition-delay: .1s; }
-  .stop.is-in .about-logo-strip li:nth-child(3) { transition-delay: .18s; }
-  .stop.is-in .about-logo-strip li:nth-child(4) { transition-delay: .26s; }
-  .stop::before {
+  .stop[data-stop="2"] .stop-card {
+    border-radius: 28px 22px 40px 30px;
+    padding: 30px 34px 26px;
+  }
+  .stop[data-stop="3"] .stop-card {
+    border-radius: 40px 30px 26px 36px;
+  }
+  .stop-card::after {
     content: "";
     position: absolute;
-    inset: -36px -28px;
-    background: radial-gradient(ellipse at 30% 40%, rgba(190, 216, 236, .32), transparent 68%);
-    opacity: 0;
-    transition: opacity 1s ease;
+    right: -12%;
+    bottom: -28%;
+    width: 62%;
+    height: 68%;
+    background: radial-gradient(ellipse at 70% 70%, rgba(176, 208, 230, .38), transparent 70%);
     pointer-events: none;
-    z-index: -1;
   }
-  .stop.is-in::before { opacity: 1; }
-  .stop-04 .scroll-shell {
-    position: relative;
-    padding: 56px 8px 28px;
-    overflow: hidden;
+  .stop[data-stop="3"] .stop-card::after {
+    right: auto;
+    left: -16%;
+    bottom: -22%;
   }
-  .stop-04 .parchment-art {
-    position: absolute;
-    left: -6%;
-    top: -16%;
-    width: 72%;
-    pointer-events: none;
-    mix-blend-mode: multiply;
-  }
-  .stop-04 .parchment-body {
+  .stop-card p {
     position: relative;
     z-index: 1;
-    padding: 12px 3% 8px;
-    background: linear-gradient(180deg, rgba(250,244,232,.15) 0%, rgba(247,241,228,.92) 22%, #F4EEDC 100%);
-    border-radius: 0 0 16px 16px;
+    font-family: var(--serif);
+    font-size: clamp(18px, 2.05vw, 26px);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .stop .hook { font-style: italic; color: #3D5CB8; }
+  .stop .about-logo-strip { position: relative; z-index: 1; margin-top: 18px; }
+  .stop .about-logo-strip li { opacity: 0; transform: translateY(8px); transition: opacity .55s ease, transform .55s ease; }
+  .stop.is-in .about-logo-strip li { opacity: 1; transform: none; }
+  .stop.is-in .about-logo-strip li:nth-child(2) { transition-delay: .12s; }
+  .stop.is-in .about-logo-strip li:nth-child(3) { transition-delay: .2s; }
+  .stop.is-in .about-logo-strip li:nth-child(4) { transition-delay: .28s; }
+  .stop-04 .scroll-shell {
+    position: relative;
+    padding: 36px 56px 40px 48px;
+    background:
+      radial-gradient(ellipse 42% 48% at 8% 88%, rgba(186, 216, 234, .28), transparent 70%),
+      radial-gradient(ellipse 38% 42% at 88% 92%, rgba(186, 216, 234, .22), transparent 68%),
+      linear-gradient(180deg, #F8F3E6 0%, #F4EEDC 100%);
+    border-radius: 10px 6px 6px 12px;
+    overflow: visible;
+  }
+  .stop-04 .scroll-inlet {
+    position: absolute;
+    left: -48px;
+    top: 18%;
+    width: 120px;
+    height: 64%;
+    background: radial-gradient(ellipse at 20% 50%, rgba(160, 204, 228, .42), transparent 72%);
+    pointer-events: none;
+  }
+  .stop-04 .scroll-roll {
+    position: absolute;
+    top: 3%;
+    right: -16px;
+    bottom: 3%;
+    width: 28px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #e4d8bc 0%, #f6f0e0 26%, #d8ccb0 50%, #f8f2e4 76%, #cfc3a6 100%);
+    box-shadow: inset 2px 0 3px rgba(90, 70, 30, .08);
+    pointer-events: none;
+  }
+  .stop-04 .scroll-compass {
+    position: absolute;
+    right: 36px;
+    bottom: 18px;
+    width: 42px;
+    height: 42px;
+    opacity: .72;
+    pointer-events: none;
+  }
+  .stop-04 .parchment-body { position: relative; z-index: 1; }
+  .stop-04 .skills-pin {
+    max-width: none;
+    padding: 0;
+  }
+  .stop-04 .skills-label {
+    margin-bottom: 14px;
+  }
+  .stop-04 .skills-chips {
+    align-self: flex-start;
+    margin: 0 0 28px;
+    padding: 0;
+    gap: 8px;
+    border: 0;
+    background: transparent;
+    border-radius: 0;
+  }
+  .stop-04 .skills-chips .chip {
+    border-radius: 999px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, .42);
+    border: 1px solid rgba(28, 36, 56, .08);
+  }
+  .stop-04 .skills-chips .chip.is-active {
+    background: var(--teal);
+    color: #fff;
+    border-color: transparent;
   }
   .stop-04 .acc-btn { display: none; }
-  .stop-04 .scroll-lede,
-  .stop-04 .skill-proofs { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
-  .stop-04.is-tabs .skills-chips { opacity: 1; }
-  .stop-04.is-statement .scroll-lede,
-  .stop-04.is-themes .scroll-lede,
-  .stop-04.is-themes .skill-proofs { opacity: 1; transform: none; }
+  .stop-04 .acc-panel-inner,
+  .stop-04 .scroll-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    gap: clamp(28px, 4vw, 56px);
+    min-height: 0;
+    align-items: start;
+  }
+  .stop-04 .acc-panel .lede {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 2.35vw, 32px);
+    line-height: 1.28;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    margin: 0 0 16px;
+    max-width: 22ch;
+  }
+  .stop-04 .scroll-echo {
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .stop-04 .scroll-echo::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    vertical-align: middle;
+  }
+  .stop-04 .scroll-themes {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .stop-04 .theme {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .stop-04 .theme-ico {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(28, 36, 56, .16);
+    display: grid;
+    place-items: center;
+    color: var(--ink);
+  }
+  .stop-04 .theme-ico svg { width: 16px; height: 16px; }
+  .stop-04 .theme h3 {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 6px 0 6px;
+    color: var(--ink);
+  }
+  .stop-04 .theme p {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
   .current-close {
     position: absolute;
     left: 50%;
@@ -722,8 +912,19 @@
     .wake-aside { display: none; }
     .hero--wake .hero-stats { padding-bottom: 18vh; }
     .wake-boat { width: min(36vw, 160px); }
-    .stop { width: min(88vw, 480px); left: 6vw !important; right: auto !important; }
-    .stop[data-stop="4"] { width: calc(100% - 28px); }
+    .stop[data-stop="1"],
+    .stop[data-stop="2"],
+    .stop[data-stop="3"] {
+      width: min(88vw, 480px);
+      left: 6vw;
+      right: auto;
+    }
+    .stop[data-stop="4"] { width: calc(100% - 24px); }
+    .stop-04 .scroll-shell { padding: 28px 22px 32px 20px; }
+    .stop-04 .scroll-roll { display: none; }
+    .stop-04 .acc-panel-inner,
+    .stop-04 .scroll-cols { grid-template-columns: 1fr; }
+    .stop-04 .acc-panel .lede { max-width: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .hero--wake.is-in .wake-boat { animation: none; }
@@ -1371,12 +1572,7 @@
 <section class="block-v1" id="about-v1" aria-label="Watercolor wake">
   <p class="compare-kicker">2.0 — watercolor wake</p>
   <div class="wake-pin" data-wake-pin>
-    <header class="hero hero--wake" id="hero-v1" data-hero>
-      <div class="wake-sky" aria-hidden="true">
-        <img class="wake-cloud-l" src="assets/images/portfolio_watercolor_assets/cloud_bank_left.png" alt="">
-        <img class="wake-cloud-r" src="assets/images/portfolio_watercolor_assets/cloud_bank_right.png" alt="">
-        <img class="wake-hero-bg" src="assets/images/portfolio_watercolor_assets/hero_cloud_water_background.png" alt="">
-      </div>
+    <header class="hero" id="hero-v1" data-hero>
       <div class="hero-fg" data-hero-fg>
         <div class="hero-inner">
           <div class="hero-copy">
@@ -1389,10 +1585,49 @@
             <p><strong><span>1000</span>+</strong> Participants</p>
           </div>
         </div>
-        <p class="wake-aside wake-aside--l">a compass when things get&nbsp;fuzzy</p>
-        <p class="wake-aside wake-aside--r">a seeker of&nbsp;truths</p>
+
+        <div class="cloud-top" aria-hidden="true">
+          <div class="cloud-bob">
+            <div class="cloud-frame">
+              <img class="cloud-face" src="assets/images/home/cloud-soft-3.png" alt="">
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-clouds">
+          <div class="cloud-back" aria-hidden="true">
+            <div class="cloud-bob">
+              <img src="assets/images/home/cloud-soft-4.png" alt="">
+            </div>
+          </div>
+          <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+            <div class="cloud-bob">
+              <div class="cloud-frame">
+                <div class="cloud-media">
+                  <img class="gif" src="assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+                  <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-1-wide.png" alt="" aria-hidden="true" width="800" height="379">
+                </div>
+                <span class="cloud-caption">a compass when things get&nbsp;fuzzy</span>
+              </div>
+            </div>
+          </button>
+          <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+            <div class="cloud-bob">
+              <div class="cloud-frame">
+                <div class="cloud-media">
+                  <img class="gif" src="assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+                  <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-2-wide.png" alt="" aria-hidden="true" width="761" height="303">
+                </div>
+                <span class="cloud-caption">a seeker of&nbsp;truths</span>
+              </div>
+            </div>
+          </button>
+        </div>
       </div>
-      <img class="wake-boat" src="assets/images/portfolio_watercolor_assets/sailboat.png" alt="" aria-hidden="true">
+      <div class="hero-ocean" aria-hidden="true">
+        <img class="wave wave--far" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+        <img class="wave wave--near" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+      </div>
     </header>
   </div>
 
@@ -1410,10 +1645,10 @@
           <feGaussianBlur stdDeviation="1.4"/>
         </filter>
       </defs>
-      <path class="wash" data-current-path filter="url(#water-wash)" d="M 728 38 C 788 168 648 288 728 428 C 988 588 1188 708 1048 908 C 828 1128 288 1188 348 1508 C 428 1808 1228 1768 1188 2128 C 1148 2448 388 2408 368 2768 C 358 3048 628 3188 728 3368 C 988 3568 1188 3688 908 3848 C 748 3948 648 3968 728 3998"/>
-      <path class="mid" data-current-path filter="url(#water-edge)" d="M 720 30 C 780 160 640 280 720 420 C 980 580 1180 700 1040 900 C 820 1120 280 1180 340 1500 C 420 1800 1220 1760 1180 2120 C 1140 2440 380 2400 360 2760 C 350 3040 620 3180 720 3360 C 980 3560 1180 3680 900 3840 C 740 3940 640 3960 720 3990"/>
-      <path class="flow" data-current-path data-current-spine filter="url(#water-edge)" d="M 720 30 C 780 160 640 280 720 420 C 980 580 1180 700 1040 900 C 820 1120 280 1180 340 1500 C 420 1800 1220 1760 1180 2120 C 1140 2440 380 2400 360 2760 C 350 3040 620 3180 720 3360 C 980 3560 1180 3680 900 3840 C 740 3940 640 3960 720 3990"/>
-      <path class="glint" data-current-path d="M 720 30 C 780 160 640 280 720 420 C 980 580 1180 700 1040 900 C 820 1120 280 1180 340 1500 C 420 1800 1220 1760 1180 2120 C 1140 2440 380 2400 360 2760 C 350 3040 620 3180 720 3360 C 980 3560 1180 3680 900 3840 C 740 3940 640 3960 720 3990"/>
+      <path class="wash" data-current-path filter="url(#water-wash)" d="M 708 16 C 648 220 548 440 598 660 C 688 960 1148 1120 1058 1380 C 978 1640 348 1780 398 2060 C 438 2340 158 2560 178 2760 C 198 3180 388 3660 698 3990"/>
+      <path class="mid" data-current-path filter="url(#water-edge)" d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 150 2550 170 2750 C 190 3170 380 3650 690 3988"/>
+      <path class="flow" data-current-path data-current-spine filter="url(#water-edge)" d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 150 2550 170 2750 C 190 3170 380 3650 690 3988"/>
+      <path class="glint" data-current-path d="M 700 8 C 640 210 540 430 590 650 C 680 950 1140 1110 1050 1370 C 970 1630 340 1770 390 2050 C 430 2330 150 2550 170 2750 C 190 3170 380 3650 690 3988"/>
       <circle class="current-head" r="5" data-current-head/>
       <g class="node" data-node="1"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
       <g class="node" data-node="2"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
@@ -1421,223 +1656,194 @@
       <g class="node" data-node="4"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
     </svg>
 
-    <article class="stop stop--l" data-stop="1">
-      <span class="stop-num">01</span>
-      <p>👋 Hey, glad you're&nbsp;here. I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area.</p>
+    <div class="node-badge" data-mark="1">01</div>
+    <div class="node-badge" data-mark="2">02</div>
+    <div class="node-badge" data-mark="3">03</div>
+    <div class="node-badge" data-mark="4">04</div>
+
+    <article class="stop" data-stop="1">
+      <div class="stop-card">
+        <p>👋 Hey, glad you're&nbsp;here. I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area.</p>
+      </div>
     </article>
 
-    <article class="stop stop--r" data-stop="2">
-      <span class="stop-num">02</span>
-      <p>I&nbsp;lead strategic research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
-      <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
-        <li data-brand="malwarebytes"><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async"></li>
-        <li data-brand="google"><img src="assets/images/shared/brand/google-wordmark.png" alt="Google" width="120" height="40" decoding="async"></li>
-        <li data-brand="huawei"><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" width="140" height="36" decoding="async"></li>
-        <li data-brand="kerr"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" width="110" height="70" decoding="async"></li>
-      </ul>
+    <article class="stop" data-stop="2">
+      <div class="stop-card">
+        <p>I&nbsp;lead strategic research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI.</span></p>
+        <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
+          <li data-brand="malwarebytes"><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async"></li>
+          <li data-brand="google"><img src="assets/images/shared/brand/google-wordmark.png" alt="Google" width="120" height="40" decoding="async"></li>
+          <li data-brand="huawei"><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" width="140" height="36" decoding="async"></li>
+          <li data-brand="kerr"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" width="110" height="70" decoding="async"></li>
+        </ul>
+      </div>
     </article>
 
-    <article class="stop stop--l" data-stop="3">
-      <span class="stop-num">03</span>
-      <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
-      <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
-        <li data-brand="oregon-state"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async"></li>
-        <li data-brand="lanzhou"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" width="180" height="56" decoding="async"></li>
-        <li data-brand="bfa"><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" width="200" height="54" decoding="async"></li>
-      </ul>
+    <article class="stop" data-stop="3">
+      <div class="stop-card">
+        <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+        <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
+          <li data-brand="oregon-state"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async"></li>
+          <li data-brand="lanzhou"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" width="180" height="56" decoding="async"></li>
+          <li data-brand="bfa"><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" width="200" height="54" decoding="async"></li>
+        </ul>
+      </div>
     </article>
 
-    <div class="stop stop-04" data-stop="4" data-scroll-pin>
+    <div class="stop stop-04" data-stop="4">
       <div class="scroll-shell">
-        <img class="parchment-art" src="assets/images/portfolio_watercolor_assets/blank_long_scroll.png" alt="">
+        <span class="scroll-inlet" aria-hidden="true"></span>
+        <span class="scroll-roll" aria-hidden="true"></span>
+        <svg class="scroll-compass" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="22" fill="none" stroke="#C4B48A" stroke-width="1.2"/>
+          <circle cx="32" cy="32" r="7" fill="none" stroke="#C4B48A" stroke-width="1"/>
+          <path d="M32 10 L34.6 32 L32 54 L29.4 32 Z" fill="#C4B48A" opacity=".78"/>
+          <path d="M10 32 L32 34.6 L54 32 L32 29.4 Z" fill="#C4B48A" opacity=".38"/>
+          <circle cx="32" cy="32" r="2.2" fill="#C4B48A"/>
+        </svg>
         <div class="parchment-body">
-<div id="skills-v1" aria-label="Practice areas">
-          <div class="skills-pin" data-skills>
-    <p class="skills-label" aria-hidden="true">.practice areas</p>
-    <div class="skills-chips" role="tablist" aria-label="Practice areas">
-      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
-      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
-      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
-      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
-    </div>
-
-    <div class="skills-acc" data-skills-acc>
-      <div class="acc-item is-open" data-skill="ai" id="skill-ai-v1">
-        <button type="button" class="acc-btn" aria-expanded="true">AI + Trust</button>
-        <div class="acc-panel">
-          <div class="acc-panel-inner">
-            <p class="lede scroll-lede">I&nbsp;shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take&nbsp;control.</p>
-            <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="trust-cal">
-                <strong>trust calibration &amp; explainability</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Security Advisor</span>
-                  <p class="skill-proof-desc">Led the research arc behind Malwarebytes' conversational security advisor: uncovering what makes people trust a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-ai">SAM mockup<br><small>drop image here</small></div>
+          <div id="skills-v1" aria-label="Practice areas">
+            <div class="skills-pin" data-skills>
+              <p class="skills-label" aria-hidden="true">.practice areas</p>
+              <div class="skills-chips" role="tablist" aria-label="Practice areas">
+                <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+                <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
+                <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+                <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
+              </div>
+              <div class="skills-acc" data-skills-acc>
+                <div class="acc-item is-open" data-skill="ai" id="skill-ai-v1">
+                  <button type="button" class="acc-btn" aria-expanded="true">AI + Trust</button>
+                  <div class="acc-panel">
+                    <div class="acc-panel-inner scroll-cols">
+                      <div class="scroll-statement">
+                        <p class="lede">I&nbsp;shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take&nbsp;control.</p>
+                        <p class="scroll-echo">trust calibration &amp; explainability</p>
+                      </div>
+                      <div class="scroll-themes">
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
+                          <div>
+                            <h3>trust calibration &amp; explainability</h3>
+                            <p>I design studies that reveal how people assess, interpret, and build appropriate trust in AI&nbsp;systems.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="8" r="2.2"/><circle cx="12" cy="17" r="2.2"/><path d="M8 8.2 10.4 15.2M16.2 9.4 13.6 15"/></svg></span>
+                          <div>
+                            <h3>mental models &amp; system understanding</h3>
+                            <p>I uncover how users form mental models of complex systems—and where those models break&nbsp;down.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 13.5V7.2a1.8 1.8 0 0 1 3.6 0V13"/><path d="M11.6 12.8V8.6a1.6 1.6 0 1 1 3.2 0V13"/><path d="M14.8 12.6V9.8a1.5 1.5 0 1 1 3 0v4.4c0 3-2.2 5.2-5.4 5.2h-1.2C8.4 19.4 6 17 6 14.2V12"/></svg></span>
+                          <div>
+                            <h3>agency &amp; control</h3>
+                            <p>I explore how people decide when to rely on, override, or opt out of AI—and what helps them feel in&nbsp;control.</p>
+                          </div>
+                        </article>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="hitl">
-                <strong>human-in-the-loop autonomy</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Automation Scaling</span>
-                  <p class="skill-proof-desc">Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-ai">automation scaling artifact<br><small>drop image here</small></div>
+                <div class="acc-item" data-skill="conv" id="skill-conv-v1">
+                  <button type="button" class="acc-btn" aria-expanded="false">Product Systems &amp; Convergence</button>
+                  <div class="acc-panel">
+                    <div class="acc-panel-inner scroll-cols">
+                      <div class="scroll-statement">
+                        <p class="lede">I&nbsp;lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy&nbsp;structure.</p>
+                        <p class="scroll-echo">product systems &amp; convergence</p>
+                      </div>
+                      <div class="scroll-themes">
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="5" width="7" height="6" rx="1.2"/><rect x="13" y="13" width="7" height="6" rx="1.2"/><path d="M11 8h3.5A2.5 2.5 0 0 1 17 10.5V13"/></svg></span>
+                          <div>
+                            <h3>google express → google shopping</h3>
+                            <p>Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="8" r="2.2"/><circle cx="12" cy="17" r="2.2"/><path d="M8 8.2 10.4 15.2M16.2 9.4 13.6 15"/></svg></span>
+                          <div>
+                            <h3>information architecture redesign</h3>
+                            <p>Converged four standalone products into one coherent app, with mental model research defining the unified&nbsp;structure.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 16h16M6 16V8.5A2.5 2.5 0 0 1 8.5 6h7A2.5 2.5 0 0 1 18 8.5V16"/><path d="M9 11h6"/></svg></span>
+                          <div>
+                            <h3>complex workflow &amp; platform modernization</h3>
+                            <p>Untangled task flows, navigation, and information structures in a fragmented enterprise console into one actionable system.</p>
+                          </div>
+                        </article>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item" data-skill="conv" id="skill-conv-v1">
-        <button type="button" class="acc-btn" aria-expanded="false">Product Systems &amp; Convergence</button>
-        <div class="acc-panel">
-          <div class="acc-panel-inner">
-            <p class="lede scroll-lede">I&nbsp;lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy&nbsp;structure.</p>
-            <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="shopping">
-                <strong>google express → google shopping</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Google Express to Google Shopping Evolution</span>
-                  <p class="skill-proof-desc">Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-conv">Shopping tab<br><small>drop image here</small></div>
+                <div class="acc-item" data-skill="zero" id="skill-zero-v1">
+                  <button type="button" class="acc-btn" aria-expanded="false">0→1 Product Builds</button>
+                  <div class="acc-panel">
+                    <div class="acc-panel-inner scroll-cols">
+                      <div class="scroll-statement">
+                        <p class="lede">I&nbsp;turn ambiguous ideas into validated product direction, from early exploration through&nbsp;launch.</p>
+                        <p class="scroll-echo">0→1 builds</p>
+                      </div>
+                      <div class="scroll-themes">
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
+                          <div>
+                            <h3>concept-to-launch research</h3>
+                            <p>Defined target users, unmet needs, value propositions, and launch experience for a net-new consumer privacy&nbsp;product.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 13.5V7.2a1.8 1.8 0 0 1 3.6 0V13"/><path d="M11.6 12.8V8.6a1.6 1.6 0 1 1 3.2 0V13"/><path d="M14.8 12.6V9.8a1.5 1.5 0 1 1 3 0v4.4c0 3-2.2 5.2-5.4 5.2h-1.2C8.4 19.4 6 17 6 14.2V12"/></svg></span>
+                          <div>
+                            <h3>ai-native product discovery &amp; build</h3>
+                            <p>A researcher who ships—from pain point to vision to working product—using the same strategy-first discipline I&nbsp;bring to enterprise&nbsp;work.</p>
+                          </div>
+                        </article>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="ia">
-                <strong>information architecture redesign</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Malwarebytes 5.0 Integration</span>
-                  <p class="skill-proof-desc">Converged four standalone products—MB4, Privacy VPN, Browser Guard, and MyAccount—into one coherent app, with mental model research defining the unified&nbsp;structure.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-conv">MB5<br><small>drop image here</small></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="platform">
-                <strong>complex workflow &amp; platform modernization</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Nebula to ThreatDown Evolution</span>
-                  <p class="skill-proof-desc">Untangled task flows, navigation, and information structures in a fragmented enterprise console into an all-in-one endpoint and data management system anchored in actionable security posture&nbsp;assessment.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-conv">homepage before and after<br><small>drop image here</small></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item" data-skill="zero" id="skill-zero-v1">
-        <button type="button" class="acc-btn" aria-expanded="false">0→1 Product Builds</button>
-        <div class="acc-panel">
-          <div class="acc-panel-inner">
-            <p class="lede scroll-lede">I&nbsp;turn ambiguous ideas into validated product direction, from early exploration through&nbsp;launch.</p>
-            <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="concept-launch">
-                <strong>concept-to-launch research</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Malwarebytes Privacy VPN 1.0</span>
-                  <p class="skill-proof-desc">Defined target users, unmet needs, value propositions, interaction models, and launch experience for a net-new consumer privacy&nbsp;product.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-zero">Privacy VPN<br><small>drop image here</small></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
-                <strong>ai-native product discovery &amp; build</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">AI-Native Product Discovery &amp; Build</span>
-                  <p class="skill-proof-desc">A researcher who ships—from pain point to vision to working product—using the same strategy-first discipline I&nbsp;bring to enterprise&nbsp;work.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-zero">personal project<br><small>drop image here</small></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="acc-item" data-skill="amp" id="skill-amp-v1">
-        <button type="button" class="acc-btn" aria-expanded="false">Research Systems &amp; Influence</button>
-        <div class="acc-panel">
-          <div class="acc-panel-inner">
-            <p class="lede scroll-lede">I&nbsp;connect fragmented customer insights into an omnichannel user experience strategy that aligns XFN teams around a shared experience and product&nbsp;vision.</p>
-            <div class="skill-proofs">
-              <div class="skill-proof" role="button" tabindex="0" data-proof="xfn">
-                <strong>cross-functional product collaboration</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Participatory Research Program</span>
-                  <p class="skill-proof-desc">Built stronger connections between teams and users—bringing stakeholders directly into research, deepening buy-in on findings, and strengthening empathy for the end user across the product&nbsp;organization.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-amp">three-phase program diagram<br><small>drop image here</small></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="cross-craft">
-                <strong>cross-craft UX leadership</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Established the UX Research Practice from the Ground&nbsp;Up</span>
-                  <p class="skill-proof-desc">Led multidisciplinary UX work across research, interaction design, visual design, and content, while growing the research team from 2 to 5 and establishing more consistent research operations and&nbsp;practices.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-amp">intake / planning artifact<br><small>drop image here</small></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-proof" role="button" tabindex="0" data-proof="self-serve">
-                <strong>self-serve research infrastructure</strong>
-                <div class="skill-proof-reveal">
-                  <span class="skill-proof-title">Google Ads Recruiting Hub</span>
-                  <p class="skill-proof-desc">Turned three years of archived recruiting data plus a live view of the current pipeline into a self-serve dashboard used by UXers and PMs across the Ads&nbsp;org.</p>
-                  <span class="skill-proof-tags"></span>
-                  <div class="skill-proof-media" aria-hidden="true">
-                    <div class="skill-proof-media-clip">
-                      <div class="proof-ph ph-amp">dashboard<br><small>drop image here</small></div>
+                <div class="acc-item" data-skill="amp" id="skill-amp-v1">
+                  <button type="button" class="acc-btn" aria-expanded="false">Research Systems &amp; Influence</button>
+                  <div class="acc-panel">
+                    <div class="acc-panel-inner scroll-cols">
+                      <div class="scroll-statement">
+                        <p class="lede">I&nbsp;connect fragmented customer insights into an omnichannel user experience strategy that aligns XFN teams around a shared experience and product&nbsp;vision.</p>
+                        <p class="scroll-echo">research influence</p>
+                      </div>
+                      <div class="scroll-themes">
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="8" r="2.2"/><circle cx="12" cy="17" r="2.2"/><path d="M8 8.2 10.4 15.2M16.2 9.4 13.6 15"/></svg></span>
+                          <div>
+                            <h3>cross-functional product collaboration</h3>
+                            <p>Brought stakeholders directly into research, deepening buy-in on findings and strengthening empathy for the end&nbsp;user.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 16h16M6 16V8.5A2.5 2.5 0 0 1 8.5 6h7A2.5 2.5 0 0 1 18 8.5V16"/><path d="M9 11h6"/></svg></span>
+                          <div>
+                            <h3>cross-craft UX leadership</h3>
+                            <p>Led multidisciplinary UX work while growing the research team from 2 to 5 and establishing more consistent research&nbsp;operations.</p>
+                          </div>
+                        </article>
+                        <article class="theme">
+                          <span class="theme-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="5" width="7" height="6" rx="1.2"/><rect x="13" y="13" width="7" height="6" rx="1.2"/><path d="M11 8h3.5A2.5 2.5 0 0 1 17 10.5V13"/></svg></span>
+                          <div>
+                            <h3>self-serve research infrastructure</h3>
+                            <p>Turned years of recruiting data plus a live pipeline into a self-serve dashboard used across the Ads&nbsp;org.</p>
+                          </div>
+                        </article>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-          </div>
-        </div>
         </div>
       </div>
     </div>
@@ -2184,26 +2390,45 @@
   const stops = currentRoot ? [...currentRoot.querySelectorAll("[data-stop]")] : [];
   const nodes = currentRoot ? [...currentRoot.querySelectorAll("[data-node]")] : [];
   const head = currentRoot && currentRoot.querySelector("[data-current-head]");
-  const NODE_AT = [0.25, 0.48, 0.70, 0.92];
+  const NODE_AT = [0.16, 0.36, 0.54, 0.70];
   const reached = [false, false, false, false];
+  const marks = currentRoot ? [...currentRoot.querySelectorAll("[data-mark]")] : [];
 
   const placeNodes = () => {
     if (!spine) return;
     const len = spine.getTotalLength();
+    const mobile = window.innerWidth <= 800;
     nodes.forEach((g, i) => {
       const pt = spine.getPointAtLength(len * NODE_AT[i]);
       g.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+      const xPct = (pt.x / 1440) * 100;
+      const yPct = (pt.y / 4000) * 100;
+      if (marks[i]) {
+        marks[i].style.left = xPct + "%";
+        marks[i].style.top = yPct + "%";
+      }
       const stop = stops[i];
       if (!stop) return;
-      stop.style.top = ((pt.y / 4000) * 100) + "%";
-      if (stop.dataset.stop !== "4") {
-        if (pt.x < 720) {
-          stop.style.left = "6%";
-          stop.style.right = "auto";
-        } else {
-          stop.style.left = "auto";
-          stop.style.right = "6%";
+      if (stop.dataset.stop === "4") {
+        const inlet = stop.querySelector(".scroll-inlet") || stop;
+        const curBox = currentRoot.getBoundingClientRect();
+        const inBox = inlet.getBoundingClientRect();
+        if (marks[i] && inBox.height) {
+          marks[i].style.left = (((inBox.left + 36) - curBox.left) / curBox.width * 100) + "%";
+          marks[i].style.top = (((inBox.top + inBox.height * 0.42) - curBox.top) / curBox.height * 100) + "%";
         }
+        return;
+      }
+      if (mobile) {
+        stop.style.left = "6%";
+        stop.style.right = "auto";
+        return;
+      }
+      if (stop.dataset.stop === "1") {
+        stop.style.left = `calc(${xPct}% + 40px)`;
+        stop.style.top = yPct + "%";
+      } else {
+        stop.style.top = yPct + "%";
       }
     });
   };
@@ -2221,10 +2446,11 @@
       head.style.opacity = t > 0.02 && t < 0.98 ? 0.85 : 0;
     }
     const wash = currentRoot.querySelector(".wash");
-    if (wash) wash.setAttribute("stroke-width", t > 0.84 ? String(46 + (t - 0.84) * 80) : "46");
+    if (wash) wash.setAttribute("stroke-width", t > 0.66 ? String(78 + (t - 0.66) * 160) : "78");
     NODE_AT.forEach((mark, i) => {
       const on = t >= mark;
       stops[i]?.classList.toggle("is-in", on);
+      marks[i]?.classList.toggle("is-in", on);
       nodes[i]?.querySelector(".node-gold")?.classList.toggle("is-lit", on);
       if (on && !reached[i]) {
         reached[i] = true;
@@ -2265,25 +2491,20 @@
     });
   }
 
-  const scrollPin = document.querySelector("[data-scroll-pin]");
-  if (scrollPin && !reduceMotion) {
-    ScrollTrigger.create({
-      trigger: scrollPin,
-      start: "top 18%",
-      end: () => "+=" + Math.round(window.innerHeight * 1.45),
-      pin: true,
-      pinSpacing: true,
-      scrub: true,
-      onUpdate: (self) => {
-        const p = self.progress;
-        scrollPin.classList.toggle("is-tabs", p > 0.08);
-        scrollPin.classList.toggle("is-statement", p > 0.28);
-        scrollPin.classList.toggle("is-themes", p > 0.5);
-        if (p > 0.5) openSkillAt(Math.min(3, Math.floor((p - 0.5) / 0.125)));
+  const scrollStop = currentRoot && currentRoot.querySelector(".stop-04");
+  const scrollShell = scrollStop && scrollStop.querySelector(".scroll-shell");
+  if (scrollShell && !reduceMotion) {
+    gsap.fromTo(scrollShell, { y: 20, opacity: 0.4 }, {
+      y: 0,
+      opacity: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: scrollStop,
+        start: "top 82%",
+        end: "top 36%",
+        scrub: 0.7,
       },
     });
-  } else if (scrollPin) {
-    scrollPin.classList.add("is-in", "is-tabs", "is-statement", "is-themes");
   }
 </script>
 </body>
