@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tonal arc — ocean → space → lifted night → ocean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1b1b1b; font-family: var(--sans); }
+  img { display: block; max-width: 100%; }
+
+  .band {
+    position: relative;
+    width: 1440px; height: 900px;
+    overflow: hidden;
+    margin: 0 auto 24px;
+  }
+  .layer { position: absolute; inset: 0; }
+
+  /* ================= 1 · HERO — ocean, settled ======================= */
+  .band--hero {
+    background: linear-gradient(#EAF2FC 0%, #E7EFFA 28%, #EDF3FB 60%, #E8F0FA 100%);
+    color: #1C2438;
+  }
+  /* the panorama is a short wide strip with a hard bottom edge; fade it out
+     above that edge so the join reads as sky rather than a cut */
+  .band--hero .sky {
+    background: url("../assets/images/direction/sky-hero.jpg") center top / 100% auto no-repeat;
+    height: 34%;
+    -webkit-mask-image: linear-gradient(#000 38%, transparent 70%);
+    mask-image: linear-gradient(#000 38%, transparent 70%);
+  }
+  .band--hero .sea {
+    top: auto; bottom: 0; height: 46%;
+    background: url("../assets/images/direction/hero-waves.png") center bottom / 118% auto no-repeat;
+  }
+  .band--hero .hero-copy {
+    position: absolute; left: 0; right: 0; top: 188px; text-align: center; z-index: 5;
+  }
+  .band--hero .role {
+    font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: #5C6578; margin-bottom: 20px;
+  }
+  .band--hero h1 { font-family: var(--serif); font-size: 76px; font-weight: 400; line-height: 1.1; }
+  .band--hero h1 em { font-style: italic; color: #3E6FB0; }
+  .band--hero .stats {
+    display: flex; gap: 64px; justify-content: center; margin-top: 44px;
+    font-size: 13px; color: #5C6578;
+  }
+  .band--hero .stats strong { display: block; font-family: var(--serif); font-size: 26px; color: #1C2438; font-weight: 500; }
+
+  /* ================= 2 · SKILLS — deep space, darkest ================ */
+  .band--space { color: #E8EAF6; }
+  .band--space .neb {
+    background: url("../assets/images/direction/card-constellation.jpg") center 32% / cover no-repeat;
+  }
+  .band--space .deepen {
+    background:
+      radial-gradient(120% 90% at 60% 40%, rgba(10,12,34,0) 0%, rgba(8,10,28,.55) 62%, rgba(5,6,20,.88) 100%),
+      linear-gradient(rgba(9,11,30,.34), rgba(6,8,24,.52));
+  }
+  /* organic clearing instead of a rectangular plate behind the marks */
+  .band--space .bloom {
+    left: 372px; top: 128px; right: auto; bottom: auto;
+    width: 700px; height: 520px;
+    background: radial-gradient(closest-side, rgba(178,196,236,.30), rgba(150,170,220,.12) 52%, transparent 78%);
+    filter: blur(18px);
+  }
+  .starfield {
+    background-image:
+      radial-gradient(1.4px 1.4px at 12% 22%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 28% 64%, #F3EEDC, transparent),
+      radial-gradient(1.6px 1.6px at 44% 16%, #fff, transparent),
+      radial-gradient(1.1px 1.1px at 58% 78%, #E9E2FF, transparent),
+      radial-gradient(1.8px 1.8px at 71% 34%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 83% 58%, #F6EFD9, transparent),
+      radial-gradient(1.4px 1.4px at 92% 20%, #fff, transparent),
+      radial-gradient(1.1px 1.1px at 20% 86%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 65% 8%, #FFF6DC, transparent),
+      radial-gradient(1.2px 1.2px at 36% 44%, #fff, transparent);
+    opacity: .85;
+  }
+
+  /* ================= 3 · WORK — lifted night, content-first ========== */
+  .band--work { color: #16203A; }
+  .band--work .lift {
+    background:
+      linear-gradient(#93A9D6 0%, #AFC0E2 26%, #C9D4EC 58%, #DAE0F0 100%);
+  }
+  .band--work .veil {
+    background: url("../assets/images/direction/card-constellation.jpg") center 40% / cover no-repeat;
+    opacity: .30;
+    mix-blend-mode: multiply;
+  }
+  .band--work .glow {
+    background: radial-gradient(78% 58% at 50% 36%, rgba(255,255,255,.40), transparent 74%);
+  }
+
+  /* ================= 4 · FOOTER — ocean returns ====================== */
+  .band--footer {
+    color: #F2F4FA;
+    background: linear-gradient(#33406B 0%, #4A5480 34%, #7C7A96 62%, #A38E96 84%, #B59A9C 100%);
+  }
+  /* keep the panorama near its native aspect at the base instead of blowing a
+     1024×160 strip up to fill 900px */
+  .band--footer .dusk {
+    top: auto; bottom: 0; height: 34%;
+    background: url("../assets/images/direction/dusk-footer.jpg") center bottom / cover no-repeat;
+    -webkit-mask-image: linear-gradient(transparent 0%, #000 30%);
+    mask-image: linear-gradient(transparent 0%, #000 30%);
+  }
+  .band--footer .deepen {
+    background: linear-gradient(rgba(18,28,60,.46) 0%, rgba(20,32,66,.10) 44%, rgba(16,26,56,.16) 100%);
+  }
+
+  /* ---------------- shared scene furniture --------------------------- */
+  .wall { position: absolute; left: 88px; top: 300px; width: 360px; z-index: 8; }
+  .wall .k {
+    font-size: 12px; font-weight: 500; letter-spacing: .17em;
+    text-transform: uppercase; opacity: .68; margin-bottom: 14px;
+  }
+  .wall p.lead { font-family: var(--serif); font-size: 33px; line-height: 1.28; }
+  .wall p.lead em { font-style: italic; }
+  .wall .sub { margin-top: 18px; font-size: 15px; line-height: 1.6; opacity: .74; max-width: 318px; }
+
+  .plate { position: absolute; inset: 0; z-index: 7; }
+  .logo { position: absolute; }
+  .logo img { filter: brightness(0) invert(1); opacity: .94; }
+  .logo::after {
+    content: ""; position: absolute; left: 50%; bottom: -18px;
+    width: 82%; height: 14px; transform: translateX(-50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(4,8,26,.5), transparent 74%);
+    filter: blur(6px);
+  }
+
+  .work-head { position: absolute; left: 0; right: 0; top: 108px; text-align: center; z-index: 8; }
+  .work-head .k {
+    font-size: 12px; font-weight: 500; letter-spacing: .17em;
+    text-transform: uppercase; color: #3D4C74; margin-bottom: 14px;
+  }
+  .work-head .lead { font-family: var(--serif); font-size: 44px; font-weight: 400; color: #16203A; }
+  .work-head .lead em { font-style: italic; }
+
+  .shots { position: absolute; left: 0; right: 0; top: 296px; z-index: 8;
+           display: flex; gap: 34px; justify-content: center; }
+  .shot { width: 372px; }
+  .shot .mat {
+    background: #FBFAF7; border: 1px solid rgba(22,32,58,.14);
+    padding: 13px 13px 0;
+    box-shadow: 0 30px 60px -26px rgba(16,26,56,.52);
+  }
+  .shot .mat img { width: 100%; height: 208px; object-fit: cover; object-position: top left; }
+  .shot figcaption {
+    padding: 12px 3px 14px; font-size: 12px; letter-spacing: .04em; color: #4A5570;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .shot:nth-child(1) { transform: rotate(-1.2deg); }
+  .shot:nth-child(3) { transform: rotate(1.1deg); }
+
+  .foot-copy { position: absolute; left: 96px; top: 300px; z-index: 8; }
+  .foot-copy p.lead { font-family: var(--serif); font-size: 46px; line-height: 1.2; }
+  .foot-copy p.lead em { font-style: italic; }
+  .foot-copy .sub { margin-top: 18px; font-size: 15px; opacity: .8; }
+
+  .trail { position: absolute; inset: 0; z-index: 6; }
+  .trail path { fill: none; stroke: #D5C79C; stroke-width: 1.8; stroke-linecap: round; opacity: .62; }
+  .trail path.dot { stroke-dasharray: 2 9; opacity: .42; }
+
+  .compass { position: absolute; right: 62px; bottom: 54px; width: 100px; z-index: 9; opacity: .82; }
+  .compass img { width: 100%; }
+  .band--space .compass img, .band--footer .compass img { filter: brightness(0) invert(1); opacity: .8; }
+
+  .grain {
+    position: absolute; inset: 0; z-index: 10; pointer-events: none;
+    opacity: .14; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+
+  .tag {
+    position: absolute; left: 0; top: 0; z-index: 30;
+    font: 500 11px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase;
+    background: #111; color: #fff; padding: 8px 12px;
+  }
+  body.capture .tag { display: none; }
+</style>
+</head>
+<body>
+
+<section class="band band--hero" data-band="1-hero">
+  <div class="layer sky"></div>
+  <div class="layer sea"></div>
+  <div class="hero-copy">
+    <p class="role">Senior UX Researcher / Manager</p>
+    <h1>From <em>insights</em><br>to influence</h1>
+    <div class="stats">
+      <p><strong>9+</strong> Years</p>
+      <p><strong>100+</strong> Studies</p>
+      <p><strong>1000+</strong> Participants</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+  <div class="tag">1 · hero — ocean (settled)</div>
+</section>
+
+<section class="band band--space" data-band="2-space">
+  <div class="layer neb"></div>
+  <div class="layer starfield"></div>
+  <div class="layer deepen"></div>
+  <div class="layer bloom"></div>
+
+  <div class="wall">
+    <p class="k">practice areas</p>
+    <p class="lead">…where trust is the <em>product</em>.</p>
+    <p class="sub">Security, privacy, and now AI — complex systems where the thing being designed is confidence itself.</p>
+  </div>
+
+  <div class="plate">
+    <figure class="logo" style="left:534px; top:266px;">
+      <img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="" width="208" height="32">
+    </figure>
+    <figure class="logo" style="left:850px; top:236px;">
+      <img src="../assets/images/shared/brand/google-wordmark.png" alt="" width="128" height="42">
+    </figure>
+    <figure class="logo" style="left:566px; top:436px;">
+      <img src="../assets/images/shared/brand/huawei-wordmark.png" alt="" width="156" height="40">
+    </figure>
+    <figure class="logo" style="left:852px; top:428px;">
+      <img src="../assets/images/shared/brand/kerr.png" alt="" width="102" height="64">
+    </figure>
+  </div>
+
+  <svg class="trail" viewBox="0 0 1440 900" preserveAspectRatio="none">
+    <path d="M -30 792 C 200 748, 360 818, 560 800 S 880 744, 1050 788"/>
+    <path class="dot" d="M 1050 788 C 1168 814, 1268 818, 1332 792"/>
+  </svg>
+  <div class="compass"><img src="../assets/images/shared/compass-rose.png" alt=""></div>
+  <div class="grain"></div>
+  <div class="tag">2 · skills — deep space (darkest)</div>
+</section>
+
+<section class="band band--work" data-band="3-work">
+  <div class="layer lift"></div>
+  <div class="layer veil"></div>
+  <div class="layer glow"></div>
+
+  <div class="work-head">
+    <p class="k">selected work</p>
+    <p class="lead">Turning complexity into <em>clarity</em>.</p>
+  </div>
+
+  <div class="shots">
+    <figure class="shot">
+      <div class="mat">
+        <img src="../assets/images/home/blurred sql dashboard.png" alt="">
+        <figcaption><span>Clarity in the Chaos</span><span>01</span></figcaption>
+      </div>
+    </figure>
+    <figure class="shot">
+      <div class="mat">
+        <img src="../assets/images/home/Empathy program.png" alt="">
+        <figcaption><span>Democratizing with Strategy</span><span>02</span></figcaption>
+      </div>
+    </figure>
+    <figure class="shot">
+      <div class="mat">
+        <img src="../assets/images/home/01.png" alt="">
+        <figcaption><span>Fragmented Tools → Unified App</span><span>03</span></figcaption>
+      </div>
+    </figure>
+  </div>
+
+  <div class="grain"></div>
+  <div class="tag">3 · work — lifted night (content-first)</div>
+</section>
+
+<section class="band band--footer" data-band="4-footer">
+  <div class="layer dusk"></div>
+  <div class="layer deepen"></div>
+  <div class="foot-copy">
+    <p class="lead">Let's navigate what's <em>next</em>.</p>
+    <p class="sub">Open to meaningful conversations and new adventures.</p>
+  </div>
+  <div class="compass"><img src="../assets/images/shared/compass-rose.png" alt=""></div>
+  <div class="grain"></div>
+  <div class="tag">4 · footer — ocean returns</div>
+</section>
+
+</body>
+</html>

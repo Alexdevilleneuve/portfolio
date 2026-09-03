@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme variants — chart / ocean / space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #2a2a2a; font-family: var(--sans); }
+  img { display: block; max-width: 100%; }
+
+  .variant {
+    position: relative;
+    width: 1440px; height: 900px;
+    overflow: hidden;
+    margin: 0 auto 28px;
+    color: var(--ink);
+  }
+
+  /* ---- theme tokens -------------------------------------------------- */
+  [data-theme="chart"] {
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --accent: #C4B48A;
+    --frame-mat: #F7F4EE;
+    --frame-edge: rgba(28,36,56,.16);
+    --shadow: rgba(28,36,56,.30);
+    --logo-filter: none;
+    --plate: none;
+  }
+  [data-theme="ocean"] {
+    --ink: #EAF1FA;
+    --ink-soft: #A9BFDC;
+    --accent: #D8C79A;
+    --frame-mat: rgba(247,244,238,.94);
+    --frame-edge: rgba(255,255,255,.28);
+    --shadow: rgba(4,12,30,.6);
+    --logo-filter: brightness(0) invert(1) opacity(.92);
+    --plate: rgba(255,255,255,.10);
+  }
+  [data-theme="space"] {
+    --ink: #EDE9F6;
+    --ink-soft: #A9A4C4;
+    --accent: #D9C79B;
+    --frame-mat: rgba(240,238,248,.95);
+    --frame-edge: rgba(255,255,255,.24);
+    --shadow: rgba(2,4,20,.72);
+    --logo-filter: brightness(0) invert(1) opacity(.88);
+    --plate: rgba(255,255,255,.07);
+  }
+
+  /* ---- backgrounds ---------------------------------------------------- */
+  .bg { position: absolute; inset: 0; }
+
+  [data-theme="chart"] .bg {
+    background:
+      radial-gradient(115% 88% at 62% 40%, #F9F6F0 0%, #F3EAE1 54%, #E7DED1 100%);
+  }
+  [data-theme="chart"] .bg-art {
+    position: absolute; inset: 0;
+    background: url("../assets/images/direction/paper-skills.jpg") center top / 100% auto no-repeat;
+    opacity: .5;
+    -webkit-mask-image: linear-gradient(#000 0%, transparent 62%);
+    mask-image: linear-gradient(#000 0%, transparent 62%);
+  }
+
+  [data-theme="ocean"] .bg {
+    background:
+      url("../assets/images/direction/night-work.jpg") center bottom / cover no-repeat,
+      linear-gradient(#16305C 0%, #1E3B68 46%, #24406E 100%);
+  }
+  [data-theme="ocean"] .bg-art {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 42%;
+    background: url("../assets/images/direction/hero-waves.png") center bottom / 120% auto no-repeat;
+    opacity: .5;
+  }
+
+  [data-theme="space"] .bg {
+    background:
+      radial-gradient(120% 95% at 58% 34%, #23264E 0%, #141634 48%, #0A0B20 100%);
+  }
+  [data-theme="space"] .bg-art {
+    position: absolute; inset: 0;
+    background:
+      url("../assets/images/direction/trail-a.png") 20% 28% / 78% auto no-repeat,
+      url("../assets/images/direction/card-constellation.jpg") center / cover no-repeat;
+    opacity: .42;
+    mix-blend-mode: screen;
+  }
+
+  /* faint cartographic graticule, chart theme only */
+  .marks { position: absolute; inset: 0; opacity: 0; }
+  [data-theme="chart"] .marks { opacity: 1; }
+  .marks svg { width: 100%; height: 100%; }
+  .marks .grat { fill: none; stroke: rgba(28,36,56,.09); stroke-width: 1; }
+  .marks .contour { fill: none; stroke: rgba(196,180,138,.42); stroke-width: 1.2; }
+
+  /* ---- text wall ------------------------------------------------------ */
+  .wall {
+    position: absolute; left: 82px; top: 232px; width: 372px; z-index: 6;
+  }
+  .wall .k {
+    font-size: 12px; font-weight: 500; letter-spacing: .17em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 14px;
+  }
+  .wall p.lead {
+    font-family: var(--serif); font-size: 33px; line-height: 1.28; color: var(--ink);
+  }
+  .wall p.lead em { font-style: italic; }
+  .wall .sub {
+    margin-top: 18px; font-size: 15px; line-height: 1.6; color: var(--ink-soft);
+    max-width: 320px;
+  }
+
+  /* ---- logo plate ----------------------------------------------------- */
+  .plate { position: absolute; inset: 0; z-index: 5; }
+  .logo {
+    position: absolute;
+    display: grid; place-items: center;
+    transform-origin: 50% 100%;
+  }
+  .logo .disc {
+    padding: 26px 30px; border-radius: 12px;
+    background: var(--plate);
+  }
+  .logo img { filter: var(--logo-filter); }
+  .logo::after {
+    content: ""; position: absolute; left: 50%; bottom: -16px;
+    width: 78%; height: 16px; transform: translateX(-50%);
+    background: radial-gradient(50% 50% at 50% 50%, var(--shadow), transparent 72%);
+    filter: blur(5px);
+  }
+
+  /* ---- case study card ------------------------------------------------ */
+  .shot {
+    position: absolute; right: 96px; top: 214px; width: 384px; z-index: 7;
+    transform: rotate(-1.4deg);
+  }
+  .shot .mat {
+    background: var(--frame-mat);
+    border: 1px solid var(--frame-edge);
+    padding: 14px 14px 0;
+    box-shadow: 0 26px 54px -22px var(--shadow);
+  }
+  .shot .mat img { width: 100%; height: 214px; object-fit: cover; object-position: top left; }
+  .shot figcaption {
+    padding: 12px 2px 14px;
+    font-size: 12px; letter-spacing: .04em; color: #5C6578;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .shot .note {
+    position: absolute; right: -18px; bottom: -40px;
+    font-family: var(--hand); font-size: 21px; color: var(--accent);
+    transform: rotate(-5deg);
+  }
+
+  /* ---- compass + trail ------------------------------------------------ */
+  .compass {
+    position: absolute; right: 62px; bottom: 54px; width: 104px; z-index: 8; opacity: .8;
+  }
+  .compass img { width: 100%; filter: var(--logo-filter); }
+  [data-theme="chart"] .compass img { filter: none; opacity: .75; }
+
+  .trail { position: absolute; inset: 0; z-index: 4; }
+  .trail path {
+    fill: none; stroke: var(--accent); stroke-width: 1.8;
+    stroke-linecap: round; opacity: .7;
+  }
+  .trail path.dot { stroke-dasharray: 2 9; opacity: .45; }
+
+  .grain {
+    position: absolute; inset: 0; z-index: 9; pointer-events: none;
+    opacity: .13; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+  [data-theme="ocean"] .grain, [data-theme="space"] .grain { mix-blend-mode: overlay; opacity: .18; }
+
+  .tag {
+    position: absolute; left: 0; top: 0; z-index: 20;
+    font: 500 11px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase;
+    background: #111; color: #fff; padding: 8px 12px;
+  }
+  body.capture .tag { display: none; }
+</style>
+</head>
+<body>
+
+<!-- template repeated verbatim per theme so the comparison is like-for-like -->
+<section class="variant" data-theme="chart" data-tag="A · paper & chart"></section>
+<section class="variant" data-theme="ocean" data-tag="B · literal ocean"></section>
+<section class="variant" data-theme="space" data-tag="C · literal space"></section>
+
+<script>
+  const SCENE = `
+    <div class="bg"></div>
+    <div class="bg-art"></div>
+
+    <div class="marks">
+      <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+        <path class="grat" d="M0 180 H1440 M0 360 H1440 M0 540 H1440 M0 720 H1440"/>
+        <path class="grat" d="M240 0 V900 M480 0 V900 M720 0 V900 M960 0 V900 M1200 0 V900"/>
+        <path class="contour" d="M -20 640 C 200 596, 420 686, 640 648 S 1060 566, 1300 622"/>
+        <path class="contour" d="M -20 700 C 220 664, 460 742, 700 706 S 1100 636, 1330 682" opacity=".5"/>
+      </svg>
+    </div>
+
+    <div class="wall">
+      <p class="k">practice areas</p>
+      <p class="lead">…where trust is the <em>product</em>.</p>
+      <p class="sub">Security, privacy, and now AI — complex systems where the thing being designed is confidence itself.</p>
+    </div>
+
+    <div class="plate">
+      <figure class="logo" style="left:506px; top:250px; transform:scale(1.06)">
+        <span class="disc"><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="" width="196" height="30"></span>
+      </figure>
+      <figure class="logo" style="left:742px; top:208px; transform:scale(.82)">
+        <span class="disc"><img src="../assets/images/shared/brand/google-wordmark.png" alt="" width="132" height="44"></span>
+      </figure>
+      <figure class="logo" style="left:528px; top:410px; transform:scale(.9)">
+        <span class="disc"><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="" width="150" height="38"></span>
+      </figure>
+      <figure class="logo" style="left:748px; top:440px; transform:scale(1.0)">
+        <span class="disc"><img src="../assets/images/shared/brand/kerr.png" alt="" width="98" height="62"></span>
+      </figure>
+    </div>
+
+    <figure class="shot">
+      <div class="mat">
+        <img src="../assets/images/home/blurred sql dashboard.png" alt="">
+        <figcaption><span>Clarity in the Chaos</span><span>03</span></figcaption>
+      </div>
+      <span class="note">the evidence, unredacted →</span>
+    </figure>
+
+    <svg class="trail" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <path d="M -30 806 C 180 762, 340 828, 540 812 S 860 758, 1040 800"/>
+      <path class="dot" d="M 1040 800 C 1160 826, 1266 828, 1330 800"/>
+    </svg>
+
+    <div class="compass"><img src="../assets/images/shared/compass-rose.png" alt=""></div>
+    <div class="grain"></div>
+  `;
+
+  document.querySelectorAll(".variant").forEach((el) => {
+    el.innerHTML = SCENE + '<div class="tag">' + el.dataset.tag + "</div>";
+  });
+</script>
+
+</body>
+</html>

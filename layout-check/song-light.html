@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新中式 light register — skills band exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@300;400;500&family=Noto+Serif+SC:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --serif: "Fraunces", serif;
+    --display: "Cormorant Garamond", serif;
+    --sans: "Inter", sans-serif;
+    --cjk: "Noto Serif SC", serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #d8d4cc; font-family: var(--sans); padding: 24px 0; }
+  img { display: block; max-width: 100%; }
+
+  .band {
+    position: relative;
+    width: 1440px; height: 900px;
+    overflow: hidden;
+    margin: 0 auto 26px;
+    color: var(--ink);
+  }
+  .layer { position: absolute; inset: 0; }
+
+  /* ============ palettes — all in the light register ================== */
+
+  /* A · 素纸 — warm paper, ink and a loaded brush */
+  [data-v="suzhi"] {
+    --p-top: #F5EEE1;
+    --p-bot: #EBE2D0;
+    --ink: #2B2A26;
+    --ink-soft: #6F6A5C;
+    --range-far: rgba(78,70,56,.46);
+    --range-mid: rgba(52,46,36,.70);
+    --mist: rgba(252,248,239,.62);
+    --brush: rgba(52,47,38,.58);
+    --gold: #A98338;
+    --sun: #C8A257;
+    --hair: rgba(43,42,38,.26);
+    --seal: #A6382B;
+    --weave: rgba(74,62,44,.045);
+    --logo-filter: brightness(0) opacity(.82);
+  }
+
+  /* B · 靛白 — indigo on near-white, the 新中式 house style */
+  [data-v="dianbai"] {
+    --p-top: #FAFCFD;
+    --p-bot: #E9F0F5;
+    --ink: #1E3348;
+    --ink-soft: #5C7488;
+    --range-far: rgba(74,116,160,.52);
+    --range-mid: rgba(38,78,124,.78);
+    --mist: rgba(255,255,255,.70);
+    --brush: rgba(44,84,128,.52);
+    --gold: #B08A38;
+    --sun: #CCA659;
+    --hair: rgba(30,51,72,.22);
+    --seal: #A6382B;
+    --weave: rgba(30,60,90,.035);
+    --logo-filter: brightness(0) opacity(.80);
+  }
+
+  /* C · 色块 — mineral colour blocks holding the content */
+  [data-v="sekuai"] {
+    --p-top: #F8F3E6;
+    --p-bot: #F1EAD9;
+    --ink: #23302B;
+    --ink-soft: #5F6F63;
+    --range-far: rgba(78,112,94,.44);
+    --range-mid: rgba(46,74,62,.66);
+    --mist: rgba(253,250,242,.66);
+    --brush: rgba(52,78,66,.44);
+    --gold: #A98338;
+    --sun: #CCA255;
+    --hair: rgba(35,48,43,.22);
+    --seal: #A6382B;
+    --weave: rgba(70,64,44,.04);
+    --logo-filter: brightness(0) opacity(.84);
+    --blk-celadon: rgba(148,186,166,.42);
+    --blk-ochre: rgba(214,178,108,.38);
+    --blk-blue: rgba(156,188,208,.34);
+  }
+
+  .ground { background: linear-gradient(var(--p-top), var(--p-bot)); }
+
+  /* silk / linen weave, the substrate the whole thing is painted on */
+  .weave {
+    background-image:
+      repeating-linear-gradient(0deg,  var(--weave) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(90deg, var(--weave) 0 1px, transparent 1px 5px);
+  }
+
+  /* 平远 — ink concentrates at the ridge and dissolves downward into mist,
+     which is the opposite of a fog bank and the reason peaks read as form */
+  .ranges { position: absolute; inset: 0; }
+  .ranges .echo { opacity: .16; }
+  .ranges .s-far { stop-color: var(--range-far); }
+  .ranges .s-mid { stop-color: var(--range-mid); }
+  .ranges .s-w   { stop-color: var(--range-far); }
+  /* mist sits as a band at the mountain's base and clears again at the very
+     bottom, so the water and its reflection stay readable */
+  .mist-layer { background: linear-gradient(transparent 60%, var(--mist) 76%, var(--mist) 85%, transparent 100%); }
+
+  /* one loaded brush stroke, edges broken by displacement so it reads wet */
+  .brush { position: absolute; inset: 0; z-index: 5; }
+  .brush .hair { fill: none; stroke: var(--brush); stroke-width: 1.1; opacity: .16; }
+  .brush .fleck { fill: var(--brush); opacity: .34; }
+  .brush .s-b0 { stop-color: var(--brush); }
+
+  .sun { position: absolute; z-index: 4; }
+  .sun .s-sun { stop-color: var(--sun); }
+
+  /* 星图 — a chart, not a night sky: ink rules and gold nodes on paper */
+  .stars { position: absolute; inset: 0; z-index: 6; }
+  .stars line { stroke: var(--ink); stroke-width: .7; opacity: .30; }
+  .stars circle { fill: var(--gold); }
+  .stars circle.bright { r: 3.4; }
+  .stars .ring { fill: none; stroke: var(--gold); stroke-width: .7; opacity: .42; }
+
+  /* mineral blocks — variant C only; these are where screenshots will live */
+  .blocks { position: absolute; inset: 0; z-index: 3; }
+  .blocks div { position: absolute; }
+
+  /* ---------------- copy ------------------------------------------------ */
+  .wall { position: absolute; left: 104px; top: 268px; width: 396px; z-index: 12; }
+  .wall .cjk {
+    font-family: var(--cjk); font-weight: 200; font-size: 17px;
+    letter-spacing: .3em; color: var(--ink-soft); opacity: .72; margin-bottom: 18px;
+  }
+  .wall .k {
+    font-family: var(--display); font-size: 13px; font-weight: 400;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .wall .k-rule { width: 54px; height: 1px; background: var(--hair); margin: 18px 0 22px; }
+  .wall p.lead {
+    font-family: var(--serif); font-weight: 300; font-size: 37px; line-height: 1.3;
+    color: var(--ink);
+  }
+  .wall p.lead em { font-style: italic; }
+  .wall .sub {
+    margin-top: 22px; font-size: 14px; font-weight: 300; line-height: 1.75;
+    color: var(--ink-soft); max-width: 340px;
+  }
+
+  /* the 4-up index from the reference banners — collapsed state of the
+     practice-area accordion */
+  .index {
+    position: absolute; left: 104px; bottom: 104px; z-index: 12;
+    display: flex; align-items: flex-start;
+  }
+  .index .cell { padding: 0 26px; position: relative; }
+  .index .cell:first-child { padding-left: 0; }
+  .index .cell + .cell::before {
+    content: ""; position: absolute; left: 0; top: 4px;
+    width: 1px; height: 46px; background: var(--hair);
+  }
+  .index svg { width: 22px; height: 22px; margin-bottom: 12px; display: block; }
+  .index svg * { fill: none; stroke: var(--ink-soft); stroke-width: 1.1; opacity: .8; }
+  .index .cn {
+    font-family: var(--cjk); font-weight: 300; font-size: 13px;
+    letter-spacing: .2em; color: var(--ink); margin-bottom: 5px;
+  }
+  .index .en {
+    font-family: var(--display); font-size: 9.5px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--ink-soft); opacity: .8;
+  }
+
+  .marks { position: absolute; inset: 0; z-index: 11; }
+  .mark { position: absolute; }
+  .mark img { filter: var(--logo-filter); }
+
+  .boat { position: absolute; z-index: 10; }
+  .boat * { fill: none; stroke: var(--ink); stroke-width: 1.2; opacity: .55; }
+  .boat .hull { fill: var(--ink); stroke: none; opacity: .5; }
+
+  /* 印章 — carved, so the character is knocked out of the cinnabar */
+  .seal {
+    position: absolute; right: 108px; bottom: 112px; z-index: 13;
+    width: 40px; height: 40px; display: grid; place-items: center;
+    background: var(--seal); border-radius: 2px; opacity: .88;
+    font-family: var(--cjk); font-size: 21px; font-weight: 400;
+    color: var(--p-top); line-height: 1;
+  }
+
+  .grain {
+    position: absolute; inset: 0; z-index: 20; pointer-events: none;
+    opacity: .12; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+  }
+
+  .tag {
+    position: absolute; left: 0; top: 0; z-index: 40;
+    font: 400 11px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase;
+    background: #111; color: #fff; padding: 8px 12px;
+  }
+  body.capture .tag { display: none; }
+</style>
+</head>
+<body>
+
+<section class="band" data-v="suzhi"   data-tag="A · 素纸 warm paper + loaded brush"></section>
+<section class="band" data-v="dianbai" data-tag="B · 靛白 indigo on near-white"></section>
+<section class="band" data-v="sekuai"  data-tag="C · 色块 mineral blocks"></section>
+
+<script>
+  const WATERLINE = 800;
+
+  /* one dominant massif with subordinate distant peaks — the compositional
+     skeleton every reference banner shares */
+  /* one dominant peak, a lower shoulder, a saddle, and a long tail — the
+     asymmetry is what separates an ink massif from a symmetrical cone */
+  const MASSIF = `M 214 ${WATERLINE}
+    C 330 788, 402 764, 464 726
+    C 512 696, 548 660, 588 626
+    C 618 654, 640 686, 674 708
+    C 708 668, 750 606, 794 546
+    C 814 518, 832 494, 848 470
+    C 868 508, 886 552, 910 594
+    C 948 660, 1002 716, 1066 754
+    C 1130 786, 1212 798, 1296 ${WATERLINE} Z`;
+
+  const FARPEAKS = `M -40 ${WATERLINE}
+    C 40 792, 78 758, 122 714
+    C 156 748, 190 772, 244 786
+    C 282 758, 318 716, 368 748
+    C 416 774, 470 790, 528 ${WATERLINE} Z
+    M 1148 ${WATERLINE}
+    C 1206 790, 1250 754, 1300 720
+    C 1348 756, 1396 782, 1460 794
+    L 1460 ${WATERLINE} Z`;
+
+  /* every gradient and filter id is suffixed per variant — SVG ids are
+     document-global, so shared ids would make all three bands render with the
+     first band's palette */
+  const DEFS = (v) => `
+    <defs>
+      <linearGradient id="gFar-${v}" gradientUnits="userSpaceOnUse" x1="0" y1="688" x2="0" y2="806">
+        <stop class="s-far" offset="0"   stop-opacity="1"/>
+        <stop class="s-far" offset=".62" stop-opacity=".34"/>
+        <stop class="s-far" offset="1"   stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="gMid-${v}" gradientUnits="userSpaceOnUse" x1="0" y1="468" x2="0" y2="806">
+        <stop class="s-mid" offset="0"   stop-opacity="1"/>
+        <stop class="s-mid" offset=".46" stop-opacity=".52"/>
+        <stop class="s-mid" offset="1"   stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="gWater-${v}" gradientUnits="userSpaceOnUse" x1="0" y1="800" x2="0" y2="900">
+        <stop class="s-w" offset="0" stop-opacity=".16"/>
+        <stop class="s-w" offset="1" stop-opacity=".05"/>
+      </linearGradient>
+      <filter id="bFar-${v}"  x="-8%" y="-20%" width="116%" height="150%"><feGaussianBlur stdDeviation="5"/></filter>
+      <filter id="bMid-${v}"  x="-8%" y="-20%" width="116%" height="150%"><feGaussianBlur stdDeviation="2.6"/></filter>
+      <filter id="bEcho-${v}" x="-8%" y="-20%" width="116%" height="150%"><feGaussianBlur stdDeviation="7"/></filter>
+    </defs>`;
+
+  const RANGES = (v, peaks) => `
+    <svg class="ranges" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      ${DEFS(v)}
+      <rect class="water" fill="url(#gWater-${v})" x="0" y="${WATERLINE}" width="1440" height="${900 - WATERLINE}"/>
+      ${peaks ? `
+      <path class="far" fill="url(#gFar-${v})" filter="url(#bFar-${v})" d="${FARPEAKS}"/>
+      <path class="echo" fill="url(#gMid-${v})" filter="url(#bEcho-${v})" d="${MASSIF}"
+            transform="matrix(1 0 0 -1 0 ${WATERLINE * 2})"/>
+      <path class="mid" fill="url(#gMid-${v})" filter="url(#bMid-${v})" d="${MASSIF}"/>` : ""}
+    </svg>`;
+
+  /* the wet stroke. displacement roughens the silhouette; the hair lines and
+     flecks are what actually sell it as a brush rather than a vector swoosh */
+  const BRUSH = (v) => `
+    <svg class="brush" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gBrush-${v}" gradientUnits="userSpaceOnUse" x1="0" y1="830" x2="1390" y2="500">
+          <stop class="s-b0" offset="0"   stop-opacity=".92"/>
+          <stop class="s-b0" offset=".38" stop-opacity=".70"/>
+          <stop class="s-b0" offset=".76" stop-opacity=".84"/>
+          <stop class="s-b0" offset="1"   stop-opacity=".26"/>
+        </linearGradient>
+        <filter id="dry-${v}" x="-8%" y="-14%" width="118%" height="132%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.008 0.05" numOctaves="3" seed="7" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="1.4"/>
+        </filter>
+      </defs>
+      <path class="ribbon" fill="url(#gBrush-${v})" filter="url(#dry-${v})" d="M -40 806
+        C 176 788, 342 728, 524 698
+        C 706 668, 828 700, 968 656
+        C 1128 606, 1248 544, 1378 476
+        C 1384 488, 1388 500, 1390 514
+        C 1262 588, 1140 654, 978 700
+        C 836 740, 714 706, 530 742
+        C 346 776, 178 838, -40 858 Z"/>
+      <path class="hair" d="M -10 816 C 200 798, 360 740, 540 710 C 720 680, 840 712, 980 668 C 1136 618, 1256 558, 1382 492"/>
+      <path class="hair" d="M -10 838 C 214 820, 372 762, 548 730 C 726 700, 848 730, 986 686 C 1140 638, 1256 578, 1378 512"/>
+      <circle class="fleck" cx="1400" cy="462" r="2.1"/>
+      <circle class="fleck" cx="1416" cy="486" r="1.4"/>
+      <circle class="fleck" cx="1396" cy="440" r="1.6"/>
+      <circle class="fleck" cx="1420" cy="518" r="1.2"/>
+    </svg>`;
+
+  /* asterism kept from card-constellation.jpg — the golden star only */
+  const NODES = [
+    [592, 112, 2.2], [678, 172, 1.9], [784, 130, 3.0], [868, 210, 2.1],
+    [972, 162, 1.8], [914, 272, 2.9], [812, 240, 1.9], [722, 296, 2.0],
+    [1048, 244, 1.6],
+  ];
+  const EDGES = [[0,1],[1,2],[2,3],[3,4],[3,5],[5,6],[6,1],[6,7],[4,8],[5,8]];
+
+  const STARS = (() => {
+    const lines = EDGES.map(([a, b]) => {
+      const p = NODES[a], q = NODES[b];
+      return `<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/>`;
+    }).join("");
+    const dots = NODES.map(([x, y, r]) => {
+      const big = r >= 2.9;
+      return (big ? `<circle class="ring" cx="${x}" cy="${y}" r="${r + 5}"/>` : "") +
+             `<circle class="${big ? "bright" : ""}" cx="${x}" cy="${y}" r="${r}"/>`;
+    }).join("");
+    return `<svg class="stars" viewBox="0 0 1440 900" preserveAspectRatio="none">${lines}${dots}</svg>`;
+  })();
+
+  const SUN = (v) => `
+    <svg class="sun" style="right:112px; top:92px; width:132px; height:132px;" viewBox="0 0 132 132">
+      <defs>
+        <radialGradient id="gSun-${v}">
+          <stop class="s-sun" offset=".60" stop-opacity=".52"/>
+          <stop class="s-sun" offset=".84" stop-opacity=".30"/>
+          <stop class="s-sun" offset="1"   stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="66" cy="66" r="62" fill="url(#gSun-${v})"/>
+    </svg>`;
+
+  const BOAT = `
+    <svg class="boat" style="left:392px; top:806px; width:56px; height:40px;" viewBox="0 0 56 40">
+      <path class="hull" d="M3 27 C 12 34, 44 34, 53 27 L 47 23 L 9 23 Z"/>
+      <path d="M28 23 L28 4"/>
+      <path d="M28 5 C 41 9, 43 17, 37 22 L 28 22"/>
+    </svg>`;
+
+  const BLOCKS = `
+    <div class="blocks">
+      <div style="left:520px;  top:196px; width:296px; height:352px; background:var(--blk-celadon);"></div>
+      <div style="left:836px;  top:150px; width:212px; height:306px; background:var(--blk-ochre);"></div>
+      <div style="left:1058px; top:300px; width:168px; height:290px; background:var(--blk-blue);"></div>
+    </div>`;
+
+  const INDEX = `
+    <div class="index">
+      <div class="cell">
+        <svg viewBox="0 0 22 22"><path d="M2 17 L8 7 L12 13 L15 9 L20 17 Z"/></svg>
+        <p class="cn">信任</p><p class="en">AI + Trust</p>
+      </div>
+      <div class="cell">
+        <svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="8"/><path d="M3 11 H19 M11 3 V19"/></svg>
+        <p class="cn">系统</p><p class="en">Product Systems</p>
+      </div>
+      <div class="cell">
+        <svg viewBox="0 0 22 22"><path d="M3 15 C 7 6, 15 6, 19 15"/><circle cx="3" cy="15" r="1.6"/><circle cx="19" cy="15" r="1.6"/></svg>
+        <p class="cn">开物</p><p class="en">0 → 1 Builds</p>
+      </div>
+      <div class="cell">
+        <svg viewBox="0 0 22 22"><path d="M2 14 C 6 10, 9 16, 13 12 S 18 8, 20 11"/><path d="M2 18 C 6 14, 9 20, 13 16"/></svg>
+        <p class="cn">影响</p><p class="en">Research Influence</p>
+      </div>
+    </div>`;
+
+  const COPY = `
+    <div class="wall">
+      <p class="cjk">格物致知</p>
+      <p class="k">Practice Areas</p>
+      <div class="k-rule"></div>
+      <p class="lead">…where trust is the&nbsp;<em>product</em>.</p>
+      <p class="sub">Security, privacy, and now AI — complex systems where the thing being designed is confidence itself.</p>
+    </div>
+
+    <div class="marks">
+      <div class="mark" style="left:588px; top:322px;">
+        <img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="" width="204" height="31">
+      </div>
+      <div class="mark" style="left:892px; top:388px;">
+        <img src="../assets/images/shared/brand/google-wordmark.png" alt="" width="124" height="41">
+      </div>
+      <div class="mark" style="left:612px; top:462px;">
+        <img src="../assets/images/shared/brand/huawei-wordmark.png" alt="" width="150" height="38">
+      </div>
+      <div class="mark" style="left:910px; top:486px;">
+        <img src="../assets/images/shared/brand/kerr.png" alt="" width="96" height="60">
+      </div>
+    </div>
+
+    ${INDEX}
+    <div class="seal">真</div>
+    <div class="grain"></div>`;
+
+  /* A: the stroke IS the landscape. B: ink peaks and a reflection.
+     C: mineral blocks that will later hold product screenshots. */
+  const PARTS = {
+    suzhi:   (v) => `<div class="layer ground"></div>${RANGES(v, false)}${SUN(v)}${BRUSH(v)}${STARS}<div class="layer weave"></div>${COPY}`,
+    dianbai: (v) => `<div class="layer ground"></div>${RANGES(v, true)}<div class="layer mist-layer"></div>${SUN(v)}${STARS}${BOAT}<div class="layer weave"></div>${COPY}`,
+    sekuai:  (v) => `<div class="layer ground"></div>${BLOCKS}${RANGES(v, true)}<div class="layer mist-layer"></div>${SUN(v)}${STARS}<div class="layer weave"></div>${COPY}`,
+  };
+
+  document.querySelectorAll(".band").forEach((el) => {
+    el.innerHTML = PARTS[el.dataset.v](el.dataset.v) + '<div class="tag">' + el.dataset.tag + "</div>";
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Song plates — real type & logos composited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #26343F;
+    --ink-soft: #5D6E7A;
+    --ink-faint: #92A0A9;
+    --gold: #A9822F;
+    --rule: rgba(38,52,63,.22);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: #4A5157;
+    font-family: Inter, system-ui, sans-serif;
+    text-wrap: pretty;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 0 80px;
+  }
+
+  /* The plate sets the band's height, so every percentage overlay below lands
+     exactly where it does in the painting. No cover-crop guesswork. */
+  .band {
+    position: relative;
+    width: 1440px;
+    box-shadow: 0 18px 60px rgba(0,0,0,.34);
+  }
+  .plate { display: block; width: 100%; }
+
+  .caption {
+    width: 1440px;
+    margin-bottom: -26px;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+  }
+
+  /* ---- shared type ---- */
+  .kicker {
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 22px;
+  }
+  .kicker .cjk {
+    font-family: "Noto Serif SC", serif;
+    letter-spacing: .22em;
+    color: var(--gold);
+    margin-right: 14px;
+  }
+  .lede {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 300;
+    font-size: 34px;
+    line-height: 1.42;
+    letter-spacing: -.005em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .lede em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+
+  /* ---- 1 · hero ---- */
+  .hero-copy {
+    position: absolute;
+    left: 0; right: 0;
+    top: 20%;
+    text-align: center;
+  }
+  .hero-copy h1 {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 300;
+    font-size: 88px;
+    line-height: 1.06;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    margin: 0 0 26px;
+  }
+  .hero-copy h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-copy .sub {
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: .04em;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* ---- 2 & 3 · voyage frames: fixed text wall on the left ---- */
+  .wall {
+    position: absolute;
+    left: 8.4%;
+    top: 26%;
+    width: 30%;
+  }
+
+  .marks {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 52px;
+  }
+  .marks img { display: block; }
+
+  /* Companies read as one ink-toned family so no single brand shouts. */
+  .marks.ink img { filter: brightness(0) saturate(100%); opacity: .68; }
+  /* Universities keep their colour, per your call on branding. */
+  .marks.colour img { opacity: .92; }
+
+  /* ---- 4 · practice areas ---- */
+  .areas {
+    position: absolute;
+    left: 8.4%;
+    top: 24%;
+    width: 36%;
+  }
+  .area {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 19px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .area:first-of-type { border-top: 1px solid var(--rule); }
+  .area .num {
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: var(--gold);
+    width: 26px;
+    flex: none;
+  }
+  .area .name {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 300;
+    font-size: 23px;
+    color: var(--ink);
+    flex: 1;
+  }
+  .area .plus { font-size: 17px; color: var(--ink-faint); font-weight: 300; }
+  .area.open .name { color: var(--gold); }
+  .area-body {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    padding: 4px 0 20px 44px;
+    border-bottom: 1px solid var(--rule);
+    margin: 0;
+  }
+
+  /* ---- 5 · selected work: labels aligned to the painted panels ---- */
+  .work-head {
+    position: absolute;
+    left: 0; right: 0;
+    top: 5.4%;
+    text-align: center;
+  }
+  .work-head h2 {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 300;
+    font-size: 40px;
+    color: var(--ink);
+    margin: 0;
+  }
+  .panel {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 26px;
+  }
+  .panel .tag {
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.82);
+    margin-bottom: 10px;
+  }
+  .panel .title {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 1.24;
+    color: #fff;
+  }
+  .panel.dark .tag { color: rgba(38,52,63,.62); }
+  .panel.dark .title { color: var(--ink); }
+  /* Stands in for the case-study screenshot that will fill the panel. */
+  .shot {
+    flex: 1;
+    margin-bottom: 20px;
+    border: 1px dashed rgba(255,255,255,.5);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+  }
+  .panel.dark .shot { border-color: rgba(38,52,63,.3); color: rgba(38,52,63,.5); }
+
+  /* ---- 6 · philosophy: columns hang off the painted waypoints ---- */
+  .phase {
+    position: absolute;
+    width: 176px;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+  .phase .n {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .phase .t {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 300;
+    font-size: 21px;
+    color: var(--ink);
+    margin-bottom: 7px;
+  }
+  .phase .d {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .phil-wall { position: absolute; left: 5%; top: 12%; width: 18%; }
+</style>
+</head>
+<body>
+
+<!-- 1 · hero -->
+<div class="caption">1 · hero — section-1-hero</div>
+<section class="band">
+  <img class="plate" src="../assets/images/song/section-1-hero.png" alt="">
+  <div class="hero-copy">
+    <h1>From <em>insights</em> to influence</h1>
+    <p class="sub">Staff UX Researcher — security, privacy, and now&nbsp;AI</p>
+  </div>
+</section>
+
+<!-- 2 · companies -->
+<div class="caption">2 · companies — section-2-voyage-mid</div>
+<section class="band">
+  <img class="plate" src="../assets/images/song/section-2-voyage-mid.png" alt="">
+  <div class="wall">
+    <p class="kicker"><span class="cjk">格物</span>where I have worked</p>
+    <p class="lede">I&nbsp;lead strategic research in complex systems where trust is the product: <em>security, privacy, and now&nbsp;AI</em>.</p>
+  </div>
+  <div class="marks ink" style="left:44%; top:40%;">
+    <img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" style="height:26px;">
+    <img src="../assets/images/shared/brand/google-wordmark.png" alt="Google" style="height:26px;">
+    <img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" style="height:22px;">
+    <img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px;">
+  </div>
+</section>
+
+<!-- 3 · universities -->
+<div class="caption">3 · universities — section-3-voyage-arrival</div>
+<section class="band">
+  <img class="plate" src="../assets/images/song/section-3-voyage-arrival.png" alt="">
+  <div class="wall">
+    <p class="kicker"><span class="cjk">致知</span>where I was trained</p>
+    <p class="lede">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <em>what should we build, and&nbsp;why?</em></p>
+  </div>
+  <div class="marks colour" style="left:44%; top:38%; gap:46px;">
+    <img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State University" style="height:54px;">
+    <img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" style="height:54px;">
+    <img src="../assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" style="height:54px;">
+  </div>
+</section>
+
+<!-- 4 · practice areas -->
+<div class="caption">4 · practice areas — explore-05-celestial</div>
+<section class="band">
+  <img class="plate" src="../assets/images/song/explore-05-celestial.png" alt="">
+  <div class="areas">
+    <p class="kicker"><span class="cjk">四方</span>practice areas</p>
+    <div class="area open"><span class="num">01</span><span class="name">AI + Trust</span><span class="plus">−</span></div>
+    <p class="area-body">How people decide whether to rely on a system they cannot fully&nbsp;see.</p>
+    <div class="area"><span class="num">02</span><span class="name">Product Systems &amp; Convergence</span><span class="plus">+</span></div>
+    <div class="area"><span class="num">03</span><span class="name">0→1 Product Builds</span><span class="plus">+</span></div>
+    <div class="area"><span class="num">04</span><span class="name">Research Systems &amp; Influence</span><span class="plus">+</span></div>
+  </div>
+</section>
+
+<!-- 5 · selected work -->
+<div class="caption">5 · selected work — section-4-selected-work</div>
+<section class="band">
+  <img class="plate" src="../assets/images/song/section-4-selected-work.png" alt="">
+  <div class="work-head"><h2>Selected work</h2></div>
+  <div class="panel" style="left:11.5%; top:26%; width:22.2%; height:60%;">
+    <div class="shot">screenshot</div>
+    <div class="tag">Malwarebytes</div>
+    <div class="title">Research to roadmap</div>
+  </div>
+  <div class="panel dark" style="left:39.1%; top:21.5%; width:22.5%; height:65%;">
+    <div class="shot">screenshot</div>
+    <div class="tag">Google Shopping</div>
+    <div class="title">Shopping with confidence</div>
+  </div>
+  <div class="panel" style="left:66.9%; top:25.5%; width:22.4%; height:61%;">
+    <div class="shot">screenshot</div>
+    <div class="tag">Huawei</div>
+    <div class="title">Patchwork to posture</div>
+  </div>
+</section>
+
+<!-- 6 · research philosophy -->
+<div class="caption">6 · research philosophy — section-6-philosophy-arc (phase names are placeholder)</div>
+<section class="band">
+  <img class="plate" src="../assets/images/song/section-6-philosophy-arc.png" alt="">
+  <div class="phil-wall">
+    <p class="kicker"><span class="cjk">理</span>philosophy</p>
+    <p class="lede" style="font-size:27px;">A four-phase&nbsp;arc.</p>
+  </div>
+  <div class="phase" style="left:23.4%; top:70%;">
+    <div class="n">01</div><div class="t">Frame</div>
+    <div class="d">Name the decision the team is actually&nbsp;facing.</div>
+  </div>
+  <div class="phase" style="left:44.1%; top:47%;">
+    <div class="n">02</div><div class="t">Discover</div>
+    <div class="d">Go where the behaviour already&nbsp;happens.</div>
+  </div>
+  <div class="phase" style="left:66.2%; top:42%;">
+    <div class="n">03</div><div class="t">Converge</div>
+    <div class="d">Turn signal into a position the team can&nbsp;hold.</div>
+  </div>
+  <div class="phase" style="left:87%; top:47%;">
+    <div class="n">04</div><div class="t">Influence</div>
+    <div class="d">Make the finding survive contact with&nbsp;roadmaps.</div>
+  </div>
+</section>
+
+</body>
+</html>

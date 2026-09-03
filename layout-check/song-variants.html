@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contemporary Song — skills band exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --serif: "Fraunces", "Noto Serif SC", serif;
+    --sans: "Inter", sans-serif;
+    --cjk: "Noto Serif SC", serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #17181a; font-family: var(--sans); }
+  img { display: block; max-width: 100%; }
+
+  .band {
+    position: relative;
+    width: 1440px; height: 900px;
+    overflow: hidden;
+    margin: 0 auto 24px;
+    color: var(--ink);
+  }
+  .layer { position: absolute; inset: 0; }
+
+  /* ============ palettes ============================================= */
+
+  /* 天青 — Ru-glaze sky-after-rain, the daylight register */
+  [data-v="tianqing"] {
+    --g-top: #C4D3D0;
+    --g-bot: #A9BEBC;
+    --ink: #1D2A31;
+    --ink-soft: #4C6068;
+    --range-far: rgba(29,42,49,.13);
+    --range-mid: rgba(29,42,49,.20);
+    --range-near: rgba(29,42,49,.30);
+    --gold: #B08D46;
+    --star-core: #8A6D2E;
+    --mist: rgba(246,250,249,.44);
+    --hair: rgba(29,42,49,.28);
+    --logo-filter: brightness(0) opacity(.80);
+    --seal: #A85B32;
+  }
+
+  /* 墨夜 — ink night, the darkest point of the arc */
+  [data-v="moye"] {
+    --g-top: #16233F;
+    --g-bot: #0C1424;
+    --ink: #E6ECEF;
+    --ink-soft: #92A6B4;
+    --range-far: rgba(215,230,240,.09);
+    --range-mid: rgba(200,218,232,.07);
+    --range-near: rgba(8,14,26,.55);
+    --gold: #D4B678;
+    --star-core: #F0DCA8;
+    --mist: rgba(152,180,204,.13);
+    --hair: rgba(214,229,238,.26);
+    --logo-filter: brightness(0) invert(1) opacity(.90);
+    --seal: #B4653A;
+  }
+
+  /* 月白 — moon white, maximum 留白 */
+  [data-v="yuebai"] {
+    --g-top: #F1F3F3;
+    --g-bot: #E3E8E9;
+    --ink: #1A2126;
+    --ink-soft: #5C6B73;
+    --range-far: rgba(26,33,38,.07);
+    --range-mid: rgba(26,33,38,.11);
+    --range-near: rgba(26,33,38,.17);
+    --gold: #A98A45;
+    --star-core: #806526;
+    --mist: rgba(255,255,255,.58);
+    --hair: rgba(26,33,38,.22);
+    --logo-filter: brightness(0) opacity(.78);
+    --seal: #A85B32;
+  }
+
+  /* 青绿 — azurite & malachite, after 千里江山图 */
+  [data-v="qinglv"] {
+    --g-top: #1E3D63;
+    --g-bot: #14283F;
+    --ink: #EAF0EE;
+    --ink-soft: #9DB8B4;
+    --range-far: rgba(74,136,118,.62);
+    --range-mid: rgba(38,96,152,.70);
+    --range-near: rgba(9,22,38,.82);
+    --gold: #D9BE7C;
+    --star-core: #F5E4B4;
+    --mist: rgba(154,196,208,.20);
+    --hair: rgba(224,238,234,.26);
+    --logo-filter: brightness(0) invert(1) opacity(.90);
+    --seal: #C06A3C;
+  }
+
+  .ground { background: linear-gradient(var(--g-top), var(--g-bot)); }
+
+  /* 龙脉 — one continuous line of energy through the composition, so the void
+     reads as deliberate rather than unfilled */
+  .route { position: absolute; inset: 0; z-index: 6; }
+  .route path { fill: none; stroke: var(--gold); stroke-width: 1; stroke-linecap: round; opacity: .34; }
+  .route path.dot { stroke-dasharray: 1.5 10; opacity: .22; }
+
+  /* 平远 — level distance from receding planes. Each plane fades upward into
+     nothing and carries its own blur, so the recession reads as atmosphere
+     rather than as stacked vector shapes. */
+  .ranges { position: absolute; inset: 0; }
+  .ranges .far  { fill: url(#gFar);  filter: url(#bFar); }
+  .ranges .mid  { fill: url(#gMid);  filter: url(#bMid); }
+  .ranges .near { fill: url(#gNear); filter: url(#bNear); }
+  .ranges .s-far  { stop-color: var(--range-far); }
+  .ranges .s-mid  { stop-color: var(--range-mid); }
+  .ranges .s-near { stop-color: var(--range-near); }
+
+  /* 云海 — the band of cloud that separates one distance from the next */
+  .mist { background: linear-gradient(transparent 56%, var(--mist) 70%, transparent 86%); }
+
+  /* the golden asterism, redrawn as ink-and-gold line rather than a wash */
+  .stars { position: absolute; inset: 0; }
+  .stars line { stroke: var(--gold); stroke-width: .9; opacity: .5; }
+  .stars circle { fill: var(--gold); }
+  .stars circle.bright { fill: var(--star-core); }
+  .stars .halo { fill: var(--gold); opacity: .14; }
+
+  .wall { position: absolute; left: 96px; top: 292px; width: 348px; z-index: 8; }
+  .wall .k {
+    font-size: 11px; font-weight: 400; letter-spacing: .26em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 20px;
+  }
+  .wall .cjk {
+    font-family: var(--cjk); font-weight: 300; font-size: 13px;
+    letter-spacing: .34em; color: var(--ink-soft); opacity: .62; margin-bottom: 14px;
+  }
+  .wall p.lead {
+    font-family: var(--serif); font-weight: 300; font-size: 34px; line-height: 1.34;
+    color: var(--ink);
+  }
+  .wall p.lead em { font-style: italic; }
+  .wall .rule { width: 46px; height: 1px; background: var(--hair); margin: 26px 0 22px; }
+  .wall .sub {
+    font-size: 14px; font-weight: 300; line-height: 1.72; color: var(--ink-soft); max-width: 306px;
+  }
+
+  .marks { position: absolute; inset: 0; z-index: 7; }
+  .mark { position: absolute; }
+  .mark img { filter: var(--logo-filter); }
+
+  .compass { position: absolute; right: 132px; bottom: 208px; width: 84px; height: 84px; z-index: 9; }
+  .compass circle { fill: none; stroke: var(--hair); stroke-width: .8; }
+  .compass line { stroke: var(--hair); stroke-width: .8; }
+  .compass polygon { fill: var(--gold); opacity: .85; }
+  .compass .pin { fill: var(--ink); opacity: .5; }
+
+  .seal {
+    position: absolute; left: 96px; top: 636px; z-index: 9;
+    width: 34px; height: 34px; display: grid; place-items: center;
+    border: 1px solid var(--seal); border-radius: 2px;
+    font-family: var(--cjk); font-size: 15px; color: var(--seal); opacity: .82;
+  }
+
+  .grain {
+    position: absolute; inset: 0; z-index: 10; pointer-events: none;
+    opacity: .10; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+
+  .tag {
+    position: absolute; left: 0; top: 0; z-index: 30;
+    font: 400 11px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase;
+    background: #111; color: #fff; padding: 8px 12px;
+  }
+  body.capture .tag { display: none; }
+</style>
+</head>
+<body>
+
+<section class="band" data-v="tianqing" data-tag="S1 · 天青 ru-glaze"></section>
+<section class="band" data-v="moye"     data-tag="S2 · 墨夜 ink night"></section>
+<section class="band" data-v="yuebai"   data-tag="S3 · 月白 moon white"></section>
+<section class="band" data-v="qinglv"   data-tag="S4 · 青绿 azurite & malachite"></section>
+
+<script>
+  const RANGES = `
+    <svg class="ranges" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gFar" gradientUnits="userSpaceOnUse" x1="0" y1="604" x2="0" y2="784">
+          <stop class="s-far" offset="0" stop-opacity="0"/>
+          <stop class="s-far" offset="1" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="gMid" gradientUnits="userSpaceOnUse" x1="0" y1="690" x2="0" y2="846">
+          <stop class="s-mid" offset="0" stop-opacity="0"/>
+          <stop class="s-mid" offset="1" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="gNear" gradientUnits="userSpaceOnUse" x1="0" y1="774" x2="0" y2="898">
+          <stop class="s-near" offset="0" stop-opacity="0"/>
+          <stop class="s-near" offset="1" stop-opacity="1"/>
+        </linearGradient>
+        <filter id="bFar"  x="-6%" y="-14%" width="112%" height="128%"><feGaussianBlur stdDeviation="9"/></filter>
+        <filter id="bMid"  x="-6%" y="-14%" width="112%" height="128%"><feGaussianBlur stdDeviation="5.5"/></filter>
+        <filter id="bNear" x="-6%" y="-14%" width="112%" height="128%"><feGaussianBlur stdDeviation="2.4"/></filter>
+      </defs>
+      <path class="far"  d="M0 668 C 130 632, 250 680, 372 646 S 628 604, 768 642 S 1028 612, 1188 648 S 1366 630, 1440 654 L1440 900 L0 900 Z"/>
+      <path class="mid"  d="M0 748 C 152 716, 302 762, 472 730 S 762 692, 922 736 S 1214 710, 1440 742 L1440 900 L0 900 Z"/>
+      <path class="near" d="M0 820 C 182 794, 364 836, 542 810 S 864 778, 1044 816 S 1294 794, 1440 822 L1440 900 L0 900 Z"/>
+    </svg>`;
+
+  const ROUTE = `
+    <svg class="route" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <path class="dot" d="M -30 744 C 160 716, 320 704, 470 690"/>
+      <path d="M 470 690 C 670 664, 850 616, 1000 528 S 1170 366, 1198 240"/>
+    </svg>`;
+
+  /* asterism kept from card-constellation.jpg — the golden star only, redrawn
+     as line so it can be stroked, scaled and animated */
+  const STAR_NODES = [
+    [742, 108, 2.6], [828, 168, 2.2], [934, 126, 3.0], [1018, 206, 2.4],
+    [1122, 158, 2.0], [1064, 268, 2.8], [962, 236, 2.2], [872, 292, 2.4],
+    [1198, 240, 1.8],
+  ];
+  const STAR_EDGES = [[0,1],[1,2],[2,3],[3,4],[3,5],[5,6],[6,1],[6,7],[4,8],[5,8]];
+
+  const STARS = (() => {
+    const lines = STAR_EDGES.map(([a, b]) => {
+      const p = STAR_NODES[a], q = STAR_NODES[b];
+      return `<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/>`;
+    }).join("");
+    const dots = STAR_NODES.map(([x, y, r], i) => {
+      const bright = r >= 2.8;
+      return `<circle class="halo" cx="${x}" cy="${y}" r="${r * 4.6}"/>` +
+             `<circle class="${bright ? "bright" : ""}" cx="${x}" cy="${y}" r="${r}"/>`;
+    }).join("");
+    return `<svg class="stars" viewBox="0 0 1440 900" preserveAspectRatio="none">${lines}${dots}</svg>`;
+  })();
+
+  const SCENE = `
+    <div class="layer ground"></div>
+    ${RANGES}
+    <div class="layer mist"></div>
+    ${ROUTE}
+    ${STARS}
+
+    <div class="wall">
+      <p class="cjk">格物致知</p>
+      <p class="k">practice areas</p>
+      <p class="lead">…where trust is the&nbsp;<em>product</em>.</p>
+      <div class="rule"></div>
+      <p class="sub">Security, privacy, and now AI — complex systems where the thing being designed is confidence itself.</p>
+    </div>
+
+    <div class="marks">
+      <div class="mark" style="left:566px; top:286px;">
+        <img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="" width="204" height="31">
+      </div>
+      <div class="mark" style="left:874px; top:352px;">
+        <img src="../assets/images/shared/brand/google-wordmark.png" alt="" width="124" height="41">
+      </div>
+      <div class="mark" style="left:592px; top:432px;">
+        <img src="../assets/images/shared/brand/huawei-wordmark.png" alt="" width="150" height="38">
+      </div>
+      <div class="mark" style="left:892px; top:456px;">
+        <img src="../assets/images/shared/brand/kerr.png" alt="" width="96" height="60">
+      </div>
+    </div>
+
+    <svg class="compass" viewBox="0 0 84 84">
+      <circle cx="42" cy="42" r="33"/>
+      <circle cx="42" cy="42" r="23"/>
+      <line x1="42" y1="2" x2="42" y2="11"/>
+      <line x1="42" y1="73" x2="42" y2="82"/>
+      <line x1="2" y1="42" x2="11" y2="42"/>
+      <line x1="73" y1="42" x2="82" y2="42"/>
+      <polygon points="42,12 46,42 42,58 38,42"/>
+      <circle class="pin" cx="42" cy="42" r="2" stroke="none"/>
+    </svg>
+
+    <div class="seal">真</div>
+    <div class="grain"></div>
+  `;
+
+  document.querySelectorAll(".band").forEach((el) => {
+    el.innerHTML = SCENE + '<div class="tag">' + el.dataset.tag + "</div>";
+  });
+</script>
+
+</body>
+</html>

@@ -123,7 +123,7 @@
     height: auto;
     min-height: 100vh;
     min-height: 100svh;
-    /* Clip to one viewport on load so only the arch tip peeks; JS expands on scroll */
+    /* Clip to one viewport on load; arch stays below the fold until the hero copy has left */
     max-height: 100vh;
     max-height: 100svh;
     overflow: hidden;
@@ -409,19 +409,20 @@
     width: 100%;
     height: 100%;
   }
-  /* Your original soft clouds (black bg → transparent via screen) */
   .cloud-media img.cloud-face {
     position: relative;
     z-index: 2;
-    width: 100%;
+    width: 86%;
     height: 100%;
+    margin: 0 auto;
     object-fit: contain;
     object-position: center bottom;
     display: block;
-    mix-blend-mode: screen;
     pointer-events: none;
     transition: opacity 1.6s cubic-bezier(.45, 0, .2, 1);
   }
+  .cloud-right .cloud-media img.cloud-face { width: 116%; max-width: none; }
+  .cloud-left .cloud-media img.cloud-face { width: 103.2%; max-width: none; left: -8.6%; }
   .cloud-media img.gif {
     position: absolute;
     inset: 8% 10%;
@@ -531,6 +532,33 @@
   .cloud-left .cloud-caption { --caption-tilt: -2deg; }
   .cloud-right .cloud-caption { --caption-tilt: 2deg; }
 
+  .hero-ocean {
+    position: absolute;
+    left: 0; right: 0; bottom: clamp(-96px, -6vw, -52px);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hero-ocean img {
+    width: 108%; max-width: none; margin-left: -4%; height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  .hero-ocean .wave--near { position: relative; z-index: 2; }
+  .hero-ocean .wave--far {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+    opacity: .5; transform-origin: 50% 100%;
+  }
+  .hero.is-in .wave--near { animation: swellNear 7.2s ease-in-out infinite; }
+  .hero.is-in .wave--far { animation: swellFar 11.3s ease-in-out infinite; }
+  @keyframes swellNear {
+    0%, 100% { transform: translate3d(-7px, 0, 0); }
+    50% { transform: translate3d(7px, -11px, 0); }
+  }
+  @keyframes swellFar {
+    0%, 100% { transform: translate3d(6px, 0, 0) scale(1.06); }
+    50% { transform: translate3d(-6px, -5px, 0) scale(1.06); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-copy, .hero-stats, .cloud, .cloud-top, .cloud-back {
       transition: opacity .4s ease !important;
@@ -542,7 +570,9 @@
     }
     .hero.is-in .cloud-top { transform: translate(-50%, 0) !important; }
     .hero.is-in .cloud-back { transform: translateX(-50%) translateY(0) !important; }
-    .hero.is-in .cloud-bob { animation: none !important; }
+    .hero.is-in .cloud-bob,
+    .hero.is-in .wave--near,
+    .hero.is-in .wave--far { animation: none !important; }
     .cloud-media img.gif,
     .cloud-media img.cloud-face { transition: opacity .5s ease !important; }
     .how-flower img { animation: none !important; }
@@ -658,12 +688,12 @@
       0 -18px 60px rgba(0,115,140,.10),
       0 28px 48px -12px rgba(30, 42, 68, .10);
     will-change: transform;
-    /* Hero tip-peek: clip to the mint dome; expanded allows skill-card bleed */
+    /* Clip to the mint dome; expanded allows skill-card bleed */
     overflow: hidden;
   }
-  /* FOUC / pre-GSAP: only a tiny tip at the bottom (mint only) */
+  /* FOUC / pre-GSAP: hold the arch below the fold so it never sits in the hero */
   .intro-pin:not(.is-expanded) .about-arch {
-    transform: scale(0.28) translateY(14%);
+    transform: scale(0.24) translateY(40%);
     transform-origin: 50% 100%;
   }
   .intro-pin.is-expanded .about-arch {
@@ -2994,6 +3024,8 @@
       <li><a href="#about" data-ph="nav" data-ph-label="about"><b>? |</b> about</a></li>
       <li><a href="https://drive.google.com/file/d/17MfLUzv30i4aaarp9RvkORppY3sFjvG3/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-ph="resume"><b>⌗ |</b> resume</a></li>
       <li><a href="https://www.linkedin.com/in/alexandra-irribarren" target="_blank" rel="noopener noreferrer" data-ph="connect" data-ph-location="nav"><b>⌲ |</b> connect</a></li>
+      <li><a href="index-2.html" data-ph="nav" data-ph-label="v2"><b>◈ |</b> 2.0</a></li>
+      <li><a href="index-3.html" data-ph="nav" data-ph-label="v3"><b>✦ |</b> 3.0</a></li>
     </ul>
   </div>
 </nav>
@@ -3035,7 +3067,7 @@
               <div class="cloud-frame">
                 <div class="cloud-media">
                   <img class="gif" src="assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
-                  <img class="cloud-face" src="assets/images/home/cloud-soft-1.png" alt="" aria-hidden="true">
+                  <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-1-wide.png" alt="" aria-hidden="true" width="800" height="379">
                 </div>
                 <span class="cloud-caption">a compass when things get fuzzy</span>
               </div>
@@ -3047,13 +3079,17 @@
               <div class="cloud-frame">
                 <div class="cloud-media">
                   <img class="gif" src="assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
-                  <img class="cloud-face" src="assets/images/home/cloud-soft-2.png" alt="" aria-hidden="true">
+                  <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-2-wide.png" alt="" aria-hidden="true" width="761" height="303">
                 </div>
                 <span class="cloud-caption">a seeker of truths</span>
               </div>
             </div>
           </button>
         </div>
+      </div>
+      <div class="hero-ocean" aria-hidden="true">
+        <img class="wave wave--far" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+        <img class="wave wave--near" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
       </div>
     </header>
 
@@ -4079,15 +4115,15 @@
   // Intro: pinned ScrollTrigger — hero exits up, arch grows small → full
   gsap.registerPlugin(ScrollTrigger);
   const introPin = document.querySelector(".intro-pin");
-  const heroFg = document.querySelector("[data-hero-fg]");
+  const heroFg = introPin && introPin.querySelector("[data-hero-fg]");
   const aboutArch = document.querySelector("[data-about-arch]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (introPin && heroFg && aboutArch && !reduceMotion) {
-    // Landing: just the tip of the arch peeks under the hero clouds
+    // Hold the arch below the fold. Hero copy fades up first; ocean stays; then the arch rises.
     gsap.set(aboutArch, {
-      scale: 0.28,
-      yPercent: 32,
+      scale: 0.24,
+      yPercent: 40,
       transformOrigin: "50% 100%",
     });
     aboutArch.classList.remove("is-content-visible");
@@ -4134,51 +4170,43 @@
         onUpdate: (self) => {
           const p = self.progress;
           heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
-          // Only the grown arch should capture clicks; tip must stay pass-through
-          aboutArch.style.pointerEvents = p > 0.4 ? "auto" : "none";
-          // Keep intro copy off the hero; fade in only after the dome has grown in
-          setArchContent(p > 0.22);
+          aboutArch.style.pointerEvents = p > 0.45 ? "auto" : "none";
+          setArchContent(p > 0.38);
 
           // Expand before unpin so pin-spacer / #work never see a collapsed 100vh shell.
-          // First scroll-up was overlapping the arch when expand waited until onLeave.
           if (p >= 0.7) expandIntro();
         },
-        // Unpin: lock full shell height + strip transform.
-        // (A bare refresh() was re-applying yPercent:28 and sliding the arch over #work.)
         onLeave: () => {
           expandIntro({ refresh: true, lock: true });
         },
-        // Scroll-up into the pin: keep expanded — never collapse here.
         onEnterBack: () => {
           expandIntro();
           aboutArch.style.willChange = "transform";
           aboutArch.style.removeProperty("transform");
           setArchContent(true);
         },
-        // Fully back at the hero — safe to re-clip for the tip peek.
         onLeaveBack: () => {
           introPin.classList.remove("is-expanded");
           aboutArch.style.willChange = "transform";
+          gsap.set(aboutArch, { scale: 0.24, yPercent: 40, transformOrigin: "50% 100%" });
           setArchContent(false);
         },
       },
       defaults: { ease: "none" },
     });
 
-    // Hero clears immediately as arch takes over
     introTl.to(heroFg, {
       y: () => -window.innerHeight * 0.45,
       opacity: 0,
-      duration: 0.12,
+      duration: 0.18,
     }, 0);
 
-    // From the first scroll: tip → filling the screen
     introTl.to(aboutArch, {
       scale: 1,
       yPercent: 0,
-      duration: 0.7,
-      ease: "power1.out", // front-loads growth so it arrives sooner
-    }, 0);
+      duration: 0.55,
+      ease: "power1.out",
+    }, 0.22);
 
     const refreshIntro = () => ScrollTrigger.refresh();
     window.addEventListener("load", refreshIntro);

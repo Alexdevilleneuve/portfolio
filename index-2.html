@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<!--
+  Homepage 2.0 — comparison cut.
+
+  Block 1: watercolor wake (new hero + boat, path cards, parchment).
+  Block 2: 1.0-style ice-sky hero + current camera voyage.
+
+  Unique IDs: hero-v1 / hero-v2 / skills-v1.
+  Do not ship into index.html / index-3.html until this cut is settled.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexandra Irribarren — Homepage 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ice-sky: #E8F0FA;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --gold: #C4B48A;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --hand: "Caveat", cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+  }
+
+  /* ---- 1.0 hero ---- */
+  .hero {
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    --accent-deep: #3D5CB8;
+    position: relative;
+    z-index: 6;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    min-height: 640px;
+    overflow: hidden;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, var(--ice-sky) 100%);
+  }
+  .hero-fg { position: absolute; inset: 0; z-index: 2; }
+  .hero-inner {
+    position: relative; z-index: 5;
+    width: 100%; height: 100%;
+    max-width: 920px; margin: 0 auto;
+    padding: clamp(88px, 14vh, 140px) 32px clamp(72px, 14vh, 120px);
+    display: flex; flex-direction: column; align-items: center;
+    pointer-events: none;
+  }
+  .hero-copy {
+    max-width: 920px; text-align: center; margin: 12vh auto 0;
+    opacity: 0; transform: translateY(120px);
+    transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
+  .hero-role {
+    font-size: 15px; letter-spacing: .14em; text-transform: uppercase;
+    color: #5E7F82; font-weight: 600;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(36px, 6.2vw, 78px); line-height: 1.1;
+    margin-top: 14px; letter-spacing: -.03em; color: var(--ink);
+    white-space: nowrap;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-stats {
+    margin-top: auto; display: flex; flex-direction: column; gap: 4px; text-align: center;
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 1.08s .5s cubic-bezier(.2,.7,.2,1), transform 1.08s .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .hero-stats { opacity: 1; transform: translateY(0); }
+  .hero-stats p { font-size: 16px; font-weight: 500; color: var(--ink-soft); letter-spacing: .02em; }
+  .hero-stats strong { font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 18px; }
+  .hero-stats strong span { color: var(--accent); }
+
+  .cloud-top {
+    position: absolute;
+    top: -4%;
+    left: 50%;
+    width: min(70vw, 820px);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -40px);
+    transition: opacity 1.4s .1s cubic-bezier(.2,.7,.2,1), transform 1.4s .1s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-top { opacity: .9; transform: translate(-50%, 0); }
+  .hero.is-in .cloud-top .cloud-bob { animation: cloudBounce 10s ease-in-out 1.6s infinite; }
+  .cloud-top .cloud-frame {
+    aspect-ratio: 2.4 / 1;
+    filter: drop-shadow(0 12px 28px rgba(30,42,68,.1));
+  }
+  .cloud-top img.cloud-face {
+    width: 100%; height: 100%;
+    object-fit: contain; mix-blend-mode: screen; display: block;
+  }
+
+  .hero-clouds {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: min(50vh, 480px); z-index: 4; pointer-events: none;
+  }
+  .cloud-back {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    max-width: none;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-50%) translateY(24px);
+    transition: opacity 1.5s .25s cubic-bezier(.2,.7,.2,1), transform 1.5s .25s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-back { opacity: .75; transform: translateX(-50%) translateY(0); }
+  .cloud-back .cloud-bob {
+    position: relative; left: auto; right: auto; bottom: auto;
+    width: 100%; will-change: transform;
+  }
+  .hero.is-in .cloud-back .cloud-bob { animation: cloudBounceSoft 14s ease-in-out 2.2s infinite; }
+  .cloud-back img {
+    display: block; width: 100%; height: auto;
+    object-fit: cover; object-position: center bottom;
+  }
+
+  .cloud {
+    position: absolute; top: 16%; bottom: 0;
+    margin: 0; padding: 0; border: none; background: none;
+    cursor: pointer; text-align: center; font: inherit; color: inherit;
+    pointer-events: auto; opacity: 0; overflow: visible;
+  }
+  .cloud:focus { outline: none; }
+  .cloud:focus-visible .cloud-frame {
+    outline: 2px solid var(--accent);
+    outline-offset: 8px;
+    border-radius: 40px;
+  }
+  .cloud-left {
+    left: 2%; width: 44%; z-index: 3; transform: translateX(-180px);
+    transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .cloud-right {
+    right: 2%; left: auto; width: 40%; z-index: 2; transform: translateX(180px);
+    transition: opacity 1.4s .2s cubic-bezier(.2,.7,.2,1), transform 1.4s .2s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-left, .hero.is-in .cloud-right { opacity: 1; transform: translateX(0); }
+  .cloud-bob { position: absolute; bottom: -6%; width: min(124%, 720px); will-change: transform; pointer-events: none; }
+  .cloud-left .cloud-bob { left: -16%; }
+  .cloud-right .cloud-bob { right: -16%; left: auto; width: min(116%, 680px); }
+  .hero.is-in .cloud-left .cloud-bob { animation: cloudBounce 7.5s ease-in-out 1.5s infinite; }
+  .hero.is-in .cloud-right .cloud-bob { animation: cloudBounce 8.8s ease-in-out 1.9s infinite; }
+  @keyframes cloudBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-48px); }
+  }
+  @keyframes cloudBounceSoft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  .cloud-frame {
+    position: relative; width: 100%; aspect-ratio: 2 / 1.1;
+    filter: drop-shadow(0 18px 36px rgba(30,42,68,.14));
+  }
+  .cloud-media { position: relative; width: 100%; height: 100%; }
+  .cloud-media img.cloud-face {
+    position: relative; z-index: 2;
+    width: 86%; height: 100%; margin: 0 auto;
+    object-fit: contain; object-position: center bottom;
+    display: block; pointer-events: none;
+    transition: opacity 1.6s cubic-bezier(.45, 0, .2, 1);
+  }
+  .cloud-right .cloud-media img.cloud-face { width: 116%; max-width: none; }
+  .cloud-left .cloud-media img.cloud-face { width: 103.2%; max-width: none; left: -8.6%; }
+  .cloud-media img.gif {
+    position: absolute; inset: 8% 10%; z-index: 1; width: 80%; height: 80%; margin: auto;
+    object-fit: cover; object-position: center; display: block;
+    opacity: 0; border-radius: 40%;
+    filter: blur(1.2px) saturate(0.9); transform: scale(.94);
+    transition: opacity 1.65s cubic-bezier(.45, 0, .15, 1), transform 1.85s cubic-bezier(.33, .1, .2, 1), filter 1.65s cubic-bezier(.45, 0, .15, 1);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
+  }
+  .cloud-left .cloud-media img.gif { transform: translateX(-6%) scale(.94); object-position: 42% center; }
+  .cloud.is-peeking .cloud-media img.gif {
+    opacity: 1; filter: blur(0.2px) saturate(0.9); transform: scale(1);
+    transition: opacity 2.15s cubic-bezier(.35, 0, .15, 1), transform 2.35s cubic-bezier(.3, .05, .15, 1), filter 2.15s cubic-bezier(.35, 0, .15, 1);
+  }
+  .cloud-left.is-peeking .cloud-media img.gif { transform: translateX(-6%) scale(1); }
+  .cloud.is-peeking .cloud-media img.cloud-face {
+    opacity: .48; transition: opacity 2.15s cubic-bezier(.35, 0, .15, 1);
+  }
+  .cloud.is-hot .cloud-media img.gif,
+  .cloud:focus-within .cloud-media img.gif,
+  .cloud.is-revealed .cloud-media img.gif {
+    opacity: 1; filter: blur(0.2px) saturate(0.9); transform: scale(1);
+    transition: opacity .85s cubic-bezier(.4, 0, .2, 1), transform .9s cubic-bezier(.33, .1, .2, 1), filter .85s cubic-bezier(.4, 0, .2, 1);
+  }
+  .cloud-left.is-hot .cloud-media img.gif,
+  .cloud-left:focus-within .cloud-media img.gif,
+  .cloud-left.is-revealed .cloud-media img.gif { transform: translateX(-6%) scale(1); }
+  .cloud.is-hot .cloud-media img.cloud-face,
+  .cloud:focus-within .cloud-media img.cloud-face,
+  .cloud.is-revealed .cloud-media img.cloud-face { opacity: .28; }
+  .cloud.is-hot .cloud-caption,
+  .cloud:focus-within .cloud-caption,
+  .cloud.is-revealed .cloud-caption {
+    opacity: 1; color: var(--ink);
+    font-size: clamp(22px, 2.35vw, 30px);
+    text-shadow: 0 0 22px rgba(239, 243, 250, .98), 0 0 8px rgba(239, 243, 250, .9), 0 1px 2px rgba(255, 255, 255, .85);
+  }
+  .cloud-caption {
+    --caption-tilt: -1.5deg;
+    position: absolute; left: 50%; top: 18%; z-index: 3;
+    width: max-content; max-width: 72%; margin: 0;
+    font-family: var(--hand); font-weight: 500;
+    font-size: clamp(20px, 2.1vw, 27px);
+    color: var(--ink-soft); line-height: 1.25; text-align: center;
+    pointer-events: none; opacity: .72;
+    transform: translateX(-50%) rotate(var(--caption-tilt));
+    transition: opacity .55s ease, color .55s ease, font-size .55s ease, text-shadow .55s ease;
+    text-shadow: 0 0 16px rgba(239, 243, 250, .85), 0 1px 0 rgba(255, 255, 255, .55);
+  }
+  .cloud-left .cloud-caption { --caption-tilt: -2deg; }
+  .cloud-right .cloud-caption { --caption-tilt: 2deg; }
+  .hero-ocean {
+    position: absolute; left: 0; right: 0; bottom: clamp(-96px, -6vw, -52px);
+    z-index: 1; pointer-events: none;
+  }
+  .hero-ocean img {
+    width: 108%; max-width: none; margin-left: -4%; height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  .hero-ocean .wave--near { position: relative; z-index: 2; }
+  .hero-ocean .wave--far {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+    opacity: .5; transform-origin: 50% 100%;
+  }
+  .hero.is-in .wave--near { animation: swellNear 7.2s ease-in-out infinite; }
+  .hero.is-in .wave--far { animation: swellFar 11.3s ease-in-out infinite; }
+  @keyframes swellNear {
+    0%, 100% { transform: translate3d(-7px, 0, 0); }
+    50% { transform: translate3d(7px, -11px, 0); }
+  }
+  @keyframes swellFar {
+    0%, 100% { transform: translate3d(6px, 0, 0) scale(1.06); }
+    50% { transform: translate3d(-6px, -5px, 0) scale(1.06); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-copy, .hero-stats, .cloud, .cloud-top, .cloud-back {
+      transition: opacity .4s ease !important;
+      transform: none !important;
+    }
+    .cloud-caption {
+      transform: translateX(-50%) rotate(var(--caption-tilt, -1.5deg)) !important;
+    }
+    .hero.is-in .cloud-top { transform: translate(-50%, 0) !important; }
+    .hero.is-in .cloud-back { transform: translateX(-50%) translateY(0) !important; }
+    .hero.is-in .cloud-bob,
+    .hero.is-in .wave--near,
+    .hero.is-in .wave--far { animation: none !important; }
+  }
+  @media (max-width: 720px) {
+    .hero-inner { padding-top: 88px; padding-bottom: clamp(48px, 10vh, 80px); }
+    .hero-copy { margin-top: 8vh; }
+    .hero h1 { font-size: clamp(26px, 7.2vw, 40px); }
+    .cloud-top { width: min(88vw, 520px); top: -2%; }
+    .cloud-left .cloud-bob,
+    .cloud-right .cloud-bob { width: min(140%, 420px); }
+    .cloud-frame { aspect-ratio: 16 / 11; }
+  }
+
+  /* ---- voyage: still backdrop; only type + marks move ---- */
+  .voyage { height: 460vh; position: relative; }
+  .voyage-viewport {
+    position: sticky; top: 0;
+    height: 100vh; overflow: hidden;
+    background: var(--paper);
+  }
+  .backdrop {
+    position: absolute; inset: 0; z-index: 0;
+    background: url("assets/images/song/explore-06-voyage.png") center / cover no-repeat;
+    pointer-events: none;
+  }
+  .backdrop-veil {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(90deg, rgba(244,241,234,.42) 0%, transparent 38%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .stage { position: absolute; inset: 0; z-index: 2; }
+
+  .cutout {
+    position: absolute; left: 0; top: 0;
+    transform-origin: 50% 100%;
+    will-change: transform, opacity;
+  }
+  .cutout .face {
+    display: grid; place-items: center;
+    width: 100%; height: 100%;
+    padding: 16px 22px;
+    border-radius: 10px;
+    background: rgba(247, 246, 241, .78);
+    border: 1px solid rgba(28, 36, 56, .08);
+    box-shadow: 0 10px 28px rgba(28, 36, 56, .08);
+  }
+  .cutout.mark img {
+    display: block;
+    max-width: 88%;
+    max-height: 58%;
+    object-fit: contain;
+  }
+  .cutout.mark.ink img {
+    filter: brightness(0) saturate(100%);
+    opacity: .72;
+  }
+  .cutout.mark.colour img { opacity: .92; }
+
+  .cutout.area .face {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    padding: 22px 24px;
+  }
+  .cutout.area .num {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: #9A7A38;
+  }
+  .cutout.area .name {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .cutout .shadow {
+    position: absolute; left: 50%; bottom: -13%;
+    width: 82%; height: 12%;
+    transform: translateX(-50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(28, 36, 56, .22), transparent 70%);
+    filter: blur(4px);
+  }
+
+  /* David: a fixed left column, one stanza in a center aperture.
+     The stack translates up; each block's opacity is its distance from
+     the reading window, so arriving lines rise and departing ones fade. */
+  .textwall {
+    position: absolute; left: 5.5vw; top: 0;
+    width: min(38vw, 520px); height: 100vh;
+    z-index: 650; pointer-events: none; overflow: hidden;
+    -webkit-mask-image: linear-gradient(transparent 6%, #000 22%, #000 58%, transparent 90%);
+    mask-image: linear-gradient(transparent 6%, #000 22%, #000 58%, transparent 90%);
+  }
+  .textwall-inner {
+    position: absolute; left: 0; top: 0; width: 100%;
+    padding-top: 8vh;
+    will-change: transform;
+  }
+  .tw-block {
+    min-height: 40vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-right: 8px;
+    will-change: opacity, transform;
+  }
+  .tw-block .line {
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.5vw, 38px);
+    line-height: 1.32;
+    font-weight: 400;
+    letter-spacing: -.01em;
+  }
+  .tw-block .line em { font-style: italic; color: #9A7A38; }
+  .tw-block .src {
+    margin-top: 16px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    opacity: .72;
+  }
+  .tw-block.is-lead .line {
+    font-size: clamp(20px, 1.8vw, 26px);
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .tw-block.is-lead .src {
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+
+  .trail {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 4;
+  }
+  .trail path {
+    fill: none; stroke: var(--gold); stroke-width: 1.4;
+    stroke-linecap: round; stroke-dasharray: 1; opacity: .45;
+  }
+  .trail path.ghost { stroke-dasharray: 3 10; stroke-width: 1.1; opacity: .12; }
+
+  .compass {
+    position: absolute; right: 4.5vw; bottom: 6vh;
+    width: 88px; height: 88px; z-index: 800; opacity: .55;
+  }
+  .compass svg { width: 100%; height: 100%; overflow: visible; }
+  .compass .ring { fill: none; stroke: rgba(28, 36, 56, .28); stroke-width: 1; }
+  .compass .tick { stroke: rgba(28, 36, 56, .24); stroke-width: 1; }
+  .compass .needle { fill: var(--gold); stroke: rgba(28, 36, 56, .4); stroke-width: .6; }
+
+  .ver-nav {
+    position: fixed; right: 16px; top: 16px; z-index: 900;
+    display: flex; gap: 14px; list-style: none;
+    font-size: 13px; font-weight: 500;
+    background: rgba(247, 244, 238, .9);
+    border: 1px solid rgba(28, 36, 56, .16);
+    border-radius: 999px; padding: 8px 16px;
+  }
+  .ver-nav a { color: var(--ink-soft); text-decoration: none; }
+  .ver-nav a:hover, .ver-nav a[aria-current="page"] { color: var(--ink); }
+  .ver-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+
+  .hud, .controls { opacity: 0; pointer-events: none; }
+  body.voyage-hud .hud, body.voyage-hud .controls { opacity: 1; pointer-events: auto; }
+  .hud {
+    position: fixed; left: 16px; top: 16px; z-index: 900;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--ink-soft);
+    background: rgba(247, 244, 238, .9);
+    border: 1px solid rgba(28, 36, 56, .16);
+    border-radius: 8px; padding: 8px 10px; line-height: 1.5; white-space: pre;
+  }
+  .controls {
+    position: fixed; left: 50%; bottom: 18px; z-index: 900;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(247, 244, 238, .94);
+    border: 1px solid rgba(28, 36, 56, .16);
+    border-radius: 999px; padding: 10px 18px;
+    box-shadow: 0 6px 24px rgba(28, 36, 56, .12);
+  }
+  .controls input[type="range"] { width: 40vw; max-width: 560px; accent-color: var(--ink); }
+  .controls button {
+    font: inherit; font-size: 12px; font-weight: 500;
+    border: 1px solid rgba(28, 36, 56, .22); background: none;
+    border-radius: 999px; padding: 4px 12px; cursor: pointer; color: var(--ink);
+  }
+
+  body.capture .hud, body.capture .controls, body.capture .ver-nav { display: none; }
+  body.capture .hero-copy,
+  body.capture .hero-stats,
+  body.capture .cloud-left,
+  body.capture .cloud-right,
+  body.capture .cloud-top,
+  body.capture .cloud-back {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  body.capture .hero.is-in .cloud-bob,
+  body.capture .wave--near,
+  body.capture .wave--far { animation: none !important; }
+
+
+  .block-v1 {
+    --teal: #00738C;
+    --ink: #0A4554;
+    --ink-soft: #5E7F82;
+    --accent: #00738C;
+    --ice-sky: #E8F0FA;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .block-v1 .hero {
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+  }
+  .intro-pin .hero {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 1;
+    min-height: 0;
+    height: 100vh;
+    height: 100svh;
+  }
+  .block-v2 { position: relative; background: var(--paper); }
+  .block-v2 .hero { position: relative; min-height: 640px; }
+  .compare-kicker {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: rgba(243, 234, 225, .72);
+    border: 1px solid rgba(28, 36, 56, .12);
+    border-radius: 999px;
+    padding: 5px 12px;
+    pointer-events: none;
+  }
+  .block-v1, .block-v2 { position: relative; }
+  @media (max-width: 720px) {
+    .compare-kicker { display: none; }
+  }
+
+  /* ---- Watercolor wake (block 1) ---- */
+  .wake-pin {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .hero--wake {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+    height: 100%;
+    z-index: 2;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 8%, #F4F8FC 0%, transparent 50%),
+      linear-gradient(180deg, #B9D6F4 0%, #CDE3F7 38%, #DCEAF8 68%, #E8F0FA 100%);
+  }
+  .wake-sky { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .wake-hero-bg {
+    position: absolute;
+    left: 50%;
+    bottom: -6%;
+    transform: translateX(-50%);
+    width: 168%;
+    max-width: none;
+    height: auto;
+  }
+  .wake-cloud-l {
+    position: absolute;
+    left: -6%;
+    top: 4%;
+    width: min(52vw, 560px);
+    mix-blend-mode: screen;
+  }
+  .wake-cloud-r {
+    position: absolute;
+    right: -8%;
+    top: 0;
+    width: min(58vw, 680px);
+    mix-blend-mode: screen;
+  }
+  .hero--wake .hero-fg { z-index: 4; }
+  .hero--wake .hero-inner { padding-bottom: 28vh; }
+  .hero--wake .hero-stats { margin-top: auto; padding-bottom: 22vh; }
+  .wake-aside {
+    position: absolute;
+    z-index: 4;
+    bottom: 28%;
+    width: min(28vw, 240px);
+    font-family: var(--hand);
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--ink-soft);
+    line-height: 1.25;
+    text-align: center;
+    pointer-events: none;
+  }
+  .wake-aside--l { left: 10%; transform: rotate(-2deg); }
+  .wake-aside--r { right: 10%; transform: rotate(2deg); }
+  .wake-boat {
+    position: absolute;
+    left: 50%;
+    bottom: 3%;
+    z-index: 3;
+    width: min(22vw, 200px);
+    transform: translateX(-50%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse 62% 70% at 50% 42%, #000 38%, transparent 72%);
+    mask-image: radial-gradient(ellipse 62% 70% at 50% 42%, #000 38%, transparent 72%);
+  }
+  .hero--wake.is-in .wake-boat { animation: boatBob 7.4s ease-in-out infinite; }
+  @keyframes boatBob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-3px); }
+  }
+  .current {
+    position: relative;
+    z-index: 2;
+    min-height: 440vh;
+    margin-top: -14vh;
+  }
+  .current-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .current-svg .wash { fill: none; stroke: #c8e0f2; stroke-width: 46; stroke-linecap: round; opacity: .32; }
+  .current-svg .mid { fill: none; stroke: #7eafd0; stroke-width: 15; stroke-linecap: round; opacity: .5; }
+  .current-svg .flow { fill: none; stroke: #4d8ab4; stroke-width: 4.5; stroke-linecap: round; opacity: .72; }
+  .current-svg .glint { fill: none; stroke: #f4f9fc; stroke-width: 1.4; stroke-linecap: round; opacity: .7; }
+  .current-svg .node-gold { fill: #c4b48a; opacity: 0; }
+  .current-svg .node-gold.is-lit { opacity: .92; }
+  .current-svg .ripple-c { fill: none; stroke: rgba(126, 175, 208, .45); stroke-width: 1.2; }
+  .current-head { fill: #d7e8f4; opacity: 0; }
+  .stop {
+    position: absolute;
+    z-index: 2;
+    width: min(460px, 40vw);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .75s ease, transform .75s ease;
+    pointer-events: none;
+  }
+  .stop.is-in { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .stop--l { left: max(6vw, 32px); }
+  .stop--r { right: max(6vw, 32px); left: auto; }
+  .stop[data-stop="1"] { top: 17%; }
+  .stop[data-stop="2"] { top: 38%; }
+  .stop[data-stop="3"] { top: 58%; }
+  .stop[data-stop="4"] {
+    top: 74%;
+    left: 50%;
+    right: auto;
+    width: min(1080px, calc(100% - 40px));
+    transform: translate(-50%, 16px);
+  }
+  .stop[data-stop="4"].is-in { transform: translate(-50%, 0); }
+  .stop-num {
+    display: block;
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: .12em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .stop p {
+    font-size: clamp(18px, 2.15vw, 24px);
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .stop .hook { font-family: var(--serif); font-style: italic; color: var(--accent); }
+  .stop .about-logo-strip { margin-top: 16px; }
+  .stop .about-logo-strip li { opacity: 0; transform: translateY(8px); transition: opacity .5s ease, transform .5s ease; }
+  .stop.is-in .about-logo-strip li { opacity: 1; transform: none; }
+  .stop.is-in .about-logo-strip li:nth-child(2) { transition-delay: .1s; }
+  .stop.is-in .about-logo-strip li:nth-child(3) { transition-delay: .18s; }
+  .stop.is-in .about-logo-strip li:nth-child(4) { transition-delay: .26s; }
+  .stop::before {
+    content: "";
+    position: absolute;
+    inset: -36px -28px;
+    background: radial-gradient(ellipse at 30% 40%, rgba(190, 216, 236, .32), transparent 68%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .stop.is-in::before { opacity: 1; }
+  .stop-04 .scroll-shell {
+    position: relative;
+    padding: 56px 8px 28px;
+    overflow: hidden;
+  }
+  .stop-04 .parchment-art {
+    position: absolute;
+    left: -6%;
+    top: -16%;
+    width: 72%;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+  .stop-04 .parchment-body {
+    position: relative;
+    z-index: 1;
+    padding: 12px 3% 8px;
+    background: linear-gradient(180deg, rgba(250,244,232,.15) 0%, rgba(247,241,228,.92) 22%, #F4EEDC 100%);
+    border-radius: 0 0 16px 16px;
+  }
+  .stop-04 .acc-btn { display: none; }
+  .stop-04 .scroll-lede,
+  .stop-04 .skill-proofs { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+  .stop-04.is-tabs .skills-chips { opacity: 1; }
+  .stop-04.is-statement .scroll-lede,
+  .stop-04.is-themes .scroll-lede,
+  .stop-04.is-themes .skill-proofs { opacity: 1; transform: none; }
+  .current-close {
+    position: absolute;
+    left: 50%;
+    bottom: 3vh;
+    transform: translateX(-50%);
+    font-family: var(--hand);
+    font-size: clamp(22px, 2.4vw, 30px);
+    color: var(--ink-soft);
+    z-index: 2;
+  }
+  @media (max-width: 800px) {
+    .wake-aside { display: none; }
+    .hero--wake .hero-stats { padding-bottom: 18vh; }
+    .wake-boat { width: min(36vw, 160px); }
+    .stop { width: min(88vw, 480px); left: 6vw !important; right: auto !important; }
+    .stop[data-stop="4"] { width: calc(100% - 28px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero--wake.is-in .wake-boat { animation: none; }
+  }
+  .intro-pin {
+    position: relative;
+    z-index: 3; /* above #work while pinned / during scroll-up */
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    /* Clip to one viewport on load so only the arch tip peeks; JS expands on scroll */
+    max-height: 100vh;
+    max-height: 100svh;
+    overflow: hidden;
+    /* Same canvas as the rest of the page — kills the hero→about seam */
+    background: var(--ice-sky);
+  }
+  /* After the hero pin, shell must own its full height — else it overlaps #work */
+  .intro-pin.is-expanded {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  /* ---------- About: intro arch + hard skills (one section, two parts) ---------- */
+  .block-v1 {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    padding: 0 0 64px;
+    /* Continuous ice-sky canvas — same token as body / hero exit / work */
+    background: var(--ice-sky);
+  }
+  /* Part 1 — arch layer inside the hero pin (skills nested = one shell) */
+  .about-stage {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0 0 8px;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .about-arch {
+    position: relative;
+    width: min(1100px, calc(100% - 64px));
+    min-height: 0;
+    margin: 0 auto;
+    /* Clear the dome — greeting needs room under the arch curve */
+    padding: clamp(72px, 11vh, 120px) clamp(32px, 5vw, 72px) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    pointer-events: none;
+    transform-origin: 50% 100%;
+    /* One continuous wash — arch through skills, no second fill */
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 18%, rgba(255,255,255,.5) 0%, transparent 62%),
+      linear-gradient(180deg, #D6EAD4 0%, #E4EFC8 32%, #EFF3D8 55%, #F2F6E6 78%, #F4F6F1 100%);
+    /* Lower dome so “hey…” doesn’t float in empty mint */
+    border-radius: 48% 48% 36px 36px / 12% 12% 36px 36px;
+    box-shadow:
+      0 -18px 60px rgba(0,115,140,.10),
+      0 28px 48px -12px rgba(30, 42, 68, .10);
+    will-change: transform;
+    /* Hero tip-peek: clip to the mint dome; expanded allows skill-card bleed */
+    overflow: hidden;
+  }
+  /* FOUC / pre-GSAP: only a tiny tip at the bottom (mint only) */
+  .intro-pin:not(.is-expanded) .about-arch {
+    transform: scale(0.24) translateY(40%);
+    transform-origin: 50% 100%;
+  }
+  .intro-pin.is-expanded .about-arch {
+    overflow: visible;
+  }
+  /* No copy over the hero — content appears after the arch has grown */
+  .about-arch:not(.is-content-visible) .about-arch-body,
+  .about-arch:not(.is-content-visible) #skills-v1 {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .about-arch.is-content-visible .about-arch-body,
+  .about-arch.is-content-visible #skills-v1 {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .35s ease, visibility .35s ease;
+  }
+  .about-arch-body {
+    position: relative;
+    z-index: 1;
+    width: min(920px, 100%);
+    max-width: 920px;
+    margin: 0 0 clamp(20px, 3vh, 36px);
+  }
+  .about-hello {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 36px;
+  }
+  .about-hello .about-kicker {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 auto 14px;
+  }
+  .about-hello .sec-num {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin: 0;
+    transform: none;
+  }
+  .about-hello .about-greeting {
+    font-family: var(--sans);
+    font-size: 15px;
+    letter-spacing: .02em;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin: 0;
+  }
+  .about-hello .statement {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.25;
+    letter-spacing: -.015em;
+    color: var(--ink);
+    max-width: 18em;
+    margin: 0 auto;
+  }
+  .about-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 32px 52px;
+    align-items: center;
+  }
+  .about-pair + .about-pair {
+    margin-top: 36px;
+    padding-top: 36px;
+    border-top: 1px solid rgba(10, 69, 84, .1);
+  }
+  .about-pair .pair-copy {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: var(--ink);
+    text-align: left;
+  }
+  .about-pair .pair-copy .hook {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -.01em;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .about-pair .pair-copy .hook--break {
+    display: inline;
+    margin-top: 0;
+    font-size: inherit;
+  }
+  .about-logo-strip {
+    list-style: none;
+    display: grid;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .about-logo-strip--4 { grid-template-columns: repeat(4, 1fr); }
+  .about-logo-strip--3 { grid-template-columns: repeat(3, 1fr); }
+  .about-logo-strip li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
+    padding: 16px 12px;
+    border-left: 1px solid rgba(10, 69, 84, .12);
+  }
+  .about-logo-strip li:first-child { border-left: 0; }
+  .about-logo-strip img {
+    display: block;
+    width: auto;
+    height: 28px;
+    max-width: 140px;
+    object-fit: contain;
+    opacity: .92;
+    filter: saturate(1.05) contrast(1.02);
+  }
+  .about-logo-strip li[data-brand="malwarebytes"] img { height: 22px; max-width: 150px; }
+  .about-logo-strip li[data-brand="google"] img { height: 30px; }
+  .about-logo-strip li[data-brand="huawei"] img { height: 26px; }
+  .about-logo-strip li[data-brand="kerr"] img { height: 34px; max-width: 120px; }
+  .about-logo-strip li[data-brand="oregon-state"] img { height: 30px; max-width: 150px; }
+  .about-logo-strip li[data-brand="lanzhou"] img { height: 32px; max-width: 160px; }
+  .about-logo-strip li[data-brand="bfa"] img { height: 34px; max-width: 168px; }
+  @media (max-width: 800px) {
+    .about-hello { margin-bottom: 22px; }
+    .about-pair {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .about-pair + .about-pair {
+      margin-top: 24px;
+      padding-top: 24px;
+    }
+    .about-pair .pair-copy { text-align: center; }
+    .about-logo-strip li { min-height: 56px; padding: 12px 6px; }
+    .about-logo-strip img { height: 22px; max-width: 110px; }
+    .about-logo-strip li[data-brand="kerr"] img { height: 26px; }
+    .about-logo-strip li[data-brand="bfa"] img { height: 26px; max-width: 130px; }
+  }
+  /* Part 2 — practice areas nest inside the soft panel */
+  #skills-v1 {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    display: block;
+  }
+  .skills-pin {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: clamp(8px, 1.5vw, 16px) 4px clamp(12px, 2vw, 24px);
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: left;
+  }
+  .skills-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .skills-chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-self: center;
+    gap: 0;
+    margin: 0 auto 28px;
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid rgba(10, 69, 84, .16);
+    background: rgba(255,255,255,.35);
+  }
+  .skills-chips .chip {
+    appearance: none;
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    text-transform: lowercase;
+    cursor: pointer;
+    color: var(--ink-soft);
+    background: transparent;
+    box-shadow: none;
+    transition: background .2s, color .2s;
+  }
+  .skills-chips .chip:hover { color: var(--ink); }
+  .skills-chips .chip.is-active {
+    background: var(--ink);
+    color: #fff;
+  }
+  .skills-acc {
+    display: block;
+  }
+  .acc-item {
+    display: none;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+  .acc-item.is-open { display: block; }
+  .acc-btn {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .acc-panel { display: block; padding: 0; }
+  /* Stage: lede + list sit left; large reveal card floats over / bleeds right */
+  .acc-panel-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-width: none;
+    margin: 0;
+    min-height: 300px;
+  }
+  /* Editorial statement — soft body, ink emphasis (card may cover this) */
+  .acc-panel .lede {
+    position: relative;
+    z-index: 1;
+    text-align: left;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(26px, 3.4vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .42);
+    width: 100%;
+    max-width: none;
+    margin: 0 0 28px;
+    padding: 0;
+  }
+  .acc-panel .lede::after { display: none; }
+  .acc-panel .lede em,
+  .acc-panel .lede .emph {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .skill-proofs {
+    position: static;
+    margin: 0;
+    padding: 0 0 12px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: max-content;
+    max-width: min(100%, 280px);
+    min-height: 0;
+  }
+  .skill-proof {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    width: max-content;
+    max-width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 0 0 0 18px;
+    border-radius: 0;
+    /* static so reveal docks to .acc-panel-inner (shared floating stage) */
+    position: static;
+  }
+  .skill-proof::before {
+    content: "";
+    position: absolute;
+    /* approx: next to this label’s strong; absolute under static parent is panel — use relative wrapper trick */
+    display: none;
+  }
+  /* bullet lives on a relative shell around strong */
+  .skill-proof > strong {
+    position: relative;
+    display: inline;
+    padding-left: 0;
+  }
+  .skill-proof > strong::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: .45em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 0 0 3px rgba(10, 69, 84, .1);
+    transition: background .15s ease, box-shadow .15s ease;
+  }
+  .skill-proof:hover,
+  .skill-proof:focus-visible,
+  .skill-proof.is-active {
+    background: transparent;
+    border: 0;
+    outline: none;
+    box-shadow: none;
+    z-index: 3;
+  }
+  .skill-proof:hover > strong::before,
+  .skill-proof:focus-visible > strong::before,
+  .skill-proof.is-active > strong::before {
+    box-shadow: 0 0 0 4px rgba(0, 115, 140, .16);
+    background: var(--accent);
+  }
+  .skill-proof strong {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    text-transform: lowercase;
+    color: var(--ink);
+    border-bottom: 1px solid rgba(10, 69, 84, .35);
+    padding-bottom: 1px;
+    margin: 0;
+    transition: border-color .15s ease;
+  }
+  .skill-proof:hover strong,
+  .skill-proof:focus-visible strong,
+  .skill-proof.is-active strong {
+    border-bottom-color: var(--accent);
+  }
+  /*
+   * Floating case card (Framer-style hover stage)
+   * — light glass panel, title + outcome pills + single wide media
+   * — docks over lede/list, may bleed past soft panel
+   */
+  .skill-proof-reveal {
+    position: absolute;
+    left: clamp(200px, 40%, 300px);
+    top: -12px;
+    z-index: 30;
+    width: min(460px, 58vw);
+    max-width: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px) scale(.985);
+    transition: opacity .22s ease, visibility .22s ease, transform .28s cubic-bezier(.2, .8, .2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 22px 18px;
+    border-radius: 28px;
+    background: rgba(244, 247, 241, .97);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow:
+      0 28px 64px rgba(30, 42, 68, .14),
+      0 2px 0 rgba(255,255,255,.7) inset;
+    text-align: left;
+  }
+  .skill-proof:hover .skill-proof-reveal,
+  .skill-proof:focus-visible .skill-proof-reveal,
+  .skill-proof.is-active .skill-proof-reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .skill-proof-title {
+    display: block;
+    margin: 0;
+    font-family: var(--sans);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .skill-proof-desc {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .skill-proof-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+  .skill-proof-tags:empty { display: none; }
+  .skill-proof-tags > span {
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(10, 69, 84, .22);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    background: rgba(255,255,255,.45);
+  }
+  .skill-proof-media {
+    display: block;
+    margin: 0;
+    width: 100%;
+  }
+  .skill-proof-media-clip {
+    overflow: hidden;
+    border-radius: 14px;
+    min-height: 0;
+    background: rgba(10, 69, 84, .04);
+  }
+  .skill-proof-media-clip img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .proof-ph {
+    width: 100%;
+    /* same overall stage as two 3:4 portrait tiles side-by-side */
+    aspect-ratio: 3 / 2;
+    min-height: 0;
+    height: auto;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 16px 14px;
+    border-radius: 14px;
+    font-family: var(--hand);
+    font-size: clamp(16px, 1.8vw, 20px);
+    color: rgba(30,42,68,.55);
+    line-height: 1.2;
+  }
+  .proof-ph small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(30,42,68,.38);
+    margin-top: 6px;
+  }
+  .ph-ai { background: linear-gradient(145deg, #C9E0F5, #D8D2F0); }
+  .ph-conv { background: linear-gradient(145deg, #D2EDE4, #C9E0F5); }
+  .ph-zero { background: linear-gradient(145deg, #F3DCE9, #D9D4F5); }
+  .ph-amp { background: linear-gradient(145deg, #E4EFC8, #CDEDE4); }
+
+  @media (max-width: 800px) {
+    .skills-pin {
+      max-width: none;
+      padding-left: 2px;
+      padding-right: 2px;
+      overflow: visible;
+    }
+    .skills-chips { width: 100%; }
+    .skills-chips .chip { flex: 1 1 auto; text-align: center; padding: 8px 10px; font-size: 12px; }
+    .acc-panel-inner { min-height: 0; }
+    .acc-panel .lede {
+      width: 100%;
+      max-width: none;
+      font-size: clamp(22px, 6.2vw, 30px);
+      margin-bottom: 22px;
+    }
+    .skill-proofs {
+      width: 100%;
+      max-width: none;
+    }
+    .skill-proof {
+      position: relative;
+      width: 100%;
+    }
+    /* stack under the label on small screens */
+    .skill-proof-reveal {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      max-width: none;
+      margin-top: 12px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 14px;
+      border: 0;
+      box-shadow: none;
+      visibility: hidden;
+      transform: none;
+      transition: opacity .18s ease, max-height .25s ease, padding .18s ease, visibility .18s ease;
+    }
+    .skill-proof:hover .skill-proof-reveal,
+    .skill-proof:focus-visible .skill-proof-reveal,
+    .skill-proof.is-active .skill-proof-reveal {
+      opacity: 1;
+      visibility: visible;
+      max-height: 520px;
+      padding: 18px 16px 14px;
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 0 16px 40px rgba(30, 42, 68, .12);
+      transform: none;
+    }
+    .proof-ph {
+      aspect-ratio: 3 / 2;
+      font-size: 15px;
+      padding: 12px 10px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro-pin { height: auto; min-height: 100vh; max-height: none; overflow: visible; }
+    .intro-pin .hero { position: relative; height: 100vh; min-height: 640px; }
+    .intro-pin .hero-fg { position: relative; inset: auto; }
+    .about-stage { position: relative; inset: auto; display: flex; overflow: visible; padding: 24px 0 32px; }
+    .about-arch {
+      width: min(1100px, calc(100% - 32px));
+      border-radius: 40% 40% 28px 28px / 16% 16% 28px 28px;
+      overflow: visible;
+      transform: none !important;
+    }
+    .intro-pin:not(.is-expanded) .about-arch { transform: none !important; }
+    .about-arch .about-arch-body,
+    .about-arch #skills-v1 { opacity: 1 !important; visibility: visible !important; }
+    #skills-v1 { margin-top: 0; }
+  }
+
+</style>
+</head>
+<body>
+
+<ul class="ver-nav" aria-label="Site versions">
+  <li><a href="index.html">1.0</a></li>
+  <li><a href="index-2.html" aria-current="page">2.0</a></li>
+  <li><a href="index-3.html">3.0</a></li>
+</ul>
+
+<section class="block-v1" id="about-v1" aria-label="Watercolor wake">
+  <p class="compare-kicker">2.0 — watercolor wake</p>
+  <div class="wake-pin" data-wake-pin>
+    <header class="hero hero--wake" id="hero-v1" data-hero>
+      <div class="wake-sky" aria-hidden="true">
+        <img class="wake-cloud-l" src="assets/images/portfolio_watercolor_assets/cloud_bank_left.png" alt="">
+        <img class="wake-cloud-r" src="assets/images/portfolio_watercolor_assets/cloud_bank_right.png" alt="">
+        <img class="wake-hero-bg" src="assets/images/portfolio_watercolor_assets/hero_cloud_water_background.png" alt="">
+      </div>
+      <div class="hero-fg" data-hero-fg>
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="hero-role">Senior UX Researcher/Manager</p>
+            <h1>From <em>insights</em> to influence</h1>
+          </div>
+          <div class="hero-stats">
+            <p><strong><span>9</span>+</strong> Years</p>
+            <p><strong><span>100</span>+</strong> Studies</p>
+            <p><strong><span>1000</span>+</strong> Participants</p>
+          </div>
+        </div>
+        <p class="wake-aside wake-aside--l">a compass when things get&nbsp;fuzzy</p>
+        <p class="wake-aside wake-aside--r">a seeker of&nbsp;truths</p>
+      </div>
+      <img class="wake-boat" src="assets/images/portfolio_watercolor_assets/sailboat.png" alt="" aria-hidden="true">
+    </header>
+  </div>
+
+    <div class="current" data-current>
+    <svg class="current-svg" viewBox="0 0 1440 4000" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <filter id="water-edge" x="-8%" y="-8%" width="116%" height="116%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="3" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="0.55"/>
+        </filter>
+        <filter id="water-wash" x="-12%" y="-12%" width="124%" height="124%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="1.4"/>
+        </filter>
+      </defs>
+      <path class="wash" data-current-path filter="url(#water-wash)" d="M 728 38 C 788 168 648 288 728 428 C 988 588 1188 708 1048 908 C 828 1128 288 1188 348 1508 C 428 1808 1228 1768 1188 2128 C 1148 2448 388 2408 368 2768 C 358 3048 628 3188 728 3368 C 988 3568 1188 3688 908 3848 C 748 3948 648 3968 728 3998"/>
+      <path class="mid" data-current-path filter="url(#water-edge)" d="M 720 30 C 780 160 640 280 720 420 C 980 580 1180 700 1040 900 C 820 1120 280 1180 340 1500 C 420 1800 1220 1760 1180 2120 C 1140 2440 380 2400 360 2760 C 350 3040 620 3180 720 3360 C 980 3560 1180 3680 900 3840 C 740 3940 640 3960 720 3990"/>
+      <path class="flow" data-current-path data-current-spine filter="url(#water-edge)" d="M 720 30 C 780 160 640 280 720 420 C 980 580 1180 700 1040 900 C 820 1120 280 1180 340 1500 C 420 1800 1220 1760 1180 2120 C 1140 2440 380 2400 360 2760 C 350 3040 620 3180 720 3360 C 980 3560 1180 3680 900 3840 C 740 3940 640 3960 720 3990"/>
+      <path class="glint" data-current-path d="M 720 30 C 780 160 640 280 720 420 C 980 580 1180 700 1040 900 C 820 1120 280 1180 340 1500 C 420 1800 1220 1760 1180 2120 C 1140 2440 380 2400 360 2760 C 350 3040 620 3180 720 3360 C 980 3560 1180 3680 900 3840 C 740 3940 640 3960 720 3990"/>
+      <circle class="current-head" r="5" data-current-head/>
+      <g class="node" data-node="1"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
+      <g class="node" data-node="2"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
+      <g class="node" data-node="3"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
+      <g class="node" data-node="4"><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="ripple-c" r="2"/><circle class="node-gold" r="4.5"/></g>
+    </svg>
+
+    <article class="stop stop--l" data-stop="1">
+      <span class="stop-num">01</span>
+      <p>👋 Hey, glad you're&nbsp;here. I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area.</p>
+    </article>
+
+    <article class="stop stop--r" data-stop="2">
+      <span class="stop-num">02</span>
+      <p>I&nbsp;lead strategic research in complex systems where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI</span>.</p>
+      <ul class="about-logo-strip about-logo-strip--4" aria-label="Companies">
+        <li data-brand="malwarebytes"><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" width="180" height="28" decoding="async"></li>
+        <li data-brand="google"><img src="assets/images/shared/brand/google-wordmark.png" alt="Google" width="120" height="40" decoding="async"></li>
+        <li data-brand="huawei"><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" width="140" height="36" decoding="async"></li>
+        <li data-brand="kerr"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" width="110" height="70" decoding="async"></li>
+      </ul>
+    </article>
+
+    <article class="stop stop--l" data-stop="3">
+      <span class="stop-num">03</span>
+      <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+      <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
+        <li data-brand="oregon-state"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async"></li>
+        <li data-brand="lanzhou"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" width="180" height="56" decoding="async"></li>
+        <li data-brand="bfa"><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" width="200" height="54" decoding="async"></li>
+      </ul>
+    </article>
+
+    <div class="stop stop-04" data-stop="4" data-scroll-pin>
+      <div class="scroll-shell">
+        <img class="parchment-art" src="assets/images/portfolio_watercolor_assets/blank_long_scroll.png" alt="">
+        <div class="parchment-body">
+<div id="skills-v1" aria-label="Practice areas">
+          <div class="skills-pin" data-skills>
+    <p class="skills-label" aria-hidden="true">.practice areas</p>
+    <div class="skills-chips" role="tablist" aria-label="Practice areas">
+      <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+      <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
+      <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+      <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
+    </div>
+
+    <div class="skills-acc" data-skills-acc>
+      <div class="acc-item is-open" data-skill="ai" id="skill-ai-v1">
+        <button type="button" class="acc-btn" aria-expanded="true">AI + Trust</button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <p class="lede scroll-lede">I&nbsp;shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take&nbsp;control.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="trust-cal">
+                <strong>trust calibration &amp; explainability</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Security Advisor</span>
+                  <p class="skill-proof-desc">Led the research arc behind Malwarebytes' conversational security advisor: uncovering what makes people trust a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-ai">SAM mockup<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="hitl">
+                <strong>human-in-the-loop autonomy</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Automation Scaling</span>
+                  <p class="skill-proof-desc">Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-ai">automation scaling artifact<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item" data-skill="conv" id="skill-conv-v1">
+        <button type="button" class="acc-btn" aria-expanded="false">Product Systems &amp; Convergence</button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <p class="lede scroll-lede">I&nbsp;lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy&nbsp;structure.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="shopping">
+                <strong>google express → google shopping</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Google Express to Google Shopping Evolution</span>
+                  <p class="skill-proof-desc">Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">Shopping tab<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="ia">
+                <strong>information architecture redesign</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Malwarebytes 5.0 Integration</span>
+                  <p class="skill-proof-desc">Converged four standalone products—MB4, Privacy VPN, Browser Guard, and MyAccount—into one coherent app, with mental model research defining the unified&nbsp;structure.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">MB5<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="platform">
+                <strong>complex workflow &amp; platform modernization</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Nebula to ThreatDown Evolution</span>
+                  <p class="skill-proof-desc">Untangled task flows, navigation, and information structures in a fragmented enterprise console into an all-in-one endpoint and data management system anchored in actionable security posture&nbsp;assessment.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-conv">homepage before and after<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item" data-skill="zero" id="skill-zero-v1">
+        <button type="button" class="acc-btn" aria-expanded="false">0→1 Product Builds</button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <p class="lede scroll-lede">I&nbsp;turn ambiguous ideas into validated product direction, from early exploration through&nbsp;launch.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="concept-launch">
+                <strong>concept-to-launch research</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Malwarebytes Privacy VPN 1.0</span>
+                  <p class="skill-proof-desc">Defined target users, unmet needs, value propositions, interaction models, and launch experience for a net-new consumer privacy&nbsp;product.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-zero">Privacy VPN<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
+                <strong>ai-native product discovery &amp; build</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">AI-Native Product Discovery &amp; Build</span>
+                  <p class="skill-proof-desc">A researcher who ships—from pain point to vision to working product—using the same strategy-first discipline I&nbsp;bring to enterprise&nbsp;work.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-zero">personal project<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item" data-skill="amp" id="skill-amp-v1">
+        <button type="button" class="acc-btn" aria-expanded="false">Research Systems &amp; Influence</button>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <p class="lede scroll-lede">I&nbsp;connect fragmented customer insights into an omnichannel user experience strategy that aligns XFN teams around a shared experience and product&nbsp;vision.</p>
+            <div class="skill-proofs">
+              <div class="skill-proof" role="button" tabindex="0" data-proof="xfn">
+                <strong>cross-functional product collaboration</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Participatory Research Program</span>
+                  <p class="skill-proof-desc">Built stronger connections between teams and users—bringing stakeholders directly into research, deepening buy-in on findings, and strengthening empathy for the end user across the product&nbsp;organization.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">three-phase program diagram<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="cross-craft">
+                <strong>cross-craft UX leadership</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Established the UX Research Practice from the Ground&nbsp;Up</span>
+                  <p class="skill-proof-desc">Led multidisciplinary UX work across research, interaction design, visual design, and content, while growing the research team from 2 to 5 and establishing more consistent research operations and&nbsp;practices.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">intake / planning artifact<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skill-proof" role="button" tabindex="0" data-proof="self-serve">
+                <strong>self-serve research infrastructure</strong>
+                <div class="skill-proof-reveal">
+                  <span class="skill-proof-title">Google Ads Recruiting Hub</span>
+                  <p class="skill-proof-desc">Turned three years of archived recruiting data plus a live view of the current pipeline into a self-serve dashboard used by UXers and PMs across the Ads&nbsp;org.</p>
+                  <span class="skill-proof-tags"></span>
+                  <div class="skill-proof-media" aria-hidden="true">
+                    <div class="skill-proof-media-clip">
+                      <div class="proof-ph ph-amp">dashboard<br><small>drop image here</small></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="current-close">…the journey continues</p>
+  </div>
+</section>
+
+<section class="block-v2" id="voyage-compare" aria-label="2.0 hero and voyage">
+  <p class="compare-kicker">2.0 — hero + voyage</p>
+  <header class="hero" id="hero-v2" data-hero>
+  <div class="hero-fg" data-hero-fg>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-role">Senior UX Researcher/Manager</p>
+        <h1>From <em>insights</em> to influence</h1>
+      </div>
+      <div class="hero-stats">
+        <p><strong><span>9</span>+</strong> Years</p>
+        <p><strong><span>100</span>+</strong> Studies</p>
+        <p><strong><span>1000</span>+</strong> Participants</p>
+      </div>
+    </div>
+
+    <div class="cloud-top" aria-hidden="true">
+      <div class="cloud-bob">
+        <div class="cloud-frame">
+          <img class="cloud-face" src="assets/images/home/cloud-soft-3.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-clouds">
+      <div class="cloud-back" aria-hidden="true">
+        <div class="cloud-bob">
+          <img src="assets/images/home/cloud-soft-4.png" alt="">
+        </div>
+      </div>
+      <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+        <div class="cloud-bob">
+          <div class="cloud-frame">
+            <div class="cloud-media">
+              <img class="gif" src="assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+              <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-1-wide.png" alt="" aria-hidden="true" width="800" height="379">
+            </div>
+            <span class="cloud-caption">a compass when things get&nbsp;fuzzy</span>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+        <div class="cloud-bob">
+          <div class="cloud-frame">
+            <div class="cloud-media">
+              <img class="gif" src="assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+              <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-2-wide.png" alt="" aria-hidden="true" width="761" height="303">
+            </div>
+            <span class="cloud-caption">a seeker of&nbsp;truths</span>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+  <div class="hero-ocean" aria-hidden="true">
+    <img class="wave wave--far" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+    <img class="wave wave--near" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+  </div>
+</header>
+<section class="voyage" data-voyage>
+  <div class="voyage-viewport">
+    <div class="backdrop" aria-hidden="true"></div>
+    <div class="backdrop-veil" aria-hidden="true"></div>
+    <div class="stage" data-stage>
+
+      <div class="cutout mark ink" data-group="1" data-gx="-0.55" data-gy="-0.38" data-gz="-0.35" data-w="240" data-h="96" data-standup="true">
+        <div class="face"><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="0.85" data-gy="-0.42" data-gz="0.25" data-w="220" data-h="96">
+        <div class="face"><img src="assets/images/shared/brand/google-wordmark.png" alt="Google"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="-0.45" data-gy="0.36" data-gz="0.45" data-w="220" data-h="96">
+        <div class="face"><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="1.00" data-gy="0.32" data-gz="-0.20" data-w="220" data-h="96" data-standup="true">
+        <div class="face"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion"></div>
+        <div class="shadow"></div>
+      </div>
+
+      <div class="cutout mark colour" data-group="2" data-gx="-0.70" data-gy="-0.18" data-gz="0.20" data-w="236" data-h="108">
+        <div class="face"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark colour" data-group="2" data-gx="0.55" data-gy="-0.36" data-gz="-0.40" data-w="236" data-h="108" data-standup="true">
+        <div class="face"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark colour" data-group="2" data-gx="0.85" data-gy="0.38" data-gz="0.15" data-w="248" data-h="108">
+        <div class="face"><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy"></div>
+        <div class="shadow"></div>
+      </div>
+
+      <div class="cutout area" data-group="3" data-gx="-0.70" data-gy="-0.36" data-gz="-0.25" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">01</span><span class="name">AI + Trust</span></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout area" data-group="3" data-gx="0.85" data-gy="-0.28" data-gz="0.30" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">02</span><span class="name">Product Systems</span></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout area" data-group="3" data-gx="-0.75" data-gy="0.40" data-gz="0.35" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">03</span><span class="name">0→1 Product Builds</span></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout area" data-group="3" data-gx="0.80" data-gy="0.46" data-gz="-0.15" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">04</span><span class="name">Research Influence</span></div>
+        <div class="shadow"></div>
+      </div>
+
+    </div>
+
+    <div class="textwall" aria-hidden="true">
+      <div class="textwall-inner" data-textwall>
+        <div class="tw-block is-lead">
+          <p class="src">Hey, glad you're&nbsp;here</p>
+          <p class="line">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
+        </div>
+        <div class="tw-block">
+          <p class="line">I&nbsp;lead strategic research in complex systems where trust is the product: <em>security, privacy, and now&nbsp;AI</em>.</p>
+        </div>
+        <div class="tw-block">
+          <p class="line">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <em>what should we build, and&nbsp;why?</em></p>
+        </div>
+        <div class="tw-block">
+          <p class="line">Four places I&nbsp;do my best&nbsp;work.</p>
+          <p class="src">practice areas</p>
+        </div>
+      </div>
+    </div>
+
+    <svg class="trail" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ghost"
+            d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
+      <path data-trail pathLength="1"
+            d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
+    </svg>
+
+    <div class="compass" aria-hidden="true">
+      <svg viewBox="0 0 104 104">
+        <circle class="ring" cx="52" cy="52" r="40"/>
+        <circle class="ring" cx="52" cy="52" r="31"/>
+        <line class="tick" x1="52" y1="6" x2="52" y2="15"/>
+        <line class="tick" x1="52" y1="89" x2="52" y2="98"/>
+        <line class="tick" x1="6" y1="52" x2="15" y2="52"/>
+        <line class="tick" x1="89" y1="52" x2="98" y2="52"/>
+        <polygon class="needle" data-needle points="52,15 58,52 52,71 46,52"/>
+        <circle cx="52" cy="52" r="3" fill="rgba(28,36,56,.6)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="hud" data-hud>progress 0.000</div>
+
+<div class="controls">
+  <button type="button" data-play>play</button>
+  <input type="range" data-slider min="0" max="1000" value="0">
+</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+<script>
+  const UNIT = 132;
+  const VIEW_DIST = 9;
+  const VP_X = 0.63;
+  const VP_Y = 0.44;
+
+  const GROUPS = [
+    { wx:    0, wz:  0 },
+    { wx:  8.5, wz:  2.2 },
+    { wx: 17.0, wz: -1.8 },
+    { wx: 25.5, wz:  1.2 },
+  ];
+
+  const CTRL_BACK = 4.2;
+  const CTRL_SWAY = 2.6;
+  const LIFT = 0.30;
+  const LOOK = 0.045;
+  const STAND_ANGLE = 84;
+
+  const SEGMENTS = [
+    { kind: "dwell",   g: 0,           p0: 0.00, p1: 0.11 },
+    { kind: "transit", from: 0, to: 1, p0: 0.11, p1: 0.33 },
+    { kind: "dwell",   g: 1,           p0: 0.33, p1: 0.45 },
+    { kind: "transit", from: 1, to: 2, p0: 0.45, p1: 0.65 },
+    { kind: "dwell",   g: 2,           p0: 0.65, p1: 0.77 },
+    { kind: "transit", from: 2, to: 3, p0: 0.77, p1: 0.95 },
+    { kind: "dwell",   g: 3,           p0: 0.95, p1: 1.00 },
+  ];
+
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, n) => a + (b - a) * n;
+  const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  const remap = (v, a, b) => clamp((v - a) / (b - a), 0, 1);
+  const qbez = (a, c, b, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * c + t * t * b;
+
+  const section = document.querySelector("[data-voyage]");
+  const trail = document.querySelector("[data-trail]");
+  const needle = document.querySelector("[data-needle]");
+  const wall = document.querySelector("[data-textwall]");
+  const hud = document.querySelector("[data-hud]");
+  const slider = document.querySelector("[data-slider]");
+  const playBtn = document.querySelector("[data-play]");
+
+  const items = Array.from(document.querySelectorAll("[data-gx]")).map((el) => ({
+    el,
+    group: parseInt(el.dataset.group, 10),
+    gx: parseFloat(el.dataset.gx) || 0,
+    gy: parseFloat(el.dataset.gy) || 0,
+    gz: parseFloat(el.dataset.gz) || 0,
+    standup: el.dataset.standup === "true",
+    w: parseFloat(el.dataset.w),
+    h: parseFloat(el.dataset.h),
+  }));
+
+  items.forEach((it) => {
+    it.el.style.width = it.w + "px";
+    it.el.style.height = it.h + "px";
+  });
+
+  function segmentAt(p) {
+    for (const s of SEGMENTS) if (p <= s.p1) return s;
+    return SEGMENTS[SEGMENTS.length - 1];
+  }
+
+  function camera(p) {
+    const s = segmentAt(p);
+    if (s.kind === "dwell") {
+      const g = GROUPS[s.g];
+      return { cx: g.wx, cy: 0, cz: g.wz - VIEW_DIST, active: s.g };
+    }
+    const a = GROUPS[s.from];
+    const b = GROUPS[s.to];
+    const t = easeInOutCubic(remap(p, s.p0, s.p1));
+    const dir = s.from % 2 === 0 ? 1 : -1;
+
+    const ax = a.wx, bx = b.wx;
+    const az = a.wz - VIEW_DIST, bz = b.wz - VIEW_DIST;
+    const cxCtrl = (ax + bx) / 2 + CTRL_SWAY * dir;
+    const czCtrl = (az + bz) / 2 - CTRL_BACK;
+
+    return {
+      cx: qbez(ax, cxCtrl, bx, t),
+      cy: Math.sin(t * Math.PI) * LIFT * dir,
+      cz: qbez(az, czCtrl, bz, t),
+      active: s.to,
+    };
+  }
+
+  function arrivalOf(groupIndex, p) {
+    if (groupIndex === 0) return 1;
+    const leg = SEGMENTS.find((s) => s.kind === "transit" && s.to === groupIndex);
+    if (!leg) return 1;
+    if (p >= leg.p1) return 1;
+    if (p <= leg.p0) return 0;
+    return remap(p, leg.p0 + (leg.p1 - leg.p0) * 0.3, leg.p1);
+  }
+
+  const WAYPOINT_ANGLE = [-40, -8, 34, 74];
+  const WALL_TRAVEL = 1.15;
+  const WALL_FOCUS = 0.42;
+  const WALL_WINDOW = 0.26;
+  const blocks = Array.from(document.querySelectorAll(".tw-block"));
+
+  function render(p) {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const cam = camera(p);
+    const camAhead = camera(Math.min(1, p + 0.004));
+    const vpx = VP_X - clamp((camAhead.cx - cam.cx) * LOOK * 12, -0.06, 0.06);
+    const arrivals = GROUPS.map((_, i) => arrivalOf(i, p));
+
+    items.forEach((it) => {
+      const g = GROUPS[it.group];
+      const dz = g.wz + it.gz - cam.cz;
+      const dx = g.wx + it.gx - cam.cx;
+
+      if (dz < 1.4) { it.el.style.opacity = "0"; return; }
+
+      const scale = VIEW_DIST / dz;
+      const x = vpx * W + dx * UNIT * scale;
+      const y = VP_Y * H + (it.gy - cam.cy) * UNIT * scale;
+      const stand = it.standup ? STAND_ANGLE * (1 - easeOutCubic(arrivals[it.group])) : 0;
+
+      it.el.style.transform =
+        "translate(-50%,-50%) translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)" +
+        " scale(" + scale.toFixed(4) + ")" +
+        (stand > 0.2 ? " perspective(760px) rotateX(" + stand.toFixed(2) + "deg)" : "");
+
+      const lateral = dx < 0
+        ? 1 - remap(-dx, 1.9, 4.0)
+        : 1 - remap(dx, 5.2, 7.6);
+      const nearFade = remap(dz, 1.4, 4);
+      it.el.style.opacity = (nearFade * lateral).toFixed(3);
+      it.el.style.zIndex = String(Math.round(900 - dz * 12));
+
+      const blur = Math.round(clamp((dz - 10.5) * 0.45, 0, 4));
+      it.el.style.filter = blur ? "blur(" + blur + "px)" : "none";
+    });
+
+    wall.style.transform = "translateY(" + (-p * WALL_TRAVEL * H).toFixed(1) + "px)";
+    blocks.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const mid = (r.top + r.bottom) / 2 / H;
+      const t = clamp(1 - Math.abs(mid - WALL_FOCUS) / WALL_WINDOW, 0, 1);
+      const ease = t * t * (3 - 2 * t);
+      el.style.opacity = ease.toFixed(3);
+      el.style.transform = "translateY(" + ((mid - WALL_FOCUS) * 22).toFixed(1) + "px)";
+    });
+    trail.style.strokeDashoffset = String(1 - p);
+
+    const seg = segmentAt(p);
+    const a0 = clamp(cam.active, 0, 3);
+    const prev = WAYPOINT_ANGLE[Math.max(0, a0 - 1)];
+    const legT = seg.kind === "transit" ? easeInOutCubic(remap(p, seg.p0, seg.p1)) : 1;
+    needle.setAttribute("transform",
+      "rotate(" + lerp(prev, WAYPOINT_ANGLE[a0], legT).toFixed(2) + " 52 52)");
+
+    hud.textContent =
+      "progress " + p.toFixed(3) +
+      "\nsegment  " + seg.kind + (seg.kind === "dwell" ? " @g" + seg.g : " g" + seg.from + "→g" + seg.to) +
+      "\ncam      x " + cam.cx.toFixed(2) + "  y " + cam.cy.toFixed(2) + "  z " + cam.cz.toFixed(2);
+  }
+
+  let target = 0;
+  let current = 0;
+  let override = null;
+  let playing = false;
+
+  function scrollProgress() {
+    const total = section.offsetHeight - window.innerHeight;
+    const rect = section.getBoundingClientRect();
+    return clamp(-rect.top / total, 0, 1);
+  }
+
+  function pinVoyage() {
+    const top = section.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo(0, top);
+  }
+
+  function tick() {
+    if (playing) {
+      override = Math.min(1, (override ?? 0) + 0.0016);
+      slider.value = String(Math.round(override * 1000));
+      if (override >= 1) { playing = false; playBtn.textContent = "play"; }
+    }
+    target = override !== null ? override : scrollProgress();
+    current = lerp(current, target, 0.09);
+    if (Math.abs(current - target) < 0.0002) current = target;
+    render(current);
+    requestAnimationFrame(tick);
+  }
+
+  slider.addEventListener("input", () => {
+    playing = false;
+    playBtn.textContent = "play";
+    override = slider.value / 1000;
+  });
+  playBtn.addEventListener("click", () => {
+    playing = !playing;
+    if (playing && (override === null || override >= 1)) override = 0;
+    playBtn.textContent = playing ? "pause" : "play";
+  });
+  window.addEventListener("wheel", () => { override = null; playing = false; playBtn.textContent = "play"; }, { passive: true });
+  window.addEventListener("resize", () => render(current));
+
+  window.setProgress = (p) => {
+    pinVoyage();
+    override = clamp(p, 0, 1);
+    playing = false;
+    current = override;
+    target = override;
+    slider.value = String(Math.round(override * 1000));
+    render(current);
+  };
+
+
+  function wireHero(hero) {
+    if (!hero) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add("is-in")));
+    const clouds = hero.querySelectorAll(".cloud");
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    const reduceMotionClouds = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (canHover) {
+      let leaveTimer;
+      let peekTimers = [];
+      let peekDone = false;
+      const setHot = (side) => {
+        clouds.forEach((c) => {
+          const on = side && c.classList.contains(side);
+          c.classList.toggle("is-hot", on);
+          if (on) c.classList.remove("is-peeking");
+        });
+      };
+      const cancelPeek = () => {
+        peekDone = true;
+        peekTimers.forEach(clearTimeout);
+        peekTimers = [];
+        hero.querySelectorAll(".cloud.is-peeking").forEach((c) => c.classList.remove("is-peeking"));
+      };
+      clouds.forEach((cloud) => {
+        cloud.addEventListener("pointerenter", () => {
+          clearTimeout(leaveTimer);
+          cancelPeek();
+          setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
+        });
+        cloud.addEventListener("pointerleave", () => {
+          leaveTimer = setTimeout(() => setHot(null), 160);
+        });
+      });
+      if (!reduceMotionClouds) {
+        const holdMs = 3400;
+        const schedulePeek = (selector, delayMs) => {
+          const startId = setTimeout(() => {
+            if (peekDone) return;
+            const el = hero.querySelector(selector);
+            if (!el) return;
+            el.classList.add("is-peeking");
+            peekTimers.push(setTimeout(() => {
+              if (!peekDone) el.classList.remove("is-peeking");
+            }, holdMs));
+          }, delayMs);
+          peekTimers.push(startId);
+        };
+        schedulePeek(".cloud-left", 1000);
+        schedulePeek(".cloud-right", 1800);
+      }
+    } else {
+      clouds.forEach((cloud) => {
+        cloud.addEventListener("click", () => {
+          const open = cloud.classList.toggle("is-revealed");
+          cloud.setAttribute("aria-pressed", open ? "true" : "false");
+        });
+        cloud.setAttribute("aria-pressed", "false");
+      });
+    }
+  }
+  document.querySelectorAll("[data-hero]").forEach(wireHero);
+
+  const voyageEl = document.querySelector("[data-voyage]");
+  if (voyageEl && "IntersectionObserver" in window) {
+    const hudWatch = new IntersectionObserver((entries) => {
+      document.body.classList.toggle("voyage-hud", entries.some((e) => e.isIntersecting));
+    }, { threshold: 0.08 });
+    hudWatch.observe(voyageEl);
+  }
+
+  render(0);
+  requestAnimationFrame(tick);
+
+  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+  if (window.DrawSVGPlugin) gsap.registerPlugin(DrawSVGPlugin);
+  const wakePin = document.querySelector("[data-wake-pin]");
+  const heroFg = wakePin && wakePin.querySelector("[data-hero-fg]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (wakePin && heroFg && !reduceMotion) {
+    const wakeTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: wakePin,
+        start: "top top",
+        end: () => "+=" + Math.round(window.innerHeight * 1.35),
+        pin: true,
+        pinSpacing: true,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          heroFg.style.pointerEvents = self.progress > 0.08 ? "none" : "auto";
+        },
+      },
+      defaults: { ease: "none" },
+    });
+    wakeTl.to(heroFg, { y: () => -window.innerHeight * 0.42, opacity: 0, duration: 1 }, 0);
+    const refreshWake = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refreshWake);
+    let wakeResizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(wakeResizeTimer);
+      wakeResizeTimer = setTimeout(refreshWake, 120);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshWake).catch(() => {});
+  }
+
+  const skillsRoot = document.querySelector("[data-skills]");
+  const skillsAcc = document.querySelector("[data-skills-acc]");
+  let openSkillAt = () => {};
+  if (skillsRoot && skillsAcc) {
+    const chips = [...skillsRoot.querySelectorAll(".skills-chips [data-skill]")];
+    const items = [...skillsAcc.querySelectorAll(".acc-item")];
+    const openAt = (index) => {
+      items.forEach((el, j) => {
+        const on = j === index;
+        el.classList.toggle("is-open", on);
+        el.querySelector(".acc-btn")?.setAttribute("aria-expanded", on ? "true" : "false");
+      });
+      chips.forEach((chip, j) => {
+        const on = j === index;
+        chip.classList.toggle("is-active", on);
+        chip.setAttribute("aria-selected", on ? "true" : "false");
+      });
+    };
+    chips.forEach((chip, i) => chip.addEventListener("click", () => openAt(i)));
+    items.forEach((item, i) => item.querySelector(".acc-btn")?.addEventListener("click", () => openAt(i)));
+    skillsRoot.querySelectorAll(".acc-item").forEach((item) => {
+      const proofs = [...item.querySelectorAll(".skill-proof")];
+      proofs.forEach((proof) => {
+        proof.addEventListener("focus", () => proofs.forEach((b) => b.classList.toggle("is-active", b === proof)));
+        proof.addEventListener("blur", () => { if (matchMedia("(hover: hover)").matches) proof.classList.remove("is-active"); });
+        proof.addEventListener("click", () => {
+          if (matchMedia("(hover: hover)").matches) return;
+          const on = !proof.classList.contains("is-active");
+          proofs.forEach((b) => b.classList.remove("is-active"));
+          if (on) proof.classList.add("is-active");
+        });
+        proof.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          proof.click();
+        });
+      });
+    });
+    openSkillAt = openAt;
+  }
+
+  const currentRoot = document.querySelector("[data-current]");
+  const spine = currentRoot && currentRoot.querySelector("[data-current-spine]");
+  const paths = currentRoot ? [...currentRoot.querySelectorAll("[data-current-path]")] : [];
+  const stops = currentRoot ? [...currentRoot.querySelectorAll("[data-stop]")] : [];
+  const nodes = currentRoot ? [...currentRoot.querySelectorAll("[data-node]")] : [];
+  const head = currentRoot && currentRoot.querySelector("[data-current-head]");
+  const NODE_AT = [0.25, 0.48, 0.70, 0.92];
+  const reached = [false, false, false, false];
+
+  const placeNodes = () => {
+    if (!spine) return;
+    const len = spine.getTotalLength();
+    nodes.forEach((g, i) => {
+      const pt = spine.getPointAtLength(len * NODE_AT[i]);
+      g.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+      const stop = stops[i];
+      if (!stop) return;
+      stop.style.top = ((pt.y / 4000) * 100) + "%";
+      if (stop.dataset.stop !== "4") {
+        if (pt.x < 720) {
+          stop.style.left = "6%";
+          stop.style.right = "auto";
+        } else {
+          stop.style.left = "auto";
+          stop.style.right = "6%";
+        }
+      }
+    });
+  };
+
+  const setPathProgress = (t) => {
+    paths.forEach((path) => {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = `${len}`;
+      path.style.strokeDashoffset = `${len * (1 - t)}`;
+    });
+    if (head && spine) {
+      const pt = spine.getPointAtLength(spine.getTotalLength() * t);
+      head.setAttribute("cx", pt.x);
+      head.setAttribute("cy", pt.y);
+      head.style.opacity = t > 0.02 && t < 0.98 ? 0.85 : 0;
+    }
+    const wash = currentRoot.querySelector(".wash");
+    if (wash) wash.setAttribute("stroke-width", t > 0.84 ? String(46 + (t - 0.84) * 80) : "46");
+    NODE_AT.forEach((mark, i) => {
+      const on = t >= mark;
+      stops[i]?.classList.toggle("is-in", on);
+      nodes[i]?.querySelector(".node-gold")?.classList.toggle("is-lit", on);
+      if (on && !reached[i]) {
+        reached[i] = true;
+        const ripples = nodes[i] ? [...nodes[i].querySelectorAll(".ripple-c")] : [];
+        ripples.forEach((c, k) => {
+          gsap.fromTo(c, { attr: { r: 2 }, opacity: 0.5 }, {
+            attr: { r: 18 + k * 8 },
+            opacity: 0,
+            duration: 1.5,
+            delay: k * 0.12,
+            ease: "power1.out",
+          });
+        });
+      }
+    });
+  };
+
+  if (currentRoot && spine) {
+    placeNodes();
+    if (reduceMotion) {
+      setPathProgress(1);
+      stops.forEach((s) => s.classList.add("is-in"));
+    } else {
+      setPathProgress(0);
+      ScrollTrigger.create({
+        trigger: currentRoot,
+        start: "top 88%",
+        end: "bottom 70%",
+        scrub: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => setPathProgress(self.progress),
+        onRefresh: placeNodes,
+      });
+    }
+    window.addEventListener("resize", () => {
+      placeNodes();
+      ScrollTrigger.refresh();
+    });
+  }
+
+  const scrollPin = document.querySelector("[data-scroll-pin]");
+  if (scrollPin && !reduceMotion) {
+    ScrollTrigger.create({
+      trigger: scrollPin,
+      start: "top 18%",
+      end: () => "+=" + Math.round(window.innerHeight * 1.45),
+      pin: true,
+      pinSpacing: true,
+      scrub: true,
+      onUpdate: (self) => {
+        const p = self.progress;
+        scrollPin.classList.toggle("is-tabs", p > 0.08);
+        scrollPin.classList.toggle("is-statement", p > 0.28);
+        scrollPin.classList.toggle("is-themes", p > 0.5);
+        if (p > 0.5) openSkillAt(Math.min(3, Math.floor((p - 0.5) / 0.125)));
+      },
+    });
+  } else if (scrollPin) {
+    scrollPin.classList.add("is-in", "is-tabs", "is-statement", "is-themes");
+  }
+</script>
+</body>
+</html>

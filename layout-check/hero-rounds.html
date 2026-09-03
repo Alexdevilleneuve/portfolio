@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero — last three rounds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.6;
+    overflow-x: hidden; text-wrap: pretty;
+  }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; }
+
+  /* ---------- comparison chrome (not part of the design) ---------- */
+  .bar {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 90; display: flex; gap: 6px; align-items: center;
+    padding: 7px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.82); backdrop-filter: blur(10px);
+    box-shadow: 0 6px 24px rgba(28,36,56,.13);
+    font-size: 12.5px; letter-spacing: .02em;
+  }
+  .bar a { color: var(--ink-soft); text-decoration: none; padding: 4px 10px; border-radius: 999px; }
+  .bar a:hover { background: rgba(91,127,217,.12); color: var(--ink); }
+  .bar button {
+    appearance: none; border: 0; cursor: pointer;
+    padding: 4px 10px; border-radius: 999px;
+    background: #1C2438; color: #fff; font-size: 12.5px;
+  }
+  .tag {
+    position: absolute; top: 74px; left: 50%; transform: translateX(-50%);
+    z-index: 20; text-align: center; pointer-events: none;
+  }
+  .tag b {
+    display: inline-block; font-family: var(--sans); font-size: 11px;
+    font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+    color: #46577D; background: rgba(255,255,255,.72);
+    padding: 5px 12px; border-radius: 999px;
+  }
+  .tag span { display: block; margin-top: 7px; font-family: var(--hand); font-size: 17px; color: #6A7388; }
+
+  /* ---------- hero base (mirrors index-3.html) ---------- */
+  .hero {
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    position: relative; z-index: 6;
+    width: 100%; height: 100svh; min-height: 640px;
+    overflow: visible;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, #E8F0FA 86%, var(--paper) 100%);
+  }
+  .scene--sky {
+    position: absolute; left: 0; right: 0; top: 0; z-index: 0;
+    height: max(15.3vw, 130px);
+    background: url("../assets/images/direction/sky-hero.jpg") center top / cover no-repeat;
+    opacity: .8; pointer-events: none;
+    -webkit-mask-image: linear-gradient(#000 55%, transparent 100%);
+    mask-image: linear-gradient(#000 55%, transparent 100%);
+  }
+  .hero-fg { position: absolute; inset: 0; z-index: 2; overflow: hidden; }
+  .hero-inner {
+    position: relative; z-index: 5; width: 100%; height: 100%;
+    max-width: 920px; margin: 0 auto;
+    padding: clamp(88px, 14vh, 140px) 32px clamp(72px, 14vh, 120px);
+    display: flex; flex-direction: column; align-items: center;
+    pointer-events: none;
+  }
+  .hero-copy { max-width: 920px; text-align: center; margin: 12vh auto 0; }
+  .hero-role { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: #5E7F82; font-weight: 600; }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(36px, 6.2vw, 78px); line-height: 1.1;
+    margin-top: 14px; letter-spacing: -.03em; color: var(--ink); white-space: nowrap;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-stats { margin-top: auto; display: flex; flex-direction: column; gap: 4px; }
+  .hero-stats p { font-size: 16px; font-weight: 500; color: var(--ink-soft); letter-spacing: .02em; }
+  .hero-stats strong { font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 18px; }
+  .hero-stats strong span { color: var(--accent); }
+
+  .hero-clouds { position: absolute; left: 0; right: 0; bottom: 0; height: min(50vh, 480px); z-index: 4; pointer-events: none; }
+  .cloud {
+    position: absolute; top: 16%; bottom: 0;
+    margin: 0; padding: 0; border: none; background: none;
+    cursor: pointer; text-align: center; font: inherit; color: inherit;
+    pointer-events: auto; overflow: visible;
+  }
+  .cloud:focus { outline: none; }
+  .cloud:focus-visible .cloud-frame { outline: 2px solid var(--accent); outline-offset: 8px; border-radius: 40px; }
+  .cloud-left  { left: 2%;  width: 44%; z-index: 3; }
+  .cloud-right { right: 2%; left: auto; width: 40%; z-index: 2; }
+  .cloud-bob { position: absolute; bottom: -6%; width: min(124%, 720px); will-change: transform; pointer-events: none; }
+  .cloud-left .cloud-bob  { left: -16%; }
+  .cloud-right .cloud-bob { right: -16%; left: auto; width: min(116%, 680px); }
+  .is-in .cloud-left .cloud-bob  { animation: driftA 8.4s ease-in-out infinite; }
+  .is-in .cloud-right .cloud-bob { animation: driftB 10.6s ease-in-out infinite; }
+  @keyframes driftA { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(5px,-14px,0); } }
+  @keyframes driftB { 0%,100% { transform: translate3d(0,-4px,0); } 50% { transform: translate3d(-5px,-17px,0); } }
+  .cloud-frame { position: relative; width: 100%; aspect-ratio: 2 / 1.1; }
+  .cloud-media { position: relative; width: 100%; height: 100%; }
+  .cloud-media img.gif {
+    position: absolute; inset: 8% 10%; z-index: 1; width: 80%; height: 80%; margin: auto;
+    object-fit: cover; object-position: center; display: block;
+    opacity: 0; border-radius: 40%;
+    filter: blur(1.4px) saturate(.85); transform: scale(.94);
+    transition: opacity 1.65s cubic-bezier(.45,0,.15,1), transform 1.85s cubic-bezier(.33,.1,.2,1), filter 1.65s cubic-bezier(.45,0,.15,1);
+    -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 54%, #000 26%, rgba(0,0,0,.5) 54%, transparent 78%);
+    mask-image: radial-gradient(ellipse 62% 58% at 50% 54%, #000 26%, rgba(0,0,0,.5) 54%, transparent 78%);
+  }
+  .cloud-left .cloud-media img.gif { transform: translateX(-6%) scale(.94); object-position: 42% center; }
+  .cloud.is-hot .cloud-media img.gif,
+  .cloud:focus-within .cloud-media img.gif { opacity: 1; filter: blur(.2px) saturate(.9); transform: scale(1); }
+  .cloud-left.is-hot .cloud-media img.gif,
+  .cloud-left:focus-within .cloud-media img.gif { transform: translateX(-6%) scale(1); }
+  .cloud-caption {
+    --caption-tilt: -1.5deg;
+    position: absolute; left: 50%; top: 18%; z-index: 3;
+    width: max-content; max-width: 72%;
+    font-family: var(--hand); font-weight: 500; font-size: clamp(20px, 2.1vw, 27px);
+    color: var(--ink-soft); line-height: 1.25; text-align: center;
+    pointer-events: none; opacity: .72;
+    transform: translateX(-50%) rotate(var(--caption-tilt));
+    transition: opacity .55s ease, color .55s ease, font-size .55s ease, text-shadow .55s ease;
+    text-shadow: 0 0 16px rgba(239,243,250,.85);
+  }
+  .cloud-left .cloud-caption  { --caption-tilt: -2deg; }
+  .cloud-right .cloud-caption { --caption-tilt: 2deg; }
+  .cloud.is-hot .cloud-caption,
+  .cloud:focus-within .cloud-caption {
+    opacity: 1; color: var(--ink); font-size: clamp(22px, 2.35vw, 30px);
+    text-shadow: 0 0 22px rgba(239,243,250,.98), 0 0 8px rgba(239,243,250,.9);
+  }
+
+  .hero-ocean { position: absolute; left: 0; right: 0; bottom: clamp(-96px, -6vw, -52px); z-index: 1; pointer-events: none; }
+  .hero-ocean img { width: 108%; max-width: none; margin-left: -4%; height: auto; }
+  .hero-ocean .wave--near { position: relative; z-index: 2; }
+  .hero-ocean .wave--far { position: absolute; left: 0; bottom: 0; z-index: 1; opacity: .5; transform-origin: 50% 100%; }
+  .is-in .wave--near { animation: swellNear 7.2s ease-in-out infinite; }
+  .is-in .wave--far  { animation: swellFar 11.3s ease-in-out infinite; }
+  @keyframes swellNear {
+    0%, 100% { transform: translate3d(-7px, 0, 0); }
+    50%      { transform: translate3d(7px, -11px, 0); }
+  }
+  @keyframes swellFar {
+    0%, 100% { transform: translate3d(6px, 0, 0) scale(1.06); }
+    50%      { transform: translate3d(-6px, -5px, 0) scale(1.06); }
+  }
+
+  /* ---- old ocean (hero-waves.png): crests feather late, needs a deep top fade ---- */
+  .sea-old .hero-ocean img {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  /* ---- ocean 6: its own top is already transparent, so barely fade it ---- */
+  .sea-new .hero-ocean img {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 2%, #000 78%, transparent 99%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 2%, #000 78%, transparent 99%);
+  }
+
+  /* ============ round B — the mirrored left/right cloud pair ============
+     These two are halves of one painting: each runs its art right up to its
+     inner edge so they butt together at the centre line. Sized to exactly
+     half the hero each, the seam disappears; anything else exposes the cut. */
+  .cloudbank {
+    /* wider than the hero so the drift never uncovers an edge */
+    position: absolute; left: -18px; right: -18px; bottom: 0;
+    z-index: 1; pointer-events: none;
+    display: flex; align-items: flex-end;
+    opacity: .9;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 82%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 82%, transparent 100%);
+  }
+  /* flex-basis 0 lets the browser split the row exactly — percentage widths
+     round independently and leave a hairline of sky down the seam */
+  .cloudbank .bank { flex: 1 1 0; min-width: 0; max-width: none; width: auto; height: auto; }
+  /* the bank drifts as one piece; moving the halves separately splits the seam */
+  .is-in .cloudbank { animation: bankDrift 21s ease-in-out infinite; }
+  @keyframes bankDrift {
+    0%, 100% { transform: translate3d(-6px, 0, 0); }
+    50%      { transform: translate3d(6px, -7px, 0); }
+  }
+
+  /* ================= round A — CSS gradient plate ================= */
+  .plate-css .cloud-media::after {
+    content: ""; position: absolute; inset: 2% 4%; z-index: 2; pointer-events: none;
+    background:
+      radial-gradient(ellipse 38% 44% at 32% 52%, rgba(255,255,255,.74) 0%, rgba(255,255,255,.44) 44%, rgba(255,255,255,0) 74%),
+      radial-gradient(ellipse 34% 40% at 58% 44%, rgba(255,255,255,.70) 0%, rgba(255,255,255,.40) 46%, rgba(255,255,255,0) 76%),
+      radial-gradient(ellipse 30% 34% at 46% 64%, rgba(249,252,255,.62) 0%, rgba(249,252,255,.34) 48%, rgba(249,252,255,0) 78%),
+      radial-gradient(ellipse 24% 28% at 74% 60%, rgba(255,255,255,.54) 0%, rgba(255,255,255,0) 72%);
+    filter: blur(2px);
+    transition: opacity 1.6s cubic-bezier(.45,0,.2,1);
+  }
+  .plate-css .cloud.is-hot .cloud-media::after,
+  .plate-css .cloud:focus-within .cloud-media::after { opacity: .16; }
+
+  /* ============ round B — one stat at a time, typed in ============
+     Nothing in the line is emphasised — the number reads at the same size and
+     weight as its label. The interest comes from the reveal, not the type. */
+  .hero-roll { position: relative; height: 2.6em; width: min(560px, 86vw); }
+  .hero-roll .stat {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: 500;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    white-space: pre;
+  }
+  /* each character lands on its own beat */
+  .hero-roll .ch {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(.42em);
+    filter: blur(5px);
+    transition:
+      opacity .44s ease,
+      transform .52s cubic-bezier(.22,.7,.2,1),
+      filter .44s ease;
+    transition-delay: calc(var(--i) * 26ms);
+  }
+  .hero-roll .stat.is-on .ch { opacity: 1; transform: none; filter: blur(0); }
+  .hero-roll .stat.is-out .ch {
+    opacity: 0; transform: translateY(-.42em); filter: blur(5px);
+    transition-delay: calc(var(--i) * 14ms);
+  }
+  /* used to snap an exited line back below without animating it back through */
+  .hero-roll .stat.no-tr .ch { transition: none !important; }
+
+  /* ============ round C — clouds 1 & 2 ============ */
+  .plate-art .cloud-media::after {
+    content: ""; position: absolute; z-index: 2; top: 50%; opacity: .82;
+    pointer-events: none; background-repeat: no-repeat; background-size: 100% 100%;
+    transition: opacity 1.6s cubic-bezier(.45,0,.2,1);
+  }
+  .plate-art .cloud-left .cloud-media::after {
+    left: -14%; width: 104%; aspect-ratio: 1200 / 393; transform: translateY(-50%);
+    background-image: url("../assets/images/direction/hero-cloud-1.png");
+  }
+  .plate-art .cloud-right .cloud-media::after {
+    right: -12%; width: 96%; aspect-ratio: 1200 / 590; transform: translateY(-50%);
+    background-image: url("../assets/images/direction/hero-cloud-2.png");
+  }
+  .plate-art .cloud.is-hot .cloud-media::after,
+  .plate-art .cloud:focus-within .cloud-media::after { opacity: .14; }
+
+  @media (max-width: 900px) {
+    .hero { min-height: 0; height: 100svh; }
+    .hero h1 { font-size: clamp(26px, 7.2vw, 40px); }
+    .hero-inner { padding-top: 88px; padding-bottom: clamp(150px, 26vh, 240px); }
+    .hero-copy { margin-top: 8vh; }
+    .cloud-left .cloud-bob, .cloud-right .cloud-bob { width: min(140%, 420px); bottom: 4%; }
+    .cloud-frame { aspect-ratio: 16 / 11; }
+    /* At half the viewport each the painted halves collapse to a thin band, so
+       narrow screens anchor them to their outer edges at a readable scale. The
+       swap put each piece's hard-cut edge outward, so it lands off-screen and
+       only the soft sides meet in the middle. */
+    .cloudbank { display: block; }
+    .cloudbank .bank { width: 94%; }
+    .cloudbank .bank--r { position: absolute; right: 0; bottom: 0; }
+    .bar { font-size: 11px; gap: 2px; padding: 5px 7px; }
+    .bar a { padding: 3px 7px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cloud-bob, .wave, .cloudbank { animation: none !important; }
+    .cloud-media img.gif, .cloud-media::after { transition: opacity .5s ease !important; }
+    /* no typing — fall back to the three stacked, all readable at once */
+    .hero-roll { height: auto; width: auto; }
+    .hero-roll .stat { position: static; justify-content: flex-start; }
+    .hero-roll .ch { opacity: 1; transform: none; filter: none; transition: none; }
+  }
+  body.pin .cloud-bob, body.pin .wave { animation-delay: -3.6s !important; animation-play-state: paused !important; }
+</style>
+</head>
+<body class="is-in">
+
+<nav class="bar">
+  <a href="#a">A · css plate + old sea</a>
+  <a href="#b">B · ocean 6 + L/R clouds</a>
+  <a href="#c">C · L/R clouds + old sea</a>
+  <button type="button" data-pin>pin mid-drift</button>
+</nav>
+
+<!-- ============================ A ============================ -->
+<header class="hero plate-css sea-old" id="a">
+  <div class="scene--sky" aria-hidden="true"></div>
+  <div class="tag"><b>A · css plate + old sea</b><span>the version before the new art landed</span></div>
+  <div class="hero-fg">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-role">Senior UX Researcher/Manager</p>
+        <h1>From <em>insights</em> to influence</h1>
+      </div>
+      <div class="hero-stats">
+        <p><strong><span>9</span>+</strong> Years</p>
+        <p><strong><span>100</span>+</strong> Studies</p>
+        <p><strong><span>1000</span>+</strong> Participants</p>
+      </div>
+    </div>
+    <div class="hero-clouds">
+      <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+        <div class="cloud-bob"><div class="cloud-frame"><div class="cloud-media">
+          <img class="gif" src="../assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+        </div><span class="cloud-caption">a compass when things get&nbsp;fuzzy</span></div></div>
+      </button>
+      <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+        <div class="cloud-bob"><div class="cloud-frame"><div class="cloud-media">
+          <img class="gif" src="../assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+        </div><span class="cloud-caption">a seeker of&nbsp;truths</span></div></div>
+      </button>
+    </div>
+  </div>
+  <div class="hero-ocean" aria-hidden="true">
+    <img class="wave wave--far"  src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+    <img class="wave wave--near" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+  </div>
+</header>
+
+<!-- ============================ B ============================ -->
+<header class="hero plate-lr sea-new" id="b">
+  <div class="scene--sky" aria-hidden="true"></div>
+  <div class="tag"><b>B · ocean 6 + left/right clouds</b><span>typed stat, one at a time</span></div>
+  <div class="cloudbank" aria-hidden="true">
+    <img class="bank bank--l" src="../assets/images/direction/hero-cloud-right.png" alt="" width="1100" height="825">
+    <img class="bank bank--r" src="../assets/images/direction/hero-cloud-left.png"  alt="" width="1100" height="825">
+  </div>
+  <div class="hero-fg">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-role">Senior UX Researcher/Manager</p>
+        <h1>From <em>insights</em> to influence</h1>
+      </div>
+      <div class="hero-stats hero-roll" data-roll>
+        <p class="stat is-on">9+ Years</p>
+        <p class="stat">100+ Studies</p>
+        <p class="stat">1000+ Participants</p>
+      </div>
+    </div>
+    <div class="hero-clouds">
+      <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+        <div class="cloud-bob"><div class="cloud-frame"><div class="cloud-media">
+          <img class="gif" src="../assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+        </div><span class="cloud-caption">a compass when things get&nbsp;fuzzy</span></div></div>
+      </button>
+      <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+        <div class="cloud-bob"><div class="cloud-frame"><div class="cloud-media">
+          <img class="gif" src="../assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+        </div><span class="cloud-caption">a seeker of&nbsp;truths</span></div></div>
+      </button>
+    </div>
+  </div>
+  <div class="hero-ocean" aria-hidden="true">
+    <img class="wave wave--far"  src="../assets/images/direction/hero-ocean-6.png" alt="" width="1900" height="641">
+    <img class="wave wave--near" src="../assets/images/direction/hero-ocean-6.png" alt="" width="1900" height="641">
+  </div>
+</header>
+
+<!-- ============================ C ============================ -->
+<header class="hero plate-lr sea-old" id="c">
+  <div class="scene--sky" aria-hidden="true"></div>
+  <div class="tag"><b>C · left/right clouds + old sea</b><span>same clouds as B, only the ocean differs</span></div>
+  <div class="cloudbank" aria-hidden="true">
+    <img class="bank bank--l" src="../assets/images/direction/hero-cloud-right.png" alt="" width="1100" height="825">
+    <img class="bank bank--r" src="../assets/images/direction/hero-cloud-left.png"  alt="" width="1100" height="825">
+  </div>
+  <div class="hero-fg">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-role">Senior UX Researcher/Manager</p>
+        <h1>From <em>insights</em> to influence</h1>
+      </div>
+      <div class="hero-stats">
+        <p><strong><span>9</span>+</strong> Years</p>
+        <p><strong><span>100</span>+</strong> Studies</p>
+        <p><strong><span>1000</span>+</strong> Participants</p>
+      </div>
+    </div>
+    <div class="hero-clouds">
+      <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+        <div class="cloud-bob"><div class="cloud-frame"><div class="cloud-media">
+          <img class="gif" src="../assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+        </div><span class="cloud-caption">a compass when things get&nbsp;fuzzy</span></div></div>
+      </button>
+      <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+        <div class="cloud-bob"><div class="cloud-frame"><div class="cloud-media">
+          <img class="gif" src="../assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+        </div><span class="cloud-caption">a seeker of&nbsp;truths</span></div></div>
+      </button>
+    </div>
+  </div>
+  <div class="hero-ocean" aria-hidden="true">
+    <img class="wave wave--far"  src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+    <img class="wave wave--near" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+  </div>
+</header>
+
+<script>
+  if (window.matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll(".cloud").forEach((cloud) => {
+      cloud.addEventListener("pointerenter", () => cloud.classList.add("is-hot"));
+      cloud.addEventListener("pointerleave", () => cloud.classList.remove("is-hot"));
+    });
+  }
+  /* one stat at a time, each spelled out a character at a time */
+  const roll = document.querySelector("[data-roll]");
+  if (roll && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const items = [...roll.querySelectorAll(".stat")];
+
+    // split into per-character spans; the <p> keeps the whole string as its
+    // accessible name so screen readers don't spell it out letter by letter
+    items.forEach((el) => {
+      const text = el.textContent.trim();
+      el.setAttribute("aria-label", text);
+      el.textContent = "";
+      const frag = document.createDocumentFragment();
+      [...text].forEach((c, i) => {
+        const s = document.createElement("span");
+        s.className = "ch";
+        s.setAttribute("aria-hidden", "true");
+        s.style.setProperty("--i", i);
+        s.textContent = c;
+        frag.appendChild(s);
+      });
+      el.appendChild(frag);
+    });
+
+    const EXIT = 820;
+    let i = 0;
+    setInterval(() => {
+      if (document.hidden) return;
+      const prev = items[i];
+      prev.classList.replace("is-on", "is-out");
+      // once it has cleared, drop it back below without animating the return
+      setTimeout(() => {
+        prev.classList.add("no-tr");
+        prev.classList.remove("is-out");
+        void prev.offsetWidth;
+        prev.classList.remove("no-tr");
+      }, EXIT);
+      i = (i + 1) % items.length;
+      items[i].classList.add("is-on");
+    }, 3400);
+  }
+
+  document.querySelector("[data-pin]").addEventListener("click", (e) => {
+    document.body.classList.toggle("pin");
+    e.target.textContent = document.body.classList.contains("pin") ? "resume" : "pin mid-drift";
+  });
+</script>
+</body>
+</html>
