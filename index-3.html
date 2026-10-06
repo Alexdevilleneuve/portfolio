@@ -3871,6 +3871,249 @@
     .endorse-strip .strip-who .meta > span { max-width: none; }
     .endorse-more { margin-top: 28px; }
   }
+
+  /* ---- Hard skills: original voyage (storyboard) ---- */
+  .skills-voyage {
+    position: relative;
+    z-index: 2;
+    height: 460vh;
+    margin: 0;
+    background: var(--paper);
+  }
+  .skills-voyage .voyage-viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .skills-voyage .backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url("assets/images/song/explore-06-voyage.png") center / cover no-repeat;
+    pointer-events: none;
+  }
+  .skills-voyage .backdrop-veil {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(244,241,234,.42) 0%, transparent 38%, transparent 100%);
+    pointer-events: none;
+  }
+  .skills-voyage .stage { position: absolute; inset: 0; z-index: 2; }
+  .skills-voyage .cutout {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: 50% 100%;
+    will-change: transform, opacity;
+  }
+  .skills-voyage .cutout .face {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 16px 22px;
+    border-radius: 10px;
+    background: rgba(247, 246, 241, .78);
+    border: 1px solid rgba(28, 36, 56, .08);
+    box-shadow: 0 10px 28px rgba(28, 36, 56, .08);
+  }
+  .skills-voyage .cutout.mark img {
+    display: block;
+    max-width: 88%;
+    max-height: 58%;
+    object-fit: contain;
+  }
+  .skills-voyage .cutout.mark.ink img {
+    filter: brightness(0) saturate(100%);
+    opacity: .72;
+  }
+  .skills-voyage .cutout.mark.colour img { opacity: .92; }
+  .skills-voyage .cutout.area .face {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    padding: 22px 24px;
+  }
+  .skills-voyage .cutout.area .num {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: #9A7A38;
+  }
+  .skills-voyage .cutout.area .name {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .skills-voyage .cutout .shadow {
+    position: absolute;
+    left: 50%;
+    bottom: -13%;
+    width: 82%;
+    height: 12%;
+    transform: translateX(-50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(28, 36, 56, .22), transparent 70%);
+    filter: blur(4px);
+  }
+  .skills-voyage .textwall {
+    position: absolute;
+    left: 5.5vw;
+    top: 0;
+    width: min(38vw, 520px);
+    height: 100vh;
+    height: 100svh;
+    z-index: 5;
+    pointer-events: none;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(transparent 6%, #000 22%, #000 58%, transparent 90%);
+    mask-image: linear-gradient(transparent 6%, #000 22%, #000 58%, transparent 90%);
+  }
+  .skills-voyage .textwall-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding-top: 8vh;
+    will-change: transform;
+  }
+  .skills-voyage .tw-block {
+    min-height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 8px;
+    will-change: opacity, transform;
+  }
+  .skills-voyage .tw-block .line {
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.5vw, 38px);
+    line-height: 1.32;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    color: var(--ink);
+  }
+  .skills-voyage .tw-block .line em { font-style: italic; color: #9A7A38; }
+  .skills-voyage .tw-block .src {
+    margin-top: 16px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    opacity: .72;
+  }
+  .skills-voyage .tw-block.is-lead .line {
+    font-size: clamp(20px, 1.8vw, 26px);
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .skills-voyage .tw-block.is-lead .src {
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+  .skills-voyage .trail {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .skills-voyage .trail path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    opacity: .45;
+  }
+  .skills-voyage .trail path.ghost {
+    stroke-dasharray: 3 10;
+    stroke-width: 1.1;
+    opacity: .12;
+  }
+  .skills-voyage .compass {
+    position: absolute;
+    right: 4.5vw;
+    bottom: 6vh;
+    width: 88px;
+    height: 88px;
+    z-index: 6;
+    opacity: .55;
+    pointer-events: none;
+  }
+  .skills-voyage .compass svg { width: 100%; height: 100%; overflow: visible; }
+  .skills-voyage .compass .ring { fill: none; stroke: rgba(28, 36, 56, .28); stroke-width: 1; }
+  .skills-voyage .compass .tick { stroke: rgba(28, 36, 56, .24); stroke-width: 1; }
+  .skills-voyage .compass .needle { fill: var(--gold); stroke: rgba(28, 36, 56, .4); stroke-width: .6; }
+  @media (max-width: 800px) {
+    .skills-voyage .textwall { width: min(78vw, 420px); left: 6vw; }
+    .skills-voyage .tw-block .line { font-size: clamp(22px, 6.2vw, 30px); }
+    .skills-voyage .tw-block.is-lead .line { font-size: clamp(16px, 4.4vw, 20px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skills-voyage { height: auto; }
+    .skills-voyage .voyage-viewport {
+      position: relative;
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      padding: 88px 0 64px;
+    }
+    .skills-voyage .stage {
+      position: relative;
+      inset: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      padding: 12px 6vw 28px;
+      order: 2;
+    }
+    .skills-voyage .cutout {
+      position: relative;
+      left: auto;
+      top: auto;
+      opacity: 1 !important;
+      filter: none !important;
+      transform: none !important;
+    }
+    .skills-voyage .textwall {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: min(640px, calc(100% - 48px));
+      height: auto;
+      margin: 0 auto 12px;
+      overflow: visible;
+      mask-image: none;
+      -webkit-mask-image: none;
+      order: 1;
+    }
+    .skills-voyage .textwall-inner { position: relative; padding-top: 0; }
+    .skills-voyage .tw-block {
+      min-height: 0;
+      margin-bottom: 28px;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .skills-voyage .trail,
+    .skills-voyage .compass { display: none; }
+  }
+
 </style>
 </head>
 <body>
@@ -4169,7 +4412,7 @@
     </div>
 </section>
 
-<section class="block-v2" id="voyage-compare" data-section-stack-base aria-label="3.0 hero and watercolor timeline">
+<section class="block-v2" id="voyage-compare" data-section-stack-base aria-label="3.0 hero and hard skills voyage">
   <div class="section-stack-scale" data-section-stack-scale>
   <div class="timeline-v2-bg" aria-hidden="true">
     <div class="timeline-v2-ocean">
@@ -4236,233 +4479,95 @@
   </div>
 </header>
   </div>
-<section class="voyage timeline-v2" data-timeline-v2 aria-label="About Alexandra and practice areas">
-  <div class="timeline-v2-inner">
-    <img class="timeline-v2-current" src="assets/images/portfolio_watercolor_assets/wake-path.png" alt="" aria-hidden="true">
-    <img class="timeline-v2-current-tail" src="assets/images/portfolio_watercolor_assets/wake-path.png" alt="" aria-hidden="true">
-    <ol class="timeline-v2-list">
-      <li class="timeline-v2-stop">
-        <span class="timeline-v2-marker" aria-hidden="true">01</span>
-        <article class="timeline-v2-card">
-          <img class="timeline-v2-card-art" src="assets/images/portfolio_watercolor_assets/card-01.png" alt="" aria-hidden="true">
-          <p class="timeline-v2-greeting">👋 Hey, glad you're&nbsp;here.</p>
-          <p>I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area.</p>
-        </article>
-      </li>
+<section class="voyage skills-voyage" data-skills-voyage aria-label="Hard skills voyage">
+  <div class="voyage-viewport">
+    <div class="backdrop" aria-hidden="true"></div>
+    <div class="backdrop-veil" aria-hidden="true"></div>
+    <div class="stage" data-stage>
+      <div class="cutout mark ink" data-group="1" data-gx="-0.55" data-gy="-0.38" data-gz="-0.35" data-w="240" data-h="96" data-standup="true">
+        <div class="face"><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="0.85" data-gy="-0.42" data-gz="0.25" data-w="220" data-h="96">
+        <div class="face"><img src="assets/images/shared/brand/google-wordmark.png" alt="Google"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="-0.45" data-gy="0.36" data-gz="0.45" data-w="220" data-h="96">
+        <div class="face"><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="1.00" data-gy="0.32" data-gz="-0.20" data-w="220" data-h="96" data-standup="true">
+        <div class="face"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion"></div>
+        <div class="shadow"></div>
+      </div>
 
-      <li class="timeline-v2-stop">
-        <span class="timeline-v2-marker" aria-hidden="true">02</span>
-        <article class="timeline-v2-card">
-          <img class="timeline-v2-card-art" src="assets/images/portfolio_watercolor_assets/card-02.png" alt="" aria-hidden="true">
-          <p>I&nbsp;lead strategic research in complex systems<br>where trust is the product: <span class="hook">security, privacy, and now&nbsp;AI.</span></p>
-          <ul class="timeline-v2-logos" aria-label="Companies">
-            <li><img src="assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" decoding="async"></li>
-            <li><img src="assets/images/shared/brand/google-wordmark.png" alt="Google" decoding="async"></li>
-            <li><img src="assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" decoding="async"></li>
-            <li data-brand="kerr"><img src="assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion" decoding="async"></li>
-          </ul>
-        </article>
-      </li>
+      <div class="cutout mark colour" data-group="2" data-gx="-0.70" data-gy="-0.18" data-gz="0.20" data-w="236" data-h="108">
+        <div class="face"><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark colour" data-group="2" data-gx="0.55" data-gy="-0.36" data-gz="-0.40" data-w="236" data-h="108" data-standup="true">
+        <div class="face"><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark colour" data-group="2" data-gx="0.85" data-gy="0.38" data-gz="0.15" data-w="248" data-h="108">
+        <div class="face"><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy"></div>
+        <div class="shadow"></div>
+      </div>
 
-      <li class="timeline-v2-stop">
-        <span class="timeline-v2-marker" aria-hidden="true">03</span>
-        <article class="timeline-v2-card">
-          <img class="timeline-v2-card-art" src="assets/images/portfolio_watercolor_assets/card-03.png" alt="" aria-hidden="true">
-          <p>Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what experience should we build, and&nbsp;why?</span></p>
-          <ul class="timeline-v2-logos timeline-v2-logos--schools" aria-label="Universities">
-            <li><img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" decoding="async"></li>
-            <li><img src="assets/images/shared/brand/lanzhou.png" alt="Lanzhou University" decoding="async"></li>
-            <li><img src="assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy" decoding="async"></li>
-          </ul>
-        </article>
-      </li>
+      <div class="cutout area" data-group="3" data-gx="-0.70" data-gy="-0.36" data-gz="-0.25" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">01</span><span class="name">AI + Trust</span></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout area" data-group="3" data-gx="0.85" data-gy="-0.28" data-gz="0.30" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">02</span><span class="name">Product Systems</span></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout area" data-group="3" data-gx="-0.75" data-gy="0.40" data-gz="0.35" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">03</span><span class="name">0→1 Product Builds</span></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout area" data-group="3" data-gx="0.80" data-gy="0.46" data-gz="-0.15" data-w="248" data-h="118" data-standup="true">
+        <div class="face"><span class="num">04</span><span class="name">Research Influence</span></div>
+        <div class="shadow"></div>
+      </div>
+    </div>
 
-      <li class="timeline-v2-stop timeline-v2-stop--scroll">
-        <div class="timeline-v2-scroll-stage" data-scroll-stage>
-          <div class="timeline-v2-scroll-stack" data-practice>
-            <div class="timeline-v2-scroll-rail">
-              <div class="timeline-v2-scroll-rail-track timeline-v2-scroll-rail-track--sheet">
-                <span class="timeline-v2-marker" aria-hidden="true">04</span>
-                <div class="timeline-v2-scroll-card">
-                  <article class="timeline-v2-scroll">
-                    <div class="timeline-v2-scroll-glass" aria-hidden="true">
-                      <img class="timeline-v2-scroll-land" src="assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
-                    </div>
-                    <div class="timeline-v2-scroll-inner">
-                      <header class="timeline-v2-chips-in-sheet">
-                        <p class="timeline-v2-tabs-label" aria-hidden="true">.practice areas</p>
-                        <div class="timeline-v2-tabs" role="tablist" aria-label="Practice areas">
-                          <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
-                          <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
-                          <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
-                          <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
-                        </div>
-                      </header>
-                      <div class="timeline-v2-practice is-active" data-skill="ai" role="tabpanel" id="timeline-v2-skill-ai">
-                        <p class="timeline-v2-statement">I&nbsp;shape <strong>trustworthy AI experiences</strong> by uncovering how people <strong>form and calibrate trust</strong>, understand system behavior, and decide when to take&nbsp;control.</p>
-                        <div class="timeline-v2-proofs">
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="trust-cal">
-                            <strong>trust calibration &amp; explainability</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Security Advisor</span>
-                              <p class="skill-proof-desc">Led the research arc behind Malwarebytes' conversational security advisor: uncovering what makes people trust a personalized, adaptive advisor before the industry had the vocabulary for&nbsp;it.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-ai">SAM mockup<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="hitl">
-                            <strong>human-in-the-loop autonomy</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Automation Scaling</span>
-                              <p class="skill-proof-desc">Built the framework for how much autonomy users would grant an automated security system, and where they needed a human in the&nbsp;loop.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-ai">automation scaling artifact<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="timeline-v2-practice" data-skill="conv" role="tabpanel" id="timeline-v2-skill-conv" hidden>
-                        <p class="timeline-v2-statement">I&nbsp;lead iterative research to define <strong>scalable UX architecture</strong> when <strong>complex product systems</strong> outgrow their legacy&nbsp;structure.</p>
-                        <div class="timeline-v2-proofs">
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="shopping">
-                            <strong>google express → google shopping</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Google Express to Google Shopping Evolution</span>
-                              <p class="skill-proof-desc">Foundational and concept-validation research as Express folded into the new Shopping&nbsp;tab.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-conv">Shopping tab<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="ia">
-                            <strong>information architecture redesign</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Malwarebytes 5.0 Integration</span>
-                              <p class="skill-proof-desc">Converged four standalone products—MB4, Privacy VPN, Browser Guard, and MyAccount—into one coherent app, with mental model research defining the unified&nbsp;structure.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-conv">MB5<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="platform">
-                            <strong>complex workflow &amp; platform modernization</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Nebula to ThreatDown Evolution</span>
-                              <p class="skill-proof-desc">Untangled task flows, navigation, and information structures in a fragmented enterprise console into an all-in-one endpoint and data management system anchored in actionable security posture&nbsp;assessment.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-conv">homepage before and after<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="timeline-v2-practice" data-skill="zero" role="tabpanel" id="timeline-v2-skill-zero" hidden>
-                        <p class="timeline-v2-statement">I&nbsp;turn ambiguous ideas into <strong>validated product direction</strong>, from early exploration through&nbsp;launch.</p>
-                        <div class="timeline-v2-proofs">
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="concept-launch">
-                            <strong>concept-to-launch research</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Malwarebytes Privacy VPN 1.0</span>
-                              <p class="skill-proof-desc">Defined target users, unmet needs, value propositions, interaction models, and launch experience for a net-new consumer privacy&nbsp;product.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-zero">Privacy VPN<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="ai-native">
-                            <strong>ai-native product discovery &amp; build</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">AI-Native Product Discovery &amp; Build</span>
-                              <p class="skill-proof-desc">A researcher who ships—from pain point to vision to working product—using the same strategy-first discipline I&nbsp;bring to enterprise&nbsp;work.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-zero">personal project<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="timeline-v2-practice" data-skill="amp" role="tabpanel" id="timeline-v2-skill-amp" hidden>
-                        <p class="timeline-v2-statement">I&nbsp;turn fragmented customer insights into an <strong>omnichannel UX strategy</strong> that aligns XFN teams around <strong>one shared experience and product&nbsp;vision</strong>.</p>
-                        <div class="timeline-v2-proofs">
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="xfn">
-                            <strong>cross-functional product collaboration</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Participatory Research Program</span>
-                              <p class="skill-proof-desc">Built stronger connections between teams and users—bringing stakeholders directly into research, deepening buy-in on findings, and strengthening empathy for the end user across the product&nbsp;organization.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-amp">three-phase program diagram<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="cross-craft">
-                            <strong>cross-craft UX leadership</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Established the UX Research Practice from the Ground&nbsp;Up</span>
-                              <p class="skill-proof-desc">Led multidisciplinary UX work across research, interaction design, visual design, and content, while growing the research team from 2 to 5 and establishing more consistent research operations and&nbsp;practices.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-amp">intake / planning artifact<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="skill-proof" role="button" tabindex="0" data-proof="self-serve">
-                            <strong>self-serve research infrastructure</strong>
-                            <div class="skill-proof-reveal">
-                              <span class="skill-proof-title">Google Ads Recruiting Hub</span>
-                              <p class="skill-proof-desc">Turned three years of archived recruiting data plus a live view of the current pipeline into a self-serve dashboard used by UXers and PMs across the Ads&nbsp;org.</p>
-                              <span class="skill-proof-tags"></span>
-                              <div class="skill-proof-media" aria-hidden="true">
-                                <div class="skill-proof-media-clip">
-                                  <div class="proof-ph ph-amp">dashboard<br><small>drop image here</small></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="textwall">
+      <div class="textwall-inner" data-textwall>
+        <div class="tw-block is-lead">
+          <p class="src">Hey, glad you're&nbsp;here</p>
+          <p class="line">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
         </div>
-        <div class="timeline-v2-coda" data-voyage-coda>
-          <div class="timeline-v2-coda-row">
-            <img class="timeline-v2-coda-boat" src="assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="" aria-hidden="true">
-            <p class="timeline-v2-coda-note">…the journey&nbsp;continues<span class="timeline-v2-coda-star" aria-hidden="true"></span></p>
-          </div>
+        <div class="tw-block">
+          <p class="line">I&nbsp;lead strategic research in complex systems where trust is the product: <em>security, privacy, and now&nbsp;AI</em>.</p>
         </div>
-      </li>
-    </ol>
+        <div class="tw-block">
+          <p class="line">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <em>what experience should we build, and&nbsp;why?</em></p>
+        </div>
+        <div class="tw-block">
+          <p class="line">Four places I&nbsp;do my best&nbsp;work.</p>
+          <p class="src">practice areas</p>
+        </div>
+      </div>
+    </div>
+
+    <svg class="trail" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ghost" d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
+      <path data-trail pathLength="1" d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
+    </svg>
+
+    <div class="compass" aria-hidden="true">
+      <svg viewBox="0 0 104 104">
+        <circle class="ring" cx="52" cy="52" r="40"/>
+        <circle class="ring" cx="52" cy="52" r="31"/>
+        <line class="tick" x1="52" y1="6" x2="52" y2="15"/>
+        <line class="tick" x1="52" y1="89" x2="52" y2="98"/>
+        <line class="tick" x1="6" y1="52" x2="15" y2="52"/>
+        <line class="tick" x1="89" y1="52" x2="98" y2="52"/>
+        <polygon class="needle" data-needle points="52,15 58,52 52,71 46,52"/>
+        <circle cx="52" cy="52" r="3" fill="rgba(28,36,56,.6)"/>
+      </svg>
+    </div>
   </div>
 </section>
   </div>
@@ -5908,6 +6013,159 @@
       const btn = item.querySelector(".how-v2-item-btn");
       btn?.addEventListener("click", () => setOpen(item.dataset.howItem));
     });
+  })();
+
+
+  // Hard skills voyage — scroll drives the original storyboard camera.
+  (() => {
+    const section = document.querySelector("[data-skills-voyage]");
+    if (!section) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const trail = section.querySelector("[data-trail]");
+    const needle = section.querySelector("[data-needle]");
+    const wall = section.querySelector("[data-textwall]");
+    const blocks = [...section.querySelectorAll(".tw-block")];
+    const UNIT = 132;
+    const VIEW_DIST = 9;
+    const VP_X = 0.63;
+    const VP_Y = 0.44;
+    const GROUPS = [
+      { wx: 0, wz: 0 },
+      { wx: 8.5, wz: 2.2 },
+      { wx: 17.0, wz: -1.8 },
+      { wx: 25.5, wz: 1.2 },
+    ];
+    const CTRL_BACK = 4.2;
+    const CTRL_SWAY = 2.6;
+    const LIFT = 0.30;
+    const LOOK = 0.045;
+    const STAND_ANGLE = 84;
+    const SEGMENTS = [
+      { kind: "dwell", g: 0, p0: 0.00, p1: 0.11 },
+      { kind: "transit", from: 0, to: 1, p0: 0.11, p1: 0.33 },
+      { kind: "dwell", g: 1, p0: 0.33, p1: 0.45 },
+      { kind: "transit", from: 1, to: 2, p0: 0.45, p1: 0.65 },
+      { kind: "dwell", g: 2, p0: 0.65, p1: 0.77 },
+      { kind: "transit", from: 2, to: 3, p0: 0.77, p1: 0.95 },
+      { kind: "dwell", g: 3, p0: 0.95, p1: 1.00 },
+    ];
+    const WAYPOINT_ANGLE = [-40, -8, 34, 74];
+    const WALL_TRAVEL = 1.15;
+    const WALL_FOCUS = 0.42;
+    const WALL_WINDOW = 0.26;
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const lerp = (a, b, n) => a + (b - a) * n;
+    const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    const remap = (v, a, b) => clamp((v - a) / (b - a), 0, 1);
+    const qbez = (a, c, b, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * c + t * t * b;
+    const items = [...section.querySelectorAll("[data-gx]")].map((el) => ({
+      el,
+      group: parseInt(el.dataset.group, 10),
+      gx: parseFloat(el.dataset.gx) || 0,
+      gy: parseFloat(el.dataset.gy) || 0,
+      gz: parseFloat(el.dataset.gz) || 0,
+      standup: el.dataset.standup === "true",
+      w: parseFloat(el.dataset.w),
+      h: parseFloat(el.dataset.h),
+    }));
+    items.forEach((it) => {
+      it.el.style.width = it.w + "px";
+      it.el.style.height = it.h + "px";
+    });
+    if (reduceMotion) return;
+
+    const segmentAt = (p) => {
+      for (const s of SEGMENTS) if (p <= s.p1) return s;
+      return SEGMENTS[SEGMENTS.length - 1];
+    };
+    const camera = (p) => {
+      const s = segmentAt(p);
+      if (s.kind === "dwell") {
+        const g = GROUPS[s.g];
+        return { cx: g.wx, cy: 0, cz: g.wz - VIEW_DIST, active: s.g };
+      }
+      const a = GROUPS[s.from];
+      const b = GROUPS[s.to];
+      const t = easeInOutCubic(remap(p, s.p0, s.p1));
+      const dir = s.from % 2 === 0 ? 1 : -1;
+      const ax = a.wx, bx = b.wx;
+      const az = a.wz - VIEW_DIST, bz = b.wz - VIEW_DIST;
+      return {
+        cx: qbez(ax, (ax + bx) / 2 + CTRL_SWAY * dir, bx, t),
+        cy: Math.sin(t * Math.PI) * LIFT * dir,
+        cz: qbez(az, (az + bz) / 2 - CTRL_BACK, bz, t),
+        active: s.to,
+      };
+    };
+    const arrivalOf = (groupIndex, p) => {
+      if (groupIndex === 0) return 1;
+      const leg = SEGMENTS.find((s) => s.kind === "transit" && s.to === groupIndex);
+      if (!leg) return 1;
+      if (p >= leg.p1) return 1;
+      if (p <= leg.p0) return 0;
+      return remap(p, leg.p0 + (leg.p1 - leg.p0) * 0.3, leg.p1);
+    };
+    const render = (p) => {
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const cam = camera(p);
+      const camAhead = camera(Math.min(1, p + 0.004));
+      const vpx = VP_X - clamp((camAhead.cx - cam.cx) * LOOK * 12, -0.06, 0.06);
+      const arrivals = GROUPS.map((_, i) => arrivalOf(i, p));
+      items.forEach((it) => {
+        const g = GROUPS[it.group];
+        const dz = g.wz + it.gz - cam.cz;
+        const dx = g.wx + it.gx - cam.cx;
+        if (dz < 1.4) { it.el.style.opacity = "0"; return; }
+        const scale = VIEW_DIST / dz;
+        const x = vpx * W + dx * UNIT * scale;
+        const y = VP_Y * H + (it.gy - cam.cy) * UNIT * scale;
+        const stand = it.standup ? STAND_ANGLE * (1 - easeOutCubic(arrivals[it.group])) : 0;
+        it.el.style.transform =
+          "translate(-50%,-50%) translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)" +
+          " scale(" + scale.toFixed(4) + ")" +
+          (stand > 0.2 ? " perspective(760px) rotateX(" + stand.toFixed(2) + "deg)" : "");
+        const lateral = dx < 0 ? 1 - remap(-dx, 1.9, 4.0) : 1 - remap(dx, 5.2, 7.6);
+        const nearFade = remap(dz, 1.4, 4);
+        it.el.style.opacity = (nearFade * lateral).toFixed(3);
+        it.el.style.zIndex = String(Math.round(900 - dz * 12));
+        const blur = Math.round(clamp((dz - 10.5) * 0.45, 0, 4));
+        it.el.style.filter = blur ? "blur(" + blur + "px)" : "none";
+      });
+      wall.style.transform = "translateY(" + (-p * WALL_TRAVEL * H).toFixed(1) + "px)";
+      blocks.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const mid = (r.top + r.bottom) / 2 / H;
+        const t = clamp(1 - Math.abs(mid - WALL_FOCUS) / WALL_WINDOW, 0, 1);
+        const ease = t * t * (3 - 2 * t);
+        el.style.opacity = ease.toFixed(3);
+        el.style.transform = "translateY(" + ((mid - WALL_FOCUS) * 22).toFixed(1) + "px)";
+      });
+      if (trail) trail.style.strokeDashoffset = String(1 - p);
+      const seg = segmentAt(p);
+      const a0 = clamp(cam.active, 0, 3);
+      const prev = WAYPOINT_ANGLE[Math.max(0, a0 - 1)];
+      const legT = seg.kind === "transit" ? easeInOutCubic(remap(p, seg.p0, seg.p1)) : 1;
+      needle?.setAttribute("transform", "rotate(" + lerp(prev, WAYPOINT_ANGLE[a0], legT).toFixed(2) + " 52 52)");
+    };
+    const scrollProgress = () => {
+      const total = section.offsetHeight - window.innerHeight;
+      if (total <= 0) return 0;
+      return clamp(-section.getBoundingClientRect().top / total, 0, 1);
+    };
+    let target = 0;
+    let current = 0;
+    const tick = () => {
+      target = scrollProgress();
+      current = lerp(current, target, 0.09);
+      if (Math.abs(current - target) < 0.0002) current = target;
+      render(current);
+      requestAnimationFrame(tick);
+    };
+    window.addEventListener("resize", () => render(current));
+    render(0);
+    requestAnimationFrame(tick);
   })();
 
   // Endorsements — 1.0 collage reveal
