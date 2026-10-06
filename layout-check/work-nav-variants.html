@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selected work — index variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ice-sky: #E8F0FA;
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    --accent-deep: #3D5CB8;
+    --star: #d3a13a;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --hand: "Caveat", cursive;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #D8E4F0;
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 28px 20px 80px;
+  }
+  .page-head { max-width: 1280px; margin: 0 auto 20px; }
+  .page-head h1 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin-top: 8px;
+    max-width: 62ch;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .toc {
+    position: sticky;
+    top: 10px;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 1280px;
+    margin: 0 auto 28px;
+    padding: 10px 12px;
+    border: 1px solid rgba(28,36,56,.1);
+    border-radius: 14px;
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(12px);
+  }
+  .toc a {
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .toc a:hover { background: rgba(232,240,250,.9); color: var(--ink); }
+
+  .board {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .option-head { margin-bottom: 12px; }
+  .option-head .tag {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: var(--accent-deep);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .option-head h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+  }
+  .option-head p {
+    margin-top: 4px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+  }
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(220px, 30%) minmax(0, 1fr);
+    gap: 28px;
+    padding: 28px 28px 32px;
+    border-radius: 28px 28px 0 0;
+    background:
+      radial-gradient(ellipse 70% 40% at 90% 0%, rgba(255,255,255,.55), transparent 58%),
+      linear-gradient(180deg, #F4F7FB 0%, #E8F0FA 100%);
+    box-shadow: 0 18px 40px rgba(30,42,68,.08);
+  }
+  .fake-card {
+    min-height: 280px;
+    padding: 22px 24px;
+    border-radius: 24px;
+    background: rgba(255,252,246,.92);
+    box-shadow: 0 16px 36px rgba(30,42,68,.1);
+  }
+  .fake-card .kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-deep);
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .fake-card h3 {
+    margin: 8px 0 6px;
+    font-family: var(--serif);
+    font-size: 26px;
+  }
+  .fake-card p { color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
+  .fake-card .ph {
+    display: grid;
+    place-items: center;
+    height: 120px;
+    margin-top: 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #D2EDE4, #B4DFD1);
+    color: rgba(30,42,68,.45);
+    font-family: var(--hand);
+    font-size: 22px;
+  }
+
+  nav { display: flex; flex-direction: column; }
+  .co {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .co img { width: 18px; height: 18px; border-radius: 4px; }
+  button {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* A — Quiet rail (live default) */
+  .nav-a { position: relative; gap: 20px; padding-left: 2px; }
+  .nav-a::before {
+    content: "";
+    position: absolute;
+    left: 7px; top: 10px; bottom: 8px;
+    border-left: 1.5px dashed rgba(211,161,58,.55);
+  }
+  .nav-a .co { position: relative; padding: 0 0 6px 26px; }
+  .nav-a .dot {
+    position: absolute; left: 0; top: 2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fffaf0; border: 2px solid var(--star);
+  }
+  .nav-a .group:has(.is-active) .dot { background: var(--star); }
+  .nav-a button {
+    position: relative;
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 8px 22px 8px 18px;
+    border-radius: 12px;
+  }
+  .nav-a button::before {
+    content: "";
+    position: absolute; left: 0; top: 50%;
+    width: 7px; height: 2px; border-radius: 999px;
+    background: rgba(211,161,58,.35);
+    transform: translateY(-50%);
+  }
+  .nav-a .is-active { background: rgba(91,127,217,.1); }
+  .nav-a .is-active::before { width: 9px; background: var(--star); }
+  .nav-a .is-active::after {
+    content: "";
+    position: absolute; right: 10px; top: 50%;
+    width: 8px; height: 8px; background: var(--star);
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+    transform: translateY(-50%);
+  }
+  .nav-a .num { font-family: var(--mono); font-size: 11px; color: rgba(30,42,68,.38); }
+  .nav-a .title { font-family: var(--serif); font-size: 17px; font-weight: 600; color: rgba(30,42,68,.38); }
+  .nav-a .is-active .title { color: var(--ink); }
+
+  /* B — Ice chip, title only */
+  .nav-b { gap: 18px; }
+  .nav-b .co { color: var(--ink-soft); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; font-family: var(--sans); }
+  .nav-b button {
+    padding: 10px 14px;
+    border-radius: 999px;
+    color: rgba(30,42,68,.4);
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .nav-b .is-active {
+    background: rgba(91,127,217,.14);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px rgba(91,127,217,.18);
+  }
+
+  /* C — Editorial names */
+  .nav-c { gap: 28px; }
+  .nav-c .co {
+    margin-bottom: 10px;
+    color: var(--star);
+    font-family: var(--hand);
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .nav-c .co img { display: none; }
+  .nav-c button {
+    padding: 5px 0;
+    color: rgba(30,42,68,.36);
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -.02em;
+  }
+  .nav-c .is-active { color: var(--ink); font-style: italic; }
+
+  /* D — Constellation ticks */
+  .nav-d { position: relative; gap: 22px; padding-left: 4px; }
+  .nav-d::before {
+    content: "";
+    position: absolute;
+    left: 11px; top: 14px; bottom: 10px;
+    border-left: 1px solid rgba(211,161,58,.4);
+  }
+  .nav-d .co { padding-left: 28px; }
+  .nav-d button {
+    position: relative;
+    padding: 7px 0 7px 28px;
+    color: rgba(30,42,68,.36);
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .nav-d button::before {
+    content: attr(data-num);
+    position: absolute; left: 0; top: 8px;
+    width: 22px;
+    color: rgba(30,42,68,.32);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .04em;
+  }
+  .nav-d .is-active { color: var(--ink); }
+  .nav-d .is-active::after {
+    content: "";
+    position: absolute; left: 6px; top: 12px;
+    width: 10px; height: 10px; background: var(--star);
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  }
+  .nav-d .is-active::before { opacity: 0; }
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>Selected work — name-only index</h1>
+    <p>Copy lives on the stacked cards. The left rail is only a way to jump. Click a title in any board to feel the active state. Live page currently uses A.</p>
+  </div>
+  <nav class="toc">
+    <a href="#a">A Quiet rail</a>
+    <a href="#b">B Ice chips</a>
+    <a href="#c">C Editorial</a>
+    <a href="#d">D Constellation</a>
+    <a href="../index-2.html#work">Open live 2.0</a>
+  </nav>
+
+  <div class="board">
+    <section id="a">
+      <div class="option-head">
+        <span class="tag">A · live default</span>
+        <h2>Quiet rail</h2>
+        <p>Company groups stay. Number + name on one line. Gold ticks and a small star on the active row.</p>
+      </div>
+      <div class="stage" data-nav>
+        <nav class="nav-a" aria-label="Quiet rail">
+          <div class="group">
+            <div class="co"><span class="dot"></span><img src="../assets/images/shared/brand/malwarebytes.svg" alt=""><span>Malwarebytes</span></div>
+            <button type="button" class="is-active"><span class="num">01</span><span class="title">From Research to&nbsp;Roadmap</span></button>
+            <button type="button"><span class="num">02</span><span class="title">Security Advisor</span></button>
+            <button type="button"><span class="num">03</span><span class="title">From Patchwork to&nbsp;Posture</span></button>
+          </div>
+          <div class="group">
+            <div class="co"><span class="dot"></span><img src="../assets/images/shared/brand/google.svg" alt=""><span>Google</span></div>
+            <button type="button"><span class="num">04</span><span class="title">Grocery Reimagined</span></button>
+            <button type="button"><span class="num">05</span><span class="title">Express → Shopping&nbsp;Tab</span></button>
+          </div>
+        </nav>
+        <aside class="fake-card">
+          <div class="kicker">03 · Malwarebytes</div>
+          <h3>From Patchwork to&nbsp;Posture</h3>
+          <p>Copy stays on the card. The rail only names the study.</p>
+          <div class="ph">stacked card</div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="b">
+      <div class="option-head">
+        <span class="tag">B</span>
+        <h2>Ice chips</h2>
+        <p>Titles only — no numbers. Active state is a soft pill. Company is a small caps label.</p>
+      </div>
+      <div class="stage" data-nav>
+        <nav class="nav-b" aria-label="Ice chips">
+          <div class="group">
+            <div class="co"><img src="../assets/images/shared/brand/malwarebytes.svg" alt=""><span>Malwarebytes</span></div>
+            <button type="button" class="is-active">From Research to&nbsp;Roadmap</button>
+            <button type="button">Security Advisor</button>
+            <button type="button">From Patchwork to&nbsp;Posture</button>
+          </div>
+          <div class="group">
+            <div class="co"><img src="../assets/images/shared/brand/google.svg" alt=""><span>Google</span></div>
+            <button type="button">Grocery Reimagined</button>
+            <button type="button">Express → Shopping&nbsp;Tab</button>
+          </div>
+        </nav>
+        <aside class="fake-card">
+          <div class="kicker">03 · Malwarebytes</div>
+          <h3>From Patchwork to&nbsp;Posture</h3>
+          <p>Softest jump list. Numbers live only on the card.</p>
+          <div class="ph">stacked card</div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="c">
+      <div class="option-head">
+        <span class="tag">C</span>
+        <h2>Editorial</h2>
+        <p>Handwritten company, italic serif on the active name. No rail, no numbers, no chips.</p>
+      </div>
+      <div class="stage" data-nav>
+        <nav class="nav-c" aria-label="Editorial">
+          <div class="group">
+            <div class="co"><img src="../assets/images/shared/brand/malwarebytes.svg" alt=""><span>Malwarebytes</span></div>
+            <button type="button" class="is-active">From Research to&nbsp;Roadmap</button>
+            <button type="button">Security Advisor</button>
+            <button type="button">From Patchwork to&nbsp;Posture</button>
+          </div>
+          <div class="group">
+            <div class="co"><img src="../assets/images/shared/brand/google.svg" alt=""><span>Google</span></div>
+            <button type="button">Grocery Reimagined</button>
+            <button type="button">Express → Shopping&nbsp;Tab</button>
+          </div>
+        </nav>
+        <aside class="fake-card">
+          <div class="kicker">03 · Malwarebytes</div>
+          <h3>From Patchwork to&nbsp;Posture</h3>
+          <p>Most like a contents page. Quiet until you land on a name.</p>
+          <div class="ph">stacked card</div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="d">
+      <div class="option-head">
+        <span class="tag">D</span>
+        <h2>Constellation</h2>
+        <p>Numbers sit on the gold line. The active study becomes a star. Closest to the original mockup index.</p>
+      </div>
+      <div class="stage" data-nav>
+        <nav class="nav-d" aria-label="Constellation">
+          <div class="group">
+            <div class="co"><img src="../assets/images/shared/brand/malwarebytes.svg" alt=""><span>Malwarebytes</span></div>
+            <button type="button" class="is-active" data-num="01">From Research to&nbsp;Roadmap</button>
+            <button type="button" data-num="02">Security Advisor</button>
+            <button type="button" data-num="03">From Patchwork to&nbsp;Posture</button>
+          </div>
+          <div class="group">
+            <div class="co"><img src="../assets/images/shared/brand/google.svg" alt=""><span>Google</span></div>
+            <button type="button" data-num="04">Grocery Reimagined</button>
+            <button type="button" data-num="05">Express → Shopping&nbsp;Tab</button>
+          </div>
+        </nav>
+        <aside class="fake-card">
+          <div class="kicker">03 · Malwarebytes</div>
+          <h3>From Patchwork to&nbsp;Posture</h3>
+          <p>A map more than a menu. The star marks where you are in the voyage.</p>
+          <div class="ph">stacked card</div>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+<script>
+  document.querySelectorAll("[data-nav]").forEach((stage) => {
+    const buttons = [...stage.querySelectorAll("nav button")];
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        buttons.forEach((b) => b.classList.toggle("is-active", b === btn));
+      });
+    });
+  });
+</script>
+</body>
+</html>

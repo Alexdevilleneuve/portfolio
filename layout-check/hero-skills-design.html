@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design lab — hero + hard skills voyage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ice-sky: #E8F0FA;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --gold: #C4B48A;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--ice-sky);
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+  }
+
+  /* ---- 3.0 hero ---- */
+  .scene--sky {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: max(15.3vw, 130px);
+    background-image: url("../assets/images/direction/sky-hero.jpg");
+    background-position: center top;
+    background-size: cover;
+    opacity: .8;
+    -webkit-mask-image: linear-gradient(#000 55%, transparent 100%);
+    mask-image: linear-gradient(#000 55%, transparent 100%);
+    pointer-events: none;
+  }
+  .hero {
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    position: relative;
+    z-index: 6;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    min-height: 640px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, var(--ice-sky) 100%);
+  }
+  .hero-fg { position: absolute; inset: 0; z-index: 2; overflow: hidden; }
+  .hero-inner {
+    position: relative; z-index: 5;
+    width: 100%; height: 100%;
+    max-width: 920px; margin: 0 auto;
+    padding: clamp(88px, 14vh, 140px) 32px clamp(72px, 14vh, 120px);
+    display: flex; flex-direction: column; align-items: center;
+    pointer-events: none;
+  }
+  .hero-copy {
+    max-width: 920px; text-align: center; margin: 12vh auto 0;
+    opacity: 0; transform: translateY(120px);
+    transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
+  .hero-role {
+    font-size: 15px; letter-spacing: .14em; text-transform: uppercase;
+    color: #5E7F82; font-weight: 600;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(36px, 6.2vw, 78px); line-height: 1.1;
+    margin-top: 14px; letter-spacing: -.03em; color: var(--ink);
+    white-space: nowrap;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-stats {
+    margin-top: auto; display: flex; flex-direction: column; gap: 4px; text-align: center;
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 1.08s .5s cubic-bezier(.2,.7,.2,1), transform 1.08s .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .hero-stats { opacity: 1; transform: translateY(0); }
+  .hero-stats p { font-size: 16px; font-weight: 500; color: var(--ink-soft); letter-spacing: .02em; }
+  .hero-stats strong { font-family: var(--serif); font-weight: 600; color: var(--ink); font-size: 18px; }
+  .hero-stats strong span { color: var(--accent); }
+
+  .hero-clouds {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: min(50vh, 480px); z-index: 4; pointer-events: none;
+  }
+  .cloud {
+    position: absolute; top: 16%; bottom: 0;
+    margin: 0; padding: 0; border: none; background: none;
+    cursor: pointer; text-align: center; font: inherit; color: inherit;
+    pointer-events: auto; opacity: 0; overflow: visible;
+  }
+  .cloud-left {
+    left: 2%; width: 44%; z-index: 3; transform: translateX(-180px);
+    transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
+  }
+  .cloud-right {
+    right: 2%; left: auto; width: 40%; z-index: 2; transform: translateX(180px);
+    transition: opacity 1.4s .2s cubic-bezier(.2,.7,.2,1), transform 1.4s .2s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-left, .hero.is-in .cloud-right { opacity: 1; transform: translateX(0); }
+  .cloud-bob { position: absolute; bottom: -6%; width: min(124%, 720px); will-change: transform; pointer-events: none; }
+  .cloud-left .cloud-bob { left: -16%; }
+  .cloud-right .cloud-bob { right: -8%; left: auto; width: min(116%, 680px); }
+  .hero.is-in .cloud-left .cloud-bob { animation: driftA 9.6s ease-in-out 1.5s infinite; }
+  .hero.is-in .cloud-right .cloud-bob { animation: driftB 12s ease-in-out 1.9s infinite; }
+  @keyframes driftA {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    32% { transform: translate3d(5px, -20px, 0); }
+    68% { transform: translate3d(2px, 9px, 0); }
+  }
+  @keyframes driftB {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    36% { transform: translate3d(-5px, -23px, 0); }
+    72% { transform: translate3d(-2px, 8px, 0); }
+  }
+  .cloud-frame { position: relative; width: 100%; aspect-ratio: 2 / 1.1; }
+  .cloud-media { position: relative; width: 100%; height: 100%; }
+  .cloud-media img.cloud-face {
+    position: relative; z-index: 2;
+    width: 86%; height: 100%; margin: 0 auto;
+    object-fit: contain; object-position: center bottom;
+    display: block; pointer-events: none;
+    transition: opacity 1.6s cubic-bezier(.45, 0, .2, 1);
+  }
+  .cloud-right .cloud-media img.cloud-face { width: 116%; max-width: none; }
+  .cloud-left .cloud-media img.cloud-face { width: 103.2%; max-width: none; left: -8.6%; }
+  .cloud.is-peeking .cloud-media img.cloud-face,
+  .cloud.is-hot .cloud-media img.cloud-face { opacity: .48; }
+  .cloud-media img.gif {
+    position: absolute; inset: 8% 10%; z-index: 1; width: 80%; height: 80%; margin: auto;
+    object-fit: cover; object-position: center; display: block;
+    opacity: 0; border-radius: 40%;
+    filter: blur(1.4px) saturate(0.85); transform: scale(.94);
+    transition: opacity 1.65s cubic-bezier(.45, 0, .15, 1), transform 1.85s cubic-bezier(.33, .1, .2, 1), filter 1.65s cubic-bezier(.45, 0, .15, 1);
+    -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 54%, #000 26%, rgba(0,0,0,.5) 54%, transparent 78%);
+    mask-image: radial-gradient(ellipse 62% 58% at 50% 54%, #000 26%, rgba(0,0,0,.5) 54%, transparent 78%);
+  }
+  .cloud-left .cloud-media img.gif { transform: translateX(-6%) scale(.94); object-position: 42% center; }
+  .cloud.is-peeking .cloud-media img.gif,
+  .cloud.is-hot .cloud-media img.gif { opacity: 1; filter: blur(0.2px) saturate(0.9); transform: scale(1); }
+  .cloud-left.is-peeking .cloud-media img.gif,
+  .cloud-left.is-hot .cloud-media img.gif { transform: translateX(-6%) scale(1); }
+  .cloud-caption {
+    --caption-tilt: -1.5deg;
+    position: absolute; left: 50%; top: 18%; z-index: 3;
+    width: max-content; max-width: 72%; margin: 0;
+    font-family: var(--hand); font-weight: 500;
+    font-size: clamp(20px, 2.1vw, 27px);
+    color: var(--ink-soft); line-height: 1.25; text-align: center;
+    pointer-events: none; opacity: .72;
+    transform: translateX(-50%) rotate(var(--caption-tilt));
+    text-shadow: 0 0 16px rgba(239,243,250,.85);
+  }
+  .cloud-left .cloud-caption { --caption-tilt: -2deg; }
+  .cloud-right .cloud-caption { --caption-tilt: 2deg; }
+  .hero-ocean {
+    position: absolute; left: 0; right: 0; bottom: clamp(-96px, -6vw, -52px);
+    z-index: 1; pointer-events: none;
+  }
+  .hero-ocean img {
+    width: 108%; max-width: none; margin-left: -4%; height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  .hero-ocean .wave--near { position: relative; z-index: 2; }
+  .hero-ocean .wave--far {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+    opacity: .5; transform-origin: 50% 100%;
+  }
+  .hero.is-in .wave--near { animation: swellNear 7.2s ease-in-out infinite; }
+  .hero.is-in .wave--far { animation: swellFar 11.3s ease-in-out infinite; }
+  @keyframes swellNear {
+    0%, 100% { transform: translate3d(-7px, 0, 0); }
+    50% { transform: translate3d(7px, -11px, 0); }
+  }
+  @keyframes swellFar {
+    0%, 100% { transform: translate3d(6px, 0, 0) scale(1.06); }
+    50% { transform: translate3d(-6px, -5px, 0) scale(1.06); }
+  }
+
+  .cloud-top {
+    position: absolute; top: -4%; left: 50%; width: min(70vw, 820px); z-index: 1;
+    pointer-events: none; opacity: 0; transform: translate(-50%, -40px);
+    transition: opacity 1.6s .14s cubic-bezier(.2,.7,.2,1), transform 1.6s .14s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-top { opacity: .9; transform: translate(-50%, 0); }
+  .cloud-top .cloud-frame { aspect-ratio: 2.4 / 1; filter: drop-shadow(0 12px 28px rgba(30,42,68,.1)); }
+  .cloud-top img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; display: block; }
+  .cloud-back {
+    position: absolute; left: 50%; bottom: 0; width: 100vw; z-index: 0;
+    pointer-events: none; opacity: 0; transform: translateX(-50%) translateY(24px);
+    transition: opacity 1.7s .32s cubic-bezier(.2,.7,.2,1), transform 1.7s .32s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero.is-in .cloud-back { opacity: .75; transform: translateX(-50%); }
+  .cloud-back img { display: block; width: 100%; height: auto; object-fit: cover; object-position: center bottom; }
+
+  /* Same stack as 2.0: sticky ice sky and waves, hero overlapped on top. */
+  .lab-block { position: relative; background: transparent; }
+  .timeline-v2-bg {
+    position: sticky; top: 0; z-index: 0;
+    width: 100%; height: 100vh; height: 100svh; overflow: hidden;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, var(--ice-sky) 100%);
+    pointer-events: none;
+  }
+  .timeline-v2-ocean {
+    position: absolute; left: 0; right: 0; bottom: clamp(-96px, -6vw, -52px);
+  }
+  .timeline-v2-ocean img {
+    display: block; width: 108%; max-width: none; height: auto; margin-left: -4%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  .timeline-v2-ocean .wave--far { position: absolute; inset: auto 0 0; z-index: 1; opacity: .5; }
+  .timeline-v2-ocean .wave--near { position: relative; z-index: 2; }
+  .timeline-v2-bg.is-in .wave--near { animation: swellNear 7.2s ease-in-out infinite; }
+  .timeline-v2-bg.is-in .wave--far { animation: swellFar 11.3s ease-in-out infinite; }
+  .v2-intro-pin {
+    position: relative; z-index: 6;
+    height: 100vh; height: 100svh; min-height: 640px;
+    margin-top: -100vh; margin-top: -100svh;
+    overflow: hidden; background: transparent;
+  }
+  .v2-intro-pin .hero {
+    position: absolute; inset: 0; height: 100%;
+    background: transparent; overflow: visible;
+  }
+  .v2-intro-pin .hero-ocean,
+  .v2-intro-pin .scene--sky { display: none; }
+  .v2-intro-pin .cloud-back {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 88%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 88%);
+  }
+
+  /* ---- voyage: still backdrop; only type + marks move ---- */
+  .voyage { height: 520vh; position: relative; z-index: 1; background: transparent; }
+  .voyage-viewport {
+    position: sticky; top: 0;
+    height: 100vh; overflow: hidden;
+    background: transparent;
+  }
+  .backdrop {
+    position: absolute; inset: 0; z-index: 0;
+    background: none;
+    pointer-events: none;
+  }
+  .lab-wake {
+    position: absolute; z-index: 1;
+    top: -5%; left: -8%;
+    width: min(62%, 680px); height: 118%;
+    object-fit: fill; object-position: 40% top;
+    opacity: 0; pointer-events: none;
+    filter: saturate(.86) contrast(.94);
+  }
+  .backdrop-ocean { display: none; }
+  .backdrop-veil {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(90deg, rgba(232, 240, 250, .5) 0%, rgba(232, 240, 250, .12) 34%, transparent 52%);
+    pointer-events: none;
+  }
+
+  .stage { position: absolute; inset: 0; z-index: 2; }
+
+  .cutout {
+    position: absolute; left: 0; top: 0;
+    transform-origin: 50% 100%;
+    will-change: transform, opacity;
+  }
+  .cutout .face {
+    display: grid; place-items: center;
+    width: 100%; height: 100%;
+    padding: 16px 22px;
+    border-radius: 10px;
+    background: rgba(247, 246, 241, .78);
+    border: 1px solid rgba(28, 36, 56, .08);
+    box-shadow: 0 10px 28px rgba(28, 36, 56, .08);
+  }
+  .cutout.mark img {
+    display: block;
+    max-width: 88%;
+    max-height: 58%;
+    object-fit: contain;
+  }
+  .cutout.mark.ink img {
+    filter: brightness(0) saturate(100%);
+    opacity: .72;
+  }
+  .cutout.mark.colour img { opacity: .92; }
+
+  .cutout.area .face {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    padding: 22px 24px;
+  }
+  .cutout.area .num {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: #9A7A38;
+  }
+  .cutout.area .name {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .cutout .shadow {
+    position: absolute; left: 50%; bottom: -13%;
+    width: 82%; height: 12%;
+    transform: translateX(-50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(28, 36, 56, .22), transparent 70%);
+    filter: blur(4px);
+  }
+
+  /* David Whyte: a left column revealed in a band just above center.
+     Five lines stay sharp. Lines above that dissolve as they scroll out
+     the top; a shorter fade brings the next lines in from below. */
+  .textwall {
+    --tw-focus: 44vh;
+    --tw-sharp: 5;
+    --tw-fade-top: 2.6;
+    --tw-fade-bottom: 1.5;
+    font-size: clamp(26px, 2.5vw, 38px);
+    line-height: 1.32;
+    position: absolute; left: 5.5vw;
+    top: calc(var(--tw-focus) - (var(--tw-fade-top) + var(--tw-sharp) / 2) * 1lh);
+    width: min(38vw, 520px);
+    height: calc((var(--tw-fade-top) + var(--tw-sharp) + var(--tw-fade-bottom)) * 1lh);
+    z-index: 650; pointer-events: none; overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, .12) 16%,
+      #000 28.6%,
+      #000 83.5%,
+      rgba(0, 0, 0, .22) 93%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, .12) 16%,
+      #000 28.6%,
+      #000 83.5%,
+      rgba(0, 0, 0, .22) 93%,
+      transparent 100%
+    );
+  }
+  .textwall-inner {
+    position: absolute; left: 0; top: 0; width: 100%;
+    will-change: transform;
+  }
+  .tw-block {
+    display: flex; flex-direction: column; justify-content: center;
+    margin: 0 0 1.8lh;
+    padding-right: 8px;
+  }
+  .tw-block .line {
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.5vw, 38px);
+    line-height: 1.32;
+    font-weight: 400;
+    letter-spacing: -.01em;
+  }
+  .tw-block .line em { font-style: italic; color: #9A7A38; }
+  .tw-block .src {
+    margin-top: 16px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    opacity: .72;
+  }
+  .tw-block.is-lead .line {
+    font-size: clamp(20px, 1.8vw, 26px);
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .tw-block.is-lead .src {
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+
+  .trail {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 4;
+  }
+  .trail path {
+    fill: none; stroke: var(--gold); stroke-width: 1.4;
+    stroke-linecap: round; stroke-dasharray: 1; opacity: .45;
+  }
+  .trail path.ghost { stroke-dasharray: 3 10; stroke-width: 1.1; opacity: .12; }
+
+  .practice-card {
+    position: absolute; inset: 0; z-index: 700;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5vh clamp(20px, 4vw, 48px) 7vh;
+    opacity: 0; pointer-events: none;
+  }
+  .practice-stage {
+    position: relative;
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    padding-left: 64px;
+  }
+  .practice-marker {
+    position: absolute; top: 8px; left: 0;
+    display: grid; place-items: center;
+    width: 48px; aspect-ratio: 1;
+    border: 1px solid rgba(30,42,68,.18);
+    border-radius: 50%;
+    background: rgba(250,248,242,.94);
+    font-family: var(--serif); font-size: 16px;
+  }
+  .practice-marker::before {
+    content: "";
+    position: absolute; left: 50%; bottom: -9px;
+    width: 5px; height: 5px;
+    border: 1.5px solid #d3a13a; border-radius: 50%;
+    background: #fffaf0; transform: translateX(-50%);
+  }
+  .practice-sheet {
+    position: relative;
+    min-height: clamp(360px, 46vh, 520px);
+    padding: clamp(24px, 3.4vw, 40px) clamp(24px, 3.6vw, 48px);
+    border: 1px solid rgba(255, 255, 255, .68);
+    border-radius: 24px;
+    box-shadow: 0 24px 48px rgba(28, 36, 56, .1), inset 0 1px 0 rgba(255, 255, 255, .55);
+    overflow: hidden;
+  }
+  .practice-glass {
+    position: absolute; inset: 0; border-radius: inherit;
+    backdrop-filter: blur(16px) saturate(1.22);
+    -webkit-backdrop-filter: blur(16px) saturate(1.22);
+    background: linear-gradient(180deg, rgba(255,252,248,.28), rgba(236,244,252,.22) 42%, rgba(214,232,248,.12) 78%, rgba(214,232,248,.04));
+  }
+  .practice-land {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: .55; mix-blend-mode: multiply; pointer-events: none;
+  }
+  .practice-inner {
+    position: relative; z-index: 1;
+    width: min(85%, 760px);
+    display: flex; flex-direction: column; gap: clamp(18px, 2.6vh, 32px);
+  }
+  .practice-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .practice-label { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--ink-soft); }
+  .practice-tabs {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 6px; border-radius: 999px;
+    background: linear-gradient(165deg, rgba(255,255,255,.42), rgba(230,240,250,.18));
+    border: 1px solid rgba(255,255,255,.55);
+  }
+  .chip {
+    border: 1px solid transparent; border-radius: 18px;
+    padding: 9px 15px; background: transparent;
+    color: rgba(28, 36, 56, .58);
+    font: inherit; font-size: 14px; cursor: pointer;
+  }
+  .chip.is-active {
+    color: #2a5f7a;
+    background: rgba(120, 168, 210, .28);
+    border-color: rgba(190, 214, 236, .55);
+  }
+  .practice-statement {
+    margin: 0; max-width: 38em;
+    font-weight: 500; font-size: clamp(18px, 2.1vw, 26px);
+    line-height: 1.38; letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .58);
+  }
+  .practice-statement strong { font-weight: 600; color: rgba(10, 69, 84, .82); }
+  .practice-proofs { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; list-style: none; }
+  .practice-proofs li {
+    font-size: 14px; color: rgba(10, 69, 84, .7);
+    border-bottom: 1px solid rgba(10, 69, 84, .35);
+  }
+  .practice-coda {
+    display: flex; align-items: flex-end; gap: 16px;
+    width: min(1120px, 100%);
+    margin: clamp(18px, 3vh, 36px) auto 0;
+    padding-left: clamp(80px, 14vw, 200px);
+  }
+  .practice-coda img { width: min(108px, 14vw); height: auto; }
+  .practice-coda p {
+    margin: 0 0 4px; font-family: var(--hand);
+    font-size: clamp(20px, 2.1vw, 28px); text-align: center;
+  }
+  .practice-coda .star {
+    display: block; width: 11px; height: 11px; margin: 8px auto 0;
+    background: #d3a13a;
+    clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+  .backdrop-ocean .wave--near { animation: swellNear 7.2s ease-in-out infinite; }
+  .backdrop-ocean .wave--far { animation: swellFar 11.3s ease-in-out infinite; }
+
+  .hud {
+    position: fixed; left: 16px; top: 16px; z-index: 900;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--ink-soft);
+    background: rgba(247, 244, 238, .9);
+    border: 1px solid rgba(28, 36, 56, .16);
+    border-radius: 8px; padding: 8px 10px; line-height: 1.5; white-space: pre;
+  }
+  body.capture .hud { display: none; }
+  body.capture .hero-copy,
+  body.capture .hero-stats,
+  body.capture .cloud-left,
+  body.capture .cloud-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  body.capture .hero.is-in .cloud-bob,
+  body.capture .wave--near,
+  body.capture .wave--far { animation: none !important; }
+</style>
+</head>
+<body>
+<div class="lab-block">
+  <div class="timeline-v2-bg" aria-hidden="true">
+    <div class="timeline-v2-ocean">
+      <img class="wave wave--far" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+      <img class="wave wave--near" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+    </div>
+  </div>
+  <div class="v2-intro-pin" data-v2-intro>
+
+<header class="hero" id="hero" data-hero>
+  <div class="hero-fg" data-hero-fg>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-role">Senior UX Researcher/Manager</p>
+        <h1>From <em>insights</em> to influence</h1>
+      </div>
+      <div class="hero-stats">
+        <p><strong><span>9</span>+</strong> Years</p>
+        <p><strong><span>100</span>+</strong> Studies</p>
+        <p><strong><span>1000</span>+</strong> Participants</p>
+      </div>
+    </div>
+    <div class="cloud-top" aria-hidden="true">
+      <div class="cloud-frame">
+        <img src="../assets/images/home/cloud-soft-3.png" alt="">
+      </div>
+    </div>
+    <div class="hero-clouds">
+      <div class="cloud-back" aria-hidden="true">
+        <img src="../assets/images/home/cloud-soft-4.png" alt="">
+      </div>
+      <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
+        <div class="cloud-bob">
+          <div class="cloud-frame">
+            <div class="cloud-media">
+              <img class="gif" src="../assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
+              <img class="cloud-face" src="../assets/images/direction/hero-cloud-soft-1-wide.png" alt="" aria-hidden="true" width="800" height="379">
+            </div>
+            <span class="cloud-caption">a compass when things get&nbsp;fuzzy</span>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
+        <div class="cloud-bob">
+          <div class="cloud-frame">
+            <div class="cloud-media">
+              <img class="gif" src="../assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
+              <img class="cloud-face" src="../assets/images/direction/hero-cloud-soft-2-wide.png" alt="" aria-hidden="true" width="761" height="303">
+            </div>
+            <span class="cloud-caption">a seeker of&nbsp;truths</span>
+          </div>
+        </div>
+      </button>
+    </div>
+  </div>
+  <div class="hero-ocean" aria-hidden="true">
+    <img class="wave wave--far" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+    <img class="wave wave--near" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+  </div>
+</header>
+  </div>
+
+<section class="voyage" data-voyage>
+  <div class="voyage-viewport">
+    <div class="backdrop" aria-hidden="true">
+      <div class="backdrop-ocean">
+        <img class="wave wave--far" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+        <img class="wave wave--near" src="../assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+      </div>
+    </div>
+    <div class="backdrop-veil" aria-hidden="true"></div>
+    <img class="lab-wake" data-wake src="../assets/images/portfolio_watercolor_assets/wake-path.png" alt="" aria-hidden="true">
+    <div class="stage" data-stage>
+
+      <div class="cutout mark ink" data-group="1" data-gx="-0.55" data-gy="-0.38" data-gz="-0.35" data-w="240" data-h="96" data-standup="true">
+        <div class="face"><img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="0.85" data-gy="-0.42" data-gz="0.25" data-w="220" data-h="96">
+        <div class="face"><img src="../assets/images/shared/brand/google-wordmark.png" alt="Google"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="-0.45" data-gy="0.36" data-gz="0.45" data-w="220" data-h="96">
+        <div class="face"><img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark ink" data-group="1" data-gx="1.00" data-gy="0.32" data-gz="-0.20" data-w="220" data-h="96" data-standup="true">
+        <div class="face"><img src="../assets/images/shared/brand/kerr.png" alt="Kerr by Ingredion"></div>
+        <div class="shadow"></div>
+      </div>
+
+      <div class="cutout mark colour" data-group="2" data-gx="-0.70" data-gy="-0.18" data-gz="0.20" data-w="236" data-h="108">
+        <div class="face"><img src="../assets/images/shared/brand/oregon-state.png" alt="Oregon State University"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark colour" data-group="2" data-gx="0.55" data-gy="-0.36" data-gz="-0.40" data-w="236" data-h="108" data-standup="true">
+        <div class="face"><img src="../assets/images/shared/brand/lanzhou.png" alt="Lanzhou University"></div>
+        <div class="shadow"></div>
+      </div>
+      <div class="cutout mark colour" data-group="2" data-gx="0.85" data-gy="0.38" data-gz="0.15" data-w="248" data-h="108">
+        <div class="face"><img src="../assets/images/shared/brand/beijing-film-academy.png" alt="Beijing Film Academy"></div>
+        <div class="shadow"></div>
+      </div>
+
+    </div>
+
+    <div class="textwall" aria-hidden="true">
+      <div class="textwall-inner" data-textwall>
+        <div class="tw-block is-lead">
+          <p class="src">Hey, glad you're&nbsp;here</p>
+          <p class="line">I'm Alexandra, a senior UX researcher based in the SF Bay&nbsp;Area</p>
+        </div>
+        <div class="tw-block">
+          <p class="line">I&nbsp;lead strategic research in complex systems where trust is the product: <em>security, privacy, and now&nbsp;AI</em>.</p>
+        </div>
+        <div class="tw-block">
+          <p class="line">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <em>what&nbsp;experience should we build, and&nbsp;why?</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-card" data-practice>
+      <div class="practice-stage">
+        <span class="practice-marker" aria-hidden="true">04</span>
+        <article class="practice-sheet">
+          <div class="practice-glass" aria-hidden="true">
+            <img class="practice-land" src="../assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
+          </div>
+          <div class="practice-inner">
+            <header class="practice-head">
+              <p class="practice-label">.practice areas</p>
+              <div class="practice-tabs" role="tablist" aria-label="Practice areas">
+                <button type="button" class="chip is-active" role="tab" data-skill="ai" aria-selected="true">ai + trust</button>
+                <button type="button" class="chip" role="tab" data-skill="conv" aria-selected="false">product systems &amp; convergence</button>
+                <button type="button" class="chip" role="tab" data-skill="zero" aria-selected="false">0→1 builds</button>
+                <button type="button" class="chip" role="tab" data-skill="amp" aria-selected="false">research influence</button>
+              </div>
+            </header>
+            <div data-panel="ai">
+              <p class="practice-statement">I&nbsp;shape <strong>trustworthy AI experiences</strong> by uncovering how people <strong>form and calibrate trust</strong>, understand system behavior, and decide when to take&nbsp;control.</p>
+              <ul class="practice-proofs">
+                <li>trust calibration &amp; explainability</li>
+                <li>human-in-the-loop autonomy</li>
+              </ul>
+            </div>
+            <div data-panel="conv" hidden>
+              <p class="practice-statement">I&nbsp;lead iterative research to define <strong>scalable UX architecture</strong> when <strong>complex product systems</strong> outgrow their legacy&nbsp;structure.</p>
+              <ul class="practice-proofs">
+                <li>google express → google shopping</li>
+                <li>information architecture redesign</li>
+                <li>complex workflow &amp; platform modernization</li>
+              </ul>
+            </div>
+            <div data-panel="zero" hidden>
+              <p class="practice-statement">I&nbsp;turn ambiguous ideas into <strong>validated product direction</strong>, from early exploration through&nbsp;launch.</p>
+              <ul class="practice-proofs">
+                <li>concept-to-launch research</li>
+                <li>ai-native product discovery &amp; build</li>
+              </ul>
+            </div>
+            <div data-panel="amp" hidden>
+              <p class="practice-statement">I&nbsp;turn fragmented customer insights into an <strong>omnichannel UX strategy</strong> that aligns XFN teams around <strong>one shared experience and product&nbsp;vision</strong>.</p>
+              <ul class="practice-proofs">
+                <li>cross-functional product collaboration</li>
+                <li>cross-craft UX leadership</li>
+                <li>self-serve research infrastructure</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="practice-coda">
+        <img src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="" aria-hidden="true">
+        <p>…the journey&nbsp;continues<span class="star" aria-hidden="true"></span></p>
+      </div>
+    </div>
+
+    <svg class="trail" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ghost"
+            d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
+      <path data-trail pathLength="1"
+            d="M -30 832 C 180 784, 330 858, 520 840 S 830 788, 1010 828 S 1210 854, 1316 808"/>
+    </svg>
+
+  </div>
+</section>
+</div>
+
+<div class="hud" data-hud>progress 0.000</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+  const UNIT = 132;
+  const VIEW_DIST = 9;
+  const VP_X = 0.63;
+  const VP_Y = 0.44;
+
+  const GROUPS = [
+    { wx:    0, wz:  0 },
+    { wx:  8.5, wz:  2.2 },
+    { wx: 17.0, wz: -1.8 },
+    { wx: 25.5, wz:  1.2 },
+  ];
+
+  const CTRL_BACK = 4.2;
+  const CTRL_SWAY = 2.6;
+  const LIFT = 0.30;
+  const LOOK = 0.045;
+  const STAND_ANGLE = 84;
+
+  const SEGMENTS = [
+    { kind: "dwell",   g: 0,           p0: 0.00, p1: 0.11 },
+    { kind: "transit", from: 0, to: 1, p0: 0.11, p1: 0.33 },
+    { kind: "dwell",   g: 1,           p0: 0.33, p1: 0.45 },
+    { kind: "transit", from: 1, to: 2, p0: 0.45, p1: 0.65 },
+    { kind: "dwell",   g: 2,           p0: 0.65, p1: 0.77 },
+    { kind: "transit", from: 2, to: 3, p0: 0.77, p1: 0.95 },
+    { kind: "dwell",   g: 3,           p0: 0.95, p1: 1.00 },
+  ];
+
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, n) => a + (b - a) * n;
+  const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  const remap = (v, a, b) => clamp((v - a) / (b - a), 0, 1);
+  const qbez = (a, c, b, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * c + t * t * b;
+
+  const section = document.querySelector("[data-voyage]");
+  const trail = document.querySelector("[data-trail]");
+  const wall = document.querySelector("[data-textwall]");
+  const hud = document.querySelector("[data-hud]");
+
+  const items = Array.from(document.querySelectorAll("[data-gx]")).map((el) => ({
+    el,
+    group: parseInt(el.dataset.group, 10),
+    gx: parseFloat(el.dataset.gx) || 0,
+    gy: parseFloat(el.dataset.gy) || 0,
+    gz: parseFloat(el.dataset.gz) || 0,
+    standup: el.dataset.standup === "true",
+    w: parseFloat(el.dataset.w),
+    h: parseFloat(el.dataset.h),
+  }));
+
+  items.forEach((it) => {
+    it.el.style.width = it.w + "px";
+    it.el.style.height = it.h + "px";
+  });
+
+  function segmentAt(p) {
+    for (const s of SEGMENTS) if (p <= s.p1) return s;
+    return SEGMENTS[SEGMENTS.length - 1];
+  }
+
+  function camera(p) {
+    const s = segmentAt(p);
+    if (s.kind === "dwell") {
+      const g = GROUPS[s.g];
+      return { cx: g.wx, cy: 0, cz: g.wz - VIEW_DIST, active: s.g };
+    }
+    const a = GROUPS[s.from];
+    const b = GROUPS[s.to];
+    const t = easeInOutCubic(remap(p, s.p0, s.p1));
+    const dir = s.from % 2 === 0 ? 1 : -1;
+
+    const ax = a.wx, bx = b.wx;
+    const az = a.wz - VIEW_DIST, bz = b.wz - VIEW_DIST;
+    const cxCtrl = (ax + bx) / 2 + CTRL_SWAY * dir;
+    const czCtrl = (az + bz) / 2 - CTRL_BACK;
+
+    return {
+      cx: qbez(ax, cxCtrl, bx, t),
+      cy: Math.sin(t * Math.PI) * LIFT * dir,
+      cz: qbez(az, czCtrl, bz, t),
+      active: s.to,
+    };
+  }
+
+  function arrivalOf(groupIndex, p) {
+    if (groupIndex === 0) return 1;
+    const leg = SEGMENTS.find((s) => s.kind === "transit" && s.to === groupIndex);
+    if (!leg) return 1;
+    if (p >= leg.p1) return 1;
+    if (p <= leg.p0) return 0;
+    return remap(p, leg.p0 + (leg.p1 - leg.p0) * 0.3, leg.p1);
+  }
+
+  const blocks = Array.from(document.querySelectorAll(".tw-block"));
+  /* Progress (after the wake lead) where each stanza sits in the band. */
+  const STANZA_AT = [0, 0.39, 0.64];
+
+  function blockCenter(el) {
+    return el.offsetTop + el.offsetHeight / 2;
+  }
+
+  function placeLead() {
+    const wallEl = document.querySelector(".textwall");
+    const cs = getComputedStyle(wallEl);
+    const lh = parseFloat(cs.lineHeight);
+    const fadeTop = parseFloat(cs.getPropertyValue("--tw-fade-top"));
+    const sharp = parseFloat(cs.getPropertyValue("--tw-sharp"));
+    const sharpCenter = (fadeTop + sharp / 2) * lh;
+    wall.style.top = (sharpCenter - blocks[0].offsetHeight / 2) + "px";
+  }
+
+  function wallShift(p) {
+    const c = blocks.map(blockCenter);
+    const end = STANZA_AT[STANZA_AT.length - 1];
+    let shift = c[0];
+    if (p <= STANZA_AT[1]) {
+      shift = c[0] + (p / STANZA_AT[1]) * (c[1] - c[0]);
+    } else if (p <= end) {
+      const t = (p - STANZA_AT[1]) / (end - STANZA_AT[1]);
+      shift = c[1] + t * (c[2] - c[1]);
+    } else {
+      const tail = (c[2] - c[1]) * 0.65;
+      const t = (p - end) / (1 - end);
+      shift = c[2] + t * tail;
+    }
+    return shift - c[0];
+  }
+
+  function render(raw) {
+    const WAKE_LEAD = 0.16;
+    const p = remap(raw, WAKE_LEAD, 1);
+    const leadIn = remap(raw, 0.08, 0.18);
+    const wakeEl = document.querySelector("[data-wake]");
+    if (wakeEl) {
+      const edge = Math.min(100, raw * 108);
+      const soft = Math.min(100, edge + 8);
+      const mask = "linear-gradient(to bottom, #000 0%, #000 " + edge + "%, transparent " + soft + "%)";
+      wakeEl.style.webkitMaskImage = mask;
+      wakeEl.style.maskImage = mask;
+      wakeEl.style.opacity = raw > 0.004 ? "0.82" : "0";
+    }
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const cam = camera(p);
+    const camAhead = camera(Math.min(1, p + 0.004));
+    const vpx = VP_X - clamp((camAhead.cx - cam.cx) * LOOK * 12, -0.06, 0.06);
+    const arrivals = GROUPS.map((_, i) => arrivalOf(i, p));
+
+    items.forEach((it) => {
+      const g = GROUPS[it.group];
+      const dz = g.wz + it.gz - cam.cz;
+      const dx = g.wx + it.gx - cam.cx;
+
+      if (dz < 1.4) { it.el.style.opacity = "0"; return; }
+
+      const scale = VIEW_DIST / dz;
+      const x = vpx * W + dx * UNIT * scale;
+      const y = VP_Y * H + (it.gy - cam.cy) * UNIT * scale;
+      const stand = it.standup ? STAND_ANGLE * (1 - easeOutCubic(arrivals[it.group])) : 0;
+
+      it.el.style.transform =
+        "translate(-50%,-50%) translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)" +
+        " scale(" + scale.toFixed(4) + ")" +
+        (stand > 0.2 ? " perspective(760px) rotateX(" + stand.toFixed(2) + "deg)" : "");
+
+      const lateral = dx < 0
+        ? 1 - remap(-dx, 1.9, 4.0)
+        : 1 - remap(dx, 5.2, 7.6);
+      const nearFade = remap(dz, 1.4, 4);
+      it.el.style.opacity = (nearFade * lateral).toFixed(3);
+      it.el.style.zIndex = String(Math.round(900 - dz * 12));
+
+      const blur = Math.round(clamp((dz - 10.5) * 0.45, 0, 4));
+      it.el.style.filter = blur ? "blur(" + blur + "px)" : "none";
+    });
+
+    placeLead();
+    wall.style.transform = "translateY(" + (-wallShift(p)).toFixed(1) + "px)";
+    trail.style.strokeDashoffset = String(1 - p);
+
+    const handoff = easeInOutCubic(remap(p, 0.72, 0.9));
+    const sheetT = easeInOutCubic(remap(p, 0.78, 0.96));
+    const textwallEl = document.querySelector(".textwall");
+    const stageEl = document.querySelector("[data-stage]");
+    const sheetEl = document.querySelector("[data-practice]");
+    const trailEl = document.querySelector(".trail");
+    if (textwallEl) textwallEl.style.opacity = String((1 - handoff) * leadIn);
+    if (stageEl) stageEl.style.opacity = String((1 - handoff) * leadIn);
+    if (trailEl) trailEl.style.opacity = String((1 - handoff) * leadIn);
+    if (sheetEl) {
+      sheetEl.style.opacity = String(sheetT);
+      sheetEl.style.pointerEvents = sheetT > 0.55 ? "auto" : "none";
+    }
+
+    const seg = segmentAt(p);
+
+    hud.textContent =
+      "progress " + p.toFixed(3) +
+      "\nsegment  " + seg.kind + (seg.kind === "dwell" ? " @g" + seg.g : " g" + seg.from + "→g" + seg.to) +
+      "\ncam      x " + cam.cx.toFixed(2) + "  y " + cam.cy.toFixed(2) + "  z " + cam.cz.toFixed(2);
+  }
+
+  let target = 0;
+  let current = 0;
+  let override = null;
+
+  function scrollProgress() {
+    const total = section.offsetHeight - window.innerHeight;
+    const rect = section.getBoundingClientRect();
+    return clamp(-rect.top / total, 0, 1);
+  }
+
+  function pinVoyage() {
+    const top = section.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo(0, top);
+  }
+
+  function tick() {
+    target = override !== null ? override : scrollProgress();
+    current = lerp(current, target, 0.09);
+    if (Math.abs(current - target) < 0.0002) current = target;
+    render(current);
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener("wheel", () => { override = null; }, { passive: true });
+  window.addEventListener("resize", () => render(current));
+
+  window.setProgress = (p) => {
+    pinVoyage();
+    override = clamp(p, 0, 1);
+    current = override;
+    target = override;
+    render(current);
+  };
+
+  const hero = document.querySelector(".hero");
+  const sky = document.querySelector(".timeline-v2-bg");
+  if (hero) {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      hero.classList.add("is-in");
+      if (sky) sky.classList.add("is-in");
+    }));
+  }
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const v2Intro = document.querySelector("[data-v2-intro]");
+  const v2HeroFg = v2Intro && v2Intro.querySelector("[data-hero-fg]");
+  if (v2Intro && v2HeroFg && window.gsap && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+    const v2IntroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: v2Intro,
+        start: "top top",
+        end: () => "+=" + Math.round(window.innerHeight),
+        pin: true,
+        pinSpacing: false,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      },
+      defaults: { ease: "none" },
+    });
+    v2IntroTl
+      .to(v2HeroFg, {
+        y: () => -window.innerHeight * 0.46,
+        autoAlpha: 0,
+        duration: 0.58,
+      }, 0)
+      .to({}, { duration: 0.42 });
+  }
+  document.querySelectorAll(".chip").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const id = tab.dataset.skill;
+      document.querySelectorAll(".chip").forEach((other) => {
+        const on = other === tab;
+        other.classList.toggle("is-active", on);
+        other.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      document.querySelectorAll("[data-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== id;
+      });
+    });
+  });
+
+  const clouds = document.querySelectorAll(".cloud");
+  if (window.matchMedia("(hover: hover)").matches) {
+    let leaveTimer;
+    clouds.forEach((cloud) => {
+      cloud.addEventListener("pointerenter", () => {
+        clearTimeout(leaveTimer);
+        clouds.forEach((c) => c.classList.toggle("is-hot", c === cloud));
+      });
+      cloud.addEventListener("pointerleave", () => {
+        leaveTimer = setTimeout(() => clouds.forEach((c) => c.classList.remove("is-hot")), 160);
+      });
+    });
+  }
+
+  render(0);
+  requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card 04 — constellation chip experiments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ice-sky: #E8F0FA;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --gold: #C4B48A;
+    --teal: #0A4554;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --mono: "IBM Plex Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, #E8F0FA 86%, var(--paper) 100%);
+  }
+  .page-head {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 36px 24px 8px;
+  }
+  .page-head h1 {
+    margin: 0 0 8px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin: 0;
+    max-width: 58ch;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 980px;
+    margin: 18px auto 0;
+    padding: 0 24px 24px;
+  }
+  .toc a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(28, 36, 56, .16);
+    background: rgba(255, 252, 246, .72);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .toc a:hover { background: #fff; }
+  .options { max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
+  section {
+    margin-bottom: 42px;
+  }
+  .option-head {
+    margin-bottom: 14px;
+    padding: 0 6px;
+  }
+  .option-head .tag {
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(28, 36, 56, .08);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .04em;
+  }
+  .option-head h2 {
+    margin: 0 0 6px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+  }
+  .option-head p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.4;
+    max-width: 62ch;
+  }
+
+  .stage {
+    position: relative;
+    min-height: 280px;
+    padding: 28px 18px 36px;
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% 20%, rgba(255,255,255,.35), transparent 60%);
+  }
+  .glass {
+    position: relative;
+    width: min(100%, 920px);
+    margin: 0 auto;
+    padding: 28px 32px 32px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, .68);
+    box-shadow:
+      0 24px 48px rgba(28, 36, 56, .1),
+      inset 0 1px 0 rgba(255, 255, 255, .55);
+    backdrop-filter: blur(16px) saturate(1.22);
+    -webkit-backdrop-filter: blur(16px) saturate(1.22);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 252, 248, .34) 0%,
+        rgba(236, 244, 252, .24) 48%,
+        rgba(214, 232, 248, .12) 100%
+      );
+  }
+  .label {
+    margin: 0 0 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .lede {
+    margin: 22px 0 0;
+    font-weight: 500;
+    font-size: clamp(18px, 2.2vw, 24px);
+    line-height: 1.28;
+    letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .48);
+    max-width: 38em;
+  }
+
+  /* Shared chip base */
+  .chip {
+    appearance: none;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    font: 500 14.5px/1.15 var(--sans);
+    letter-spacing: -.01em;
+    color: var(--ink-soft);
+    background: transparent;
+    transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .chip.is-active { color: #fff; }
+
+  /* ---- A: constellation line (requested) ---- */
+  .constellation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    row-gap: 12px;
+    width: fit-content;
+    max-width: 100%;
+  }
+  .constellation .node {
+    display: flex;
+    align-items: center;
+  }
+  .constellation .chip {
+    position: relative;
+    z-index: 1;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(196, 180, 138, .42);
+    background: rgba(255, 252, 246, .72);
+    box-shadow: 0 0 0 3px rgba(196, 180, 138, .08);
+  }
+  .constellation .chip:hover {
+    color: var(--ink);
+    border-color: rgba(196, 180, 138, .7);
+    background: rgba(255, 252, 246, .92);
+  }
+  .constellation .chip.is-active {
+    color: #fff;
+    background: var(--ink);
+    border-color: transparent;
+    box-shadow:
+      0 0 0 1px rgba(196, 180, 138, .55),
+      0 0 18px rgba(196, 180, 138, .28);
+  }
+  .constellation .link {
+    position: relative;
+    width: 28px;
+    height: 1px;
+    flex: 0 0 28px;
+    background: linear-gradient(90deg, rgba(196, 180, 138, .15), rgba(196, 180, 138, .7), rgba(196, 180, 138, .15));
+  }
+  .constellation .link::before,
+  .constellation .link::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 2px rgba(255, 252, 246, .7);
+    transform: translateY(-50%);
+  }
+  .constellation .link::before { left: -1px; }
+  .constellation .link::after { right: -1px; }
+
+  /* ---- B: star-dot rail ---- */
+  .star-rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 4px;
+    row-gap: 12px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(255, 252, 246, .35);
+    border: 1px solid rgba(255, 255, 255, .55);
+  }
+  .star-rail .chip {
+    padding: 9px 15px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+  }
+  .star-rail .chip:hover {
+    color: var(--ink);
+    background: rgba(255, 252, 246, .7);
+  }
+  .star-rail .chip.is-active {
+    background: var(--ink);
+    box-shadow: 0 0 0 1px rgba(196, 180, 138, .45);
+  }
+  .star-rail .star {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    color: var(--gold);
+    opacity: .75;
+  }
+  .star-rail .star svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ---- C: compass orbit ---- */
+  .orbit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    width: fit-content;
+    max-width: 100%;
+  }
+  .orbit .chip {
+    position: relative;
+    padding: 10px 16px 10px 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(28, 36, 56, .12);
+    background: rgba(255, 252, 246, .7);
+  }
+  .orbit .chip::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    background: rgba(255, 252, 246, .9);
+    transform: translateY(-50%);
+    box-shadow: 0 0 0 3px rgba(196, 180, 138, .12);
+  }
+  .orbit .chip:hover { color: var(--ink); background: #fff; }
+  .orbit .chip.is-active {
+    background: var(--ink);
+    border-color: transparent;
+  }
+  .orbit .chip.is-active::before {
+    background: var(--gold);
+    border-color: #fffaf0;
+    box-shadow: 0 0 0 3px rgba(196, 180, 138, .28);
+  }
+  .orbit .spine {
+    display: none;
+  }
+
+  /* ---- D: dashed voyage path ---- */
+  .voyage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    row-gap: 12px;
+    width: fit-content;
+    max-width: 100%;
+  }
+  .voyage .chip {
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px dashed rgba(10, 69, 84, .28);
+    background: rgba(255, 252, 246, .55);
+  }
+  .voyage .chip:hover {
+    color: var(--ink);
+    border-style: solid;
+    border-color: rgba(10, 69, 84, .35);
+    background: rgba(255, 252, 246, .9);
+  }
+  .voyage .chip.is-active {
+    border-style: solid;
+    border-color: transparent;
+    background: var(--teal);
+  }
+  .voyage .dash {
+    width: 22px;
+    height: 0;
+    flex: 0 0 22px;
+    border-top: 1.5px dashed rgba(10, 69, 84, .28);
+  }
+
+  @media (max-width: 720px) {
+    .glass { padding: 22px 18px 26px; }
+    .constellation .link { width: 16px; flex-basis: 16px; }
+    .voyage .dash { width: 14px; flex-basis: 14px; }
+    .chip { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Constellation chip experiments</h1>
+    <p>Preview-only — not committed. Four treatments for practice-area chips, echoing compass / constellation / voyage motifs. Click chips to toggle active.</p>
+  </header>
+  <nav class="toc" aria-label="Jump to variant">
+    <a href="#a">A — linked constellation</a>
+    <a href="#b">B — star-dot rail</a>
+    <a href="#c">C — compass nodes</a>
+    <a href="#d">D — dashed voyage</a>
+  </nav>
+
+  <div class="options">
+    <section id="a">
+      <div class="option-head">
+        <span class="tag">A · requested</span>
+        <h2>Four pills connected by a thin gold line</h2>
+        <p>Constellation string: soft cream pills with gold rim, hairline connectors, and tiny star nodes at each join.</p>
+      </div>
+      <div class="stage">
+        <div class="glass">
+          <p class="label">.practice areas</p>
+          <div class="constellation" data-chips role="tablist" aria-label="Practice areas">
+            <span class="node"><button type="button" class="chip is-active" data-skill="ai">ai + trust</button></span>
+            <span class="link" aria-hidden="true"></span>
+            <span class="node"><button type="button" class="chip" data-skill="conv">product systems &amp; convergence</button></span>
+            <span class="link" aria-hidden="true"></span>
+            <span class="node"><button type="button" class="chip" data-skill="zero">0→1 builds</button></span>
+            <span class="link" aria-hidden="true"></span>
+            <span class="node"><button type="button" class="chip" data-skill="amp">research influence</button></span>
+          </div>
+          <p class="lede">I&nbsp;shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take&nbsp;control.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="b">
+      <div class="option-head">
+        <span class="tag">B</span>
+        <h2>Star-dot rail</h2>
+        <p>Chips sit in one soft tray; small 4-point compass stars separate each stop — more “map legend,” less necklace.</p>
+      </div>
+      <div class="stage">
+        <div class="glass">
+          <p class="label">.practice areas</p>
+          <div class="star-rail" data-chips role="tablist" aria-label="Practice areas">
+            <button type="button" class="chip is-active" data-skill="ai">ai + trust</button>
+            <span class="star" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.2 8.7 6.4 13.8 8 8.7 9.6 8 14.8 7.3 9.6 2.2 8 7.3 6.4Z"/></svg></span>
+            <button type="button" class="chip" data-skill="conv">product systems &amp; convergence</button>
+            <span class="star" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.2 8.7 6.4 13.8 8 8.7 9.6 8 14.8 7.3 9.6 2.2 8 7.3 6.4Z"/></svg></span>
+            <button type="button" class="chip" data-skill="zero">0→1 builds</button>
+            <span class="star" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.2 8.7 6.4 13.8 8 8.7 9.6 8 14.8 7.3 9.6 2.2 8 7.3 6.4Z"/></svg></span>
+            <button type="button" class="chip" data-skill="amp">research influence</button>
+          </div>
+          <p class="lede">I&nbsp;lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy&nbsp;structure.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="c">
+      <div class="option-head">
+        <span class="tag">C</span>
+        <h2>Compass nodes</h2>
+        <p>Each pill starts with a tiny compass-ring node; active fills gold — echoes the parchment compass rose without a connecting line.</p>
+      </div>
+      <div class="stage">
+        <div class="glass">
+          <p class="label">.practice areas</p>
+          <div class="orbit" data-chips role="tablist" aria-label="Practice areas">
+            <button type="button" class="chip is-active" data-skill="ai">ai + trust</button>
+            <button type="button" class="chip" data-skill="conv">product systems &amp; convergence</button>
+            <button type="button" class="chip" data-skill="zero">0→1 builds</button>
+            <button type="button" class="chip" data-skill="amp">research influence</button>
+          </div>
+          <p class="lede">I&nbsp;turn ambiguous ideas into validated product direction, from early exploration through&nbsp;launch.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="d">
+      <div class="option-head">
+        <span class="tag">D</span>
+        <h2>Dashed voyage path</h2>
+        <p>Wake / current metaphor: dashed teal connectors between stops, active chip fills deep teal.</p>
+      </div>
+      <div class="stage">
+        <div class="glass">
+          <p class="label">.practice areas</p>
+          <div class="voyage" data-chips role="tablist" aria-label="Practice areas">
+            <button type="button" class="chip is-active" data-skill="ai">ai + trust</button>
+            <span class="dash" aria-hidden="true"></span>
+            <button type="button" class="chip" data-skill="conv">product systems &amp; convergence</button>
+            <span class="dash" aria-hidden="true"></span>
+            <button type="button" class="chip" data-skill="zero">0→1 builds</button>
+            <span class="dash" aria-hidden="true"></span>
+            <button type="button" class="chip" data-skill="amp">research influence</button>
+          </div>
+          <p class="lede">I&nbsp;turn fragmented customer insights into an omnichannel UX strategy that aligns XFN teams around one shared experience and product&nbsp;vision.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  document.querySelectorAll("[data-chips]").forEach((group) => {
+    const chips = [...group.querySelectorAll(".chip")];
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chips.forEach((c) => {
+          const on = c === chip;
+          c.classList.toggle("is-active", on);
+          c.setAttribute("aria-selected", on ? "true" : "false");
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

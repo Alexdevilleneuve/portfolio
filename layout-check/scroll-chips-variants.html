@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card 04 — chips + parchment experiments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ice-sky: #E8F0FA;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --proof-ink: #0A4554;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #D8E4F0;
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 32px 20px 80px;
+  }
+  .page-head { max-width: 1240px; margin: 0 auto 24px; }
+  .page-head h1 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    line-height: 1.5;
+  }
+  .toc {
+    position: sticky;
+    top: 10px;
+    z-index: 50;
+    max-width: 1240px;
+    margin: 0 auto 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(28,36,56,.1);
+    border-radius: 14px;
+  }
+  .toc a {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: 999px;
+  }
+  .toc a:hover { background: rgba(232,240,250,.9); color: var(--ink); }
+  .toc a.is-live { background: rgba(0,115,140,.12); color: #005A6E; }
+
+  .options {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  .option-head { margin-bottom: 14px; }
+  .option-head .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #005A6E;
+    background: rgba(0,115,140,.1);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .option-head .tag.live {
+    color: #3d5a40;
+    background: rgba(151,166,117,.28);
+  }
+  .option-head h2 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .option-head p {
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    max-width: 72ch;
+    line-height: 1.45;
+  }
+
+  /* Voyage stage */
+  .stage {
+    position: relative;
+    min-height: 580px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(28,36,56,.08);
+    box-shadow: 0 24px 56px rgba(28,36,56,.1);
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, #E8F0FA 86%, var(--paper) 100%);
+    padding: 40px 24px 48px;
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    left: -4%;
+    right: -4%;
+    bottom: -6%;
+    height: 38%;
+    background: url("../assets/images/direction/hero-waves.png") center bottom / 108% auto no-repeat;
+    opacity: .55;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 82%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 28%, #000 82%, transparent);
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    max-width: min(1128px, 100%);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Timeline marker */
+  .marker {
+    position: absolute;
+    z-index: 4;
+    top: 10px;
+    left: -66px;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    aspect-ratio: 1;
+    border: 1px solid rgba(30,42,68,.18);
+    border-radius: 50%;
+    background: rgba(250,248,242,.94);
+    box-shadow: 0 5px 14px rgba(30,42,68,.06);
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .marker::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 5px;
+    height: 5px;
+    border: 1.5px solid #d3a13a;
+    border-radius: 50%;
+    background: #fffaf0;
+    transform: translateX(-50%);
+  }
+  .marker::after {
+    content: "";
+    position: absolute;
+    top: 34px;
+    left: calc(100% + 1px);
+    width: 31px;
+    height: 16px;
+    border-top: 1px solid rgba(30,42,68,.25);
+    border-radius: 50%;
+    transform: rotate(12deg);
+    transform-origin: left center;
+  }
+
+  /* Rail = card 03 column */
+  .rail-track {
+    position: relative;
+    width: min(74%, 760px);
+    margin-left: 14%;
+  }
+
+  /* Stack */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .stack.tight .scroll-wrap { margin-top: -24px; }
+
+  /* Card 04 chips */
+  .card {
+    position: relative;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+  }
+  .card-chips {
+    min-height: 0;
+    padding: clamp(20px, 2.8vw, 28px) clamp(28px, 4vw, 44px) clamp(8px, 1.2vw, 12px);
+  }
+  .card-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    opacity: .94;
+    pointer-events: none;
+  }
+  .card > :not(.card-art) { position: relative; z-index: 1; }
+
+  .chips { display: flex; flex-direction: column; gap: 10px; }
+  .tabs-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: .02em;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .chip {
+    appearance: none;
+    border: 1px solid rgba(255, 252, 246, .55);
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(255, 252, 246, .72);
+    color: var(--ink-soft);
+    font: 500 12px/1 var(--sans);
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .chip:hover { color: var(--ink); background: rgba(255, 252, 246, .92); }
+  .chip.is-active { color: #fff; background: var(--ink); border-color: transparent; }
+
+  /* Parchment */
+  .scroll-wrap {
+    position: relative;
+    width: min(100%, 920px);
+    max-width: calc(100% - 20px);
+  }
+  .scroll-wrap.align-rail {
+    width: min(74%, 760px);
+    margin-left: 14%;
+    align-self: flex-start;
+  }
+  .scroll {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1060 / 540;
+    max-height: 380px;
+    display: flex;
+    align-items: center;
+    padding:
+      clamp(28px, 5%, 44px)
+      clamp(88px, 14%, 148px)
+      clamp(28px, 5.5%, 44px)
+      clamp(64px, 8%, 96px);
+  }
+  .scroll-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  .scroll-body {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: min(720px, 100%);
+    margin-left: clamp(40px, 5.5vw, 68px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .practice { display: none; flex-direction: column; gap: 20px; }
+  .practice.is-active { display: flex; }
+  .statement {
+    font-weight: 500;
+    font-size: clamp(17px, 2vw, 22px);
+    line-height: 1.28;
+    letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .48);
+    max-width: 38em;
+  }
+  .proofs { display: flex; flex-direction: column; gap: 12px; }
+  .proof {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--proof-ink);
+    padding-left: 18px;
+    position: relative;
+  }
+  .proof::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .45em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--proof-ink);
+    box-shadow: 0 0 0 3px rgba(10, 69, 84, .1);
+  }
+
+  /* ---- Variation B: sheet layout (reference mock) ---- */
+  .var-b-stage { min-height: 720px; padding-top: 28px; }
+  .var-b-context {
+    position: relative;
+    width: min(74%, 760px);
+    margin: 0 0 28px 14%;
+    min-height: 120px;
+    padding: clamp(24px, 3vw, 32px) clamp(28px, 4vw, 44px);
+    overflow: hidden;
+    opacity: .92;
+  }
+  .var-b-context .card-art { opacity: .9; }
+  .var-b-context p {
+    position: relative;
+    z-index: 1;
+    font-family: var(--serif);
+    font-size: clamp(15px, 1.6vw, 20px);
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 36em;
+  }
+  .var-b-context .hook { font-style: italic; color: #795f31; }
+  .var-b-context .logos-stub {
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .var-b-rail {
+    width: min(88%, 980px);
+    margin-left: 10%;
+  }
+  .var-b-rail .scroll-wrap {
+    width: 100%;
+    max-width: none;
+  }
+  .scroll-sheet {
+    aspect-ratio: 1060 / 666;
+    max-height: 480px;
+    padding:
+      clamp(26px, 4.2%, 38px)
+      clamp(108px, 16%, 168px)
+      clamp(36px, 5.5%, 52px)
+      clamp(44px, 6%, 64px);
+  }
+  .scroll-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 20px);
+  }
+  .chips-in-sheet {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+  }
+  .chips-in-sheet .tabs-label { margin-right: 0; flex-shrink: 0; }
+  .chips-in-sheet .tabs {
+    flex: 1;
+    min-width: min(100%, 420px);
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255, 252, 246, .62);
+    border: 1px solid rgba(255, 255, 255, .72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .chips-in-sheet .chip {
+    background: transparent;
+    border-color: transparent;
+    padding: 8px 14px;
+  }
+  .chips-in-sheet .chip:hover {
+    background: rgba(255, 252, 246, .55);
+  }
+  .chips-in-sheet .chip.is-active {
+    background: var(--ink);
+    border-color: transparent;
+  }
+  .sheet-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(16px, 2.5vw, 28px);
+    align-items: start;
+    flex: 1;
+  }
+  .sheet-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 100%;
+  }
+  .statement-serif {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -.025em;
+    color: rgba(10, 69, 84, .92);
+    max-width: 13.5em;
+  }
+  .proof-echo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--proof-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(10, 69, 84, .35);
+  }
+  .proof-echo::before { content: "* "; opacity: .85; }
+  .sheet-right {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 20px);
+    padding-left: clamp(8px, 1.2vw, 16px);
+    border-left: 1px solid rgba(10, 69, 84, .08);
+  }
+  .proof-detail {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px 12px;
+    align-items: start;
+  }
+  .proof-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(10, 69, 84, .2);
+    background: rgba(255, 252, 246, .7);
+    display: grid;
+    place-items: center;
+    color: rgba(10, 69, 84, .65);
+  }
+  .proof-icon svg { width: 18px; height: 18px; }
+  .proof-detail h3 {
+    font-family: var(--serif);
+    font-size: clamp(16px, 1.6vw, 18px);
+    font-weight: 600;
+    letter-spacing: -.02em;
+    line-height: 1.22;
+    color: rgba(10, 69, 84, .92);
+    margin-bottom: 5px;
+  }
+  .proof-detail p {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: rgba(10, 69, 84, .55);
+  }
+  .scroll-compass {
+    position: absolute;
+    right: clamp(68px, 11%, 100px);
+    bottom: clamp(20px, 4.5%, 32px);
+    width: 44px;
+    height: 44px;
+    z-index: 2;
+    opacity: .82;
+    pointer-events: none;
+  }
+  @media (max-width: 820px) {
+    .var-b-rail { width: calc(100% - 56px); margin-left: 56px; }
+    .var-b-context { width: calc(100% - 56px); margin-left: 56px; }
+    .var-d-rail { width: calc(100% - 56px); margin-left: 56px; }
+    .sheet-cols { grid-template-columns: 1fr; }
+    .sheet-right { border-left: 0; padding-left: 0; border-top: 1px solid rgba(10, 69, 84, .08); padding-top: 16px; }
+  }
+
+  /* ---- Variation D: liquid glass, no parchment, chips inside ---- */
+  .var-d-stage {
+    min-height: 680px;
+    padding-top: 32px;
+  }
+  .var-d-rail {
+    width: min(88%, 980px);
+    margin-left: 10%;
+  }
+  .glass-shell {
+    position: relative;
+    width: 100%;
+    min-height: clamp(380px, 46vh, 480px);
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .68);
+    box-shadow:
+      0 24px 48px rgba(28, 36, 56, .1),
+      inset 0 1px 0 rgba(255, 255, 255, .55);
+  }
+  .glass-land-glass {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: inherit;
+    backdrop-filter: blur(16px) saturate(1.22);
+    -webkit-backdrop-filter: blur(16px) saturate(1.22);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 252, 248, .28) 0%,
+        rgba(236, 244, 252, .22) 42%,
+        rgba(214, 232, 248, .12) 78%,
+        rgba(214, 232, 248, .04) 100%
+      );
+  }
+  .glass-land {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 36%;
+    opacity: .46;
+    filter: saturate(.88) contrast(.96);
+    border-radius: inherit;
+  }
+  .glass-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 20px);
+    padding:
+      clamp(28px, 4.2vw, 40px)
+      clamp(32px, 5vw, 52px)
+      clamp(36px, 5vw, 48px);
+    --proof-ink: #0A4554;
+  }
+  .glass-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: min(720px, 100%);
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Card 04 — chips + parchment experiments</h1>
+    <p>Preview lab for index-2 card 04. <strong>B</strong> — live in 2.0 (parchment + two columns). <strong>D</strong> — glass panel, chips inside, one-column proofs. <strong>E</strong> — parchment, chips outside. Click chips to switch panels.</p>
+  </header>
+  <nav class="toc" aria-label="Jump to variant">
+    <a href="#var-b" class="is-live">B — sheet + two columns ★</a>
+    <a href="#var-d">D — glass + chips inside</a>
+    <a href="#var-e">E — same column align</a>
+  </nav>
+
+  <div class="options">
+
+    <section id="var-b">
+      <div class="option-head">
+        <span class="tag live">B · live</span>
+        <h2>Chips on parchment · statement + proof columns</h2>
+        <p>Like your mock: 04 marker, chips inside the scroll crown, serif statement left, expanded proof details right, compass on the sheet. Card 03 shown above for context.</p>
+      </div>
+      <div class="stage var-b-stage">
+        <div class="inner" data-practice="b">
+          <article class="card var-b-context" aria-hidden="true">
+            <img class="card-art" src="../assets/images/portfolio_watercolor_assets/card-03.png" alt="">
+            <p>Trained in experimental science, I bring a lab scientist's rigor to a very human question: <span class="hook">what experience should we build, and why?</span></p>
+            <p class="logos-stub">Oregon State · Lanzhou · Beijing Film Academy</p>
+          </article>
+          <div class="rail-track var-b-rail">
+            <span class="marker" aria-hidden="true">04</span>
+            <div class="scroll-wrap">
+              <article class="scroll scroll-sheet">
+                <img class="scroll-art" src="../assets/images/portfolio_watercolor_assets/scroll-sheet.png" alt="">
+                <svg class="scroll-compass" viewBox="0 0 64 64" aria-hidden="true">
+                  <circle cx="32" cy="32" r="22" fill="none" stroke="#C4B48A" stroke-width="1.2"/>
+                  <circle cx="32" cy="32" r="7" fill="none" stroke="#C4B48A" stroke-width="1"/>
+                  <path d="M32 10 L34.6 32 L32 54 L29.4 32 Z" fill="#C4B48A" opacity=".78"/>
+                  <path d="M10 32 L32 34.6 L54 32 L32 29.4 Z" fill="#C4B48A" opacity=".38"/>
+                  <circle cx="32" cy="32" r="2.2" fill="#C4B48A"/>
+                </svg>
+                <div class="scroll-inner">
+                  <header class="chips-in-sheet">
+                    <p class="tabs-label">.practice areas</p>
+                    <div class="tabs" data-tabs-b></div>
+                  </header>
+                  <div data-panels-b></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="var-d">
+      <div class="option-head">
+        <span class="tag">D</span>
+        <h2>Liquid glass · chips inside · one-column</h2>
+        <p>Frosted land backdrop in a rounded glass panel — chips in the crown, statement + proof bullets below (no parchment, no two-column split).</p>
+      </div>
+      <div class="stage var-d-stage">
+        <div class="inner" data-practice="d">
+          <div class="rail-track var-d-rail">
+            <span class="marker" aria-hidden="true">04</span>
+            <div class="glass-shell">
+              <div class="glass-land-glass" aria-hidden="true">
+                <img class="glass-land" src="../assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
+              </div>
+              <div class="glass-inner">
+                <header class="chips-in-sheet">
+                  <p class="tabs-label">.practice areas</p>
+                  <div class="tabs" data-tabs-d></div>
+                </header>
+                <div class="glass-body" data-panels-d></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="var-e">
+      <div class="option-head">
+        <span class="tag">E</span>
+        <h2>Same column — card 04 + parchment aligned</h2>
+        <p>Chips card and parchment share the card-03 rail width instead of a wider centered scroll.</p>
+      </div>
+      <div class="stage">
+        <div class="inner stack tight" data-practice="e">
+          <div class="rail-track">
+            <span class="marker" aria-hidden="true">04</span>
+            <article class="card card-chips">
+              <img class="card-art" src="../assets/images/portfolio_watercolor_assets/card-wash.png" alt="">
+              <div class="chips">
+                <p class="tabs-label">.practice areas</p>
+                <div class="tabs"></div>
+              </div>
+            </article>
+          </div>
+          <div class="scroll-wrap align-rail" data-panel-host="e"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+  const SKILLS = [
+    { id: "ai", label: "ai + trust", statement: "I shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take control.", proofs: ["trust calibration & explainability", "human-in-the-loop autonomy"] },
+    { id: "conv", label: "product systems & convergence", statement: "I lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy structure.", proofs: ["google express → google shopping", "information architecture redesign"] },
+    { id: "zero", label: "0→1 builds", statement: "I turn ambiguous ideas into validated product direction, from early exploration through launch.", proofs: ["concept-to-launch research", "ai-native product discovery & build"] },
+    { id: "amp", label: "research influence", statement: "I turn fragmented customer insights into an omnichannel UX strategy that aligns XFN teams around one shared experience and product vision.", proofs: ["cross-functional product collaboration", "cross-craft UX leadership"] },
+  ];
+
+  const ICONS = {
+    target: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>`,
+    model: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M12 7.5v4M10 11l-4 5M14 11l4 5"/></svg>`,
+    hand: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 11V8a2 2 0 1 1 4 0v3"/><path d="M12 11V7a2 2 0 1 1 4 0v4"/><path d="M8 11v5a4 4 0 0 0 8 0v-4"/></svg>`,
+    map: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6l6-2 6 2 6-2v14l-6 2-6-2-6 2V6z"/><path d="M10 4v14M16 6v14"/></svg>`,
+    spark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3l1.8 5.5L19 10l-5.2 1.5L12 17l-1.8-5.5L5 10l5.2-1.5L12 3z"/></svg>`,
+    link: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg>`,
+  };
+
+  const SKILLS_B = [
+    {
+      id: "ai",
+      label: "ai + trust",
+      statement: "I shape trustworthy AI experiences by uncovering how people form and calibrate trust, understand system behavior, and decide when to take control.",
+      echo: "trust calibration & explainability",
+      details: [
+        { icon: "target", title: "trust calibration & explainability", desc: "Designing studies that surface how people assess confidence, understand AI outputs, and decide when to trust or verify." },
+        { icon: "model", title: "mental models & system understanding", desc: "Uncovering the mental models people use to form understandings of complex systems, particularly for security and privacy." },
+        { icon: "hand", title: "agency & control", desc: "Exploring how people decide when to rely on, override, or opt out of AI-driven actions—and why." },
+      ],
+    },
+    {
+      id: "conv",
+      label: "product systems & convergence",
+      statement: "I lead iterative research to define scalable UX architecture when complex product systems outgrow their legacy structure.",
+      echo: "google express → google shopping",
+      details: [
+        { icon: "map", title: "google express → google shopping", desc: "Mapping how fragmented shopping journeys converged into a unified product architecture without losing user mental models." },
+        { icon: "link", title: "information architecture redesign", desc: "Reframing navigation, taxonomy, and cross-surface patterns so teams could ship coherently at scale." },
+      ],
+    },
+    {
+      id: "zero",
+      label: "0→1 builds",
+      statement: "I turn ambiguous ideas into validated product direction, from early exploration through launch.",
+      echo: "concept-to-launch research",
+      details: [
+        { icon: "spark", title: "concept-to-launch research", desc: "Running early discovery that stress-tests assumptions, defines success signals, and de-risks build decisions." },
+        { icon: "target", title: "ai-native product discovery & build", desc: "Translating open-ended AI capability into concrete user value through rapid prototyping and evaluative studies." },
+      ],
+    },
+    {
+      id: "amp",
+      label: "research influence",
+      statement: "I turn fragmented customer insights into an omnichannel UX strategy that aligns XFN teams around one shared experience and product vision.",
+      echo: "cross-functional product collaboration",
+      details: [
+        { icon: "link", title: "cross-functional product collaboration", desc: "Synthesizing research into narratives and decision frameworks that product, design, and engineering can act on together." },
+        { icon: "model", title: "cross-craft UX leadership", desc: "Building shared language across research, content, and interaction design so experience strategy holds under real constraints." },
+      ],
+    },
+  ];
+
+  function buildPanels(bodyClass) {
+    return SKILLS.map((s, i) => `
+      <div class="practice${i === 0 ? " is-active" : ""}" data-skill="${s.id}">
+        <p class="statement">${s.statement.replace(/ I /g, " I\u00a0").replace(/ and /g, " and\u00a0")}</p>
+        <div class="proofs">${s.proofs.map(p => `<span class="proof">${p}</span>`).join("")}</div>
+      </div>`).join("");
+  }
+
+  function buildChips(list = SKILLS) {
+    return list.map((s, i) =>
+      `<button type="button" class="chip${i === 0 ? " is-active" : ""}" data-skill="${s.id}">${s.label}</button>`
+    ).join("");
+  }
+
+  function buildSheetPanels() {
+    return SKILLS_B.map((s, i) => `
+      <div class="practice${i === 0 ? " is-active" : ""}" data-skill="${s.id}">
+        <div class="sheet-cols">
+          <div class="sheet-left">
+            <p class="statement-serif">${s.statement.replace(/ I /g, " I\u00a0").replace(/ and /g, " and\u00a0")}</p>
+            <p class="proof-echo">${s.echo}</p>
+          </div>
+          <div class="sheet-right">
+            ${s.details.map((d) => `
+              <article class="proof-detail">
+                <div class="proof-icon">${ICONS[d.icon] || ICONS.target}</div>
+                <div>
+                  <h3>${d.title}</h3>
+                  <p>${d.desc}</p>
+                </div>
+              </article>`).join("")}
+          </div>
+        </div>
+      </div>`).join("");
+  }
+
+  function wirePractice(root) {
+    const chips = [...root.querySelectorAll(".chip[data-skill]")];
+    const panels = [...root.querySelectorAll(".practice[data-skill]")];
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const skill = chip.dataset.skill;
+        chips.forEach((c) => c.classList.toggle("is-active", c === chip));
+        panels.forEach((p) => p.classList.toggle("is-active", p.dataset.skill === skill));
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-practice]").forEach((root) => {
+    const id = root.dataset.practice;
+
+    if (id === "b") {
+      const tabs = root.querySelector("[data-tabs-b]");
+      const panelsHost = root.querySelector("[data-panels-b]");
+      if (tabs) tabs.innerHTML = buildChips(SKILLS_B);
+      if (panelsHost) panelsHost.innerHTML = buildSheetPanels();
+      wirePractice(root);
+      return;
+    }
+
+    if (id === "d") {
+      const tabs = root.querySelector("[data-tabs-d]");
+      const panelsHost = root.querySelector("[data-panels-d]");
+      if (tabs) tabs.innerHTML = buildChips();
+      if (panelsHost) panelsHost.innerHTML = buildPanels();
+      wirePractice(root);
+      return;
+    }
+
+    const tabs = root.querySelector(".tabs");
+    if (tabs && !tabs.innerHTML.trim()) tabs.innerHTML = buildChips();
+
+    const host = root.querySelector("[data-panel-host]");
+    if (host) {
+      const bodyClass = host.dataset.bodyClass || "";
+      host.innerHTML = `
+        <article class="scroll">
+          <img class="scroll-art" src="../assets/images/portfolio_watercolor_assets/scroll-sheet.png" alt="">
+          <div class="scroll-body ${bodyClass}">${buildPanels(bodyClass)}</div>
+        </article>`;
+    }
+
+    wirePractice(root);
+  });
+</script>
+</body>
+</html>

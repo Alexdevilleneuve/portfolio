@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.0 footer — four compositions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,460;0,9..144,500;1,9..144,460&family=Inter:wght@400;500;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #10283c;
+    --ink-soft: #5A6B8C;
+    --accent: #1d4e9e;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+    --cream: rgba(247, 244, 236, .82);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #d7e2ee;
+    color: #1e2a44;
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 28px 20px 72px;
+  }
+  a { color: inherit; }
+  .page-head { max-width: 1180px; margin: 0 auto 22px; }
+  .page-head h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin: 8px 0 0;
+    max-width: 68ch;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .stack { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  .idea-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; margin-bottom: 10px; }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(29, 78, 158, .1);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .idea-meta h2 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 20px; }
+  .why { flex: 1 1 100%; margin: 0; color: var(--ink-soft); font-size: 14px; }
+
+  .stage {
+    position: relative;
+    height: min(68vh, 620px);
+    min-height: 460px;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #1a3e62;
+    box-shadow: 0 18px 40px rgba(16, 40, 60, .16);
+  }
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+  }
+  .cloud {
+    position: absolute;
+    left: -8%;
+    width: 116%;
+    top: 0;
+    z-index: 3;
+    transform: translateY(-12%);
+    pointer-events: none;
+  }
+  .cloud img { display: block; width: 100%; height: auto; }
+
+  .panel {
+    background: var(--cream);
+    border-radius: 18px;
+    padding: 22px 26px;
+    box-shadow: 0 10px 28px rgba(16, 40, 60, .08);
+  }
+  .line {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 460;
+    font-size: clamp(28px, 3.2vw, 42px);
+    line-height: 1.12;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .curious {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--hand);
+    font-size: 26px;
+    color: var(--accent);
+    text-decoration: none;
+    transform: rotate(-2deg);
+  }
+  .mail, .year {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  .mail { margin-top: 16px; }
+  .year { margin-top: 8px; }
+  .nav-title { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
+  .nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .nav-list a { text-decoration: none; font-size: 15.5px; }
+
+  /* A — two cards, current */
+  .a-copy {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 7%;
+    transform: translateX(-50%);
+    width: min(860px, calc(100% - 48px));
+    display: grid;
+    grid-template-columns: 1.4fr .7fr;
+    gap: 28px;
+    align-items: center;
+  }
+  .a-nav { align-self: center; }
+
+  /* B — one sheet */
+  .b-sheet {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 8%;
+    transform: translateX(-50%);
+    width: min(920px, calc(100% - 56px));
+    display: grid;
+    grid-template-columns: 1.5fr auto .7fr;
+    gap: 28px;
+    align-items: center;
+    padding: 26px 32px;
+  }
+  .b-rule { width: 1px; align-self: stretch; background: rgba(16, 40, 60, .16); }
+
+  /* C — type on the water, painting stays open */
+  .c-copy {
+    position: absolute;
+    z-index: 2;
+    left: 5%;
+    bottom: 5%;
+    width: min(420px, 42%);
+    padding: 8px 4px;
+    color: #f7f4ec;
+    text-shadow: 0 1px 0 rgba(8, 24, 40, .5), 0 8px 22px rgba(8, 24, 40, .65);
+  }
+  .c-copy::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -28px -40px -12px -24px;
+    background: radial-gradient(ellipse at 28% 42%, rgba(6, 22, 40, .46), transparent 70%);
+  }
+  .c-copy .line { color: #f7f4ec; font-size: clamp(26px, 2.8vw, 36px); }
+  .c-copy .curious { color: #f7f4ec; text-shadow: 0 8px 18px rgba(8, 24, 40, .45); }
+  .c-copy .mail, .c-copy .year { color: #f7f4ec; }
+  .c-nav {
+    position: absolute;
+    z-index: 2;
+    right: 6%;
+    bottom: 11%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #f7f4ec;
+    text-shadow: 0 8px 18px rgba(8, 24, 40, .4);
+  }
+  .c-nav a { text-decoration: none; font-size: 16px; letter-spacing: .01em; }
+
+  /* D — a credit along the bottom, painting is the subject */
+  .d-bar {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 36px 26px;
+    background: linear-gradient(180deg, transparent, rgba(8, 28, 48, .55) 42%, rgba(8, 28, 48, .72));
+    color: #f7f4ec;
+  }
+  .d-bar .line { font-size: clamp(22px, 2.4vw, 30px); color: #f7f4ec; }
+  .d-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .d-links { display: flex; gap: 16px; }
+  .d-links a { color: #f7f4ec; text-decoration: none; font-size: 15px; }
+  .d-meta { margin: 0; font-size: 13px; opacity: .86; }
+
+  @media (max-width: 800px) {
+    .a-copy, .b-sheet { grid-template-columns: 1fr; }
+    .b-rule { display: none; }
+    .c-copy { width: min(100% - 36px, 420px); }
+    .c-nav { position: static; }
+    .c-copy { position: absolute; left: 18px; right: 18px; bottom: 18px; width: auto; }
+    .d-bar { flex-direction: column; align-items: flex-start; }
+    .d-side { align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Footer, four ways</h1>
+    <p>Same cloud and shore. The difference is how the farewell sits on the painting. A is what’s on 2.0 now. Tell me which one to keep.</p>
+  </header>
+
+  <div class="stack">
+    <section>
+      <div class="idea-meta">
+        <span class="tag">A · current</span>
+        <h2>Two cards</h2>
+        <p class="why">Farewell and navigation each get a vellum card, set low so the compass stays clear.</p>
+      </div>
+      <div class="stage">
+        <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
+        <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
+        <div class="a-copy">
+          <div class="panel">
+            <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
+            <a class="curious" href="#">Still curious?</a>
+            <p class="mail">alex@alexandra-irribarren.com</p>
+            <p class="year">Alexandra Irribarren 2026</p>
+          </div>
+          <nav class="panel a-nav" aria-label="A navigation">
+            <p class="nav-title">Navigation</p>
+            <ul class="nav-list">
+              <li><a href="#">project →</a></li>
+              <li><a href="#">about →</a></li>
+              <li><a href="#">resume ↗</a></li>
+              <li><a href="#">connect ↗</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">B</span>
+        <h2>One letter</h2>
+        <p class="why">A single sheet, the way 1.0 held everything in one card. The painting frames it instead of a second panel.</p>
+      </div>
+      <div class="stage">
+        <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
+        <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
+        <div class="panel b-sheet">
+          <div>
+            <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
+            <a class="curious" href="#">Still curious?</a>
+            <p class="mail">alex@alexandra-irribarren.com</p>
+            <p class="year">Alexandra Irribarren 2026</p>
+          </div>
+          <div class="b-rule" aria-hidden="true"></div>
+          <nav aria-label="B navigation">
+            <p class="nav-title">Navigation</p>
+            <ul class="nav-list">
+              <li><a href="#">project →</a></li>
+              <li><a href="#">about →</a></li>
+              <li><a href="#">resume ↗</a></li>
+              <li><a href="#">connect ↗</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">C</span>
+        <h2>Type on the water</h2>
+        <p class="why">No cards. The farewell sits on the left of the sea, links on the right, and the sailboat and compass stay uncovered.</p>
+      </div>
+      <div class="stage">
+        <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
+        <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
+        <div class="c-copy">
+          <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
+          <a class="curious" href="#">Still curious?</a>
+          <p class="mail">alex@alexandra-irribarren.com</p>
+          <p class="year">Alexandra Irribarren 2026</p>
+        </div>
+        <nav class="c-nav" aria-label="C navigation">
+          <a href="#">project →</a>
+          <a href="#">about →</a>
+          <a href="#">resume ↗</a>
+          <a href="#">connect ↗</a>
+        </nav>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">D</span>
+        <h2>Credit line</h2>
+        <p class="why">The painting is the footer. A quiet line along the bottom carries the farewell and the links.</p>
+      </div>
+      <div class="stage">
+        <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
+        <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
+        <div class="d-bar">
+          <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
+          <div class="d-side">
+            <nav class="d-links" aria-label="D navigation">
+              <a href="#">project</a>
+              <a href="#">about</a>
+              <a href="#">resume</a>
+              <a href="#">connect</a>
+            </nav>
+            <p class="d-meta">alex@alexandra-irribarren.com · 2026</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

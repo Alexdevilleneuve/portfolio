@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.0 close frame — four arrangements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #18304c;
+    --ink-soft: #5C6578;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+    --gold: #e8bd5b;
+    --cream: #fffaf0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #c5d0de;
+    color: #1e2a44;
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 28px 20px 80px;
+  }
+  a { color: inherit; }
+  .page-head { max-width: 1180px; margin: 0 auto 22px; }
+  .page-head h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin: 8px 0 0;
+    max-width: 70ch;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .stack { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  .idea-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; margin-bottom: 10px; }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #1d4e9e;
+    background: rgba(29, 78, 158, .1);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .idea-meta h2 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 20px; }
+  .why { flex: 1 1 100%; margin: 0; color: var(--ink-soft); font-size: 14px; }
+
+  .stage {
+    position: relative;
+    height: min(72vh, 640px);
+    min-height: 520px;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #071422 92% 42% / cover no-repeat;
+    background-image: url("../assets/images/portfolio_watercolor_assets/endorse-night-horizon.png");
+    box-shadow: 0 18px 40px rgba(16, 40, 60, .18);
+  }
+  .stage--a { background-position: 90% 40%; }
+  .stage--b { background-position: 94% 38%; }
+  .stage--c { background-position: 96% 44%; }
+  .stage--d { background-position: 88% 42%; }
+
+  .belief {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 2.2vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -.03em;
+    color: var(--cream);
+  }
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 20px;
+    color: #fff5df;
+    text-decoration: none;
+  }
+  .link .arrow { color: var(--gold); }
+  .link:hover { text-decoration: underline; }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    max-width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(228, 196, 119, .58);
+    border-radius: 15px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(255,255,255,.68), transparent 34%),
+      linear-gradient(145deg, #fffdf5 0%, #f5ecd8 100%);
+    color: var(--ink);
+    box-shadow: 0 18px 42px rgba(1, 10, 21, .34), inset 0 1px 0 rgba(255,255,255,.9);
+    text-decoration: none;
+  }
+  .pill img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  .pill b { display: block; font-size: 13.5px; font-weight: 600; }
+  .pill .name { display: flex; align-items: center; gap: 6px; }
+  .pill .name svg { width: 15px; height: 15px; }
+  .pill span { display: block; margin-top: 1px; font-size: 12px; line-height: 1.35; color: var(--ink-soft); }
+
+  .sign { color: var(--cream); }
+  .sign .name {
+    display: block;
+    font-family: var(--hand);
+    font-weight: 500;
+    font-size: 52px;
+    line-height: .9;
+  }
+  .sign .role {
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(255, 250, 240, .72);
+  }
+  .traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin-top: 12px;
+  }
+  .traits span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(255, 250, 240, .82);
+  }
+  .traits svg { width: 13px; height: 13px; color: var(--gold); flex-shrink: 0; }
+
+  .cutout {
+    width: 210px;
+    margin: 0;
+    pointer-events: none;
+  }
+  .cutout img {
+    display: block;
+    width: 100%;
+    height: auto;
+    -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 96%);
+    mask-image: linear-gradient(180deg, #000 72%, transparent 96%);
+  }
+
+  /* A — current stack */
+  .a-cluster {
+    position: absolute;
+    left: 36%;
+    top: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: min(400px, 44%);
+  }
+  .a-cluster .belief { font-size: 24px; }
+
+  /* B — signature in the middle */
+  .b-cluster {
+    position: absolute;
+    left: 32%;
+    top: 18%;
+    width: min(380px, 44%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  /* C — portrait in the middle */
+  .c-cluster {
+    position: absolute;
+    left: 34%;
+    top: 6%;
+    width: min(360px, 42%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+  }
+  .c-cluster .belief { max-width: 16em; }
+  .c-cluster .cutout { margin-top: 4px; }
+  .c-cluster .sign { margin-top: -36px; }
+  .c-cluster .traits { justify-content: center; }
+  .c-cluster .link { margin-top: 14px; }
+
+  /* D — belief on the water, one card holds identity and the link */
+  .d-belief {
+    position: absolute;
+    left: 8%;
+    top: 28%;
+    width: min(460px, 46%);
+    font-size: clamp(28px, 3vw, 40px);
+  }
+  .d-card {
+    position: absolute;
+    left: 8%;
+    bottom: 16%;
+    width: min(420px, 48%);
+    padding: 16px 18px 14px;
+    border: 1px solid rgba(228, 196, 119, .58);
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(255,255,255,.68), transparent 34%),
+      linear-gradient(145deg, #fffdf5 0%, #f5ecd8 100%);
+    color: var(--ink);
+    box-shadow: 0 18px 42px rgba(1, 10, 21, .34);
+  }
+  .d-card .who { display: flex; align-items: center; gap: 12px; }
+  .d-card .who img {
+    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+  }
+  .d-card .who b { font-size: 15px; }
+  .d-card .who .role { display: block; margin-top: 2px; font-size: 12px; color: var(--ink-soft); }
+  .d-card .logos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .d-card .logos img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: #fff;
+  }
+  .d-card .link {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(24, 48, 76, .12);
+    color: var(--ink);
+    font-size: 18px;
+  }
+  .d-card .link .arrow { color: #1d4e9e; }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Closing frame, four ways</h1>
+    <p>The last endorsement pause, on the night water. Each frame keeps the belief, the identity, and the LinkedIn link. B and C borrow the signature and the portrait from the middle of the other endorsement.</p>
+  </header>
+
+  <div class="stack">
+    <section>
+      <div class="idea-meta">
+        <span class="tag">A</span>
+        <h2>Current stack</h2>
+        <p class="why">Profile card, then the belief, then the link. Left-aligned in the open water, lighthouse stays to the&nbsp;right.</p>
+      </div>
+      <div class="stage stage--a">
+        <div class="a-cluster">
+          <a class="pill" href="https://www.linkedin.com/in/alexandra-irribarren/">
+            <img src="../assets/images/about/LinkedIn Profile 1.png" alt="" width="88" height="88">
+            <div>
+              <div class="name">
+                <b>Alexandra Irribarren</b>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+              </div>
+              <span>Senior UX Researcher<br>Mixed-methods</span>
+            </div>
+          </a>
+          <p class="belief">I&nbsp;believe by working hard and being kind, amazing things will&nbsp;happen.</p>
+          <a class="link" href="https://www.linkedin.com/in/alexandra-irribarren/">More kind words on LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">B</span>
+        <h2>Signature in the middle</h2>
+        <p class="why">The belief leads. The card becomes the handwritten name, the role, and Insightful, Strategic,&nbsp;Impactful.</p>
+      </div>
+      <div class="stage stage--b">
+        <div class="b-cluster">
+          <p class="belief">I&nbsp;believe by working hard and being&nbsp;kind,<br>amazing things will&nbsp;happen.</p>
+          <div class="sign">
+            <span class="name">Alexandra</span>
+            <span class="role">Senior UX Researcher</span>
+            <div class="traits">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.1 6.5H21l-5.6 4 2.2 6.5-5.6-4-5.6 4 2.2-6.5-5.6-4h6.9z"/></svg>Insightful</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>Strategic</span>
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 4.6 2.4 8.5 10 10-7.6 1.5-9.5 5.4-10 10-.5-4.6-2.4-8.5-10-10 7.6-1.5 9.5-5.4 10-10z"/></svg>Impactful</span>
+            </div>
+          </div>
+          <a class="link" href="https://www.linkedin.com/in/alexandra-irribarren/">More kind words on LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">C</span>
+        <h2>Portrait in the middle</h2>
+        <p class="why">The belief sits above the cutout. The name and the three traits close under it, then the&nbsp;link.</p>
+      </div>
+      <div class="stage stage--c">
+        <div class="c-cluster">
+          <p class="belief">I&nbsp;believe by working hard and being kind, amazing things will&nbsp;happen.</p>
+          <figure class="cutout">
+            <img src="../assets/images/about/profile-halfbody-wave.png" alt="" width="960" height="1436">
+          </figure>
+          <div class="sign">
+            <span class="name">Alexandra</span>
+            <div class="traits">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.1 6.5H21l-5.6 4 2.2 6.5-5.6-4-5.6 4 2.2-6.5-5.6-4h6.9z"/></svg>Insightful</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>Strategic</span>
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.5 4.6 2.4 8.5 10 10-7.6 1.5-9.5 5.4-10 10-.5-4.6-2.4-8.5-10-10 7.6-1.5 9.5-5.4 10-10z"/></svg>Impactful</span>
+            </div>
+          </div>
+          <a class="link" href="https://www.linkedin.com/in/alexandra-irribarren/">More kind words on LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">D</span>
+        <h2>Belief on the water</h2>
+        <p class="why">The sentence is the large line on the sea. Identity, the three company marks, and the link share one card beneath it, clear of the&nbsp;lighthouse.</p>
+      </div>
+      <div class="stage stage--d">
+        <p class="belief d-belief">I&nbsp;believe by working hard and being kind, amazing things will&nbsp;happen.</p>
+        <div class="d-card">
+          <div class="who">
+            <img src="../assets/images/about/LinkedIn Profile 1.png" alt="" width="88" height="88">
+            <div>
+              <b>Alexandra Irribarren</b>
+              <span class="role">Senior UX Researcher · Mixed-methods</span>
+            </div>
+          </div>
+          <div class="logos">
+            <img src="../assets/images/shared/brand/malwarebytes.svg" alt="Malwarebytes" width="32" height="32">
+            <img src="../assets/images/shared/brand/google.svg" alt="Google" width="32" height="32">
+            <img src="../assets/images/shared/brand/huawei.svg" alt="Huawei" width="32" height="32">
+          </div>
+          <a class="link" href="https://www.linkedin.com/in/alexandra-irribarren/">More kind words on LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

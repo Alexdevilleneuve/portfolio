@@ -161,15 +161,53 @@
     text-align: center;
     overflow: hidden;
     z-index: 1;
+    background: transparent;
+  }
+  /* Sky + waves copied from 2.0 (.timeline-v2-bg). Sits under the hero furniture. */
+  .hero .timeline-v2-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     background:
       radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
       linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 35%, #D4E6FA 62%, var(--ice-sky) 100%);
+    pointer-events: none;
   }
+  .timeline-v2-ocean {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(-96px, -6vw, -52px);
+  }
+  .timeline-v2-ocean img {
+    display: block;
+    width: 108%;
+    max-width: none;
+    height: auto;
+    margin-left: -4%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 77%, transparent 98%);
+  }
+  .timeline-v2-ocean .wave--far {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    opacity: .5;
+  }
+  .timeline-v2-ocean .wave--near {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-ocean { display: none; }
   /* Foreground layer — GSAP moves this up; sky stays behind */
   .hero-fg {
     position: absolute;
     inset: 0;
     z-index: 2;
+    overflow: hidden;
     will-change: transform, opacity;
   }
   .hero-inner {
@@ -192,12 +230,9 @@
     margin: 12vh auto 0;
     opacity: 0;
     transform: translateY(120px);
-    transition: opacity 1.32s cubic-bezier(.2,.7,.2,1), transform 1.32s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.55s cubic-bezier(.2,.7,.2,1), transform 1.55s cubic-bezier(.2,.7,.2,1);
   }
-  .hero.is-in .hero-copy {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .hero.is-in .hero-copy { opacity: 1; transform: translateY(0); }
 
   .hero-role {
     font-size: 15px;
@@ -224,9 +259,10 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    text-align: center;
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 1.08s .5s cubic-bezier(.2,.7,.2,1), transform 1.08s .5s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.28s .62s cubic-bezier(.2,.7,.2,1), transform 1.28s .62s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .hero-stats { opacity: 1; transform: translateY(0); }
   .hero-stats p {
@@ -253,7 +289,7 @@
     pointer-events: none;
     opacity: 0;
     transform: translate(-50%, -40px);
-    transition: opacity 1.4s .1s cubic-bezier(.2,.7,.2,1), transform 1.4s .1s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.6s .14s cubic-bezier(.2,.7,.2,1), transform 1.6s .14s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .cloud-top {
     opacity: .9;
@@ -296,7 +332,9 @@
     pointer-events: none;
     opacity: 0;
     transform: translateX(-50%) translateY(24px);
-    transition: opacity 1.5s .25s cubic-bezier(.2,.7,.2,1), transform 1.5s .25s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.7s .32s cubic-bezier(.2,.7,.2,1), transform 1.7s .32s cubic-bezier(.2,.7,.2,1);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 88%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 88%);
   }
   .hero.is-in .cloud-back {
     opacity: .75;
@@ -351,7 +389,7 @@
     width: 44%;
     z-index: 3;
     transform: translateX(-180px);
-    transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.6s cubic-bezier(.2,.7,.2,1), transform 1.6s cubic-bezier(.2,.7,.2,1);
   }
   .cloud-right {
     right: 2%;
@@ -359,7 +397,7 @@
     width: 40%;
     z-index: 2;
     transform: translateX(180px);
-    transition: opacity 1.4s .2s cubic-bezier(.2,.7,.2,1), transform 1.4s .2s cubic-bezier(.2,.7,.2,1);
+    transition: opacity 1.6s .28s cubic-bezier(.2,.7,.2,1), transform 1.6s .28s cubic-bezier(.2,.7,.2,1);
   }
   .hero.is-in .cloud-left,
   .hero.is-in .cloud-right {
@@ -436,36 +474,19 @@
     opacity: 0;
     border-radius: 40%;
     filter: blur(1.2px) saturate(0.9);
-    transform: scale(.94);
-    transition:
-      opacity 1.65s cubic-bezier(.45, 0, .15, 1),
-      transform 1.85s cubic-bezier(.33, .1, .2, 1),
-      filter 1.65s cubic-bezier(.45, 0, .15, 1);
+    transform: scale(.8);
+    transition: opacity 1.65s cubic-bezier(.45, 0, .15, 1), transform 1.85s cubic-bezier(.33, .1, .2, 1), filter 1.65s cubic-bezier(.45, 0, .15, 1);
     -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
     mask-image: radial-gradient(ellipse 70% 60% at 50% 55%, #000 35%, transparent 72%);
   }
-  /* Compass / team-leader gif — slight left bias inside the left cloud */
-  .cloud-left .cloud-media img.gif {
-    transform: translateX(-6%) scale(.94);
-    object-position: 42% center;
-  }
-
-  /*
-   * Auto demo peek — long ease-in (no snappy is-hot jump).
-   * Caption stays whisper-size so only media eases.
-   */
+  .cloud-left .cloud-media img.gif { transform: translateX(-6%) scale(.8); object-position: 42% center; }
   .cloud.is-peeking .cloud-media img.gif {
     opacity: 1;
     filter: blur(0.2px) saturate(0.9);
-    transform: scale(1);
-    transition:
-      opacity 2.15s cubic-bezier(.35, 0, .15, 1),
-      transform 2.35s cubic-bezier(.3, .05, .15, 1),
-      filter 2.15s cubic-bezier(.35, 0, .15, 1);
+    transform: scale(.85);
+    transition: opacity 2.15s cubic-bezier(.35, 0, .15, 1), transform 2.35s cubic-bezier(.3, .05, .15, 1), filter 2.15s cubic-bezier(.35, 0, .15, 1);
   }
-  .cloud-left.is-peeking .cloud-media img.gif {
-    transform: translateX(-6%) scale(1);
-  }
+  .cloud-left.is-peeking .cloud-media img.gif { transform: translateX(-6%) scale(.85); }
   .cloud.is-peeking .cloud-media img.cloud-face {
     opacity: .48;
     transition: opacity 2.15s cubic-bezier(.35, 0, .15, 1);
@@ -476,17 +497,12 @@
   .cloud.is-revealed .cloud-media img.gif {
     opacity: 1;
     filter: blur(0.2px) saturate(0.9);
-    transform: scale(1);
-    transition:
-      opacity .85s cubic-bezier(.4, 0, .2, 1),
-      transform .9s cubic-bezier(.33, .1, .2, 1),
-      filter .85s cubic-bezier(.4, 0, .2, 1);
+    transform: scale(.85);
+    transition: opacity .85s cubic-bezier(.4, 0, .2, 1), transform .9s cubic-bezier(.33, .1, .2, 1), filter .85s cubic-bezier(.4, 0, .2, 1);
   }
   .cloud-left.is-hot .cloud-media img.gif,
   .cloud-left:focus-within .cloud-media img.gif,
-  .cloud-left.is-revealed .cloud-media img.gif {
-    transform: translateX(-6%) scale(1);
-  }
+  .cloud-left.is-revealed .cloud-media img.gif { transform: translateX(-6%) scale(.85); }
   .cloud.is-hot .cloud-media img.cloud-face,
   .cloud:focus-within .cloud-media img.cloud-face,
   .cloud.is-revealed .cloud-media img.cloud-face { opacity: .28; }
@@ -691,10 +707,13 @@
     /* Clip to the mint dome; expanded allows skill-card bleed */
     overflow: hidden;
   }
-  /* FOUC / pre-GSAP: hold the arch below the fold so it never sits in the hero */
+  /* FOUC / pre-GSAP: hold the arch fully below the fold so it never sits in the hero */
   .intro-pin:not(.is-expanded) .about-arch {
-    transform: scale(0.24) translateY(40%);
+    transform: scale(0.18) translateY(78%);
     transform-origin: 50% 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
   .intro-pin.is-expanded .about-arch {
     overflow: visible;
@@ -976,7 +995,7 @@
     flex-direction: column;
     gap: 16px;
     width: max-content;
-    max-width: min(100%, 280px);
+    max-width: min(100%, 440px);
     min-height: 0;
   }
   .skill-proof {
@@ -1942,6 +1961,9 @@
     line-height: 1.6;
     text-wrap: pretty;
   }
+  .instinct .desc p + p {
+    margin-top: 12px;
+  }
   .instinct .desc strong {
     color: var(--ink);
     font-weight: 600;
@@ -2091,21 +2113,19 @@
     max-width: 1080px;
     margin: 0 auto;
     /* Compact cluster — two card columns flanking the portrait */
-    min-height: 730px;
-    height: clamp(730px, 72vw, 800px);
+    min-height: 880px;
+    height: clamp(880px, 72vw, 910px);
   }
   /* Half-body cutout — no frame, no mask, just Alex */
   .endorse-cutout {
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: calc(50% - 56px);
+    top: calc(50% - 108px);
     transform: translate(-50%, -50%);
     width: min(300px, 30vw);
     z-index: 4;
     pointer-events: none;
   }
-  /* keep the -50%,-50% centering through the reveal animation
-     (the generic .reveal.in { transform:none } would un-center it) */
   .endorse-cutout.reveal { transform: translate(-50%, calc(-50% + 30px)); }
   .endorse-cutout.reveal.in { transform: translate(-50%, -50%); }
   .endorse-cutout img {
@@ -2305,6 +2325,25 @@
     background: #F1F2F6;
     color: var(--ink-soft);
   }
+  /* Long quotes stay in their collage slot */
+  .endorse-card--clip .endorse-body {
+    max-height: 92px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 6px;
+    margin-right: -2px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(30,42,68,.22) transparent;
+  }
+  .endorse-card--clip .endorse-body::-webkit-scrollbar { width: 5px; }
+  .endorse-card--clip .endorse-body::-webkit-scrollbar-thumb {
+    background: rgba(30,42,68,.22);
+    border-radius: 999px;
+  }
+  /* Jonny — 10% taller so more of the quote shows before the scroll */
+  .endorse-card--2.endorse-card--clip .endorse-body {
+    max-height: 116px;
+  }
   /* Polaroid-style team photos */
   .endorse-card--photo {
     margin: 0;
@@ -2326,10 +2365,10 @@
   }
   /*
     Two flanking columns around the centered portrait:
-    left — Slack note, LinkedIn reaction card, Jonny;
-    right — Ryan hero, Slack note.
+    left — Nicole, LinkedIn reaction card, Jonny;
+    right — Ryan hero, Kimberly, Becky.
   */
-  /* top-left — Slack (Lorem Wong) */
+  /* top-left — Nicole Fry */
   .endorse-card--1 {
     top: 0;
     left: 0;
@@ -2345,9 +2384,9 @@
     z-index: 5;
     --card-accent: #0A66C2;
   }
-  /* bottom-left — Jonny */
+  /* bottom-left — Jonny, tucked under the LinkedIn post */
   .endorse-card--2 {
-    bottom: 0;
+    top: 600px;
     left: 0;
     width: min(330px, 31vw);
     z-index: 5;
@@ -2361,23 +2400,33 @@
     z-index: 5;
     --card-accent: #E07A6D;
   }
-  /* bottom-right — Slack (M. Placeholder) */
+  /* lower-right — Becky Dubrow, under Kimberly */
   .endorse-card--3 {
-    bottom: 4%;
+    top: 656px;
     right: 0;
-    width: min(350px, 33vw);
-    z-index: 5;
+    width: min(520px, 50vw);
+    z-index: 6;
     --card-accent: #E8A54B;
   }
+  /* mid-right — Kimberly Voisin, above Becky */
+  .endorse-card--5 {
+    top: 442px;
+    right: 0;
+    width: min(350px, 33vw);
+    z-index: 6;
+    --card-accent: #6B9B84;
+  }
   .endorse-card--1.reveal.in { transform: rotate(-3.2deg); }
-  .endorse-card--2.reveal.in { transform: rotate(2.2deg); }
+  .endorse-card--2.reveal.in { transform: rotate(-1.6deg); }
   .endorse-card--3.reveal.in { transform: rotate(1.4deg); }
   .endorse-card--4.reveal.in { transform: rotate(-1deg); }
+  .endorse-card--5.reveal.in { transform: rotate(-1.8deg); }
   .endorse-card--7.reveal.in { transform: rotate(1.6deg); }
   .endorse-card--1.reveal.in:hover,
   .endorse-card--2.reveal.in:hover,
   .endorse-card--3.reveal.in:hover,
   .endorse-card--4.reveal.in:hover,
+  .endorse-card--5.reveal.in:hover,
   .endorse-card--7.reveal.in:hover {
     transform: rotate(0deg) translateY(-4px) scale(1.02);
   }
@@ -2946,7 +2995,8 @@
       width: min(100%, 400px) !important;
       z-index: 2;
     }
-    .endorse-card--hero .endorse-body {
+    .endorse-card--hero .endorse-body,
+    .endorse-card--clip .endorse-body {
       max-height: none;
       overflow: visible;
       padding-right: 0;
@@ -3033,12 +3083,18 @@
 <!-- About: one section — part 1 arch (pinned with hero), part 2 hard skills -->
 <section id="about" data-ph-section="about" aria-label="About">
 <div class="intro-pin">
-    <header class="hero" id="hero">
+    <header class="hero" id="hero" data-hero>
+      <div class="timeline-v2-bg" aria-hidden="true">
+        <div class="timeline-v2-ocean">
+          <img class="wave wave--far" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+          <img class="wave wave--near" src="assets/images/direction/hero-waves.png" alt="" width="1700" height="566">
+        </div>
+      </div>
       <div class="hero-fg" data-hero-fg>
         <div class="hero-inner">
           <div class="hero-copy">
             <p class="hero-role">Senior UX Researcher/Manager</p>
-            <h1 id="slogan">From <em>insights</em> to influence</h1>
+            <h1>From <em>insights</em> to influence</h1>
           </div>
           <div class="hero-stats">
             <p><strong><span>9</span>+</strong> Years</p>
@@ -3061,7 +3117,6 @@
               <img src="assets/images/home/cloud-soft-4.png" alt="">
             </div>
           </div>
-
           <button type="button" class="cloud cloud-left" aria-label="Reveal: a compass when things get fuzzy">
             <div class="cloud-bob">
               <div class="cloud-frame">
@@ -3069,11 +3124,10 @@
                   <img class="gif" src="assets/images/home/hero-team-leader.gif" alt="" aria-hidden="true">
                   <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-1-wide.png" alt="" aria-hidden="true" width="800" height="379">
                 </div>
-                <span class="cloud-caption">a compass when things get fuzzy</span>
+                <span class="cloud-caption">a compass when things get&nbsp;fuzzy</span>
               </div>
             </div>
           </button>
-
           <button type="button" class="cloud cloud-right" aria-label="Reveal: a seeker of truths">
             <div class="cloud-bob">
               <div class="cloud-frame">
@@ -3081,7 +3135,7 @@
                   <img class="gif" src="assets/images/home/hero-researcher.gif" alt="" aria-hidden="true">
                   <img class="cloud-face" src="assets/images/direction/hero-cloud-soft-2-wide.png" alt="" aria-hidden="true" width="761" height="303">
                 </div>
-                <span class="cloud-caption">a seeker of truths</span>
+                <span class="cloud-caption">a seeker of&nbsp;truths</span>
               </div>
             </div>
           </button>
@@ -3123,7 +3177,7 @@
           </div>
 
           <div class="about-pair">
-            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what should we build, and&nbsp;why?</span></p>
+            <p class="pair-copy">Trained in experimental science, I&nbsp;bring a lab scientist's rigor to a very human&nbsp;question: <span class="hook">what experience should we build, and&nbsp;why?</span></p>
             <ul class="about-logo-strip about-logo-strip--3" aria-label="Universities">
               <li data-brand="oregon-state">
                 <img src="assets/images/shared/brand/oregon-state.png" alt="Oregon State University" width="160" height="50" decoding="async">
@@ -3278,7 +3332,7 @@
         <button type="button" class="acc-btn" aria-expanded="false">Research Systems &amp; Influence</button>
         <div class="acc-panel">
           <div class="acc-panel-inner">
-            <p class="lede">I&nbsp;connect fragmented customer insights into an omnichannel user experience strategy that aligns XFN teams around a shared experience and product&nbsp;vision.</p>
+            <p class="lede">I&nbsp;turn fragmented customer insights into an omnichannel UX strategy that aligns XFN teams around one shared experience and product&nbsp;vision.</p>
             <div class="skill-proofs">
               <div class="skill-proof" role="button" tabindex="0" data-proof="xfn">
                 <strong>cross-functional product collaboration</strong>
@@ -3653,14 +3707,22 @@
         <li class="instinct instinct--system reveal">
           <span class="instinct-mark" aria-hidden="true">◈</span>
           <span class="instinct-num">01</span>
-          <h3>The feature is rarely the whole&nbsp;problem.</h3>
-          <p class="desc">In a complex, data-heavy system, pain points rarely exist in a single dimension; solving them usually requires a set of features working in synergy. Lately, my research has focused on system-level investigation: reconciling different products, users, workflows, and mental models into a coherent experience rather than optimizing isolated surfaces. Once those relationships have a shared language, the architecture starts to reveal itself: what should be unified, what should remain distinct, where structural debt has accumulated, and what changes need to move as a system. <strong>That UX architecture blueprint is where I&nbsp;believe research creates its highest&nbsp;leverage.</strong></p>
+          <h3>I&nbsp;start with the system, not&nbsp;the&nbsp;feature.</h3>
+          <div class="desc">
+            <p>In a complex, data-heavy system, pain points rarely exist in a single dimension; solving them usually requires a set of features working in&nbsp;synergy.</p>
+            <p>Lately, my research has focused on system-level investigation: reconciling different products, users, workflows, and mental models into a coherent experience rather than optimizing isolated&nbsp;surfaces.</p>
+            <p>Once those relationships have a shared language, the architecture starts to reveal itself: what should be unified, what should remain distinct, where structural debt has accumulated, and what changes need to move as a&nbsp;system.</p>
+            <p><strong>That UX architecture blueprint is where I&nbsp;believe research creates its highest&nbsp;leverage.</strong></p>
+          </div>
         </li>
         <li class="instinct instinct--why reveal">
           <span class="instinct-mark" aria-hidden="true">◎</span>
           <span class="instinct-num">02</span>
-          <h3>What happened isn’t enough. I&nbsp;want to know&nbsp;why.</h3>
-          <p class="desc">A result becomes useful when I&nbsp;can explain what produced it. I&nbsp;keep tracing the evidence past the surface finding to the mechanism underneath, because the “why” is what transfers to the next decision. I&nbsp;test alternative explanations and account for competing variables until the causal story holds up and survives&nbsp;scrutiny.</p>
+          <h3>I&nbsp;don’t trust the first plausible&nbsp;explanation.</h3>
+          <div class="desc">
+            <p>A finding is only as strong as the explanation behind&nbsp;it. I&nbsp;treat the first “why” as a hypothesis, then pressure-test it against competing explanations, contradictory evidence, and variables that could change the&nbsp;interpretation. Years of neuroscience lab research trained me to be suspicious of convenient&nbsp;stories.</p>
+            <p>In a complex enterprise system, a drop-off in one workflow can point to permissions, data state, terminology, navigation, or the sequence&nbsp;itself. I&nbsp;don’t stop at “users are confused.” I&nbsp;trace where behavior diverges, compare the surrounding conditions, and test the competing explanations until the pattern holds across both telemetry and qualitative&nbsp;evidence.</p>
+          </div>
         </li>
         <li class="instinct instinct--compass reveal">
           <span class="instinct-mark" aria-hidden="true">✦</span>
@@ -3715,27 +3777,51 @@
         </div>
       </div>
 
-      <!-- Slack × 2 (placeholders) -->
-      <article class="endorse-card endorse-card--slack endorse-card--1 reveal" style="--card-accent:#7C6AEF">
-        <div class="slack-head">
-          <div class="ava">LW</div>
-          <div class="name-row"><b>Lorem Wong</b><time datetime="2025-11">2 months ago</time></div>
+      <article class="endorse-card endorse-card--li endorse-card--clip endorse-card--1 reveal" style="--card-accent:#7C6AEF" aria-label="Recommendation from Nicole Fry">
+        <div class="who">
+          <div class="ava"><img src="assets/images/endorsements/nicole.png" alt="" width="72" height="72"></div>
+          <div class="meta">
+            <div class="name-row">
+              <b>Nicole Fry</b>
+              <svg class="li-badge" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+            </div>
+            <span>Senior Content Strategist</span>
+          </div>
         </div>
-        <p>Lorem ipsum dolor sit amet — Alex always finds the signal in the noise and makes the next decision feel&nbsp;obvious.</p>
-        <div class="reacts" aria-hidden="true"><span>👍 8</span><span>❤️ 5</span><span>✨ 3</span></div>
+        <div class="endorse-body">
+          <p>Thank you Alexandra for your immeasurable contributions leading the UX research&nbsp;team. Thanks to your hard work producing dependable research-backed data, the copy team is able to address our users in a way that supports them and drives the usability of our features, especially Security&nbsp;Advisor! You always knew the right questions to ask when leading a research session to get to the heart of the&nbsp;matter and solve problems users might&nbsp;face. I'm incredibly grateful to have been able to build this relationship and watch how you transformed and elevated the entire research&nbsp;team.</p>
+        </div>
       </article>
 
-      <article class="endorse-card endorse-card--slack endorse-card--3 reveal" style="--card-accent:#E8A54B">
-        <div class="slack-head">
-          <div class="ava">MP</div>
-          <div class="name-row"><b>M. Placeholder</b><time datetime="2025-08">6 months ago</time></div>
+      <article class="endorse-card endorse-card--li endorse-card--clip endorse-card--5 reveal" style="--card-accent:#6B9B84" aria-label="Recommendation from Kimberly Voisin">
+        <div class="who">
+          <div class="ava"><img src="assets/images/endorsements/kv.jpg" alt="" width="72" height="72"></div>
+          <div class="meta">
+            <div class="name-row">
+              <b>Kimberly Voisin</b>
+              <svg class="li-badge" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 1 1 6.5 4.7a1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2h.1c.4-.8 1.4-1.6 2.9-1.6 3.1 0 3.6 2 3.6 4.7V19z"/></svg>
+            </div>
+            <span>Sr. UX Researcher</span>
+          </div>
         </div>
-        <p>Ut enim ad minim veniam — sharp questions, kinder rooms, better product calls. Grateful we got to partner with&nbsp;her. She de-risks the fuzzy middle so the team can ship with&nbsp;confidence.</p>
-        <div class="reacts" aria-hidden="true"><span>🙌 12</span><span>💡 4</span><span>❤️ 7</span></div>
+        <div class="endorse-body">
+          <p>Alex and I worked together as part of a rapid research team supporting consumer ads and shopping at&nbsp;Google. Alex is a highly skilled and experienced&nbsp;researcher. She has a deep understanding of the UX process and an extensive toolkit of methods that she uses to effectively execute&nbsp;studies. Alex is always willing to help others and looking for ways to improve the team’s&nbsp;work. She is also an excellent communicator and is able to clearly and concisely present research findings to both technical and non-technical&nbsp;audiences.</p>
+        </div>
+      </article>
+
+      <article class="endorse-card endorse-card--post-shot endorse-card--3 reveal" style="--card-accent:#E8A54B" aria-label="Slack shout-out from Becky Dubrow">
+        <img
+          src="assets/images/endorsements/becky%20slack%20endoresement.png"
+          alt="Slack shout-out from Becky Dubrow. Huge shoutout to @azhao for the research behind this launch. Alex joined with two months left, owned the research end to end, and the launch is better because of her."
+          width="1898"
+          height="802"
+          decoding="async"
+          loading="lazy"
+        >
       </article>
 
       <!-- LinkedIn recommendations × 3 (real quotes) -->
-      <article class="endorse-card endorse-card--li endorse-card--2 reveal" style="--card-accent:#5B7FD9">
+      <article class="endorse-card endorse-card--li endorse-card--clip endorse-card--2 reveal" style="--card-accent:#5B7FD9" aria-label="Recommendation from Jonny Rivera">
         <div class="who">
           <div class="ava"><img src="assets/images/endorsements/jr.jpg" alt="" width="72" height="72"></div>
           <div class="meta">
@@ -3746,7 +3832,9 @@
             <span>Sr. Product Director</span>
           </div>
         </div>
-        <q>Her research always provided actionable insights that we as Product could leverage. She was always able to cut through the noise and find the information that was the most relevant, and distill that into something&nbsp;useful.</q>
+        <div class="endorse-body">
+          <p>Alexandra is the best! I loved working with her during our time together at&nbsp;Malwarebytes. Her research always provided actionable insights that we as Product could leverage to help make our user's lives better on a regular&nbsp;basis. She was always able to cut through the noise and find the information that was the most relevant, and distill that into something&nbsp;useful. She is truly a great asset to any&nbsp;team!</p>
+        </div>
       </article>
 
       <article class="endorse-card endorse-card--li endorse-card--hero endorse-card--4 reveal" style="--card-accent:#E07A6D" aria-label="Recommendation from Ryan Krepps">
@@ -4030,76 +4118,78 @@
     updateNav();
   }
 
-  // Hero entrance (cloud slide-in + title rise)
-  const hero = document.getElementById("hero");
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => hero.classList.add("is-in"));
-  });
-
-  // Cloud GIF reveal — soft dual auto peek, then pointer-driven
-  const canHover = window.matchMedia("(hover: hover)").matches;
-  const reduceMotionClouds = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const clouds = document.querySelectorAll(".cloud");
-  if (canHover) {
-    let leaveTimer;
-    let peekTimers = [];
-    let peekDone = false;
-
-    const setHot = (side) => {
-      clouds.forEach((c) => {
-        const on = side && c.classList.contains(side);
-        c.classList.toggle("is-hot", on);
-        if (on) c.classList.remove("is-peeking");
+  function wireHero(hero) {
+    if (!hero) return;
+    const revealHero = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => hero.classList.add("is-in"), 160);
+        });
       });
     };
-
-    const cancelPeek = () => {
-      peekDone = true;
-      peekTimers.forEach(clearTimeout);
-      peekTimers = [];
-      document.querySelectorAll(".cloud.is-peeking").forEach((c) => c.classList.remove("is-peeking"));
-    };
-
-    clouds.forEach((cloud) => {
-      cloud.addEventListener("pointerenter", () => {
-        clearTimeout(leaveTimer);
-        cancelPeek();
-        setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
-      });
-      cloud.addEventListener("pointerleave", () => {
-        leaveTimer = setTimeout(() => setHot(null), 160);
-      });
-    });
-
-    // Soft demos: is-peeking (slow ease). Left @ 1.0s, right @ 1.8s.
-    if (!reduceMotionClouds) {
-      const holdMs = 3400; // ease in + hold + room for ease out after class removes
-      const schedulePeek = (selector, delayMs) => {
-        const startId = setTimeout(() => {
-          if (peekDone) return;
-          const el = document.querySelector(selector);
-          if (!el) return;
-          el.classList.add("is-peeking");
-          const endId = setTimeout(() => {
-            if (peekDone) return;
-            el.classList.remove("is-peeking");
-          }, holdMs);
-          peekTimers.push(endId);
-        }, delayMs);
-        peekTimers.push(startId);
-      };
-      schedulePeek(".cloud-left", 1000);
-      schedulePeek(".cloud-right", 1800);
+    if (document.visibilityState === "visible") {
+      revealHero();
+    } else {
+      document.addEventListener("visibilitychange", revealHero, { once: true });
     }
-  } else {
-    clouds.forEach((cloud) => {
-      cloud.addEventListener("click", () => {
-        const open = cloud.classList.toggle("is-revealed");
-        cloud.setAttribute("aria-pressed", open ? "true" : "false");
+    const clouds = hero.querySelectorAll(".cloud");
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    const reduceMotionClouds = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (canHover) {
+      let leaveTimer;
+      let peekTimers = [];
+      let peekDone = false;
+      const setHot = (side) => {
+        clouds.forEach((c) => {
+          const on = side && c.classList.contains(side);
+          c.classList.toggle("is-hot", on);
+          if (on) c.classList.remove("is-peeking");
+        });
+      };
+      const cancelPeek = () => {
+        peekDone = true;
+        peekTimers.forEach(clearTimeout);
+        peekTimers = [];
+        hero.querySelectorAll(".cloud.is-peeking").forEach((c) => c.classList.remove("is-peeking"));
+      };
+      clouds.forEach((cloud) => {
+        cloud.addEventListener("pointerenter", () => {
+          clearTimeout(leaveTimer);
+          cancelPeek();
+          setHot(cloud.classList.contains("cloud-left") ? "cloud-left" : "cloud-right");
+        });
+        cloud.addEventListener("pointerleave", () => {
+          leaveTimer = setTimeout(() => setHot(null), 160);
+        });
       });
-      cloud.setAttribute("aria-pressed", "false");
-    });
+      if (!reduceMotionClouds) {
+        const holdMs = 3400;
+        const schedulePeek = (selector, delayMs) => {
+          const startId = setTimeout(() => {
+            if (peekDone) return;
+            const el = hero.querySelector(selector);
+            if (!el) return;
+            el.classList.add("is-peeking");
+            peekTimers.push(setTimeout(() => {
+              if (!peekDone) el.classList.remove("is-peeking");
+            }, holdMs));
+          }, delayMs);
+          peekTimers.push(startId);
+        };
+        schedulePeek(".cloud-left", 1000);
+        schedulePeek(".cloud-right", 1800);
+      }
+    } else {
+      clouds.forEach((cloud) => {
+        cloud.addEventListener("click", () => {
+          const open = cloud.classList.toggle("is-revealed");
+          cloud.setAttribute("aria-pressed", open ? "true" : "false");
+        });
+        cloud.setAttribute("aria-pressed", "false");
+      });
+    }
   }
+  document.querySelectorAll("[data-hero]").forEach(wireHero);
 
   // Scroll reveal
   const io = new IntersectionObserver(entries => {
@@ -4120,21 +4210,36 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (introPin && heroFg && aboutArch && !reduceMotion) {
-    // Hold the arch below the fold. Hero copy fades up first; ocean stays; then the arch rises.
-    gsap.set(aboutArch, {
-      scale: 0.24,
-      yPercent: 40,
-      transformOrigin: "50% 100%",
-    });
-    aboutArch.classList.remove("is-content-visible");
-
+    // Hold the arch fully below the fold. Hero copy fades up first; ocean stays; then the arch rises.
     const setArchContent = (show) => {
       aboutArch.classList.toggle("is-content-visible", show);
     };
 
+    const parkArch = () => {
+      aboutArch.style.removeProperty("transform");
+      gsap.set(aboutArch, {
+        scale: 0.18,
+        yPercent: 78,
+        x: 0,
+        y: 0,
+        autoAlpha: 0,
+        transformOrigin: "50% 100%",
+      });
+      setArchContent(false);
+    };
+
+    parkArch();
+
     const lockArch = () => {
-      gsap.set(aboutArch, { scale: 1, x: 0, y: 0, yPercent: 0, clearProps: "transform" });
-      aboutArch.style.transform = "none";
+      // Keep GSAP in control of transform so scroll-back can reverse cleanly.
+      gsap.set(aboutArch, {
+        scale: 1,
+        x: 0,
+        y: 0,
+        yPercent: 0,
+        autoAlpha: 1,
+        transformOrigin: "50% 100%",
+      });
       setArchContent(true);
     };
 
@@ -4155,6 +4260,18 @@
       }
     };
 
+    const paintHeroFg = (progress, direction) => {
+      // Scroll down: clear furniture quickly before the arch rises.
+      // Scroll up: bring furniture back sooner while the arch is still shrinking.
+      const fadeEnd = direction < 0 ? 0.48 : 0.18;
+      const t = gsap.utils.clamp(0, 1, progress / fadeEnd);
+      gsap.set(heroFg, {
+        opacity: 1 - t,
+        y: -window.innerHeight * 0.45 * t,
+      });
+      heroFg.style.pointerEvents = t > 0.45 ? "none" : "auto";
+    };
+
     const introTl = gsap.timeline({
       scrollTrigger: {
         trigger: introPin,
@@ -4169,44 +4286,63 @@
         preventOverlaps: true,
         onUpdate: (self) => {
           const p = self.progress;
-          heroFg.style.pointerEvents = p > 0.08 ? "none" : "auto";
-          aboutArch.style.pointerEvents = p > 0.45 ? "auto" : "none";
-          setArchContent(p > 0.38);
+          paintHeroFg(p, self.direction);
+          aboutArch.style.pointerEvents = p > 0.5 ? "auto" : "none";
+          setArchContent(p > 0.42);
 
           // Expand before unpin so pin-spacer / #work never see a collapsed 100vh shell.
           if (p >= 0.7) expandIntro();
+
+          // At the hero, always hard-park. onLeaveBack may not fire because start is ~0.
+          if (p <= 0.02) {
+            parkArch();
+            paintHeroFg(0, 1);
+            if (introPin.classList.contains("is-expanded")) {
+              introPin.classList.remove("is-expanded");
+            }
+          }
         },
         onLeave: () => {
           expandIntro({ refresh: true, lock: true });
         },
-        onEnterBack: () => {
-          expandIntro();
+        onEnterBack: (self) => {
           aboutArch.style.willChange = "transform";
-          aboutArch.style.removeProperty("transform");
-          setArchContent(true);
+          // Never leave the arch with an empty transform — that reveals a full-size mint box.
+          if (self.progress <= 0.02) {
+            introPin.classList.remove("is-expanded");
+            parkArch();
+            paintHeroFg(0, -1);
+            return;
+          }
+          expandIntro();
+          introTl.progress(self.progress);
+          paintHeroFg(self.progress, -1);
+          setArchContent(self.progress > 0.42);
         },
         onLeaveBack: () => {
           introPin.classList.remove("is-expanded");
           aboutArch.style.willChange = "transform";
-          gsap.set(aboutArch, { scale: 0.24, yPercent: 40, transformOrigin: "50% 100%" });
-          setArchContent(false);
+          parkArch();
+          paintHeroFg(0, -1);
         },
       },
       defaults: { ease: "none" },
     });
 
-    introTl.to(heroFg, {
-      y: () => -window.innerHeight * 0.45,
-      opacity: 0,
-      duration: 0.18,
-    }, 0);
+    paintHeroFg(0, 1);
 
-    introTl.to(aboutArch, {
+    introTl.fromTo(aboutArch, {
+      scale: 0.18,
+      yPercent: 78,
+      autoAlpha: 0,
+    }, {
       scale: 1,
       yPercent: 0,
+      autoAlpha: 1,
       duration: 0.55,
       ease: "power1.out",
-    }, 0.22);
+      immediateRender: false,
+    }, 0.28);
 
     const refreshIntro = () => ScrollTrigger.refresh();
     window.addEventListener("load", refreshIntro);

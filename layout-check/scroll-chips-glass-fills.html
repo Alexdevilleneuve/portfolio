@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chip glass — A2 vs B2 on full card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --sans: "Inter", sans-serif;
+    --mono: "IBM Plex Mono", monospace;
+    --accent: #00738C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--sans);
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #BFD9F6 40%, #E8F0FA 85%, #F3EAE1 100%);
+  }
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 36px 24px 80px;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+  }
+  .lede {
+    margin: 0 0 28px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.45;
+    max-width: 54ch;
+  }
+  section { margin-bottom: 40px; }
+  .tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(28,36,56,.08);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  p.note {
+    margin: 0 0 16px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  /* Full card shell — mirrors 2.0 card 04 */
+  .card {
+    position: relative;
+    width: 100%;
+    min-height: clamp(420px, 52vh, 560px);
+    padding:
+      clamp(28px, 4.2vw, 40px)
+      clamp(32px, 5vw, 52px)
+      clamp(36px, 5vw, 48px);
+    border: 1px solid rgba(255, 255, 255, .68);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow:
+      0 24px 48px rgba(28, 36, 56, .1),
+      inset 0 1px 0 rgba(255, 255, 255, .55);
+  }
+  .card-glass {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: inherit;
+    backdrop-filter: blur(16px) saturate(1.22);
+    -webkit-backdrop-filter: blur(16px) saturate(1.22);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 252, 248, .28) 0%,
+        rgba(236, 244, 252, .22) 42%,
+        rgba(214, 232, 248, .12) 78%,
+        rgba(214, 232, 248, .04) 100%
+      );
+  }
+  .card-land {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 36%;
+    opacity: .46;
+    filter: saturate(.88) contrast(.96);
+  }
+  .card-inner {
+    position: relative;
+    z-index: 1;
+    width: 85%;
+    max-width: 85%;
+    margin-left: clamp(12px, 2vw, 28px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 3.2vw, 40px);
+  }
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+  }
+  .tabs-label {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .02em;
+    color: var(--ink-soft);
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 6px;
+    border-radius: 999px;
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  }
+  .chip {
+    appearance: none;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 9px 15px;
+    font: 500 14.5px/1.15 var(--sans);
+    letter-spacing: -.01em;
+    cursor: pointer;
+    color: rgba(28, 36, 56, .58);
+    background: transparent;
+    transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .chip:hover {
+    color: rgba(28, 36, 56, .78);
+    background: rgba(255, 255, 255, .28);
+    border-color: rgba(255, 255, 255, .4);
+  }
+
+  /* A2 — clear tray, sky active chip */
+  .a2 .tabs {
+    background: linear-gradient(165deg, rgba(255,255,255,.42), rgba(230,240,250,.18));
+    border: 1px solid rgba(255,255,255,.55);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 8px 24px rgba(36,68,104,.06);
+  }
+  .a2 .chip.is-active {
+    color: #2a5f7a;
+    background: rgba(120, 168, 210, .28);
+    border-color: rgba(120, 168, 210, .35);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .55),
+      0 4px 12px rgba(120, 168, 210, .12);
+    backdrop-filter: blur(12px) saturate(1.3);
+    -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  }
+
+  /* B2 — sky tray, frosted active chip */
+  .b2 .tabs {
+    background: rgba(120, 168, 210, .24);
+    border: 1px solid rgba(120, 168, 210, .28);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .45),
+      0 8px 24px rgba(120, 168, 210, .1);
+  }
+  .b2 .chip.is-active {
+    color: var(--ink);
+    background: linear-gradient(165deg, rgba(255,255,255,.72), rgba(255,252,248,.45));
+    border-color: rgba(255,255,255,.78);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.9),
+      0 6px 16px rgba(36,68,104,.08);
+  }
+
+  .practice {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(20px, 2.6vw, 28px);
+    max-width: min(720px, 100%);
+  }
+  .practice.is-active { display: flex; }
+  .statement {
+    margin: 0;
+    font-weight: 500;
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: 1.38;
+    letter-spacing: -.03em;
+    color: rgba(10, 69, 84, .58);
+    text-wrap: pretty;
+    max-width: 38em;
+  }
+  .statement strong {
+    font-weight: 600;
+    color: rgba(10, 69, 84, .82);
+  }
+  .proofs {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .proofs li {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -.015em;
+    color: rgba(10, 69, 84, .62);
+  }
+  .proofs li::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 10px;
+    margin-bottom: 1px;
+    border-radius: 50%;
+    background: rgba(10, 69, 84, .45);
+    box-shadow: 0 0 0 3px rgba(10, 69, 84, .08);
+  }
+
+  @media (max-width: 760px) {
+    .card-inner { width: 100%; max-width: 100%; margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <h1>A2 vs B2 — full card</h1>
+    <p class="lede">Same card 04 shell as 2.0. Click chips to switch panels. Pick A2 or B2 when ready.</p>
+
+    <section>
+      <span class="tag">A2</span>
+      <h2>Sky on selected chip</h2>
+      <p class="note">Clear glass tray · active chip sky @ 28%</p>
+      <article class="card a2" data-card>
+        <div class="card-glass" aria-hidden="true">
+          <img class="card-land" src="../assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
+        </div>
+        <div class="card-inner">
+          <header class="chips-row">
+            <p class="tabs-label">.practice areas</p>
+            <div class="tabs" role="tablist" data-chips>
+              <button type="button" class="chip is-active" data-skill="ai">ai + trust</button>
+              <button type="button" class="chip" data-skill="conv">product systems &amp; convergence</button>
+              <button type="button" class="chip" data-skill="zero">0→1 builds</button>
+              <button type="button" class="chip" data-skill="amp">research influence</button>
+            </div>
+          </header>
+          <div class="practice is-active" data-skill="ai">
+            <p class="statement">I&nbsp;shape <strong>trustworthy AI experiences</strong> by uncovering how people <strong>form and calibrate trust</strong>, understand system behavior, and decide when to take&nbsp;control.</p>
+            <ul class="proofs">
+              <li>trust calibration &amp; explainability</li>
+              <li>human-in-the-loop autonomy</li>
+            </ul>
+          </div>
+          <div class="practice" data-skill="conv" hidden>
+            <p class="statement">I&nbsp;lead iterative research to define <strong>scalable UX architecture</strong> when <strong>complex product systems</strong> outgrow their legacy&nbsp;structure.</p>
+            <ul class="proofs">
+              <li>google express → google shopping</li>
+              <li>information architecture redesign</li>
+              <li>complex workflow &amp; platform modernization</li>
+            </ul>
+          </div>
+          <div class="practice" data-skill="zero" hidden>
+            <p class="statement">I&nbsp;turn ambiguous ideas into <strong>validated product direction</strong>, from early exploration through&nbsp;launch.</p>
+            <ul class="proofs">
+              <li>concept-to-launch research</li>
+              <li>ai-native product discovery &amp; build</li>
+            </ul>
+          </div>
+          <div class="practice" data-skill="amp" hidden>
+            <p class="statement">I&nbsp;turn fragmented customer insights into an <strong>omnichannel UX strategy</strong> that aligns XFN teams around <strong>one shared experience and product&nbsp;vision</strong>.</p>
+            <ul class="proofs">
+              <li>cross-functional product collaboration</li>
+              <li>cross-craft UX leadership</li>
+              <li>self-serve research infrastructure</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <span class="tag">B2</span>
+      <h2>Sky on parent pill</h2>
+      <p class="note">Sky tray @ 24% · active chip frosted white</p>
+      <article class="card b2" data-card>
+        <div class="card-glass" aria-hidden="true">
+          <img class="card-land" src="../assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
+        </div>
+        <div class="card-inner">
+          <header class="chips-row">
+            <p class="tabs-label">.practice areas</p>
+            <div class="tabs" role="tablist" data-chips>
+              <button type="button" class="chip is-active" data-skill="ai">ai + trust</button>
+              <button type="button" class="chip" data-skill="conv">product systems &amp; convergence</button>
+              <button type="button" class="chip" data-skill="zero">0→1 builds</button>
+              <button type="button" class="chip" data-skill="amp">research influence</button>
+            </div>
+          </header>
+          <div class="practice is-active" data-skill="ai">
+            <p class="statement">I&nbsp;shape <strong>trustworthy AI experiences</strong> by uncovering how people <strong>form and calibrate trust</strong>, understand system behavior, and decide when to take&nbsp;control.</p>
+            <ul class="proofs">
+              <li>trust calibration &amp; explainability</li>
+              <li>human-in-the-loop autonomy</li>
+            </ul>
+          </div>
+          <div class="practice" data-skill="conv" hidden>
+            <p class="statement">I&nbsp;lead iterative research to define <strong>scalable UX architecture</strong> when <strong>complex product systems</strong> outgrow their legacy&nbsp;structure.</p>
+            <ul class="proofs">
+              <li>google express → google shopping</li>
+              <li>information architecture redesign</li>
+              <li>complex workflow &amp; platform modernization</li>
+            </ul>
+          </div>
+          <div class="practice" data-skill="zero" hidden>
+            <p class="statement">I&nbsp;turn ambiguous ideas into <strong>validated product direction</strong>, from early exploration through&nbsp;launch.</p>
+            <ul class="proofs">
+              <li>concept-to-launch research</li>
+              <li>ai-native product discovery &amp; build</li>
+            </ul>
+          </div>
+          <div class="practice" data-skill="amp" hidden>
+            <p class="statement">I&nbsp;turn fragmented customer insights into an <strong>omnichannel UX strategy</strong> that aligns XFN teams around <strong>one shared experience and product&nbsp;vision</strong>.</p>
+            <ul class="proofs">
+              <li>cross-functional product collaboration</li>
+              <li>cross-craft UX leadership</li>
+              <li>self-serve research infrastructure</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+<script>
+  document.querySelectorAll("[data-card]").forEach((card) => {
+    const chips = [...card.querySelectorAll("[data-chips] .chip")];
+    const panels = [...card.querySelectorAll(".practice[data-skill]")];
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const skill = chip.dataset.skill;
+        chips.forEach((c) => c.classList.toggle("is-active", c === chip));
+        panels.forEach((p) => {
+          const on = p.dataset.skill === skill;
+          p.classList.toggle("is-active", on);
+          p.hidden = !on;
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

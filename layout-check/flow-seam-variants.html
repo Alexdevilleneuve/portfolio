@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.0 flow ideas — voyage → selected work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ice-sky: #E8F0FA;
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    --star: #d3a13a;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #D4E0EE;
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 28px 20px 80px;
+  }
+  .page-head { max-width: 1320px; margin: 0 auto 22px; }
+  .page-head h1 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin-top: 8px;
+    max-width: 70ch;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .page-head a { color: var(--accent); }
+  .grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .idea {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(30, 42, 68, .08);
+  }
+  .idea--wide { grid-column: 1 / -1; }
+  .idea-meta { padding: 16px 18px 12px; }
+  .idea-kicker {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .idea h2 {
+    margin-top: 4px;
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+  }
+  .idea-meta p {
+    margin-top: 6px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .stage {
+    position: relative;
+    height: 620px;
+    overflow: hidden;
+  }
+  .idea--wide .stage { height: 980px; }
+  .ocean {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 18%, rgba(169, 207, 245, .55), transparent 58%),
+      linear-gradient(180deg, #8FBFDE 0%, #B5D4EC 28%, #D4E6F6 58%, var(--ice-sky) 100%);
+  }
+  .waves {
+    position: absolute;
+    left: -8%;
+    right: -8%;
+    top: 8%;
+    width: 116%;
+    opacity: .42;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 82%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 82%);
+  }
+  .boat {
+    position: absolute;
+    width: 108px;
+    filter: drop-shadow(0 8px 12px rgba(30, 42, 68, .18));
+  }
+  .note {
+    position: absolute;
+    font-family: var(--hand);
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(88%, 420px);
+    text-align: center;
+    z-index: 3;
+  }
+  .title h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -.02em;
+  }
+  .title h3 b {
+    font-family: var(--hand);
+    font-weight: 600;
+    color: var(--accent);
+    font-size: .72em;
+    margin-right: .2em;
+  }
+  .title p {
+    margin-top: 6px;
+    font-family: var(--hand);
+    font-size: 17px;
+    color: rgba(10, 69, 84, .62);
+  }
+  .star {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--star);
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  }
+  .cloudsea {
+    position: absolute;
+    left: -4%;
+    right: -4%;
+    top: 18%;
+    width: 108%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .cloudsea img {
+    width: 56%;
+    mix-blend-mode: multiply;
+    opacity: .9;
+  }
+  .cloudsea img:last-child { transform: translateY(22px) scaleX(-1); }
+  .constellation {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .constellation path {
+    fill: none;
+    stroke: #C4A45A;
+    stroke-width: 1.4;
+    stroke-dasharray: 2 7;
+    stroke-linecap: round;
+  }
+  .constellation circle {
+    fill: #E8C56A;
+    stroke: rgba(255, 248, 220, .95);
+    stroke-width: 1.1;
+    filter: drop-shadow(0 0 5px rgba(196, 164, 90, .7));
+  }
+  .constellation .major { fill: #F3D98A; }
+  .glyph {
+    position: absolute;
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+    background: #E8C56A;
+    clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%);
+    filter: drop-shadow(0 0 8px rgba(196, 164, 90, .75));
+  }
+  .brand {
+    position: absolute;
+    z-index: 3;
+    font-family: var(--hand);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: .01em;
+    color: rgba(10, 69, 84, .7);
+  }
+  .brand small { display: block; margin-top: 3px; font-size: 19px; }
+
+  /* A — wash */
+  .a .boat { left: 18%; top: 22%; }
+  .a .note { left: 38%; top: 28%; }
+  .a .title { top: 58%; }
+  .a .wash {
+    position: absolute;
+    left: 0; right: 0; bottom: 0; height: 58%;
+    background: linear-gradient(180deg, transparent 0%, #F4F7FB 38%, var(--ice-sky) 100%);
+  }
+
+  /* C — landfall */
+  .c .land {
+    position: absolute;
+    left: -6%;
+    right: -6%;
+    bottom: -8%;
+    width: 112%;
+    opacity: .92;
+    mix-blend-mode: multiply;
+  }
+  .c .boat { left: 22%; top: 20%; }
+  .c .note { left: 42%; top: 24%; }
+  .c .title { top: 58%; }
+
+  /* D — mist */
+  .d .boat { left: 20%; top: 14%; }
+  .d .note { left: 40%; top: 18%; }
+  .d .mist {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    top: 28%;
+    width: 120%;
+    opacity: .55;
+    filter: blur(2px);
+  }
+  .d .title { top: 64%; }
+
+  /* F — pale star chart (stays in ice-sky) */
+  .f .ocean {
+    background:
+      linear-gradient(180deg,
+        #8FBFDE 0%,
+        #C4DCF0 18%,
+        #E8F0FA 34%,
+        #F4F7FB 52%,
+        #E8F0FA 78%,
+        #E8F0FA 100%);
+  }
+  .f .boat { left: 20%; top: 16%; }
+  .f .note { left: 40%; top: 19%; }
+  .f .skymap {
+    position: absolute;
+    inset: 26% -6% 8% -6%;
+    width: 112%;
+    height: 66%;
+    object-fit: cover;
+    object-position: center 18%;
+    opacity: .62;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 58% 55% at 50% 42%, #000 35%, transparent 100%);
+    mask-image: radial-gradient(ellipse 58% 55% at 50% 42%, #000 35%, transparent 100%);
+  }
+  .f .brand { left: 8%; top: 48%; }
+  .f .title { top: 78%; }
+
+  /* G — dusk teal (night, not purple) */
+  .g .ocean {
+    background:
+      linear-gradient(180deg,
+        #8FBFDE 0%,
+        #B7D4EA 12%,
+        #D8E8F4 22%,
+        #C5D6E4 32%,
+        #6A8BA4 44%,
+        #2E4A5C 56%,
+        #1B3A42 66%,
+        #2A5060 78%,
+        #D4E2EE 90%,
+        var(--ice-sky) 100%);
+  }
+  .g .boat { left: 22%; top: 14%; }
+  .g .note { left: 42%; top: 17%; color: #1C2438; }
+  .g .cloudsea { top: 16%; }
+  .g .cloudsea img { mix-blend-mode: screen; opacity: .88; filter: brightness(1.15); }
+  .g .starsheet {
+    position: absolute;
+    inset: 34% -10% 18% -10%;
+    width: 120%;
+    height: 48%;
+    object-fit: cover;
+    opacity: .55;
+    mix-blend-mode: screen;
+    -webkit-mask-image: radial-gradient(ellipse 55% 50% at 50% 50%, #000 20%, transparent 92%);
+    mask-image: radial-gradient(ellipse 55% 50% at 50% 50%, #000 20%, transparent 92%);
+  }
+  .g .brand { left: 8%; top: 54%; color: #F6F1E4; }
+  .g .brand small { color: rgba(246, 241, 228, .8); }
+  .g .title { top: 80%; }
+  .g .constellation path { stroke: #E2C17A; }
+  .g .constellation circle { fill: #F0D58A; }
+
+  /* H — gold ink chart (parchment night) */
+  .h .ocean {
+    background:
+      linear-gradient(180deg,
+        #8FBFDE 0%,
+        #C8DCE8 16%,
+        #E8E4D6 30%,
+        #D8D0BC 42%,
+        #3D4A42 56%,
+        #2A3530 66%,
+        #4A5648 78%,
+        #E8F0FA 90%,
+        var(--ice-sky) 100%);
+  }
+  .h .boat { left: 18%; top: 15%; }
+  .h .note { left: 38%; top: 18%; }
+  .h .cloudsea { top: 17%; }
+  .h .cloudsea img { opacity: .78; }
+  .h .orb {
+    position: absolute;
+    right: 16%;
+    top: 36%;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 34%, #F4E4B0, #C4A45A 62%, transparent 72%);
+    opacity: .55;
+    filter: blur(.4px);
+  }
+  .h .brand { left: 8%; top: 52%; color: #F3EAE1; }
+  .h .brand small { color: rgba(243, 234, 225, .8); }
+  .h .title { top: 80%; }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .stage { height: 540px; }
+    .idea--wide .stage { height: 820px; }
+    .brand { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>How the voyage can flow into Selected work</h1>
+    <p>
+      Boat → 云海 → stars, then Selected work. Palette stays voyage: ice-sky, gold, teal-ink.
+      No purple. 3.0 is unchanged. Back to <a href="../index-3.html">3.0</a>.
+    </p>
+  </header>
+
+  <div class="grid">
+    <article class="idea idea--wide f" id="f">
+      <div class="idea-meta">
+        <div class="idea-kicker">F — pale star chart</div>
+        <h2>The sky stays light</h2>
+        <p>The boat rides the cloud sea, then a gold sky-map appears on ice-sky — no night, no hue shift. Constellation is ink on paper. Quietest celestial version; work sits on the same pale sheet.</p>
+      </div>
+      <div class="stage">
+        <div class="ocean"></div>
+        <img class="waves" src="../assets/images/direction/hero-waves.png" alt="">
+        <div class="cloudsea" aria-hidden="true">
+          <img src="../assets/images/portfolio_watercolor_assets/alt/cloud-bank-left.png" alt="">
+          <img src="../assets/images/portfolio_watercolor_assets/alt/cloud-bank-left.png" alt="">
+        </div>
+        <img class="skymap" src="../assets/images/song/explore-05-celestial.png" alt="">
+        <img class="boat" src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="">
+        <p class="note">…the journey continues</p>
+        <svg class="constellation" viewBox="0 0 1320 980" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 360 260 L 510 340 L 690 320 L 860 390 L 940 500 L 850 620 L 720 720 L 600 800"/>
+          <path d="M 860 390 L 1020 350"/>
+          <path d="M 690 320 L 760 220"/>
+          <circle cx="360" cy="260" r="3.5"/>
+          <circle cx="510" cy="340" r="4"/>
+          <circle class="major" cx="690" cy="320" r="6"/>
+          <circle cx="760" cy="220" r="3"/>
+          <circle cx="860" cy="390" r="4.5"/>
+          <circle cx="1020" cy="350" r="3.5"/>
+          <circle cx="940" cy="500" r="4"/>
+          <circle cx="850" cy="620" r="4.5"/>
+          <circle class="major" cx="720" cy="720" r="6"/>
+          <circle class="major" cx="600" cy="800" r="6.5"/>
+        </svg>
+        <span class="glyph" style="left:64%; top:39%"></span>
+        <p class="brand">navigating through the stars,<small>connecting the dots.</small></p>
+        <div class="title">
+          <h3><b>02</b> Selected work sample</h3>
+          <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idea idea--wide g" id="g">
+      <div class="idea-meta">
+        <div class="idea-kicker">G — dusk teal</div>
+        <h2>Night, but teal — not purple</h2>
+        <p>Cloud sea lifts into a deep teal dusk (the site’s ink / compass color). Gold stars sit on that night. Then it fades back to ice-sky for Selected work. Same climb, different temperature.</p>
+      </div>
+      <div class="stage">
+        <div class="ocean"></div>
+        <img class="waves" src="../assets/images/direction/hero-waves.png" alt="">
+        <div class="cloudsea" aria-hidden="true">
+          <img src="../assets/images/portfolio_watercolor_assets/alt/cloud-bank-left.png" alt="">
+          <img src="../assets/images/portfolio_watercolor_assets/alt/cloud-bank-left.png" alt="">
+        </div>
+        <img class="starsheet" src="../assets/images/portfolio_watercolor_assets/alt/star elements.png" alt="">
+        <img class="boat" src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="">
+        <p class="note">…the journey continues</p>
+        <svg class="constellation" viewBox="0 0 1320 980" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 360 240 L 520 330 L 700 310 L 870 390 L 950 510 L 860 640 L 720 730 L 590 810"/>
+          <path d="M 870 390 L 1030 340"/>
+          <path d="M 950 510 L 1090 590"/>
+          <circle cx="360" cy="240" r="3.5"/>
+          <circle cx="520" cy="330" r="4"/>
+          <circle class="major" cx="700" cy="310" r="6"/>
+          <circle cx="870" cy="390" r="4.5"/>
+          <circle cx="1030" cy="340" r="3.5"/>
+          <circle cx="950" cy="510" r="4"/>
+          <circle cx="1090" cy="590" r="3.5"/>
+          <circle cx="860" cy="640" r="4.5"/>
+          <circle class="major" cx="720" cy="730" r="6"/>
+          <circle class="major" cx="590" cy="810" r="6.5"/>
+        </svg>
+        <span class="glyph" style="left:71%; top:51%"></span>
+        <p class="brand">navigating through the stars,<small>connecting the dots.</small></p>
+        <div class="title">
+          <h3><b>02</b> Selected work sample</h3>
+          <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idea idea--wide h" id="h">
+      <div class="idea-meta">
+        <div class="idea-kicker">H — gold ink chart</div>
+        <h2>Old map, not a nebula</h2>
+        <p>Clouds go cream, then a sage-ink night like aged vellum. A soft gold moon + dotted orbits. Less “space,” more navigator’s chart — closer to the compass already on the page.</p>
+      </div>
+      <div class="stage">
+        <div class="ocean"></div>
+        <img class="waves" src="../assets/images/direction/hero-waves.png" alt="">
+        <div class="cloudsea" aria-hidden="true">
+          <img src="../assets/images/portfolio_watercolor_assets/alt/cloud-bank-left.png" alt="">
+          <img src="../assets/images/portfolio_watercolor_assets/alt/cloud-bank-left.png" alt="">
+        </div>
+        <span class="orb" aria-hidden="true"></span>
+        <img class="boat" src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="">
+        <p class="note">…the journey continues</p>
+        <svg class="constellation" viewBox="0 0 1320 980" preserveAspectRatio="none" aria-hidden="true">
+          <ellipse cx="1040" cy="400" rx="160" ry="90" stroke="#C4A45A" stroke-width="1" stroke-dasharray="2 8" fill="none" opacity=".55"/>
+          <ellipse cx="1040" cy="400" rx="220" ry="130" stroke="#C4A45A" stroke-width=".8" stroke-dasharray="1 10" fill="none" opacity=".4"/>
+          <path d="M 340 250 L 500 340 L 680 300 L 820 400 L 780 540 L 640 660 L 560 800"/>
+          <path d="M 820 400 L 1040 400"/>
+          <circle cx="340" cy="250" r="3.5"/>
+          <circle cx="500" cy="340" r="4"/>
+          <circle class="major" cx="680" cy="300" r="6"/>
+          <circle cx="820" cy="400" r="4.5"/>
+          <circle class="major" cx="1040" cy="400" r="7"/>
+          <circle cx="780" cy="540" r="4"/>
+          <circle cx="640" cy="660" r="5"/>
+          <circle class="major" cx="560" cy="800" r="6.5"/>
+        </svg>
+        <p class="brand">navigating through the stars,<small>connecting the dots.</small></p>
+        <div class="title">
+          <h3><b>02</b> Selected work sample</h3>
+          <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idea" id="a">
+      <div class="idea-meta">
+        <div class="idea-kicker">A — sky wash</div>
+        <h2>Same canvas, no edge</h2>
+        <p>The sea just fades into ice-sky. Quietest option — no stars.</p>
+      </div>
+      <div class="stage a">
+        <div class="ocean"></div>
+        <img class="waves" src="../assets/images/direction/hero-waves.png" alt="">
+        <img class="boat" src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="">
+        <p class="note">…the journey continues</p>
+        <div class="wash"></div>
+        <div class="title">
+          <h3><b>02</b> Selected work sample</h3>
+          <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idea" id="c">
+      <div class="idea-meta">
+        <div class="idea-kicker">C — landfall</div>
+        <h2>The boat reaches shore</h2>
+        <p>Watercolor land rises out of the sea. A clear “you have arrived” beat.</p>
+      </div>
+      <div class="stage c">
+        <div class="ocean"></div>
+        <img class="waves" src="../assets/images/direction/hero-waves.png" alt="">
+        <img class="boat" src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="">
+        <p class="note">…the journey continues</p>
+        <img class="land" src="../assets/images/portfolio_watercolor_assets/scroll-land.png" alt="">
+        <div class="title">
+          <h3><b>02</b> Selected work sample</h3>
+          <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="idea" id="d">
+      <div class="idea-meta">
+        <div class="idea-kicker">D — mist</div>
+        <h2>Fog between chapters</h2>
+        <p>A cloud bank dissolves water into sky. Atmosphere only.</p>
+      </div>
+      <div class="stage d">
+        <div class="ocean"></div>
+        <img class="waves" src="../assets/images/direction/hero-waves.png" alt="">
+        <img class="boat" src="../assets/images/portfolio_watercolor_assets/alt/sailboat.png" alt="">
+        <p class="note">…the journey continues</p>
+        <img class="mist" src="../assets/images/home/cloud-soft-3.png" alt="">
+        <span class="star" style="top:48%; left:18%"></span>
+        <span class="star" style="top:52%; right:22%; width:8px; height:8px"></span>
+        <div class="title">
+          <h3><b>02</b> Selected work sample</h3>
+          <p>Messy, ambiguous product problems → evidence-backed strategy that shipped.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</body>
+</html>
