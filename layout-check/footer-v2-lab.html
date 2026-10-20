@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2.0 footer — four compositions</title>
+<title>Footer — the valley, the letter, and the credit line</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,460;0,9..144,500;1,9..144,460&family=Inter:wght@400;500;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
 <style>
@@ -15,6 +15,8 @@
     --sans: "Inter", sans-serif;
     --hand: "Caveat", cursive;
     --cream: rgba(247, 244, 236, .82);
+    --ice-sky: #E8F0FA;
+    --accent-deep: #3D5CB8;
   }
   * { box-sizing: border-box; }
   body {
@@ -122,6 +124,162 @@
   .nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .nav-list a { text-decoration: none; font-size: 15.5px; }
 
+  /* 1.0 — valley in three planes, grass sways */
+  .valley {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: var(--ice-sky);
+    box-shadow: 0 18px 40px rgba(16, 40, 60, .16);
+    padding: clamp(72px, 11vh, 112px) 0 clamp(64px, 10vh, 100px);
+    isolation: isolate;
+  }
+  .valley::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--ice-sky) 0%,
+      rgba(232, 240, 250, .92) 10%,
+      rgba(232, 240, 250, .55) 22%,
+      rgba(232, 240, 250, .18) 34%,
+      transparent 48%
+    );
+  }
+  .valley-bg,
+  .valley-fg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .valley-bg {
+    z-index: 0;
+    object-position: center 42%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.4) 12%, #000 28%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.4) 12%, #000 28%, #000 100%);
+  }
+  .valley-fg--hills { z-index: 3; object-position: center 42%; }
+  .valley-fg--grass {
+    z-index: 4;
+    object-position: center 42%;
+    transform-origin: 50% 100%;
+    animation: footerGrassSway 9s ease-in-out infinite;
+  }
+  @keyframes footerGrassSway {
+    0%, 100% { transform: rotate(-0.35deg) translate3d(0, 0, 0) scale(1.04); }
+    50% { transform: rotate(0.55deg) translate3d(-2px, 3px, 0) scale(1.04); }
+  }
+  .valley-card {
+    position: relative;
+    z-index: 2;
+    width: min(1040px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: clamp(24px, 3vw, 32px) clamp(32px, 3.5vw, 48px);
+    border-radius: 32px;
+    background: rgba(255, 255, 255, .42);
+    border: 1px solid rgba(255, 255, 255, .72);
+    box-shadow: 0 16px 44px rgba(30, 42, 68, .07), inset 0 1px 0 rgba(255, 255, 255, .85);
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 3fr 4fr 2fr;
+    gap: clamp(20px, 2.5vw, 32px);
+    align-items: center;
+  }
+  .valley-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .9;
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(201, 220, 247, .45), transparent 55%),
+      linear-gradient(160deg, rgba(201, 220, 247, .18), transparent 60%);
+  }
+  .valley-card > * { position: relative; z-index: 1; }
+  .valley-mark {
+    width: 100%;
+    max-width: 168px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+  }
+  .valley-mark img { width: 115%; height: 115%; object-fit: contain; }
+  .valley-line {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(20px, 2.3vw, 26px);
+    line-height: 1.28;
+    letter-spacing: -.01em;
+    color: #0A4554;
+  }
+  .valley-curious {
+    display: block;
+    width: fit-content;
+    margin-top: 12px;
+    font-family: var(--hand);
+    font-size: 20px;
+    font-weight: 500;
+    color: #5B7FD9;
+    text-decoration: none;
+    transform: rotate(-1.5deg);
+  }
+  .valley-curious:hover { text-decoration: underline; }
+  .valley-mail,
+  .valley-year {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    text-align: left;
+  }
+  .valley-mail { margin-top: 18px; cursor: pointer; }
+  .valley-mail:hover,
+  .valley-mail:focus-visible { color: var(--accent-deep); }
+  .valley-mail:focus-visible { outline: 2px solid #5B7FD9; outline-offset: 3px; }
+  .valley-year { margin-top: 10px; }
+  .valley-mail svg,
+  .valley-year svg { width: 14px; height: 14px; flex-shrink: 0; opacity: .65; }
+  .valley-nav {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: clamp(24px, 3vw, 36px);
+    border-left: 1px solid rgba(90, 107, 140, .18);
+    transform: translateX(-4px);
+  }
+  .valley-nav .nav-title { color: #0A4554; }
+  .valley-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .valley-list a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    color: #1E2A44;
+    text-decoration: none;
+    font-size: 15.5px;
+  }
+  .valley-list a:hover,
+  .valley-list a:focus-visible { color: var(--accent-deep); }
+  .valley-list svg { width: 12px; height: 12px; opacity: .55; }
+
   /* A — two cards, current */
   .a-copy {
     position: absolute;
@@ -138,40 +296,6 @@
   .a-nav { align-self: center; }
 
   /* B — one sheet */
-  .b-sheet {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    bottom: 8%;
-    transform: translateX(-50%);
-    width: min(920px, calc(100% - 56px));
-    display: grid;
-    grid-template-columns: 1.5fr auto .7fr;
-    gap: 28px;
-    align-items: center;
-    padding: 26px 32px;
-  }
-  .b-rule { width: 1px; align-self: stretch; background: rgba(16, 40, 60, .16); }
-
-  /* C — type on the water, painting stays open */
-  .c-copy {
-    position: absolute;
-    z-index: 2;
-    left: 5%;
-    bottom: 5%;
-    width: min(420px, 42%);
-    padding: 8px 4px;
-    color: #f7f4ec;
-    text-shadow: 0 1px 0 rgba(8, 24, 40, .5), 0 8px 22px rgba(8, 24, 40, .65);
-  }
-  .c-copy::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: -28px -40px -12px -24px;
-    background: radial-gradient(ellipse at 28% 42%, rgba(6, 22, 40, .46), transparent 70%);
-  }
-  .c-copy .line { color: #f7f4ec; font-size: clamp(26px, 2.8vw, 36px); }
   .c-copy .curious { color: #f7f4ec; text-shadow: 0 8px 18px rgba(8, 24, 40, .45); }
   .c-copy .mail, .c-copy .year { color: #f7f4ec; }
   .c-nav {
@@ -194,54 +318,82 @@
     left: 0;
     right: 0;
     bottom: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 22px 36px 26px;
-    background: linear-gradient(180deg, transparent, rgba(8, 28, 48, .55) 42%, rgba(8, 28, 48, .72));
-    color: #f7f4ec;
-  }
-  .d-bar .line { font-size: clamp(22px, 2.4vw, 30px); color: #f7f4ec; }
-  .d-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-  .d-links { display: flex; gap: 16px; }
-  .d-links a { color: #f7f4ec; text-decoration: none; font-size: 15px; }
-  .d-meta { margin: 0; font-size: 13px; opacity: .86; }
-
-  @media (max-width: 800px) {
-    .a-copy, .b-sheet { grid-template-columns: 1fr; }
+    .b-sheet { grid-template-columns: 1fr; }
     .b-rule { display: none; }
-    .c-copy { width: min(100% - 36px, 420px); }
-    .c-nav { position: static; }
-    .c-copy { position: absolute; left: 18px; right: 18px; bottom: 18px; width: auto; }
     .d-bar { flex-direction: column; align-items: flex-start; }
     .d-side { align-items: flex-start; }
+    .valley { padding: 64px 0 48px; }
+    .valley-card {
+      width: calc(100% - 28px);
+      padding: 24px;
+      border-radius: 28px;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      justify-items: start;
+    }
+    .valley-mark { max-width: 132px; justify-self: start; }
+    .valley-nav {
+      width: 100%;
+      padding-left: 0;
+      padding-top: 10px;
+      border-left: 0;
+      border-top: 1px solid rgba(90, 107, 140, .18);
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .valley-fg--grass { animation: none; }
   }
 </style>
 </head>
 <body>
   <header class="page-head">
-    <h1>Footer, four ways</h1>
-    <p>Same cloud and shore. The difference is how the farewell sits on the painting. A is what’s on 2.0 now. Tell me which one to keep.</p>
+    <h1>Footer</h1>
+    <p>The valley from 1.0, with the grass moving in front. Then two ways the farewell sits on the same&nbsp;shore.</p>
   </header>
 
   <div class="stack">
     <section>
       <div class="idea-meta">
-        <span class="tag">A · current</span>
-        <h2>Two cards</h2>
-        <p class="why">Farewell and navigation each get a vellum card, set low so the compass stays clear.</p>
+        <span class="tag">1.0</span>
+        <h2>Valley</h2>
+        <p class="why">Three planes. The hills stay put, and the grass in front sways, just a&nbsp;little.</p>
       </div>
-      <div class="stage">
-        <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
-        <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
-        <div class="a-copy">
-          <div class="panel">
-            <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
-            <a class="curious" href="#">Still curious?</a>
-            <p class="mail">alex@alexandra-irribarren.com</p>
-            <p class="year">Alexandra Irribarren 2026</p>
+      <div class="valley">
+        <img class="valley-bg" src="../assets/images/footer/bg-valley.png" alt="">
+        <div class="valley-card">
+          <div class="valley-mark">
+            <img src="../assets/images/footer/compass-rose-sage.png" alt="" width="240" height="240">
           </div>
+          <div>
+            <p class="valley-line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
+            <a class="valley-curious" href="#">Still curious?</a>
+            <button type="button" class="valley-mail" data-copy-email="alex@alexandra-irribarren.com" aria-label="Copy email address alex@alexandra-irribarren.com">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M15.5 8.5V6.8A2.3 2.3 0 0 0 13.2 4.5H6.8A2.3 2.3 0 0 0 4.5 6.8v6.4A2.3 2.3 0 0 0 6.8 15.5H8.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              <span class="mail-label">alex@alexandra-irribarren.com</span>
+            </button>
+            <p class="valley-year">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.25" stroke="currentColor" stroke-width="1.7"/><path d="M15.1 9.2a3.85 3.85 0 1 0 0 5.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              Alexandra Irribarren 2026
+            </p>
+          </div>
+          <nav class="valley-nav" aria-label="Valley navigation">
+            <p class="nav-title">Navigation</p>
+            <ul class="valley-list">
+              <li><a href="#">project <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12.5 8 8.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+              <li><a href="#">about <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12.5 8 8.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+              <li><a href="#">resume <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+              <li><a href="#">connect <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+            </ul>
+          </nav>
+        </div>
+        <img class="valley-fg valley-fg--hills" src="../assets/images/footer/fg-hills.png" alt="">
+        <img class="valley-fg valley-fg--grass" src="../assets/images/footer/fg-grass.png" alt="">
+      </div>
+    </section>
+
+    .c-copy { width: min(100% - 36px, 420px); }
+    .c-nav { position: static; }
           <nav class="panel a-nav" aria-label="A navigation">
             <p class="nav-title">Navigation</p>
             <ul class="nav-list">
@@ -272,30 +424,6 @@
             <p class="year">Alexandra Irribarren 2026</p>
           </div>
           <div class="b-rule" aria-hidden="true"></div>
-          <nav aria-label="B navigation">
-            <p class="nav-title">Navigation</p>
-            <ul class="nav-list">
-              <li><a href="#">project →</a></li>
-              <li><a href="#">about →</a></li>
-              <li><a href="#">resume ↗</a></li>
-              <li><a href="#">connect ↗</a></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="idea-meta">
-        <span class="tag">C</span>
-        <h2>Type on the water</h2>
-        <p class="why">No cards. The farewell sits on the left of the sea, links on the right, and the sailboat and compass stay uncovered.</p>
-      </div>
-      <div class="stage">
-        <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
-        <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
-        <div class="c-copy">
-          <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
           <a class="curious" href="#">Still curious?</a>
           <p class="mail">alex@alexandra-irribarren.com</p>
           <p class="year">Alexandra Irribarren 2026</p>
@@ -318,6 +446,18 @@
       <div class="stage">
         <img class="bg" src="../assets/images/portfolio_watercolor_assets/footer%20temp%20bg.png" alt="">
         <div class="cloud"><img src="../assets/images/portfolio_watercolor_assets/footer%20transition%20cloud.png" alt=""></div>
+<script>
+  document.querySelectorAll("[data-copy-email]").forEach((btn) => {
+    const label = btn.querySelector(".mail-label");
+    const address = btn.getAttribute("data-copy-email");
+    btn.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(address); }
+      catch { return; }
+      label.textContent = "Copied";
+      setTimeout(() => { label.textContent = address; }, 1600);
+    });
+  });
+</script>
         <div class="d-bar">
           <p class="line">You've hit the footer,<br>thanks for stopping&nbsp;by.</p>
           <div class="d-side">

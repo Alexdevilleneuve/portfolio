@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selected work — a quieter ground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1E2A44;
+    --ink-soft: #5A6B8C;
+    --accent: #5B7FD9;
+    --ice: #E8F0FA;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #d7e2ee;
+    color: #1e2a44;
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 28px 20px 72px;
+  }
+  a { color: inherit; }
+  .page-head, .stack { max-width: 1180px; margin: 0 auto; }
+  .page-head { margin-bottom: 22px; }
+  .page-head h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: -.02em;
+  }
+  .page-head p {
+    margin: 8px 0 0;
+    max-width: 68ch;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .stack { display: flex; flex-direction: column; gap: 28px; }
+  .idea-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; margin-bottom: 10px; }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #1d4e9e;
+    background: rgba(29, 78, 158, .1);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .idea-meta h2 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 20px; }
+  .why { flex: 1 1 100%; margin: 0; color: var(--ink-soft); font-size: 14px; }
+
+  .stage {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: var(--ice);
+    box-shadow: 0 18px 40px rgba(16, 40, 60, .16);
+    padding: 56px 28px 64px;
+  }
+
+  /* 02 — the panel that used to hold the studies */
+  .ground--card .co i { border-color: #F4F6F1; }
+  .ground--card .chapter {
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,255,255,.7), transparent 55%),
+      linear-gradient(180deg, #F2F6F0 0%, #F4F6F1 55%, #F5F6F2 100%);
+    border-radius: 40px;
+    box-shadow: 0 24px 64px rgba(30, 42, 68, .08), inset 0 1px 0 rgba(255,255,255,.55);
+    padding: 36px 32px 28px;
+  }
+
+  /* 03 — the old blobs, turned down */
+  .blobs { position: absolute; inset: 0; pointer-events: none; }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .42;
+  }
+  .b1 { width: 460px; height: 460px; background: #C9DCF7; top: -120px; left: -80px; }
+  .b2 { width: 400px; height: 400px; background: #D9D4F5; top: 18%; right: -120px; }
+  .b3 { width: 360px; height: 360px; background: #CDEDE4; bottom: -100px; left: 28%; }
+  .b4 { width: 280px; height: 280px; background: #F3DCE9; top: 48%; left: -60px; opacity: .28; }
+
+  /* 04 — a breath of paper, no edge */
+  .ground--wash::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: min(920px, 78%);
+    height: 86%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at 50% 40%, rgba(255,255,255,.94) 0%, rgba(228,239,200,.5) 40%, transparent 72%);
+    pointer-events: none;
+  }
+
+  .chapter { position: relative; z-index: 1; }
+  .sec-head { text-align: center; margin-bottom: 28px; }
+  .sec-head h2 {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: .4em;
+    flex-wrap: wrap;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(32px, 4vw, 48px);
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .sec-num {
+    font-family: var(--hand);
+    font-size: .72em;
+    font-weight: 600;
+    color: var(--accent);
+    transform: rotate(-3deg);
+  }
+  .sec-head p {
+    margin: 8px auto 0;
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .story {
+    display: grid;
+    grid-template-columns: minmax(220px, 34%) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .rail { position: relative; padding-left: 2px; }
+  .rail::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 12px;
+    width: 2px;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, rgba(91,127,217,.45), rgba(91,127,217,.12));
+  }
+  .co {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 0 12px 28px;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    color: #3D5CB8;
+  }
+  .co i {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--ice);
+    box-shadow: 0 0 0 2px rgba(91,127,217,.35);
+  }
+  .co img { width: 22px; height: 22px; border-radius: 6px; }
+  .study {
+    position: relative;
+    margin-left: 7px;
+    padding: 12px 16px 14px 18px;
+    border-radius: 14px;
+  }
+  .study.on { background: rgba(10, 69, 84, .055); }
+  .study::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 26px;
+    width: 7px;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(91,127,217,.35);
+  }
+  .study.on::before { width: 9px; background: var(--accent); }
+  .n {
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: .04em;
+    color: rgba(10, 69, 84, .38);
+    margin-bottom: 4px;
+  }
+  .study strong {
+    display: block;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -.02em;
+    color: rgba(10, 69, 84, .38);
+  }
+  .study.on strong,
+  .study.on .n { color: var(--ink); }
+  .study.on .n { color: var(--ink-soft); }
+  .study p {
+    margin: 8px 0 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chips span {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(0, 115, 140, .1);
+    color: #3D5CB8;
+  }
+  .panel {
+    min-height: 280px;
+    border-radius: 28px;
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 40%, rgba(255,255,255,.55), rgba(201, 220, 247, .35));
+    border: 1px solid rgba(255,255,255,.7);
+  }
+  @media (max-width: 800px) {
+    .story { grid-template-columns: 1fr; }
+    .panel { min-height: 180px; }
+    .ground--card .chapter { padding: 28px 18px 20px; border-radius: 28px; }
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>A quieter ground</h1>
+    <p>Selected work on 1.0 sits on flat ice sky. The card was taken off, and the color in the margins went with it. The type stays. Only the ground&nbsp;changes.</p>
+  </header>
+
+  <div class="stack">
+    <section>
+      <div class="idea-meta">
+        <span class="tag">now</span>
+        <h2>Ice sky</h2>
+        <p class="why">What is on 1.0. Ice sky #E8F0FA, and nothing in the gutters.</p>
+      </div>
+      <div class="stage" data-chapter></div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">02</span>
+        <h2>Mint card</h2>
+        <p class="why">The panel that used to hold the studies. More studies still sits on this one.</p>
+      </div>
+      <div class="stage ground--card" data-chapter></div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">03</span>
+        <h2>Pastel drift</h2>
+        <p class="why">The four blobs, turned down. A little color at the edges, the middle left&nbsp;open.</p>
+      </div>
+      <div class="stage" data-chapter>
+        <div class="blobs" aria-hidden="true">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+          <span class="blob b4"></span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="idea-meta">
+        <span class="tag">04</span>
+        <h2>Soft wash</h2>
+        <p class="why">A breath of paper behind the type. No edge, and no&nbsp;card.</p>
+      </div>
+      <div class="stage ground--wash" data-chapter></div>
+    </section>
+  </div>
+
+  <template id="chapter">
+    <div class="chapter">
+      <header class="sec-head">
+        <h2><span class="sec-num">02</span> <span>Selected work sample</span></h2>
+        <p>Messy, ambiguous product problems → evidence-backed strategy that&nbsp;shipped.</p>
+      </header>
+      <div class="story">
+        <div class="rail">
+          <div class="co">
+            <i aria-hidden="true"></i>
+            <img src="../assets/images/shared/brand/malwarebytes.svg" alt="" width="22" height="22">
+            <span>Malwarebytes</span>
+          </div>
+          <div class="study on">
+            <span class="n">01</span>
+            <strong>From Research to&nbsp;Roadmap</strong>
+            <p>A 32-session mixed-methods mental model study that redirected company strategy away from mobile-first.</p>
+            <div class="chips">
+              <span>Kano Analysis</span>
+              <span>Open Card Sorting</span>
+              <span>Mental Models</span>
+            </div>
+          </div>
+          <div class="study">
+            <span class="n">02</span>
+            <strong>Security Advisor</strong>
+          </div>
+        </div>
+        <div class="panel" aria-hidden="true"></div>
+      </div>
+    </div>
+  </template>
+<script>
+  const tpl = document.getElementById("chapter");
+  document.querySelectorAll("[data-chapter]").forEach((slot) => {
+    slot.append(tpl.content.cloneNode(true));
+  });
+</script>
+</body>
+</html>
