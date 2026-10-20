@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nav mark — crown, boat, lockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --gold: #C4B48A;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, #E7F0FA 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 36px 20px 96px;
+  }
+  .page-head, .toc, .options { max-width: 1080px; margin-left: auto; margin-right: auto; }
+  .page-head h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -.03em;
+  }
+  .page-head p {
+    margin-top: 10px;
+    max-width: 66ch;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    line-height: 1.5;
+  }
+  .toc {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+    padding: 8px;
+    width: fit-content;
+    background: rgba(246, 241, 228, .86);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(28, 36, 56, .08);
+    border-radius: 999px;
+  }
+  .toc a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 999px;
+  }
+  .toc a:hover, .toc a:focus-visible { color: var(--ink); background: rgba(255,255,255,.7); }
+  .options { margin-top: 36px; display: flex; flex-direction: column; gap: 64px; }
+  .option-head { margin-bottom: 14px; }
+  .option-head .tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #3E5C66;
+  }
+  .option-head h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -.02em;
+  }
+  .option-head p {
+    margin-top: 6px;
+    max-width: 68ch;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .frame {
+    --spin: 0;
+    --heel: 0;
+    --p: 0;
+    position: relative;
+    height: min(78vh, 760px);
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(28, 36, 56, .1);
+    box-shadow: 0 24px 60px rgba(30, 42, 68, .12);
+    background: #D5E6F6;
+  }
+  .voyage {
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .voyage::-webkit-scrollbar { display: none; }
+  .band {
+    position: relative;
+    min-height: 92%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 72px 48px 56px;
+    background-position: center;
+    background-size: cover;
+  }
+  .band--hero {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 0%, #E8F2FC 0%, transparent 55%),
+      linear-gradient(180deg, #A9CFF5 0%, #C5DCF6 58%, #E4EEF8 100%);
+  }
+  .band--skills {
+    background-image:
+      linear-gradient(180deg, rgba(232,242,252,.2), rgba(16,36,56,.28)),
+      url("../assets/images/portfolio_watercolor_assets/ripple-sea D.png");
+    background-position: center 60%;
+  }
+  .band--work {
+    background-image:
+      linear-gradient(180deg, rgba(246,241,228,.12), rgba(20,32,48,.3)),
+      url("../assets/images/portfolio_watercolor_assets/selected works.png");
+    background-position: center 28%;
+  }
+  .band--studies {
+    background-image:
+      linear-gradient(180deg, rgba(246,241,228,.04), rgba(20,36,48,.24)),
+      url("../assets/images/portfolio_watercolor_assets/ChatGPT Image Oct 16, 2026, 11_40_46 AM-1.png");
+    background-position: center 40%;
+  }
+  .band--philosophy {
+    background-image:
+      linear-gradient(180deg, rgba(246,241,228,.18), rgba(246,241,228,.02) 42%, rgba(20,32,48,.2)),
+      url("../assets/images/portfolio_watercolor_assets/philosophy-crown-plate.jpg");
+    background-position: center 30%;
+  }
+  .band--endorse {
+    background-image:
+      linear-gradient(180deg, rgba(18,28,48,.04), rgba(12,20,36,.4)),
+      url("../assets/images/portfolio_watercolor_assets/Dreamy Starry Sea with Lighthouse and Sailboat.png");
+    background-position: center 42%;
+  }
+  .band--footer { justify-content: flex-end; background: #1E2A44; }
+  .band h2 {
+    margin-top: 6px;
+    max-width: 16ch;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(28px, 4vw, 46px);
+    letter-spacing: -.03em;
+    line-height: 1.05;
+    color: #1E2A44;
+  }
+  .band--hero h2 { max-width: none; }
+  .band--hero h2 em { font-style: italic; color: #5B7FD9; }
+  .band--skills h2, .band--work h2, .band--studies h2, .band--endorse h2 {
+    color: #F6F1E4;
+    text-shadow: 0 2px 16px rgba(16,24,40,.35);
+  }
+  .band--footer h2 { color: #F6F1E4; max-width: 14ch; }
+  .kicker {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    color: #5E7F82;
+  }
+  .band--skills .kicker, .band--work .kicker, .band--studies .kicker, .band--endorse .kicker, .band--footer .kicker {
+    color: rgba(246,241,228,.78);
+  }
+
+  .marknav {
+    position: absolute;
+    z-index: 8;
+    top: 14px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .pill {
+    pointer-events: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(640px, 100%);
+    height: 52px;
+    padding: 0 22px 0 24px;
+    border: 1px solid rgba(255,255,255,.78);
+    border-radius: 999px;
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    box-shadow: 0 12px 40px rgba(30,42,68,.08), inset 0 1px 0 rgba(255,255,255,.9);
+    overflow: hidden;
+    transition: width .5s cubic-bezier(.2,.7,.2,1), height .5s cubic-bezier(.2,.7,.2,1), padding .5s cubic-bezier(.2,.7,.2,1), border-radius .5s cubic-bezier(.2,.7,.2,1), transform .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 18px;
+    color: #0A4554;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .links { display: flex; gap: 18px; list-style: none; }
+  .links a {
+    color: #5E7F82;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .links a:hover { color: #0A4554; }
+  .face {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 18px;
+    transition: opacity .2s ease;
+  }
+  .marknav.is-coin .pill {
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .marknav.is-coin .face { opacity: 0; pointer-events: none; }
+
+  .coin {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    border: 0;
+    background: none;
+    color: #0A4554;
+    cursor: pointer;
+    transition: opacity .25s ease .2s;
+  }
+  .marknav.is-coin .coin { opacity: 1; }
+  .rose, .boat {
+    width: 28px;
+    height: 28px;
+    display: block;
+  }
+  .rose { transform: rotate(calc(var(--spin) * 1deg)); }
+  .boat { transform: rotate(calc(var(--heel) * 1deg)); transform-origin: 50% 78%; }
+
+  .marknav--crown.is-coin .pill {
+    width: min(640px, 100%);
+    height: 52px;
+    padding: 0 22px 0 24px;
+    border-radius: 999px;
+    transform: translateY(calc(-100% - 28px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .crown {
+    position: absolute;
+    z-index: 7;
+    left: 22px;
+    top: calc(50% - 118px);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    color: #0A4554;
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    border: 1px solid rgba(255,255,255,.78);
+    box-shadow: 0 12px 40px rgba(30,42,68,.08), inset 0 1px 0 rgba(255,255,255,.9);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .marknav--crown.is-coin ~ .crown,
+  .frame[data-kind="crown"].is-coin .crown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+  .crown .rose { width: 26px; height: 26px; }
+
+  .seal {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .seal .ring {
+    position: absolute;
+    inset: 0;
+    transform: rotate(calc(var(--spin) * 1deg));
+  }
+  .seal .ring svg { display: block; width: 100%; height: 100%; }
+  .seal .ring text {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    fill: #051739;
+  }
+  .seal .ring .ring-bot { letter-spacing: .16em; }
+  .seal .star {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 48%;
+    height: 48%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+  }
+  .frame[data-kind="lockup"] .seal .star {
+    width: 56%;
+    height: 56%;
+  }
+
+  /* 04 — shrink in the middle, then roll to the top left. */
+  .frame[data-kind="lockup"] .pill {
+    transition:
+      width .48s cubic-bezier(.2,.7,.2,1),
+      height .48s cubic-bezier(.2,.7,.2,1),
+      padding .48s cubic-bezier(.2,.7,.2,1),
+      border-radius .48s cubic-bezier(.2,.7,.2,1),
+      transform .55s cubic-bezier(.2,.7,.2,1);
+  }
+  .frame[data-kind="lockup"] .marknav.is-coin .pill {
+    width: 64px;
+    height: 64px;
+  }
+  .frame[data-kind="lockup"].is-parked .marknav.is-coin .pill {
+    width: 90px;
+    height: 90px;
+    transform: translateX(var(--park)) rotate(-360deg);
+    transition:
+      width .55s cubic-bezier(.2,.7,.2,1) .46s,
+      height .55s cubic-bezier(.2,.7,.2,1) .46s,
+      padding .48s cubic-bezier(.2,.7,.2,1),
+      border-radius .48s cubic-bezier(.2,.7,.2,1),
+      transform .62s cubic-bezier(.2,.7,.2,1) .42s;
+  }
+
+  /* 04 — once the mark is parked, the bar can return beside it. */
+  .frame[data-kind="lockup"] .recall {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 110px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(560px, calc(100% - 110px));
+    height: 52px;
+    margin-inline: auto;
+    padding: 0 22px 0 24px;
+    border: 1px solid rgba(255,255,255,.78);
+    border-radius: 999px;
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    box-shadow: 0 12px 40px rgba(30,42,68,.08), inset 0 1px 0 rgba(255,255,255,.9);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .frame[data-kind="lockup"].is-recall .recall {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .rail {
+    --ink: #17233b;
+    position: absolute;
+    z-index: 6;
+    left: 34px;
+    top: calc(50% - 72px);
+    width: 16px;
+    height: 168px;
+    pointer-events: none;
+  }
+  .rail .track, .rail .fill {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+  }
+  .rail .track { background: rgba(23, 35, 59, .16); }
+  .rail .fill {
+    background: var(--ink);
+    height: calc(var(--p) * 100%);
+  }
+  .rail .count {
+    position: absolute;
+    left: 14px;
+    top: calc(var(--p) * 100%);
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    text-shadow: 0 0 6px rgba(246,241,228,.9);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .voyage { scroll-behavior: auto; }
+    .pill, .coin, .crown, .face { transition: none; }
+    .rose, .boat, .seal .ring { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>The nav becomes a mark</h1>
+    <p>The pill still hides on the way down. What stays is a small mark that turns with the scroll, and a click brings the bar back. On 04, the bar becomes the mark only while leaving the hero, then the mark stays in the top left. Scroll up and the bar returns beside it. The ring of type turns clockwise on the way down, and back on the way up. Scroll inside a&nbsp;frame.</p>
+  </header>
+  <nav class="toc" aria-label="Ideas">
+    <a href="#crown">Crown of the line</a>
+    <a href="#boat">Sailboat</a>
+    <a href="#lockup">Shrink, then roll</a>
+  </nav>
+
+  <div class="options">
+    <section class="option" id="crown">
+      <header class="option-head">
+        <span class="tag">02</span>
+        <h2>Crown of the line</h2>
+        <p>The pill leaves. The compass comes to rest above the chapter line and keeps turning. Click it to bring the bar back.</p>
+      </header>
+      <div class="frame" data-kind="crown"></div>
+    </section>
+
+    <section class="option" id="boat">
+      <header class="option-head">
+        <span class="tag">03</span>
+        <h2>Sailboat</h2>
+        <p>The pill shrinks into a glass coin, with the little boat. It heels as you travel, and it rests when the page rests.</p>
+      </header>
+      <div class="frame" data-kind="boat"></div>
+    </section>
+
+    <section class="option" id="lockup">
+      <header class="option-head">
+        <span class="tag">04</span>
+        <h2>Shrink, then roll left</h2>
+        <p>The bar shrinks from both sides into a coin, then rolls to the top left. That plays once, on the way down from the hero. After that the mark stays put. Scroll up and the bar returns beside&nbsp;it.</p>
+      </header>
+      <div class="frame" data-kind="lockup"></div>
+    </section>
+
+  </div>
+
+<script>
+  const chapters = [
+    { id: "hero", n: "1", title: "From <em>insights</em> to influence" },
+    { id: "skills", n: "2", title: "Hard skills" },
+    { id: "work", n: "3", title: "Selected work sample" },
+    { id: "studies", n: "4", title: "More studies" },
+    { id: "philosophy", n: "5", title: "Research philosophy" },
+    { id: "endorse", n: "6", title: "What's it like working with&nbsp;me" },
+    { id: "footer", n: "7", title: "You've hit the footer" }
+  ];
+  const rose = `<svg class="rose" viewBox="0 0 64 64" aria-hidden="true">
+    <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="1.15" opacity=".35"/>
+    <path d="M32 3 L39 32 L32 36 L25 32 Z" fill="#C4B48A"/>
+    <path d="M32 58 L29.5 36 L32 34 L34.5 36 Z" fill="currentColor" opacity=".45"/>
+    <path d="M8 32 L30 30 L32 32 L30 34 Z" fill="currentColor" opacity=".3"/>
+    <path d="M56 32 L34 30 L32 32 L34 34 Z" fill="currentColor" opacity=".3"/>
+    <circle cx="32" cy="32" r="2" fill="#0A4554"/>
+  </svg>`;
+  const boat = `<svg class="boat" viewBox="0 0 64 64" aria-hidden="true">
+    <path d="M33 8 L33 44 L50 44 Z" fill="#C4B48A"/>
+    <path d="M31 18 L31 44 L16 44 Z" fill="#0A4554"/>
+    <path d="M30 6 L34 6 L34 46 L30 46 Z" fill="#0A4554"/>
+    <path d="M14 46 Q32 58 50 46 L46 50 Q32 58 18 50 Z" fill="#0A4554"/>
+  </svg>`;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll(".frame").forEach((frame) => {
+    const kind = frame.dataset.kind;
+    const lockup = kind === "lockup";
+    const voyage = document.createElement("div");
+    voyage.className = "voyage";
+    voyage.tabIndex = 0;
+    chapters.forEach((c) => {
+      const band = document.createElement("section");
+      band.className = `band band--${c.id}`;
+      band.innerHTML = `<p class="kicker">${c.n}</p><h2>${c.title}</h2>`;
+      voyage.appendChild(band);
+    });
+
+    const nav = document.createElement("div");
+    nav.className = "marknav" + (kind === "crown" ? " marknav--crown" : "");
+    const seal = `<span class="seal" aria-hidden="true">
+      <span class="ring">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="top-${kind}" d="M 26,100 A 74,74 0 0 1 174,100"/>
+            <path id="bot-${kind}" d="M 26,100 A 74,74 0 0 0 174,100"/>
+          </defs>
+          <text class="ring-top"><textPath href="#top-${kind}" startOffset="50%" text-anchor="middle" textLength="218" lengthAdjust="spacing">ALEXANDRA IRRIBARREN</textPath></text>
+          <text class="ring-bot"><textPath href="#bot-${kind}" startOffset="50%" text-anchor="middle" textLength="196" lengthAdjust="spacing">UX RESEARCH</textPath></text>
+        </svg>
+      </span>
+      <img class="star" src="nav-mark-emblem.png" alt="">
+    </span>`;
+    const glyph = kind === "boat" ? boat : (lockup ? seal : rose);
+    nav.innerHTML = `
+      <div class="pill">
+        <div class="face">
+          <a class="logo" href="#${kind}">Alexandra Irribarren</a>
+          <ul class="links">
+            <li><a href="#${kind}">project</a></li>
+            <li><a href="#${kind}">about</a></li>
+            <li><a href="#${kind}">resume</a></li>
+            <li><a href="#${kind}">connect</a></li>
+          </ul>
+        </div>
+        <button class="coin" type="button" aria-label="Open navigation" hidden>${glyph}</button>
+      </div>`;
+
+    if (kind === "lockup") {
+      const recall = document.createElement("div");
+      recall.className = "recall";
+      recall.setAttribute("aria-hidden", "true");
+      recall.innerHTML = nav.querySelector(".face").innerHTML;
+      nav.append(recall);
+    }
+
+    frame.append(voyage, nav);
+    if (kind === "crown") {
+      const rail = document.createElement("div");
+      rail.className = "rail";
+      rail.setAttribute("aria-hidden", "true");
+      rail.innerHTML = `<span class="track"></span><span class="fill"></span><span class="count">1</span>`;
+      const crown = document.createElement("button");
+      crown.className = "crown";
+      crown.type = "button";
+      crown.setAttribute("aria-label", "Open navigation");
+      crown.innerHTML = rose;
+      frame.append(rail, crown);
+    }
+
+    const coin = nav.querySelector(".coin");
+    const crown = frame.querySelector(".crown");
+    const count = frame.querySelector(".rail .count");
+    let lastY = 0;
+    let hold = false;
+    let settled = false;
+    let parkTimer = 0;
+    const place = () => {
+      const navW = frame.clientWidth - 32;
+      const mark = 90;
+      frame.style.setProperty("--park", (-(navW - mark) / 2).toFixed(1) + "px");
+    };
+    if (lockup) {
+      place();
+      window.addEventListener("resize", place);
+    }
+
+    const show = () => {
+      if (nav.classList.contains("is-returning")) return;
+      if (kind === "lockup" && nav.classList.contains("is-parked")) {
+        if (nav.classList.contains("is-returning")) return;
+        nav.classList.add("is-returning");
+        nav.classList.remove("is-parked");
+        frame.classList.remove("is-parked");
+        clearTimeout(parkTimer);
+        parkTimer = setTimeout(() => {
+          nav.classList.remove("is-coin", "is-returning");
+          frame.classList.remove("is-coin");
+          coin.hidden = true;
+        }, reduce ? 0 : 560);
+        return;
+      }
+      clearTimeout(parkTimer);
+      nav.classList.remove("is-coin", "is-parked", "is-returning");
+      frame.classList.remove("is-coin", "is-parked");
+      coin.hidden = true;
+    };
+    const hide = () => {
+      hold = false;
+      if (nav.classList.contains("is-coin")) return;
+      nav.classList.add("is-coin");
+      frame.classList.add("is-coin");
+      coin.hidden = false;
+      if (kind !== "lockup") return;
+      clearTimeout(parkTimer);
+      parkTimer = setTimeout(() => {
+        if (!nav.classList.contains("is-coin")) return;
+        nav.classList.add("is-parked");
+        frame.classList.add("is-parked");
+        if (kind === "lockup") {
+          settled = true;
+          if (voyage.scrollTop <= 48 || hold) frame.classList.add("is-recall");
+        }
+      }, reduce ? 0 : 480);
+    };
+    const recallBar = (openBar) => {
+      frame.classList.toggle("is-recall", openBar);
+      const recall = nav.querySelector(".recall");
+      if (recall) recall.setAttribute("aria-hidden", openBar ? "false" : "true");
+    };
+
+    const sync = () => {
+      const span = voyage.scrollHeight - voyage.clientHeight;
+      const y = voyage.scrollTop;
+      const p = span > 0 ? y / span : 0;
+      const delta = y - lastY;
+      frame.style.setProperty("--p", p.toFixed(4));
+      frame.style.setProperty("--spin", reduce ? "0" : (p * (lockup ? 720 : 480)).toFixed(2));
+      frame.style.setProperty("--heel", reduce ? "0" : (Math.sin(p * Math.PI * 4) * 14).toFixed(2));
+      if (count) {
+        const line = y + voyage.clientHeight * 0.5;
+        let n = 1;
+        [...voyage.children].forEach((s, i) => { if (s.offsetTop <= line) n = i + 1; });
+        count.textContent = String(n);
+      }
+      if (kind === "lockup" && (settled || nav.classList.contains("is-coin"))) {
+        if (settled && (y <= 48 || delta < -6)) recallBar(true);
+        else if (settled && delta > 6 && y > 48) {
+          if (hold) hold = false;
+          else recallBar(false);
+        }
+      } else if (y <= 48) show();
+      else if (delta > 6 && !hold) hide();
+      else if (delta < -6) show();
+      lastY = y;
+    };
+
+    voyage.addEventListener("scroll", () => {
+      if (voyage._t) return;
+      voyage._t = true;
+      requestAnimationFrame(() => { sync(); voyage._t = false; });
+    }, { passive: true });
+
+    const open = () => {
+      if (kind === "lockup" && (settled || nav.classList.contains("is-coin"))) {
+        if (settled) recallBar(true);
+        hold = true;
+        return;
+      }
+      show();
+      hold = true;
+    };
+    coin.addEventListener("click", open);
+    crown?.addEventListener("click", open);
+    sync();
+  });
+</script>
+</body>
+</html>

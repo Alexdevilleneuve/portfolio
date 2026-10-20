@@ -20,33 +20,19 @@
 
   body {
     margin: 0;
-    background: #4A5157;
+    background: #F6F1E8;
     font-family: Inter, system-ui, sans-serif;
     text-wrap: pretty;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-    padding: 40px 0 80px;
   }
 
-  /* The plate sets the band's height, so every percentage overlay below lands
-     exactly where it does in the painting. No cover-crop guesswork. */
+  /* The three plates stack flush, one continuous page. The plate sets each
+     band's height, so every percentage overlay lands where it does in the painting. */
   .band {
     position: relative;
-    width: 1440px;
-    box-shadow: 0 18px 60px rgba(0,0,0,.34);
+    width: min(1440px, 100%);
+    margin: 0 auto;
   }
   .plate { display: block; width: 100%; }
-
-  .caption {
-    width: 1440px;
-    margin-bottom: -26px;
-    font-size: 11px;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,.5);
-  }
 
   /* ---- shared type ---- */
   .kicker {
@@ -248,8 +234,6 @@
 </head>
 <body>
 
-<!-- 1 · hero -->
-<div class="caption">1 · hero — section-1-hero</div>
 <section class="band">
   <img class="plate" src="../assets/images/song/section-1-hero.png" alt="">
   <div class="hero-copy">
@@ -258,24 +242,6 @@
   </div>
 </section>
 
-<!-- 2 · companies -->
-<div class="caption">2 · companies — section-2-voyage-mid</div>
-<section class="band">
-  <img class="plate" src="../assets/images/song/section-2-voyage-mid.png" alt="">
-  <div class="wall">
-    <p class="kicker"><span class="cjk">格物</span>where I have worked</p>
-    <p class="lede">I&nbsp;lead strategic research in complex systems where trust is the product: <em>security, privacy, and now&nbsp;AI</em>.</p>
-  </div>
-  <div class="marks ink" style="left:44%; top:40%;">
-    <img src="../assets/images/shared/brand/malwarebytes-wordmark.png" alt="Malwarebytes" style="height:26px;">
-    <img src="../assets/images/shared/brand/google-wordmark.png" alt="Google" style="height:26px;">
-    <img src="../assets/images/shared/brand/huawei-wordmark.png" alt="Huawei" style="height:22px;">
-    <img src="../assets/images/shared/brand/kerr.png" alt="Kerr" style="height:28px;">
-  </div>
-</section>
-
-<!-- 3 · universities -->
-<div class="caption">3 · universities — section-3-voyage-arrival</div>
 <section class="band">
   <img class="plate" src="../assets/images/song/section-3-voyage-arrival.png" alt="">
   <div class="wall">
@@ -289,44 +255,6 @@
   </div>
 </section>
 
-<!-- 4 · practice areas -->
-<div class="caption">4 · practice areas — explore-05-celestial</div>
-<section class="band">
-  <img class="plate" src="../assets/images/song/explore-05-celestial.png" alt="">
-  <div class="areas">
-    <p class="kicker"><span class="cjk">四方</span>practice areas</p>
-    <div class="area open"><span class="num">01</span><span class="name">AI + Trust</span><span class="plus">−</span></div>
-    <p class="area-body">How people decide whether to rely on a system they cannot fully&nbsp;see.</p>
-    <div class="area"><span class="num">02</span><span class="name">Product Systems &amp; Convergence</span><span class="plus">+</span></div>
-    <div class="area"><span class="num">03</span><span class="name">0→1 Product Builds</span><span class="plus">+</span></div>
-    <div class="area"><span class="num">04</span><span class="name">Research Systems &amp; Influence</span><span class="plus">+</span></div>
-  </div>
-</section>
-
-<!-- 5 · selected work -->
-<div class="caption">5 · selected work — section-4-selected-work</div>
-<section class="band">
-  <img class="plate" src="../assets/images/song/section-4-selected-work.png" alt="">
-  <div class="work-head"><h2>Selected work</h2></div>
-  <div class="panel" style="left:11.5%; top:26%; width:22.2%; height:60%;">
-    <div class="shot">screenshot</div>
-    <div class="tag">Malwarebytes</div>
-    <div class="title">Research to roadmap</div>
-  </div>
-  <div class="panel dark" style="left:39.1%; top:21.5%; width:22.5%; height:65%;">
-    <div class="shot">screenshot</div>
-    <div class="tag">Google Shopping</div>
-    <div class="title">Shopping with confidence</div>
-  </div>
-  <div class="panel" style="left:66.9%; top:25.5%; width:22.4%; height:61%;">
-    <div class="shot">screenshot</div>
-    <div class="tag">Huawei</div>
-    <div class="title">Patchwork to posture</div>
-  </div>
-</section>
-
-<!-- 6 · research philosophy -->
-<div class="caption">6 · research philosophy — section-6-philosophy-arc (phase names are placeholder)</div>
 <section class="band">
   <img class="plate" src="../assets/images/song/section-6-philosophy-arc.png" alt="">
   <div class="phil-wall">

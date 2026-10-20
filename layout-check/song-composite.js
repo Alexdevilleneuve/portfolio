@@ -3,10 +3,7 @@ const path = require('path');
 
 const NAMES = [
   'hero',
-  'companies',
   'universities',
-  'practice-areas',
-  'selected-work',
   'philosophy',
 ];
 

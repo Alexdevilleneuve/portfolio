@@ -6,7 +6,7 @@ const path = require('path');
     channel: process.env.PW_CHANNEL || 'chrome',
   });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-  await page.goto('file://' + path.resolve(__dirname, '..', 'index.html'));
+  await page.goto('file://' + path.resolve(__dirname, '..', 'v1.html'));
   await page.waitForTimeout(600);
   const section = page.locator('#endorsements');
   await section.scrollIntoViewIfNeeded();
@@ -25,7 +25,7 @@ const path = require('path');
 
   // mobile
   const mpage = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
-  await mpage.goto('file://' + path.resolve(__dirname, '..', 'index.html'));
+  await mpage.goto('file://' + path.resolve(__dirname, '..', 'v1.html'));
   await mpage.waitForTimeout(600);
   const msection = mpage.locator('#endorsements');
   await msection.scrollIntoViewIfNeeded();

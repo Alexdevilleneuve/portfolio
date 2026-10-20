@@ -5,7 +5,7 @@ const path = require("path");
   const browser = await chromium.launch({
     channel: process.env.PW_CHANNEL || "chrome",
   });
-  const file = "file://" + path.resolve(__dirname, "..", "index-2.html");
+  const file = "file://" + path.resolve(__dirname, "..", "v2.html");
 
   const shoot = async (width, height, name) => {
     const page = await browser.newPage({ viewport: { width, height } });

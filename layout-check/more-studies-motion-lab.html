@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>More studies — brush reveal lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,460&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1e2a44;
+    --ink-soft: #5a6b8c;
+    --serif: "Fraunces", Georgia, serif;
+    --sans: "Inter", sans-serif;
+    --hand: "Caveat", cursive;
+    --paper: #f5efe3;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+  }
+  .lab-note {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 22px 24px 8px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .lab-note b { color: var(--ink); font-weight: 600; }
+  .chapter {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+  .chapter-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .chapter-bg.selected { object-position: 60% 25%; }
+  .chapter-bg.philo { object-position: 32% 42%; }
+  .chapter-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(245,239,227,.42), rgba(245,239,227,.08) 30%, rgba(245,239,227,.08) 70%, rgba(245,239,227,.4));
+    pointer-events: none;
+  }
+  .chapter-inner {
+    position: relative;
+    z-index: 1;
+    width: min(1100px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 72px 0 64px;
+  }
+  .kicker {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: .35em;
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 4.6vw, 52px);
+    letter-spacing: -.02em;
+    text-align: center;
+  }
+  .num {
+    font-family: var(--hand);
+    font-size: .72em;
+    font-weight: 600;
+    color: #3d5cb8;
+    transform: rotate(-3deg);
+  }
+  .lede {
+    margin: 10px auto 0;
+    max-width: 42ch;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(18px, 1.7vw, 21px);
+    color: rgba(10, 69, 84, .72);
+  }
+  .studies {
+    display: grid;
+    gap: 14px;
+    margin: 48px auto 0;
+    max-width: 640px;
+  }
+  .study {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255, 252, 246, .78);
+    box-shadow: 0 10px 28px rgba(28, 36, 56, .06);
+  }
+  .study img.shot {
+    width: 112px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #e8eef6;
+  }
+  .study h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  .study p { margin: 4px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.4; }
+  .co { display: flex; align-items: center; gap: 6px; color: var(--ink-soft); font-size: 12px; font-weight: 600; }
+  .co img { width: 16px; height: 16px; }
+
+  /* More studies plate */
+  #more {
+    min-height: 100vh;
+    min-height: 100svh;
+    cursor: none;
+  }
+  #more canvas.reveal {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .ring {
+    position: fixed;
+    z-index: 20;
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0 -14px;
+    border: 1.5px solid rgba(255, 252, 246, .95);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(30, 42, 68, .25);
+    pointer-events: none;
+    display: none;
+  }
+  .ring::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  #more.is-on .ring { display: block; }
+  .more-copy { position: relative; z-index: 2; pointer-events: none; padding-top: 48px; }
+  .more-v2-row {
+    --card: clamp(230px, 22vw, 280px);
+    --gap: 56px;
+    position: relative;
+    z-index: 2;
+    margin-top: 28px;
+  }
+  .more-v2-window {
+    overflow-x: auto;
+    scrollbar-width: none;
+    cursor: none;
+  }
+  .more-v2-window::-webkit-scrollbar { display: none; }
+  .more-v2-track {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap);
+    width: max-content;
+    padding: 18px max(24px, calc((100vw - 1100px) / 2)) 48px;
+  }
+  .more-v2-string {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .more-v2-string path {
+    fill: none;
+    stroke: #c9a24a;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 1.6 7;
+    opacity: .85;
+  }
+  .more-v2-card {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 var(--card);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px 18px 18px;
+    border: 1px solid rgba(150, 132, 104, .14);
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fffdf8, #f6f0e6);
+    box-shadow: 0 1px 0 rgba(255,255,255,.85) inset;
+    cursor: none;
+  }
+  .more-v2-card:nth-child(even) { margin-top: 28px; }
+  .more-v2-pin {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 32% 28%, #f6e7b0, #d3a13a 58%, #a87b24);
+    box-shadow: 0 1px 2px rgba(80, 50, 10, .35);
+  }
+  .more-v2-card-top { display: flex; align-items: center; gap: 8px; }
+  .more-v2-card-co { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+  .more-v2-card-co img { width: 17px; height: 17px; border-radius: 4px; }
+  .more-v2-card-num { margin-left: auto; font-family: var(--hand); font-size: 18px; color: #c9a24a; }
+  .more-v2-card h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 20px; letter-spacing: -.01em; }
+  .more-v2-card-media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #e8eef6;
+  }
+  .more-v2-card-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .more-v2-card-media--doc img { object-fit: contain; }
+  .more-v2-card-media--courtesies { background: #f7f3ea; }
+  .more-v2-card p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hint {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    z-index: 3;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 252, 246, .84);
+    color: var(--ink-soft);
+    font-size: 12px;
+    pointer-events: none;
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 34%) 1fr;
+    gap: 48px;
+    align-items: start;
+    margin-top: 12px;
+  }
+  .how-side h2 {
+    margin: 8px 0 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 4vw, 48px);
+    letter-spacing: -.02em;
+  }
+  .how-side .lede { margin: 14px 0 0; text-align: left; }
+  .how-item { border-top: 1px solid rgba(30, 42, 68, .12); }
+  .how-item:last-child { border-bottom: 1px solid rgba(30, 42, 68, .12); }
+  .how-item button {
+    display: flex;
+    gap: 14px;
+    width: 100%;
+    padding: 16px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .how-item .n {
+    font-family: var(--hand);
+    font-size: 22px;
+    color: #3d5cb8;
+  }
+  .how-item h3 { margin: 0; font-family: var(--serif); font-weight: 500; font-size: 22px; }
+  .how-item .body { display: none; padding: 0 0 16px 36px; color: var(--ink-soft); font-size: 15px; line-height: 1.55; }
+  .how-item.is-open .body { display: block; }
+  .how-item .body p { margin: 0 0 10px; }
+  @media (max-width: 800px) {
+    .how-grid { grid-template-columns: 1fr; }
+    #more { cursor: auto; }
+    .ring { display: none !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ring { display: none !important; }
+  }
+</style>
+</head>
+<body>
+  <section class="chapter" id="more" aria-label="More studies">
+    <canvas class="reveal" id="reveal"></canvas>
+    <div class="ring" id="ring"></div>
+    <div class="more-copy">
+      <h2 class="kicker"><span class="num">03</span> More studies</h2>
+      <p class="lede">The supporting research that shaped teams, ops, and product direction.</p>
+    </div>
+    <div class="more-v2-row">
+      <div class="more-v2-window">
+        <div class="more-v2-track" id="track">
+          <svg class="more-v2-string" aria-hidden="true"><path id="string"></path></svg>
+          <article class="more-v2-card">
+            <span class="more-v2-pin"></span>
+            <span class="more-v2-card-top"><span class="more-v2-card-co"><img src="../assets/images/shared/brand/malwarebytes.svg" alt="">Malwarebytes</span><span class="more-v2-card-num">01</span></span>
+            <h3>Personas with Purpose</h3>
+            <span class="more-v2-card-media more-v2-card-media--doc"><img src="../assets/images/home/blurred%20casey.png" alt=""></span>
+            <p>Building data-driven personas for consumer and corporate UX — the foundation later studies stood on.</p>
+          </article>
+          <article class="more-v2-card">
+            <span class="more-v2-pin"></span>
+            <span class="more-v2-card-top"><span class="more-v2-card-co"><img src="../assets/images/shared/brand/google.svg" alt="">Google</span><span class="more-v2-card-num">02</span></span>
+            <h3>Power of Desktop Research</h3>
+            <span class="more-v2-card-media more-v2-card-media--doc"><img src="../assets/images/home/Screenshot%202025-08-13%20at%2017.42.51.png" alt=""></span>
+            <p>A methodology case study featuring Google Shopping SRP competitor audits.</p>
+          </article>
+          <article class="more-v2-card">
+            <span class="more-v2-pin"></span>
+            <span class="more-v2-card-top"><span class="more-v2-card-co"><img src="../assets/images/shared/brand/google.svg" alt="">Google</span><span class="more-v2-card-num">03</span></span>
+            <h3>Clarity in the Chaos</h3>
+            <span class="more-v2-card-media more-v2-card-media--doc"><img src="../assets/images/home/blurred%20sql%20dashboard.png" alt=""></span>
+            <p>Visualizing UX research recruiting at scale for Google Ads.</p>
+          </article>
+          <article class="more-v2-card">
+            <span class="more-v2-pin"></span>
+            <span class="more-v2-card-top"><span class="more-v2-card-co"><img src="../assets/images/shared/brand/malwarebytes.svg" alt="">Malwarebytes</span><span class="more-v2-card-num">04</span></span>
+            <h3>Democratizing with Strategy</h3>
+            <span class="more-v2-card-media more-v2-card-media--doc"><img src="../assets/images/home/Empathy%20program.png" alt=""></span>
+            <p>A participatory research program so more teams could sit with users.</p>
+          </article>
+          <article class="more-v2-card">
+            <span class="more-v2-pin"></span>
+            <span class="more-v2-card-top"><span class="more-v2-card-co"><img src="../assets/images/shared/brand/malwarebytes.svg" alt="">Malwarebytes</span><span class="more-v2-card-num">05</span></span>
+            <h3>From Fragmented Tools to a Unified App</h3>
+            <span class="more-v2-card-media"><img src="../assets/images/home/01.png" alt=""></span>
+            <p>Converging four standalone products into one consumer-first security experience.</p>
+          </article>
+          <article class="more-v2-card">
+            <span class="more-v2-pin"></span>
+            <span class="more-v2-card-top"><span class="more-v2-card-co"><img src="../assets/images/shared/brand/courtesies-favicon.png" alt="">Courtesies</span><span class="more-v2-card-num">06</span></span>
+            <h3>From Personal CRM to Gifting</h3>
+            <span class="more-v2-card-media more-v2-card-media--courtesies"><img src="../assets/images/shared/courtesies-ui.png" alt=""></span>
+            <p>Product vision from a personal CRM to a gifting platform with light CRM.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+    <p class="hint">Move to uncover the painting. It stays open.</p>
+  </section>
+
+<script>
+(() => {
+  const track = document.querySelector("#track");
+  const string = document.querySelector("#string");
+  const paintString = () => {
+    const tr = track.getBoundingClientRect();
+    const pts = [...track.querySelectorAll(".more-v2-pin")].map((pin) => {
+      const r = pin.getBoundingClientRect();
+      return [r.left + r.width / 2 - tr.left, r.top + r.height / 2 - tr.top];
+    });
+    if (pts.length < 2) return;
+    string.parentElement.setAttribute("viewBox", "0 0 " + tr.width + " " + tr.height);
+    let d = "M" + pts[0][0] + " " + pts[0][1];
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1];
+      const [x1, y1] = pts[i];
+      const cx = (x0 + x1) / 2;
+      const sag = Math.max(18, (x1 - x0) * 0.08);
+      d += " C" + cx + " " + (y0 + sag) + ", " + cx + " " + (y1 + sag) + ", " + x1 + " " + y1;
+    }
+    string.setAttribute("d", d);
+  };
+  new ResizeObserver(paintString).observe(track);
+  paintString();
+})();
+
+(() => {
+  const section = document.querySelector("#more");
+  const view = document.querySelector("#reveal");
+  const ring = document.querySelector("#ring");
+  const ctx = view.getContext("2d");
+  const mask = document.createElement("canvas");
+  const maskCtx = mask.getContext("2d");
+  const fringe = document.createElement("canvas");
+  const fringeCtx = fringe.getContext("2d");
+  const color = document.createElement("canvas");
+  const colorCtx = color.getContext("2d");
+  const wash = document.createElement("canvas");
+  const washCtx = wash.getContext("2d");
+  const brush = document.createElement("canvas");
+  const BRUSH = 420;
+  brush.width = brush.height = BRUSH;
+  const bg = brush.getContext("2d");
+  const rad = bg.createRadialGradient(BRUSH / 2, BRUSH / 2, BRUSH * 0.02, BRUSH / 2, BRUSH / 2, BRUSH * 0.48);
+  rad.addColorStop(0, "rgba(255,255,255,1)");
+  rad.addColorStop(0.35, "rgba(255,255,255,.9)");
+  rad.addColorStop(0.62, "rgba(255,255,255,.35)");
+  rad.addColorStop(1, "rgba(255,255,255,0)");
+  bg.fillStyle = rad;
+  bg.beginPath();
+  bg.arc(BRUSH / 2, BRUSH / 2, BRUSH * 0.48, 0, Math.PI * 2);
+  bg.fill();
+  bg.globalCompositeOperation = "destination-out";
+  for (let i = 0; i < 28; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const d = BRUSH * (0.28 + Math.random() * 0.22);
+    bg.beginPath();
+    bg.fillStyle = "rgba(0,0,0," + (0.25 + Math.random() * 0.55) + ")";
+    bg.arc(BRUSH / 2 + Math.cos(a) * d, BRUSH / 2 + Math.sin(a) * d, 10 + Math.random() * 28, 0, Math.PI * 2);
+    bg.fill();
+  }
+  bg.globalCompositeOperation = "source-over";
+
+  const img = new Image();
+  let ready = false;
+  img.onload = () => {
+    ready = true;
+    resize();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      fringeCtx.fillStyle = "#fff";
+      fringeCtx.fillRect(0, 0, fringe.width, fringe.height);
+      maskCtx.fillStyle = "#fff";
+      maskCtx.fillRect(0, 0, mask.width, mask.height);
+      paint();
+    }
+  };
+  img.src = "../assets/images/portfolio_watercolor_assets/more%20work.png";
+
+  let W = 0, H = 0, dpr = 1;
+  const resize = () => {
+    const rect = section.getBoundingClientRect();
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(rect.width * d));
+    const h = Math.max(1, Math.round(rect.height * d));
+    if (w === view.width && h === view.height) { W = rect.width; H = rect.height; return; }
+    const keep = (source) => {
+      const prev = document.createElement("canvas");
+      prev.width = source.width; prev.height = source.height;
+      prev.getContext("2d").drawImage(source, 0, 0);
+      return prev;
+    };
+    const prevMask = keep(mask);
+    const prevFringe = keep(fringe);
+    view.width = mask.width = fringe.width = color.width = wash.width = w;
+    view.height = mask.height = fringe.height = color.height = wash.height = h;
+    maskCtx.drawImage(prevMask, 0, 0, w, h);
+    fringeCtx.drawImage(prevFringe, 0, 0, w, h);
+    W = rect.width; H = rect.height; dpr = d;
+    paint();
+  };
+
+  const cover = (context, canvasW, canvasH) => {
+    const s = Math.max(canvasW / img.naturalWidth, canvasH / img.naturalHeight);
+    const dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+    const dx = (canvasW - dw) * 0.45;
+    const dy = (canvasH - dh) * 0.30;
+    context.drawImage(img, dx, dy, dw, dh);
+  };
+
+  const clipTo = (layer, layerCtx, sourceMask) => {
+    layerCtx.setTransform(1, 0, 0, 1, 0, 0);
+    layerCtx.globalCompositeOperation = "source-over";
+    layerCtx.globalAlpha = 1;
+    layerCtx.clearRect(0, 0, layer.width, layer.height);
+    cover(layerCtx, layer.width, layer.height);
+    layerCtx.filter = "none";
+    layerCtx.globalCompositeOperation = "destination-in";
+    layerCtx.drawImage(sourceMask, 0, 0);
+    layerCtx.globalCompositeOperation = "source-over";
+    ctx.drawImage(layer, 0, 0);
+  };
+
+  const paint = () => {
+    if (!ready) return;
+    const w = view.width, h = view.height;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "#f3eee4";
+    ctx.fillRect(0, 0, w, h);
+    ctx.save();
+    ctx.globalAlpha = 0.14;
+    ctx.filter = "grayscale(1) contrast(0.75) brightness(1.25)";
+    cover(ctx, w, h);
+    ctx.restore();
+    ctx.filter = "none";
+    washCtx.filter = "grayscale(1) contrast(0.72) brightness(1.08)";
+    clipTo(wash, washCtx, fringe);
+    colorCtx.filter = "none";
+    clipTo(color, colorCtx, mask);
+  };
+
+  const blob = (context, x, y, radius, count) => {
+    context.drawImage(brush, x - radius, y - radius, radius * 2, radius * 2);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const dist = radius * (0.2 + Math.random() * 0.75);
+      const size = radius * (0.22 + Math.random() * 0.4);
+      context.globalAlpha = 0.4 + Math.random() * 0.5;
+      context.drawImage(brush, x + Math.cos(a) * dist - size, y + Math.sin(a) * dist - size, size * 2, size * 2);
+    }
+    context.globalAlpha = 1;
+  };
+
+  const stamp = (x, y) => {
+    blob(fringeCtx, x, y, 188 * dpr, 9);
+    blob(maskCtx, x, y, 112 * dpr, 4);
+  };
+
+  let last = null;
+  const revealAt = (clientX, clientY) => {
+    const rect = section.getBoundingClientRect();
+    const x = (clientX - rect.left) * dpr;
+    const y = (clientY - rect.top) * dpr;
+    if (!last) stamp(x, y);
+    else {
+      const dist = Math.hypot(x - last.x, y - last.y);
+      const steps = Math.max(1, Math.ceil(dist / (16 * dpr)));
+      for (let i = 1; i <= steps; i++) {
+        stamp(last.x + (x - last.x) * i / steps, last.y + (y - last.y) * i / steps);
+      }
+    }
+    last = { x, y };
+    paint();
+  };
+
+  section.addEventListener("pointerenter", () => section.classList.add("is-on"));
+  section.addEventListener("pointerleave", () => { section.classList.remove("is-on"); last = null; });
+  section.addEventListener("pointermove", (e) => {
+    ring.style.left = e.clientX + "px";
+    ring.style.top = e.clientY + "px";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    revealAt(e.clientX, e.clientY);
+  });
+  window.addEventListener("resize", resize);
+})();
+</script>
+</body>
+</html>
