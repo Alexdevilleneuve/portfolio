@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nav compass — marks that hold at this size</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3EAE1;
+    --ink: #1C2438;
+    --ink-soft: #5C6578;
+    --gold: #C4B48A;
+    --serif: "Fraunces", serif;
+    --sans: "Inter", sans-serif;
+    --blue: #7EA6D2;
+    --ivory: #F6F1E7;
+    --gold-deep: #C6A56B;
+    --gold-light: #F0E2BC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, #E7F0FA 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    text-wrap: pretty;
+    padding: 48px 24px 96px;
+  }
+  .page { max-width: 980px; margin: 0 auto; }
+  .back {
+    color: var(--ink-soft);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .back:hover { color: var(--ink); }
+  h1 {
+    margin-top: 18px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(32px, 5vw, 46px);
+    letter-spacing: -.03em;
+  }
+  .lede {
+    margin-top: 12px;
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .hold {
+    margin-top: 18px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: .01em;
+    cursor: pointer;
+    padding: 0;
+    border-bottom: 1px solid var(--gold);
+  }
+  .hold:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+  .grid {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .card {
+    background: rgba(255,255,255,.45);
+    border: 1px solid rgba(28, 36, 56, .08);
+    border-radius: 18px;
+    padding: 22px 22px 20px;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -.02em;
+  }
+  .note {
+    margin-top: 6px;
+    max-width: 36ch;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+  .stages {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stage {
+    border-radius: 14px;
+    min-height: 148px;
+    padding: 14px 12px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+  }
+  .stage.ice {
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 100%, #D5E4F4 0%, transparent 70%),
+      linear-gradient(#F4F8FC, #E4EEF8);
+  }
+  .stage.night {
+    background:
+      radial-gradient(ellipse 90% 80% at 50% 120%, #1A4068 0%, transparent 60%),
+      linear-gradient(#16324C, #0E2236);
+  }
+  .sizes { display: flex; align-items: flex-end; gap: 16px; }
+  .size { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .tag {
+    font-size: 11px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .stage.night .tag { color: rgba(243, 234, 225, .72); }
+  .glass {
+    position: relative;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.78);
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(22px) saturate(1.5);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    box-shadow: 0 12px 40px rgba(30,42,68,.08), inset 0 1px 0 rgba(255,255,255,.9);
+  }
+  .glass--desk { width: 52px; height: 52px; }
+  .glass--phone { width: 44px; height: 44px; }
+  .compass { display: block; }
+  .glass--desk .compass { width: 48px; height: 48px; }
+  .glass--phone .compass { width: 40px; height: 40px; }
+  .compass img, .compass svg { width: 100%; height: 100%; display: block; }
+  body.is-spin .compass { animation: spin 16s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .large {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .large .drawing {
+    width: 112px;
+    height: 112px;
+    flex: none;
+  }
+  .large .drawing img, .large .drawing svg { width: 100%; height: 100%; display: block; }
+  .large p {
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.45;
+    max-width: 28ch;
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.is-spin .compass { animation: none; }
+  }
+</style>
+</head>
+<body class="is-spin">
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <symbol id="rose" viewBox="0 0 64 64">
+        <g fill="none" stroke="#E4D0A4" stroke-width="1.15" stroke-linejoin="round">
+          <polygon points="43.67,20.33 39.64,29.46 32,32" fill="#C6A56B"/>
+          <polygon points="43.67,20.33 34.54,24.36 32,32" fill="#F0E2BC"/>
+          <polygon points="43.67,43.67 34.54,39.64 32,32" fill="#C6A56B"/>
+          <polygon points="43.67,43.67 39.64,34.54 32,32" fill="#F0E2BC"/>
+          <polygon points="20.33,43.67 24.36,34.54 32,32" fill="#C6A56B"/>
+          <polygon points="20.33,43.67 29.46,39.64 32,32" fill="#F0E2BC"/>
+          <polygon points="20.33,20.33 29.46,24.36 32,32" fill="#C6A56B"/>
+          <polygon points="20.33,20.33 24.36,29.46 32,32" fill="#F0E2BC"/>
+          <polygon points="32,4 26.6,24.8 32,32" fill="#7EA6D2"/>
+          <polygon points="32,4 37.4,24.8 32,32" fill="#F6F1E7"/>
+          <polygon points="60,32 39.2,37.4 32,32" fill="#7EA6D2"/>
+          <polygon points="60,32 39.2,26.6 32,32" fill="#F6F1E7"/>
+          <polygon points="32,60 26.6,39.2 32,32" fill="#7EA6D2"/>
+          <polygon points="32,60 37.4,39.2 32,32" fill="#F6F1E7"/>
+          <polygon points="4,32 24.8,26.6 32,32" fill="#7EA6D2"/>
+          <polygon points="4,32 24.8,37.4 32,32" fill="#F6F1E7"/>
+        </g>
+        <circle cx="32" cy="32" r="4.2" fill="#F8F3E8" stroke="#C6A56B" stroke-width="1.3"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main class="page">
+    <a class="back" href="index.html">← Design labs</a>
+    <h1>Nav compass</h1>
+    <p class="lede">The painted rose turns muddy inside the glass circle. These sit at that size, on the ice sky and on the night&nbsp;sea.</p>
+    <button class="hold" type="button" data-hold>Hold still</button>
+
+    <div class="grid">
+      <article class="card">
+        <h2>Painted</h2>
+        <p class="note">The first painted file. Lace, small points, and a ring of&nbsp;ornament.</p>
+        <div class="stages">
+          <div class="stage ice">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav logo.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav logo.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+          <div class="stage night">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav logo.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav logo.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="large">
+          <span class="drawing"><img src="../assets/images/portfolio_watercolor_assets/nav logo.png" alt=""></span>
+          <p>Same drawing, larger, so the detail that disappears in the circle is visible.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Trimmed</h2>
+        <p class="note">The painted compass, with the diamonds and beads past the four long tips cut&nbsp;off.</p>
+        <div class="stages">
+          <div class="stage ice">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav-logo-trimmed.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav-logo-trimmed.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+          <div class="stage night">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav-logo-trimmed.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/nav-logo-trimmed.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="large">
+          <span class="drawing"><img src="../assets/images/portfolio_watercolor_assets/nav-logo-trimmed.png" alt=""></span>
+          <p>The lace and the eight points stay. Only the ornaments beyond the long tips are&nbsp;gone.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Gold</h2>
+        <p class="note">Eight points, gold edges, blue and ivory on the long&nbsp;arms.</p>
+        <div class="stages">
+          <div class="stage ice">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Watercolor Gold Compass Rose.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Watercolor Gold Compass Rose.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+          <div class="stage night">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Watercolor Gold Compass Rose.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Watercolor Gold Compass Rose.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="large">
+          <span class="drawing"><img src="../assets/images/portfolio_watercolor_assets/Watercolor Gold Compass Rose.png" alt=""></span>
+          <p>Same drawing, larger, so the gold lines that disappear in the circle stay&nbsp;visible.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Rose</h2>
+        <p class="note">Eight points. Blue and ivory on the long arms, gold on the short&nbsp;ones.</p>
+        <div class="stages">
+          <div class="stage ice"><div class="sizes">
+            <div class="size"><span class="glass glass--desk"><svg class="compass" viewBox="0 0 64 64"><use href="#rose"/></svg></span><span class="tag">Desk</span></div>
+            <div class="size"><span class="glass glass--phone"><svg class="compass" viewBox="0 0 64 64"><use href="#rose"/></svg></span><span class="tag">Phone</span></div>
+          </div></div>
+          <div class="stage night"><div class="sizes">
+            <div class="size"><span class="glass glass--desk"><svg class="compass" viewBox="0 0 64 64"><use href="#rose"/></svg></span><span class="tag">Desk</span></div>
+            <div class="size"><span class="glass glass--phone"><svg class="compass" viewBox="0 0 64 64"><use href="#rose"/></svg></span><span class="tag">Phone</span></div>
+          </div></div>
+        </div>
+        <div class="large">
+          <span class="drawing"><svg viewBox="0 0 64 64"><use href="#rose"/></svg></span>
+          <p>Eight points and nothing around them. The ring and the lace are both&nbsp;gone.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Star</h2>
+        <p class="note">The new file. Eight points, with a gold finial on each long&nbsp;arm.</p>
+        <div class="stages">
+          <div class="stage ice">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Elegant Gold and Azure Compass Star.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Elegant Gold and Azure Compass Star.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+          <div class="stage night">
+            <div class="sizes">
+              <div class="size"><span class="glass glass--desk"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Elegant Gold and Azure Compass Star.png" alt=""></span><span class="tag">Desk</span></div>
+              <div class="size"><span class="glass glass--phone"><img class="compass" src="../assets/images/portfolio_watercolor_assets/Elegant Gold and Azure Compass Star.png" alt=""></span><span class="tag">Phone</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="large">
+          <span class="drawing"><img src="../assets/images/portfolio_watercolor_assets/Elegant Gold and Azure Compass Star.png" alt=""></span>
+          <p>Same drawing, larger, so the finials stay visible in the&nbsp;circle.</p>
+        </div>
+      </article>
+
+    </div>
+  </main>
+<script>
+  const btn = document.querySelector("[data-hold]");
+  btn.addEventListener("click", () => {
+    const on = document.body.classList.toggle("is-spin");
+    btn.textContent = on ? "Hold still" : "Let them turn";
+  });
+</script>
+</body>
+</html>

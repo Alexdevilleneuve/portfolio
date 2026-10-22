@@ -643,6 +643,58 @@
   #work ~ section {
     background: var(--ice-sky);
   }
+  /* Main chapter ground — hero ice through the type.
+     One full plate per section, aspect kept, never cropped into a sticker.
+     The ice sits on its own layer so the last stretch can thin out and
+     the footer clouds can rise into it. */
+  .chapter-ground {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+    background: transparent;
+  }
+  .chapter-ground::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 28% at 0% 22%, rgba(169, 207, 245, .45), transparent 70%),
+      radial-gradient(ellipse 70% 24% at 100% 46%, rgba(191, 217, 246, .4), transparent 72%),
+      radial-gradient(ellipse 76% 26% at 0% 70%, rgba(212, 230, 250, .55), transparent 70%),
+      var(--ice-sky);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 300px), transparent calc(100% - 48px));
+    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 300px), transparent calc(100% - 48px));
+  }
+  .chapter-ground > #work,
+  .chapter-ground > #more,
+  .chapter-ground > #how {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
+  .chapter-plate {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    /* Dissolve each plate into the ice so section edges don't cut a line. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 160px), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 140px, #000 calc(100% - 160px), transparent 100%);
+  }
+  /* More studies and philosophy are shorter than the plate. Fill the section
+     from the top so the frame stays whole and does not spill into the next one. */
+  #more .chapter-plate,
+  #how .chapter-plate {
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
 
@@ -2078,10 +2130,21 @@
 
   /* ---------- Endorsements collage ---------- */
   #endorsements.endorse {
+    position: relative;
+    z-index: 1;
     background: transparent;
     padding-top: 72px;
-    padding-bottom: 80px;
+    padding-bottom: 28px;
     overflow: visible;
+  }
+  #endorsements .chapter-plate {
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    /* The frame's sea has its own horizon. Let it thin out early so the
+       footer cloudscape can take over without a second horizon line. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 52%, transparent 82%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 52%, transparent 82%);
   }
   .endorse-head {
     text-align: center;
@@ -2091,11 +2154,30 @@
     z-index: 2;
   }
   .endorse-card-panel {
+    background: transparent;
+    padding: clamp(28px, 3.5vw, 48px) clamp(20px, 3vw, 40px) clamp(36px, 4vw, 56px);
+    border: 0;
+    box-shadow: none;
+  }
+  /* Fill stops at the logo banner so the taller cloudscape can cover
+     the bottom of the card. The banner keeps its own white ground. */
+  .endorse-card-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
     background:
       radial-gradient(ellipse 80% 45% at 50% 0%, rgba(255,255,255,.65), transparent 55%),
-      linear-gradient(180deg, #F7F5F0 0%, #F4F1EA 50%, #EEF2F8 100%);
-    padding: clamp(28px, 3.5vw, 48px) clamp(20px, 3vw, 40px) clamp(36px, 4vw, 56px);
+      linear-gradient(180deg, #F7F5F0 0%, #F4F1EA 52%, rgba(238, 242, 248, .78) 100%);
+    border: 1px solid rgba(255, 255, 255, .72);
+    backdrop-filter: blur(6px) saturate(1.08);
+    -webkit-backdrop-filter: blur(6px) saturate(1.08);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 86%, transparent 96%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 86%, transparent 96%);
   }
+  .endorse-card-panel > * { position: relative; z-index: 1; }
   .endorse-head h2 {
     justify-content: center;
     font-size: clamp(32px, 4.6vw, 48px);
@@ -2623,60 +2705,61 @@
 
   /* ---------- Footer: open sky · compass · farewell · nav ---------- */
   footer {
+    --cloud-rise: 360px; /* half the previous cloud painting, grown upward */
     position: relative;
     padding: 0;
     overflow: hidden;
     background: transparent;
-    /* Tuck the sky up into the ice-sky gap so the fade starts under the card */
-    margin-top: -48px;
+    /* Rise into the fading ice so the cloudscape begins under the poster */
+    margin-top: calc(-168px - var(--cloud-rise));
   }
   .footer-scene {
     position: relative;
-    padding: clamp(96px, 13vh, 140px) 0 clamp(64px, 10vh, 100px);
+    padding: calc(clamp(188px, 20vh, 212px) + var(--cloud-rise)) 0 clamp(64px, 10vh, 100px);
     isolation: isolate;
     overflow: hidden;
-    background: var(--ice-sky);
+    background: transparent;
   }
-  /* 3.0's dusk painting — only the cloud bank at the bottom of the picture */
+  /* Cream cloudscape. Its own sky is already close to the ice, and the
+     mask lets that sky thicken into clouds instead of cutting a line. */
   .footer-sky {
     position: absolute;
     inset: 0;
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    /* Long dissolve from the ice-sky canvas — no line where the footer starts */
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, .38) 150px, rgba(0, 0, 0, .78) 280px, #000 420px);
-    mask-image: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, .38) 150px, rgba(0, 0, 0, .78) 280px, #000 420px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.45) 100px, #000 250px);
+    mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.45) 100px, #000 250px);
   }
-  /* Ice-sky wash over the top of the clouds, so the two skies melt together */
   .footer-sky::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, var(--ice-sky) 0, rgba(232, 240, 250, .55) 22%, rgba(232, 240, 250, 0) 52%);
+    pointer-events: none;
+    background: linear-gradient(to bottom, var(--ice-sky) 0, rgba(232, 240, 250, .6) 90px, rgba(232, 240, 250, 0) 230px);
   }
   .footer-bg {
     position: absolute;
-    /* The painting is a night sea; only its bottom cloud bank shows.
-       Size from whichever is larger — viewport width or the tall mobile
-       footer — so the bank spans edge to edge at any size, and set the
-       vertical offset from that same size so the sea never slips in. */
-    --cloud-w: max(120vw, 195svh);
-    left: 50%;
-    top: calc(var(--cloud-w) * -1.138);
-    width: var(--cloud-w);
-    height: auto;
+    left: 0;
+    top: 0;
+    width: 116%;
+    /* 120% of the risen scene is about half again the previous painting. */
+    height: 120%;
     max-width: none;
+    object-fit: cover;
+    object-position: center 36%;
+    filter: saturate(1.14) contrast(1.03);
     animation: footer-cloud-drift 58s ease-in-out infinite alternate;
   }
   @keyframes footer-cloud-drift {
-    from { transform: translate3d(calc(-50% - 1.6vw), 0, 0); }
-    to { transform: translate3d(calc(-50% + 1.6vw), 0, 0); }
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-9%, 0, 0); }
   }
   @media (prefers-reduced-motion: reduce) {
     .footer-bg {
       animation: none;
-      transform: translateX(-50%);
+      width: 100%;
+      left: 0;
     }
   }
   .footer-card {
@@ -3023,7 +3106,7 @@
     #skills { margin-top: 0; }
     .skills-pin { padding: 16px 12px 28px; }
     section { padding: 64px 0; }
-    .footer-scene { padding: 64px 0 48px; }
+    .footer-scene { padding: calc(196px + var(--cloud-rise)) 0 48px; }
     .footer-card {
       width: calc(100% - 28px);
       padding: 24px 24px;
@@ -3373,8 +3456,11 @@
 
 </section>
 
+<!-- Main chapter — cream ground, the painting in the margins -->
+<div class="chapter-ground">
 <!-- Projects: featured studies (Dia-style sticky index) -->
 <section id="work" data-ph-section="work">
+  <img class="chapter-plate" src="assets/images/1.0/portfolio-background-softened-1440x3170.png" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2><span class="sec-num">02</span> <span>Selected work sample</span></h2>
@@ -3574,6 +3660,7 @@
 
 <!-- More studies — own section (redesign next) -->
 <section id="more" data-ph-section="more" aria-label="More studies">
+  <img class="chapter-plate" src="assets/images/1.0/ChatGPT%20Image%20Oct%2021,%202026,%2004_06_39%20PM-2.png" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2><span class="sec-num">03</span> <span>More studies</span></h2>
@@ -3674,6 +3761,7 @@
 
 <!-- Research philosophy + hook to about -->
 <section class="how-work" id="how" data-ph-section="personas" aria-label="My research philosophy">
+  <img class="chapter-plate" src="assets/images/1.0/ChatGPT%20Image%20Oct%2021,%202026,%2004_06_40%20PM-3.png" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="sec-head reveal">
       <h2><span class="sec-num">04</span> <span>My Research&nbsp;Philosophy</span></h2>
@@ -3741,6 +3829,7 @@
 
 <!-- Endorsements collage -->
 <section id="endorsements" class="endorse" data-ph-section="testimonials" aria-label="What's it like working with me">
+  <img class="chapter-plate" src="assets/images/1.0/Ethereal%20Sky%20and%20Sea%20Watercolor%20Frame.png" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="endorse-head reveal">
       <h2><span class="sec-num">05</span> <span>What's it like working with&nbsp;me?</span></h2>
@@ -3943,12 +4032,13 @@
     </div>
   </div>
 </section>
+</div>
 
 <!-- Footer: open sky · compass · farewell · nav -->
 <footer data-ph-section="footer">
   <div class="footer-scene">
     <div class="footer-sky" aria-hidden="true">
-      <img class="footer-bg" src="assets/images/portfolio_watercolor_assets/Dreamy Starry Sea with Lighthouse and Sailboat.png" alt="" width="941" height="1672" decoding="async">
+      <img class="footer-bg" src="assets/images/1.0/Dreamy%20Watercolor%20Cloudscape.png" alt="" width="1881" height="836" decoding="async">
     </div>
 
     <div class="footer-card reveal">

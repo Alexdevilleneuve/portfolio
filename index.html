@@ -1337,6 +1337,7 @@
     transform: translateX(-50%) translateY(8px);
     transition: opacity .35s ease, transform .35s ease;
   }
+  .chapter-rail.is-away .nav-mark,
   nav[data-nav].is-hidden ~ .chapter-rail .nav-mark,
   .chapter-rail .nav-mark.is-hover {
     opacity: 1;
@@ -1347,11 +1348,11 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 69px;
-    height: 69px;
+    width: 48px;
+    height: 48px;
     display: block;
     object-fit: contain;
-    transform: translate(-50%, -50%) rotate(calc(var(--spin, 0) * 1deg));
+    transform: translate(-50%, -50%);
     transform-origin: center;
   }
   .chapter-rail .nav-mark:focus-visible {
@@ -1361,7 +1362,7 @@
   @media (max-width: 900px) {
     .chapter-rail { left: 12px; height: 180px; }
     .chapter-rail .nav-mark { width: 44px; height: 44px; }
-    .chapter-rail .nav-mark .compass { width: 58px; height: 58px; }
+    .chapter-rail .nav-mark .compass { width: 40px; height: 40px; }
   }
   @media (prefers-reduced-motion: reduce) {
     nav[data-nav] { transition: none; }
@@ -5481,7 +5482,7 @@
 </nav>
 <div class="chapter-rail" data-chapter-rail data-tone="light" role="progressbar" aria-label="Chapter" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" aria-valuetext="Hero">
   <button class="nav-mark" type="button" data-nav-mark aria-label="Back to top" aria-hidden="true" tabindex="-1">
-    <img class="compass" src="assets/images/portfolio_watercolor_assets/compass_extracted_transparent.png" alt="">
+    <img class="compass" src="assets/images/portfolio_watercolor_assets/nav-logo-trimmed.png" alt="">
   </button>
   <span class="spark spark-a" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 0.6 L9.15 6.85 L15.4 8 L9.15 9.15 L8 15.4 L6.85 9.15 L0.6 8 L6.85 6.85 Z"/></svg></span>
   <span class="spark spark-b" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 0.6 L9.15 6.85 L15.4 8 L9.15 9.15 L8 15.4 L6.85 9.15 L0.6 8 L6.85 6.85 Z"/></svg></span>
@@ -9486,7 +9487,8 @@
 <script>
   // Directionally aware nav — hide on scroll down, show on scroll up.
   // The chapter rail counts 1–8. The practice-areas sheet, the 4th card of
-  // hard skills, is its own page. The compass spins with the scroll.
+  // hard skills, is its own page. On the hero the compass shows while the
+  // nav is hidden. Past the hero it stays until the rail returns to Hero.
   (() => {
     const nav = document.querySelector("[data-nav]");
     const mark = document.querySelector("[data-nav-mark]");
@@ -9519,10 +9521,14 @@
     const topReveal = 48;
     const deltaMin = 6;
     const syncMark = () => {
-      if (!mark || !nav) return;
-      const away = nav.classList.contains("is-hidden");
-      mark.tabIndex = away ? 0 : -1;
-      mark.setAttribute("aria-hidden", away ? "false" : "true");
+      if (!mark) return;
+      const shown = !reduce && (
+        rail?.classList.contains("is-away")
+        || nav?.classList.contains("is-hidden")
+        || mark.classList.contains("is-hover")
+      );
+      mark.tabIndex = shown ? 0 : -1;
+      mark.setAttribute("aria-hidden", shown ? "false" : "true");
     };
     const updateNav = () => {
       const y = window.scrollY;
@@ -9553,8 +9559,8 @@
           rail.setAttribute("aria-valuenow", String(n));
           rail.setAttribute("aria-valuetext", chapter.label);
         }
+        rail.classList.toggle("is-away", !reduce && index > 0);
       }
-      if (!reduce && mark) mark.style.setProperty("--spin", ((y / Math.max(window.innerHeight, 1)) * 360).toFixed(2));
       if (nav && !reduce) {
         nav.classList.toggle("is-scrolled", y > 24);
         if (y <= topReveal) {
